@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	http://www.springframework.org/schema/tx  http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+	http://www.springframework.org/schema/aop  http://www.springframework.org/schema/aop/spring-aop-4.0.xsd 
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.0.xsd">
+
+
+	<bean id="configurationInit" class="com.dy.components.ucms.ConfigurationInitializer" init-method="init" destroy-method="destroy"/>
+
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+
+
+	<mvc:annotation-driven /> 	
+	<tx:annotation-driven transaction-manager="transactionManager" /> 
+	<task:annotation-driven/>
+
+
+	<bean id="dataSource"
+		  class="com.yd.utils.datasource.YDDriverManagerDataSource">
+		<property name="name">
+			<value>crm</value>
+		</property>
+		<property name="poolName">
+			<value>DRUID</value>
+		</property>
+	</bean>
+
+	<bean id="dataSource1"
+		  class="com.yd.utils.datasource.YDDriverManagerDataSource">
+		<property name="name">
+			<value>tmsp</value>
+		</property>
+		<property name="poolName">
+			<value>DRUID</value>
+		</property>
+	</bean>
+
+
+
+    <!-- SPRING JDBC -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+	<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource"/> 
+	</bean>
+	
+	<!-- SPRING 事务管理-->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource" />
+	</bean>
+
+
+	<!--转由springboot方式 这里先注释-->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="addToConfig" value="true"/>
+		<property name="basePackage" value="com.mybatis.mapper"/>
+		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
+	</bean>
+
+	<bean id="globalConfig" class="com.baomidou.mybatisplus.core.config.GlobalConfig">
+
+		<!--<!–注入自定义全局操作–>-->
+		<property name="sqlInjector" ref="cjSqlInjector"/>
+		<property name="metaObjectHandler" ref="CJMetaObjectHandler"/>
+
+	</bean>
+
+	<bean class="com.yd.common.mybatis.CJSqlInjector" id="cjSqlInjector"/>
+	<bean class="com.yd.common.mybatis.fill.CJMetaObjectHandler" id="CJMetaObjectHandler"/>
+
+
+	<bean id="mybatisConfiguration" class="com.baomidou.mybatisplus.core.MybatisConfiguration">
+		<!--取消映射数据库下划线字段名到数据库实体类的驼峰命名的映射-->
+		<property name="mapUnderscoreToCamelCase" value="false"/>
+
+	</bean>
+	<bean id="sqlSessionFactory" class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="globalConfig" ref="globalConfig"/>
+		<property name="typeEnumsPackage" value="com.mybatis.myconstant.constant"/>
+		<property name="typeHandlersPackage" value="com.yd.common.mybatis.typehandler"/>
+		<property name="configuration" ref="mybatisConfiguration"/>
+		<!--<property name="typeAliasesPackage" value="com.yd.tmsp" />-->
+		<property name="mapperLocations"  >
+			<array>
+
+			</array>
+		</property>
+		<property name="plugins">
+			<array>
+				<ref bean="mybatisPlusInterceptor"/>
+
+				<!--
+                这些插件已过时
+                <bean class="com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor">
+                    <property name="countSqlParser" ref="countSqlParser"/>
+                </bean>
+                <bean class="com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor"/>
+                -->
+			</array>
+		</property>
+	</bean>
+
+
+
+	<bean id="sqlSessionFactory1" class="com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource1" />
+		<property name="globalConfig" ref="globalConfig"/>
+		<property name="typeEnumsPackage" value="com.mybatis.myconstant.constant"/>
+		<property name="typeHandlersPackage" value="com.yd.common.mybatis.typehandler"/>
+		<property name="configuration" ref="mybatisConfiguration"/>
+		<!--<property name="typeAliasesPackage" value="com.yd.tmsp" />-->
+		<property name="mapperLocations"  >
+			<array>
+
+			</array>
+		</property>
+		<property name="plugins">
+			<array>
+				<ref bean="mybatisPlusInterceptor"/>
+			</array>
+		</property>
+	</bean>
+
+
+
+
+
+	<bean id="mybatisPlusInterceptor" class="com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor">
+		<property name="interceptors">
+			<list>
+				<ref bean="paginationInnerInterceptor"/><!--分页插件-->
+				<ref bean="optimisticLockerInnerInterceptor"/> <!--乐观锁插件-->
+				<!--<ref bean="illegalSQLInnerInterceptor"/>--><!--sql性能规范插件 目前不能用，需要依赖高版本的druid-->
+				<ref bean="blockAttackInnerInterceptor"/><!--防止全表更新与删除插件-->
+			</list>
+		</property>
+	</bean>
+
+	<bean id="paginationInnerInterceptor" class="com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor">
+		<!-- 对于单一数据库类型来说,都建议配置该值,避免每次分页都去抓取数据库类型 -->
+		<constructor-arg name="dbType" value="MYSQL"/>
+	</bean>
+	<bean id="blockAttackInnerInterceptor" class="com.baomidou.mybatisplus.extension.plugins.inner.BlockAttackInnerInterceptor"/>
+	<bean id="optimisticLockerInnerInterceptor" class="com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor"/>
+	<bean id="illegalSQLInnerInterceptor" class="com.baomidou.mybatisplus.extension.plugins.inner.IllegalSQLInnerInterceptor"/>
+
+	<bean id="countSqlParser"
+		  class="com.baomidou.mybatisplus.extension.plugins.pagination.optimize.JsqlParserCountOptimize">
+		<property name="optimizeJoin" value="true"/>
+	</bean>
+
+
+
+
+
+
+	<bean id="properties"
+		  class="com.yd.utils.resource.SpringAllPropertiesUtils">
+	</bean>
+	<!-- dao,service,controller,component scan -->
+    <context:component-scan base-package="com.yd.utils" />
+    <context:component-scan base-package="com.dy.test" />
+ 	<context:component-scan base-package="com.yd.query.util" />
+ 	<context:component-scan base-package="com.http" />
+ 	<context:component-scan base-package="com.factory" />
+ 	<context:component-scan base-package="com.aop" />
+
+
+</beans>

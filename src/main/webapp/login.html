@@ -1,0 +1,64 @@
+ 
+<html>
+<head>
+    <title>Title</title>
+    <script>
+  /*      var myDefineSearch=function (rec) {
+            querySpace.setParamFunction()
+
+                ,onSelect: function(rec){
+                var value=$("#load_org_id").val();
+
+                console.log(querySpace.getDownLoadType());
+
+
+                querySpace.setParamFunction(function(param){
+
+                    if(rec.code=="1"){
+                        param.test1=value;
+                    }else{
+                        param.test2=value;
+                    }
+
+                    console.log(param);
+                    return param;
+                });
+
+        } ;*/
+
+
+            $("#search_type").combobox({
+                onSelect:function (rec) {
+                    var value=$("#load_org_id").val();
+                    if(rec.code=='1'){
+                        paramFunction=function(param){
+                            delete param.load_org_id;
+                            param.test=value;
+                            return param;
+                        }
+                    }else{
+                        paramFunction=function(param){
+                            delete param.load_org_id;
+                            param.test2=value;
+                            return param;
+                        }
+                    }
+                }
+            });
+
+
+
+    </script>
+</head>
+<body>
+
+
+<input type='text' id='search_type' class='easyui-combobox'
+       data-options='valueField:"code",textField:"name",data:[{code:"1",name:"小区"},
+       {code:"2",name:"大区"}]' value="1"
+       style='height:26px;width:100px'/>
+
+
+system is ok
+</body>
+</html>
