@@ -157,7 +157,7 @@ public class RedisUtil {
 
 
 
-    private static Jedis creatDataSource() {
+    public static Jedis creatDataSource() {
         if(jedisPool!=null){
             Jedis resource = jedisPool.getResource();
             return resource;
@@ -194,5 +194,10 @@ public class RedisUtil {
         jedisPool = new JedisPool(poolConfig, redisHost, redisPort);
         return jedisPool.getResource();
     }
+
+    public static  void returnDataSource(Jedis resource){
+        jedisPool.returnResource(resource);
+    }
+
 
 }

@@ -39,6 +39,10 @@ import java.security.cert.*;
 
 import javax.net.ssl.*;
 
+/**
+ * 初始胡ssh证书
+ */
+
 public class InstallCert {
 
     public static void main(String[] args) throws Exception {
