@@ -45,14 +45,11 @@ public class HttFileForwardController {
         CIPResponseMsg success = CommonUtil.success();
         request.setCharacterEncoding("UTF-8");
         MultipartHttpServletRequest multiRequest = (MultipartHttpServletRequest) request;
-
-
-
         // 获取multiRequest 中所有的文件名
         Iterator<String> iter = multiRequest.getFileNames();
         while (iter.hasNext()) {
             // 一次遍历所有文件
-            MultipartFile file = multiRequest.getFile(iter.next().toString());
+            MultipartFile file = multiRequest.getFile(iter.next());
             if (file != null) {
                 String filename = file.getOriginalFilename();
                 String path = "C:\\Users\\admin\\Desktop\\sql\\" + filename;
@@ -60,12 +57,10 @@ public class HttFileForwardController {
                 try {
                     file.transferTo(new File(path));
                 } catch (Exception e) {
-
                     e.printStackTrace();
                 }
             }
         }
-
         return success;
     }
 
@@ -78,7 +73,9 @@ public class HttFileForwardController {
         HttpURLConnection conn = null;
         String[] strArray = contentType.split("=");
         String BOUNDARY = strArray[1]; //boundary就是request头和上传文件内容的分隔符
+
         try {
+            multipartRequest.setCharacterEncoding("UTF-8");
             URL url = new URL(urlStr);
             conn = (HttpURLConnection) url.openConnection();
             conn.setConnectTimeout(5000);
@@ -117,8 +114,11 @@ public class HttFileForwardController {
             while (iter.hasNext()) {
                 file = multipartRequest.getFile(iter.next());
                 CommonsMultipartFile cf= (CommonsMultipartFile)file;
+                String name = cf.getName();
+
                 DiskFileItem fi = (DiskFileItem)cf.getFileItem();
                 File f = fi.getStoreLocation();
+
 
                 StringBuffer strBuf2 = new StringBuffer();
                 strBuf2.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
