@@ -101,7 +101,7 @@ public class HttFileForwardController {
                     if (inputValue == null) {
                         continue;
                     }
-                    strBuf1.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
+                    strBuf1.append("--").append(BOUNDARY).append("\r\n");
                     strBuf1.append("Content-Disposition: form-data; name=\"" + inputName + "\"\r\n\r\n");
                     strBuf1.append(inputValue);
                 }
@@ -121,7 +121,7 @@ public class HttFileForwardController {
 
 
                 StringBuffer strBuf2 = new StringBuffer();
-                strBuf2.append("\r\n").append("--").append(BOUNDARY).append("\r\n");
+                strBuf2.append("--").append(BOUNDARY).append("\r\n");
                 strBuf2.append("Content-Disposition: form-data; name=\"" + f.getName() + "\"; filename=\"" + file.getOriginalFilename() + "\"\r\n");
                 strBuf2.append("Content-Type:" + "application/octet-stream" + "\r\n\r\n");
 
