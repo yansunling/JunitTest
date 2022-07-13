@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 public class CreateSql {
     public static void main(String[] args) throws Exception{
 
-       String[] clazzList={"ASSET_CHECK_RESULT"};
+       String[] clazzList={"CRMX_COUPON_STATUS"};
        for(String clazzName:clazzList){
            String sql = buildSql(clazzName);
            System.out.println(sql);

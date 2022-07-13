@@ -2,13 +2,17 @@ package com.word;
 
 public class CreateEnum {
     public static void main(String[] args) {
-        String name="损失、损坏、报废、出售、出租、捐赠、退租";
+        String name="错误上报、错误下发、标签补发、报废处置、损坏未修复、损坏已修复、信息已修正、丢失已找回、丢失未找回";
         String[] list = name.split("、");
         StringBuffer sb=new StringBuffer();
         StringBuffer sql=new StringBuffer();
 
-        String enumStart="DISPOSAL_";
-        String domainId="disposal_type";
+        String enumStart="EXCEPT_CLEAR_";
+        if(!enumStart.endsWith("_")){
+            enumStart+="_";
+        }
+
+        String domainId="except_clear";
         for(int i=0;i<list.length;i++){
             Integer key=i+1;
             String value=list[i];
