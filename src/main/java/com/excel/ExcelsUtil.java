@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+import cn.hutool.core.io.FileUtil;
 import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -13,7 +14,7 @@ import org.apache.poi.openxml4j.opc.OPCPackage;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
-import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
+import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.*;
 
 
 /**
@@ -123,13 +124,66 @@ public class ExcelsUtil {
                 List<XSSFShape> shapes = drawing.getShapes();
                 for (XSSFShape shape : shapes) {
                     try {
-                        XSSFPicture picture = (XSSFPicture) shape;
-                        XSSFClientAnchor anchor = picture.getPreferredSize();
-                        anchor.getFrom();
-                        CTMarker marker = anchor.getFrom();
-                        String key = marker.getRow() + "-" + marker.getCol();
-                        System.out.println(key);
-                        map.put(key, picture.getPictureData());
+                        if(shape instanceof XSSFShapeGroup){
+                            XSSFShapeGroup group = (XSSFShapeGroup) shape;
+                            CTGroupShape ctGroupShape = group.getCTGroupShape();
+                            CTPicture[] picArray = ctGroupShape.getPicArray();
+
+                            System.out.println("Whole group is anchored upper left:");
+                            int groupRow = ((XSSFClientAnchor)shape.getAnchor()).getRow1();
+                            long groupRowDy = ((XSSFClientAnchor)shape.getAnchor()).getDy1();
+                            System.out.print("Row: " + groupRow);
+                            System.out.println(" + " + groupRowDy + " EMU");
+
+                            int groupCol = ((XSSFClientAnchor)shape.getAnchor()).getCol1();
+                            long groupColDx = ((XSSFClientAnchor)shape.getAnchor()).getDx1();
+                            System.out.print("Col: " + groupCol);
+                            System.out.println(" + " + groupColDx + " EMU");
+
+                            for(CTPicture ctPicture:picArray){
+                                System.out.println(ctPicture);
+                                String blipId = ctPicture.getBlipFill().getBlip().getEmbed();
+                                XSSFPictureData pic = (XSSFPictureData)group.getDrawing().getRelationById(blipId);
+                                // 获取图片索引
+                                String picName = pic.toString();
+                                // 获取图片格式
+                                String ext = pic.suggestFileExtension();
+                                byte[] data = pic.getData();
+                                //图片保存路径
+                                FileOutputStream out = new FileOutputStream("I:\\img\\" + System.currentTimeMillis() + "." + ext);
+                                out.write(data);
+                                out.close();
+
+
+//                                ctPicture.save(new File("I:\\img\\"+System.currentTimeMillis()+".jpg"));
+
+
+
+                            }
+
+
+
+
+
+
+
+
+
+
+
+
+                        }else{
+                            XSSFPicture picture = (XSSFPicture) shape;
+                            XSSFClientAnchor anchor = picture.getPreferredSize();
+                            CTMarker marker = anchor.getFrom();
+                            String key = marker.getRow() + "-" + marker.getCol();
+                            System.out.println(key);
+                            map.put(key, picture.getPictureData());
+                        }
+
+
+
+
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -139,11 +193,7 @@ public class ExcelsUtil {
         return map;
     }
 
-
-
-
-
-    //图片写出
+        //图片写出
     public static void printImg(Map<String, PictureData> sheetList) throws IOException {
 
         //for (Map<String, PictureData> map : sheetList) {

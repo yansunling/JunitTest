@@ -27,7 +27,7 @@ public class UploadFile {
             RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(200000).setSocketTimeout(200000).build();
             httppost.setConfig(requestConfig);
 
-            FileBody bin = new FileBody(new File("C:/Users/admin/Desktop/16.png"));
+            FileBody bin = new FileBody(new File("C:/Users/admin/Desktop/1.png"));
             StringBody comment = new StringBody("crm", ContentType.TEXT_PLAIN);
 
             HttpEntity reqEntity = MultipartEntityBuilder.create().addPart("file0", bin).addPart("file_app_id", comment).build();
