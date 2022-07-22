@@ -62,6 +62,8 @@ public class CreateEnumBySource implements ApplicationContextAware{
         List<String> domainList = Arrays.asList("delivery_decision","send_recv_flag","cust_classify","cust_source","main_lines");
         String path="C:\\Users\\admin\\Desktop\\enum\\";
 		File dir=new File(path);
+
+		FileUtils.deleteDirectory(dir);
 		//创建目录
 		dir.mkdirs();
 		String classpath =  CreateTitleData.class.getResource( "/" ).getPath().replaceFirst( "/" ,  "" );

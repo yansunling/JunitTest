@@ -13,10 +13,7 @@ public class CreateTitleData {
 
 
 
-        String classpath =  CreateTitleData.class.getResource( "/" ).getPath().replaceFirst( "/" ,  "" );
 
-        String filePath = classpath.replaceAll( "/classes/" ,  "")+"/JuninTest/WEB-INF/template/CRMX_COMMON_STATUS.java";
-        File file=new File(filePath);
         List<String> list = FileUtils.readLines(new File("C:\\Users\\admin\\Desktop\\CrmxMarketCustomerImportData.java"));
 
         Map<String,String> map=new LinkedHashMap<>();
