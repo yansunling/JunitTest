@@ -11,7 +11,7 @@ public class Base64ToImgTest {
 	 * @param args
 	 * @throws Exception 
 	 */
-	public static String filePath = "D:/1.text";
+	public static String filePath = "I:/img/1.text";
 
 
 	public static void main(String[] args) throws Exception {
@@ -21,7 +21,7 @@ public class Base64ToImgTest {
 
 
 		//base64转图片
-		Base64ToImage(FileUtil.readAsString(new File(filePath)),"D:/3.jpg");
+		Base64ToImage(FileUtil.readAsString(new File(filePath)),"I:/img/3.jpg");
 
 
 
