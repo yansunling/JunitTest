@@ -81,55 +81,6 @@
           <element id="library" level="project" name="Maven: com.yd.query:query-util:v3.1" />
           <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/logs-error-spring/1.0.3-SNAPSHOT/logs-error-spring-1.0.3-20200925.021534-11.jar" output-file-name="logs-error-spring-1.0.3-SNAPSHOT.jar" />
           <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:4.0.1" />
-          <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/logs-api/1.0.3-SNAPSHOT/logs-api-1.0.3-20210129.060958-30.jar" output-file-name="logs-api-1.0.3-SNAPSHOT.jar" />
-          <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/logs-utils/0.0.1-SNAPSHOT/logs-utils-0.0.1-20201019.031450-36.jar" output-file-name="logs-utils-0.0.1-SNAPSHOT.jar" />
-          <element id="library" level="project" name="Maven: io.protostuff:protostuff-core:1.6.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch:elasticsearch:6.5.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch:elasticsearch-core:6.5.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch:elasticsearch-secure-sm:6.5.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch:elasticsearch-x-content:6.5.0" />
-          <element id="library" level="project" name="Maven: org.yaml:snakeyaml:1.17" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.8.11" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.8.11" />
-          <element id="library" level="project" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.8.11" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-core:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-analyzers-common:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-backward-codecs:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-grouping:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-highlighter:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-join:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-memory:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-misc:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-queries:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-queryparser:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-sandbox:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-spatial:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-spatial-extras:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-spatial3d:7.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-suggest:7.5.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch:elasticsearch-cli:6.5.0" />
-          <element id="library" level="project" name="Maven: net.sf.jopt-simple:jopt-simple:5.0.2" />
-          <element id="library" level="project" name="Maven: com.carrotsearch:hppc:0.7.1" />
-          <element id="library" level="project" name="Maven: joda-time:joda-time:2.10" />
-          <element id="library" level="project" name="Maven: com.tdunning:t-digest:3.2" />
-          <element id="library" level="project" name="Maven: org.hdrhistogram:HdrHistogram:2.1.9" />
-          <element id="library" level="project" name="Maven: org.elasticsearch:jna:4.5.1" />
-          <element id="library" level="project" name="Maven: org.elasticsearch.client:transport:6.5.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:transport-netty4-client:6.5.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:reindex-client:6.5.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:lang-mustache-client:6.5.0" />
-          <element id="library" level="project" name="Maven: com.github.spullara.mustache.java:compiler:0.9.3" />
-          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:percolator-client:6.5.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:parent-join-client:6.5.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:rank-eval-client:6.5.0" />
-          <element id="library" level="project" name="Maven: io.protostuff:protostuff-runtime:1.6.0" />
-          <element id="library" level="project" name="Maven: io.protostuff:protostuff-collectionschema:1.6.0" />
-          <element id="library" level="project" name="Maven: io.protostuff:protostuff-api:1.6.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch.client:elasticsearch-rest-high-level-client:6.5.0" />
-          <element id="library" level="project" name="Maven: org.elasticsearch.client:elasticsearch-rest-client:6.5.0" />
-          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpasyncclient:4.1.2" />
-          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore-nio:4.4.5" />
-          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:aggs-matrix-stats-client:6.5.0" />
           <element id="file-copy" path="$MAVEN_REPOSITORY$/com/yd/foundation/2.7.1_foc-SNAPSHOT/foundation-2.7.1_foc-20220510.092551-43.jar" output-file-name="foundation-2.7.1_foc-SNAPSHOT.jar" />
           <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/foc-springmvc-proxy/1.0-SNAPSHOT/foc-springmvc-proxy-1.0-20210514.081235-11.jar" output-file-name="foc-springmvc-proxy-1.0-SNAPSHOT.jar" />
           <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/foc-common-facade/1.0-SNAPSHOT/foc-common-facade-1.0-20220307.011553-18.jar" output-file-name="foc-common-facade-1.0-SNAPSHOT.jar" />
@@ -186,8 +137,6 @@
           <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/comm/v1.1.0-SNAPSHOT/comm-v1.1.0-20210114.021646-21.jar" output-file-name="comm-v1.1.0-SNAPSHOT.jar" />
           <element id="library" level="project" name="Maven: io.lettuce:lettuce-core:5.1.1.RELEASE" />
           <element id="library" level="project" name="Maven: io.netty:netty-common:4.1.29.Final" />
-          <element id="library" level="project" name="Maven: io.projectreactor:reactor-core:3.2.2.RELEASE" />
-          <element id="library" level="project" name="Maven: org.reactivestreams:reactive-streams:1.0.2" />
           <element id="library" level="project" name="Maven: org.reflections:reflections:0.9.11" />
           <element id="library" level="project" name="Maven: io.netty:netty-codec-http2:4.1.30.Final" />
           <element id="library" level="project" name="Maven: io.netty:netty-codec-http:4.1.30.Final" />
@@ -209,6 +158,64 @@
           <element id="library" level="project" name="Maven: org.mybatis:mybatis-spring:2.0.6" />
           <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.2.75" />
           <element id="library" level="project" name="Maven: com.alibaba:druid:1.1.22" />
+          <element id="library" level="project" name="Maven: com.tlwl.dts:dts-util:v1.2.0-SNAPSHOT" />
+          <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/logs-api/1.0.3-SNAPSHOT/logs-api-1.0.3-20210129.060958-30.jar" output-file-name="logs-api-1.0.3-SNAPSHOT.jar" />
+          <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/logs-utils/0.0.1-SNAPSHOT/logs-utils-0.0.1-20201019.031450-36.jar" output-file-name="logs-utils-0.0.1-SNAPSHOT.jar" />
+          <element id="library" level="project" name="Maven: io.protostuff:protostuff-core:1.6.0" />
+          <element id="library" level="project" name="Maven: org.elasticsearch:elasticsearch:6.5.0" />
+          <element id="library" level="project" name="Maven: org.elasticsearch:elasticsearch-core:6.5.0" />
+          <element id="library" level="project" name="Maven: org.elasticsearch:elasticsearch-secure-sm:6.5.0" />
+          <element id="library" level="project" name="Maven: org.elasticsearch:elasticsearch-x-content:6.5.0" />
+          <element id="library" level="project" name="Maven: org.yaml:snakeyaml:1.17" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.8.11" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.8.11" />
+          <element id="library" level="project" name="Maven: com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:2.8.11" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-core:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-analyzers-common:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-backward-codecs:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-grouping:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-highlighter:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-join:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-memory:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-misc:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-queries:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-queryparser:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-sandbox:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-spatial:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-spatial-extras:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-spatial3d:7.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.lucene:lucene-suggest:7.5.0" />
+          <element id="library" level="project" name="Maven: org.elasticsearch:elasticsearch-cli:6.5.0" />
+          <element id="library" level="project" name="Maven: net.sf.jopt-simple:jopt-simple:5.0.2" />
+          <element id="library" level="project" name="Maven: com.carrotsearch:hppc:0.7.1" />
+          <element id="library" level="project" name="Maven: joda-time:joda-time:2.10" />
+          <element id="library" level="project" name="Maven: com.tdunning:t-digest:3.2" />
+          <element id="library" level="project" name="Maven: org.hdrhistogram:HdrHistogram:2.1.9" />
+          <element id="library" level="project" name="Maven: org.elasticsearch:jna:4.5.1" />
+          <element id="library" level="project" name="Maven: org.elasticsearch.client:transport:6.5.0" />
+          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:transport-netty4-client:6.5.0" />
+          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:reindex-client:6.5.0" />
+          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:lang-mustache-client:6.5.0" />
+          <element id="library" level="project" name="Maven: com.github.spullara.mustache.java:compiler:0.9.3" />
+          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:percolator-client:6.5.0" />
+          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:parent-join-client:6.5.0" />
+          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:rank-eval-client:6.5.0" />
+          <element id="library" level="project" name="Maven: io.protostuff:protostuff-runtime:1.6.0" />
+          <element id="library" level="project" name="Maven: io.protostuff:protostuff-collectionschema:1.6.0" />
+          <element id="library" level="project" name="Maven: io.protostuff:protostuff-api:1.6.0" />
+          <element id="library" level="project" name="Maven: io.netty:netty-all:4.1.29.Final" />
+          <element id="library" level="project" name="Maven: org.elasticsearch.client:elasticsearch-rest-high-level-client:6.5.0" />
+          <element id="library" level="project" name="Maven: org.elasticsearch.client:elasticsearch-rest-client:6.5.0" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpasyncclient:4.1.2" />
+          <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpcore-nio:4.4.5" />
+          <element id="library" level="project" name="Maven: org.elasticsearch.plugin:aggs-matrix-stats-client:6.5.0" />
+          <element id="library" level="project" name="Maven: org.hibernate.validator:hibernate-validator:6.2.3.Final" />
+          <element id="library" level="project" name="Maven: jakarta.validation:jakarta.validation-api:2.0.2" />
+          <element id="library" level="project" name="Maven: org.jboss.logging:jboss-logging:3.4.1.Final" />
+          <element id="library" level="project" name="Maven: com.fasterxml:classmate:1.5.1" />
+          <element id="library" level="project" name="Maven: org.glassfish:jakarta.el:3.0.3" />
+          <element id="library" level="project" name="Maven: io.projectreactor:reactor-core:3.2.2.RELEASE" />
+          <element id="library" level="project" name="Maven: org.reactivestreams:reactive-streams:1.0.2" />
         </element>
       </element>
       <element id="directory" name="META-INF">
