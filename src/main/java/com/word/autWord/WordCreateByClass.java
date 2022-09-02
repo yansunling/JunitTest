@@ -10,6 +10,7 @@ import com.dy.test.doc.GeneralTemplateTool;
 import com.word.controller.CompAssetApplyRecordController;
 import com.word.asset.interfaces.MyNotEmpty;
 import com.word.asset.interfaces.MyNotNull;
+import com.yd.utils.common.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.lang.reflect.Field;
@@ -60,6 +61,8 @@ public class WordCreateByClass {
 
                     Object requestParam = parameterType.newInstance();
                     List<ParamBean> paramBeans=getParamsBean(parameterType);
+
+                    List<String> paramIsList=new ArrayList<>();
                     for (ParamBean bean:paramBeans) {
                         String paramName = bean.getName();
                         Map<String, String> map = new HashMap<>();
@@ -67,10 +70,19 @@ public class WordCreateByClass {
                         map.put("type", bean.getType());
                         map.put("msg", bean.getDescription());
                         tab1list.add(map);
+                        if(StringUtils.equals("Y",bean.getListType())){
+                            paramIsList.add(paramName);
+                        }
                     }
                     params.put("tab1", tab1list);
 
-                    String pretty = JSON.toJSONString(BeanUtils.beanToMap(requestParam), SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);
+                    Map<String, Object> stringObjectMap = BeanUtils.beanToMap(requestParam);
+
+                    paramIsList.forEach(param->{
+                        stringObjectMap.put(param,new ArrayList<>());
+                    });
+
+                    String pretty = JSON.toJSONString(stringObjectMap, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);
                     pretty=pretty.replaceAll("\n","\r");
                     pretty=pretty.replaceAll("null","\"\"");
                     params.put("request_json", pretty);
@@ -78,12 +90,7 @@ public class WordCreateByClass {
                     Map<String,Object> responseJson=new HashMap<>();
                     responseJson.put("errorCode",0);
                     responseJson.put("msg","操作成功");
-                    Map<String, Object> stringObjectMap = BeanUtils.beanToMap(requestParam);
 
-                    Map<String, Object> data=new HashMap<>();
-                    stringObjectMap.forEach((key,value)->{
-                        data.put(key,"");
-                    });
 
                     pretty = JSON.toJSONString(responseJson, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);
                     pretty=pretty.replaceAll("\n","\r");
@@ -128,6 +135,15 @@ public class WordCreateByClass {
                 MyNotEmpty notEmpty = declaredField.getAnnotation(MyNotEmpty.class);
                 if(notEmpty!=null){
                     bean.setType("是");
+                }
+                Class<?> type = declaredField.getType();
+                if(type.getSimpleName().indexOf("List")>=0){
+                    bean.setListType("Y");
+                    String description = bean.getDescription();
+                    if(description.indexOf("(集合)")<=0){
+                        description=description+"(集合)";
+                        bean.setDescription(description);
+                    }
                 }
 
                 returnList.add(bean);

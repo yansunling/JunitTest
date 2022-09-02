@@ -117,43 +117,12 @@ public class WordCreateByQuery {
             System.out.println("生成模板成功");
             System.out.println(outFile);
 
-
-
-
-
-
-
         }
 
 
     }
 
-    public static  List<ParamBean> getParamsBean(Class clazz){
 
-        List<ParamBean> returnList=new ArrayList<>();
-        Field[] declaredFields = clazz.getDeclaredFields();
-
-        for (Field declaredField : declaredFields) {
-
-            CJ_column cjColumn = declaredField.getAnnotation(CJ_column.class);
-            if(cjColumn!=null){
-                ParamBean bean=new ParamBean(declaredField.getName(),cjColumn.name());
-                MyNotNull annotation = declaredField.getAnnotation(MyNotNull.class);
-                if(annotation!=null){
-                    bean.setType("是");
-                }else{
-                    bean.setType("否");
-                }
-                MyNotEmpty notEmpty = declaredField.getAnnotation(MyNotEmpty.class);
-                if(notEmpty!=null){
-                    bean.setType("是");
-                }
-
-                returnList.add(bean);
-            }
-        }
-        return returnList;
-    }
 
     public static void closeWps() throws Exception{
         Runtime run =Runtime.getRuntime();
