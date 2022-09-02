@@ -3,15 +3,13 @@ package com.word.controller;
 import com.alibaba.fastjson.JSONObject;
 
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
-import com.word.asset.CompAssetStocktakingAuditVO;
-import com.word.asset.CompAssetStocktakingExceptionClearVO;
-import com.word.asset.CompAssetStocktakingReportVO;
+import com.word.asset.vo.CompAssetStocktakingAuditVO;
+import com.word.asset.vo.CompAssetStocktakingExceptionClearVO;
+import com.word.asset.vo.CompAssetStocktakingReportVO;
 import com.word.util.AssetUtil;
 import com.yd.common.data.CIPResponseMsg;
-import com.yd.common.runtime.CIPRuntime;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,4 +1,4 @@
-package com.word.asset;
+package com.word.asset.vo;
 
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -7,7 +7,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_table;
-import com.word.interfaces.MyNotNull;
+import com.word.asset.interfaces.MyNotNull;
 import com.yd.common.data.CIPBasePO;
 import lombok.Data;
 

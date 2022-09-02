@@ -1,4 +1,4 @@
-package com.word.data;
+package com.word.asset.data;
 
 import com.dy.components.annotations.CJ_column;
 import com.yd.common.exttype.Money;

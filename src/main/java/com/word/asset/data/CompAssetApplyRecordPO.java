@@ -1,4 +1,4 @@
-package com.word.data;
+package com.word.asset.data;
 
 
 import com.baomidou.mybatisplus.annotation.*;
@@ -6,8 +6,6 @@ import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_table;
 import com.yd.common.data.CIPBasePO;
 import lombok.Data;
-
-import java.sql.Timestamp;
 
 @Data
 @CJ_table(name = "资产申请记录表")

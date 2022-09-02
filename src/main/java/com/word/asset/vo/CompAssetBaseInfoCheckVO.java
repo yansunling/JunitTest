@@ -1,9 +1,9 @@
-package com.word.asset;
+package com.word.asset.vo;
 
 
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_table;
-import com.word.interfaces.MyNotNull;
+import com.word.asset.interfaces.MyNotNull;
 import lombok.Data;
 
 import java.util.ArrayList;

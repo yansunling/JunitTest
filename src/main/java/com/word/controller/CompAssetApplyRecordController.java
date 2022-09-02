@@ -2,8 +2,8 @@ package com.word.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
-import com.word.data.CompAssetApplyRecordPO;
-import com.word.data.CompAssetApplyRecordVO;
+import com.word.asset.data.CompAssetApplyRecordPO;
+import com.word.asset.data.CompAssetApplyRecordVO;
 import com.word.util.AssetUtil;
 import com.yd.common.data.CIPResponseMsg;
 import io.swagger.annotations.ApiOperation;

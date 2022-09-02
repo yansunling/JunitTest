@@ -7,14 +7,9 @@ import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
 import com.dy.test.autoTest.ParamBean;
 import com.dy.test.doc.GeneralTemplateTool;
-import com.google.common.collect.ImmutableList;
-import com.google.common.reflect.Invokable;
-import com.google.common.reflect.Parameter;
-import com.word.asset.CompAssetStocktakingReportVO;
 import com.word.controller.CompAssetApplyRecordController;
-import com.word.controller.CompAssetStocktakingReportController;
-import com.word.interfaces.MyNotEmpty;
-import com.word.interfaces.MyNotNull;
+import com.word.asset.interfaces.MyNotEmpty;
+import com.word.asset.interfaces.MyNotNull;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.lang.reflect.Field;
@@ -24,7 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class WorkCreateNew {
+public class WordCreateByClass {
 
 
     public static void main(String[] args) throws Exception{

@@ -1,10 +1,10 @@
-package com.word.data;
+package com.word.asset.data;
 
 
 
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_table;
-import com.word.interfaces.MyNotEmpty;
+import com.word.asset.interfaces.MyNotEmpty;
 import lombok.Data;
 
 @Data

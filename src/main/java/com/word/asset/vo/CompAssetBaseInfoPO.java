@@ -1,13 +1,11 @@
-package com.word.asset;
+package com.word.asset.vo;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_table;
-import com.word.interfaces.MyNotNull;
+import com.word.asset.interfaces.MyNotNull;
 import com.yd.common.data.CIPBasePO;
 import lombok.Data;
-
-import java.sql.Timestamp;
 
 @Data
 @CJ_table(name = "资产信息")

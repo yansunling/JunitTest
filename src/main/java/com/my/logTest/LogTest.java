@@ -1,6 +1,6 @@
 package com.my.logTest;
 
-import com.word.data.TMSP_claims_oa_bearData;
+import com.word.asset.data.TMSP_claims_oa_bearData;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Optional;

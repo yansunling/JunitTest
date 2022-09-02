@@ -6,12 +6,10 @@ import com.baomidou.mybatisplus.core.toolkit.BeanUtils;
 import com.dy.components.annotations.CJ_column;
 import com.dy.test.autoTest.ParamBean;
 import com.dy.test.doc.GeneralTemplateTool;
-import com.word.asset.*;
-import com.word.interfaces.MyNotEmpty;
-import com.word.interfaces.MyNotNull;
+import com.word.asset.vo.CompAssetStocktakingReportVO;
+import com.word.asset.interfaces.MyNotEmpty;
+import com.word.asset.interfaces.MyNotNull;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -35,7 +33,7 @@ public class WorkCreate {
         //创建替代&生成模板里tab1标识的表格中的值开始
         List<Map<String,String>> tab1list = new ArrayList<>();
 
-        Class clazz=CompAssetStocktakingReportVO.class;
+        Class clazz= CompAssetStocktakingReportVO.class;
 
         Object requestParam = clazz.newInstance();
         List<ParamBean> paramBeans=getParamsBean(clazz);

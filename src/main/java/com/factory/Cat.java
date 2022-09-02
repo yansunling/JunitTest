@@ -1,6 +1,6 @@
 package com.factory;
 
-import com.word.asset.CompAssetBaseInfoChangeVO;
+import com.word.asset.vo.CompAssetBaseInfoChangeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
