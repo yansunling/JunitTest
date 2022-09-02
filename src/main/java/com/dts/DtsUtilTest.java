@@ -36,7 +36,7 @@ public class DtsUtilTest implements ApplicationContextAware {
         CIPRuntimeOperator operator=new CIPRuntimeOperator();
         operator.setSubject_id("T1113");
         operator.setSubject_name("颜孙令");
-        updateData.setTableId("formtable_main_258");
+        updateData.setTableId("formtable_main_2582");
         updateData.setRequestId("248401");
         Map<String, Object> fields=new HashMap<>();
         fields.put("pch","");

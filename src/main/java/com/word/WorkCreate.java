@@ -7,22 +7,20 @@ import com.dy.components.annotations.CJ_column;
 import com.dy.test.autoTest.ParamBean;
 import com.dy.test.doc.GeneralTemplateTool;
 import com.word.asset.*;
+import com.word.interfaces.MyNotEmpty;
 import com.word.interfaces.MyNotNull;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WorkCreate {
 
 
     public static void main(String[] args) throws Exception{
 
-        closeWps();
+//        closeWps();
 
        String filePath="C:/Users/admin/Desktop/api";
         //模板路径
@@ -32,11 +30,12 @@ public class WorkCreate {
         //......对应模板扩展
         //创建替代模板里段落中如${title}值结束
         Map<String, Object> params = new HashMap<>();
-        params.put("url","https://tlwl.uat.tuolong56.com/asset-api/asset/comp_asset_base_check/deleteData.do");
+        params.put("url","https://tlwl.uat.tuolong56.com/asset-api/asset/comp_asset_stocktaking_report/reportNormal.do");
+        params.put("name","盘点正常上报");
         //创建替代&生成模板里tab1标识的表格中的值开始
         List<Map<String,String>> tab1list = new ArrayList<>();
 
-        Class clazz=CompAssetBaseInfoCheckTaskPO.class;
+        Class clazz=CompAssetStocktakingReportVO.class;
 
         Object requestParam = clazz.newInstance();
         List<ParamBean> paramBeans=getParamsBean(clazz);
@@ -58,6 +57,16 @@ public class WorkCreate {
         Map<String,Object> responseJson=new HashMap<>();
         responseJson.put("errorCode",0);
         responseJson.put("msg","操作成功");
+        System.out.println(pretty);
+        Map<String, Object> stringObjectMap = BeanUtils.beanToMap(requestParam);
+
+        Map<String, Object> data=new HashMap<>();
+        stringObjectMap.forEach((key,value)->{
+            data.put(key,"");
+        });
+
+//        responseJson.put("data",data);
+
         pretty = JSON.toJSONString(responseJson, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);
         pretty=pretty.replaceAll("\n","\r");
         params.put("response_json", pretty);
@@ -88,6 +97,11 @@ public class WorkCreate {
                 }else{
                     bean.setType("否");
                 }
+                MyNotEmpty notEmpty = declaredField.getAnnotation(MyNotEmpty.class);
+                if(notEmpty!=null){
+                    bean.setType("是");
+                }
+
                 returnList.add(bean);
             }
         }
@@ -103,10 +117,10 @@ public class WorkCreate {
     public static void openWps() throws Exception{
         Runtime run =Runtime.getRuntime();
 
-        Process p = run.exec("cmd /C start C:/Users/admin/Desktop/资产/资产接口说明.docx");
-        p.waitFor();
+//        Process p = run.exec("cmd /C start C:/Users/admin/Desktop/资产/资产接口说明.docx");
+//        p.waitFor();
 
-        p = run.exec("cmd /C start C:/Users/admin/Desktop/api/asset.docx");
+        Process p = run.exec("cmd /C start C:/Users/admin/Desktop/api/asset.docx");
         p.waitFor();
 
     }

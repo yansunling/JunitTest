@@ -2,10 +2,10 @@ package com.word;
 
 import java.lang.reflect.Method;
 
-public class CreateSql {
+public class CreateSqlByEnum {
     public static void main(String[] args) throws Exception{
 
-       String[] clazzList={"CRMX_COUPON_STATUS"};
+       String[] clazzList={"ASSET_CHECK_RERPORT"};
        for(String clazzName:clazzList){
            String sql = buildSql(clazzName);
            System.out.println(sql);
