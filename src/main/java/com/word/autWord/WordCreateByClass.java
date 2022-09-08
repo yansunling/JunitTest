@@ -10,6 +10,7 @@ import com.dy.test.doc.GeneralTemplateTool;
 import com.word.controller.CompAssetApplyRecordController;
 import com.word.asset.interfaces.MyNotEmpty;
 import com.word.asset.interfaces.MyNotNull;
+import com.word.controller.CompAssetBaseCheckController;
 import com.yd.utils.common.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -32,7 +33,7 @@ public class WordCreateByClass {
         GeneralTemplateTool gtt = new GeneralTemplateTool();
 
 
-        Class<CompAssetApplyRecordController> clazz = CompAssetApplyRecordController.class;
+        Class<CompAssetBaseCheckController> clazz = CompAssetBaseCheckController.class;
 
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
@@ -59,7 +60,15 @@ public class WordCreateByClass {
                     List<Map<String,String>> tab1list = new ArrayList<>();
 
 
-                    Object requestParam = parameterType.newInstance();
+                    Object requestParam = new HashMap<>();
+
+                    try {
+                        requestParam = parameterType.newInstance();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+
                     List<ParamBean> paramBeans=getParamsBean(parameterType);
 
                     List<String> paramIsList=new ArrayList<>();

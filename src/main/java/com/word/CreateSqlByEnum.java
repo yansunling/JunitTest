@@ -5,7 +5,7 @@ import java.lang.reflect.Method;
 public class CreateSqlByEnum {
     public static void main(String[] args) throws Exception{
 
-       String[] clazzList={"ASSET_CHECK_RERPORT"};
+       String[] clazzList={"ASSET_STATUS"};
        for(String clazzName:clazzList){
            String sql = buildSql(clazzName);
            System.out.println(sql);
@@ -23,7 +23,7 @@ public class CreateSqlByEnum {
 
             Method codeName = clazz.getMethod("codeName");
             String value=codeName.invoke(object)+"";
-            sql.append("INSERT INTO cip_admin_codes(domain_id, code_type, code_name, create_time, update_time, operator) VALUES" +
+            sql.append("INSERT ignore INTO cip_admin_codes(domain_id, code_type, code_name, create_time, update_time, operator) VALUES" +
                     " ('"+clazzName.toLowerCase()+"', '"+key+"', '"+value+"', now(), now(), 'T1113');\n");
 
         }
