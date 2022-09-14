@@ -11,6 +11,7 @@ import com.word.controller.CompAssetApplyRecordController;
 import com.word.asset.interfaces.MyNotEmpty;
 import com.word.asset.interfaces.MyNotNull;
 import com.word.controller.CompAssetBaseCheckController;
+import com.word.controller.CompAssetStocktakingReportController;
 import com.yd.utils.common.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -33,7 +34,7 @@ public class WordCreateByClass {
         GeneralTemplateTool gtt = new GeneralTemplateTool();
 
 
-        Class<CompAssetBaseCheckController> clazz = CompAssetBaseCheckController.class;
+        Class<CompAssetStocktakingReportController> clazz = CompAssetStocktakingReportController.class;
 
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径

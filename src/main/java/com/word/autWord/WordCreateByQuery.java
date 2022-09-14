@@ -43,7 +43,7 @@ public class WordCreateByQuery {
         QueryVueUtil queryUtil=new QueryVueUtil();
         queryUtil.setHOST_ADDRESS("https://tlwl.uat.tuolong56.com");
 
-        List<String> queryList = Arrays.asList("comp_asset_num_rule_list");
+        List<String> queryList = Arrays.asList("comp_asset_stocktaking_relation_report");
 
         for (String  queryId : queryList) {
 
