@@ -24,7 +24,10 @@ public class Base64ToImgTest {
 		Base64ToImage(FileUtil.readAsString(new File(filePath)),"I:/img/3.jpg");
 
 
+		String signData = "";
+//		Base64ToImage(FileUtil.readAsString(new File("I:/contract/3.txt")),"I:/contract/3.png");
 
+//		Base64ToImage(signData,"I:/contract/3.png");
 
 	}
 
