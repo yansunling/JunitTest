@@ -1,63 +1,363 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <title>手写签名demo</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-    <title>HTML5电子签名-jSignature</title>
-    <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
-    <script type="text/javascript" src="../js/jSignature.js"></script>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <style>
+        html,body {
+            padding:0;
+            margin:0;
+            width: 100%;
+            height: 100%;
+        }
+        .text-center {
+            text-align: center;
+        }
+        #signature-button {
+            display: block;
+            margin: 0 auto;
+        }
+        #signature-img {
+            width: 200px;
+            height: 100px;
+            margin: 10px auto;
+            display: none;
+        }
+        #signature-pop {
+            position: fixed;
+            background-color: #fff;
+            top:0;
+            left:0;
+            bottom:0;
+            right:0;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+        #signature-container {
+            width: 100%;
+            height: 100%;
+        }
+        .demo-top-info {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 40px;
+            background: #cccccc;
+            box-sizing: border-box;
+            text-align: center;
+        }
+        .demo-top-info .return {
+            padding-left: 5px;
+            height: 40px;
+            line-height: 40px;
+            position: absolute;
+            left: 10px;
+            display: inline-block;
+        }
+        .signature-title {
+            height: 40px;
+            line-height: 40px;
+            display: inline-block;
+        }
+        .canvas-container {
+            width: 100%;
+            height: 100%;
+            background-color: #ffffff;
+            box-sizing: border-box;
+            padding: 40px 0 40px 0;
+        }
+        .canvas-parent {
+            width: 100%;
+            height: 100%;
+        }
+        .demo-bottom-info {
+            position: absolute;
+            bottom:0;
+            left:0;
+            width: 100%;
+            height: 40px;
+            background: #cccccc;
+            padding: 0 2%;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+        #clean_canvas {
+            float: left;
+            font-size: 18px;
+            margin-top: 2px;
+            background: #f8f8f8;
+            border: 1px solid #ddd;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+        #sure_canvas {
+            float: right;
+            padding: 3px 0;
+            background: #00005F;
+            padding: 5px 10px;
+            border: 1px solid #00005F;
+            border-radius: 4px;
+            color: #fff;
+            margin-top: 3px;
+        }
+        #canvas2 {
+            position: absolute;
+            top: 0;
+            left:0;
+            z-index: 999;
+            margin-left: 40px;
+        }
+    </style>
 </head>
 <body>
-<h3>请在下方签名</h3>
-<div id="signature" style="height:100%;border:1px solid #000"></div>
-<br>
-<input id="clear" type="button" value="清除">
-<input id="export" type="button" value="输出图片">
-<input id="save" type="button" value="保存base64">
+<div class="app-container" style="padding-top: 100px;">
+    <button id="signature-button">开始手写签名</button>
+    <div class="signature-result__img">
+        <img src="" id="signature-img" alt="手写签名图片预览"/>
+    </div>
+</div>
+<div id="signature-pop">
+    <div id="signature-container">
+        <div class="demo-top-info" id="rotate-container">
+            <div class="return" id="return">返回</div>
+            <div class="signature-title text-center">手写签名</div>
+        </div>
+        <div class="canvas-container">
+            <div class="canvas-parent">
+                <canvas id="canvas"></canvas>
+            </div>
+        </div>
+        <div class="demo-bottom-info">
+            <div id="clean_canvas">清空</div>
+            <div id="sure_canvas">确认</div>
+        </div>
+    </div>
+    <canvas id="canvas2"></canvas>
+</div>
 
-<a href="javascript:;" onclick="submit();">提交</a>
-<div id="pic" />
-<p id="base" style="width:100%;"></p>
-
-<script type="text/javascript" charset="utf-8">
-    var param = {
-        width: '300px', //签名区域的宽
-        height: '100px', //签名区域的高
-        //cssclass: 'cans', //画布的类 可以写自定义的样式
-        UndoButton: false, //撤销按钮的状态 这个按钮的样式修改要去jSignature.js文件中去找
-        signatureLine: false, //去除默认画布上那条横线
-        lineWidth: '2', //画笔的大小
-        color:'#000' //画笔颜色
-    };
-
-    $(document).ready(function() {
-        $("#signature").jSignature(param)
-    });
-    //清除
-    $('#clear').click(function(){
-        $("#signature").jSignature("reset");
-        $("#pic")[0].innerHTML = '';
-    });
-    //输出图片
-    $('#export').click(function(){
-        var datapair = $("#signature").jSignature("getData", "image");
-        var i = new Image();
-        i.src = "data:" + datapair[0] + "," + datapair[1];
-        $(i).appendTo($("#pic"));
-    });
-    //保存base64
-    $('#save').click(function(){
-        var datapair = $("#signature").jSignature("getData", "image");
-        //var array = datapair.splice(",");
-        //mui.toast(array[1]);
-        console.log('--',datapair);
-    });
-    function submit(){
-        if( $("#signature").jSignature('getData', 'native').length == 0){
-            alert("请先进行签名");
-            return;
-        }
-    }
-</script>
 </body>
+<script type="text/javascript">
+
+    // 手绘签名类
+    var SignatureClass = (function(){
+        //获取当前位置(返回px)
+        function getStyle(obj, attr) {
+            if (obj.currentStyle) {
+                return obj.currentStyle[attr];
+            } else {
+                return getComputedStyle(obj, false)[attr];
+            }
+        }
+
+        function Signatrue(options) {
+            this.cavnas = null;
+            this.ctx = null;
+            this.maxparams = {};
+            this.minparams = {};
+            this.entershuping = true; //是否是竖屏 true=是
+            this.firstTouch = true; // 第一次点击或touch
+            this.allowSubmit = false; // 是否手写了内容 是=才能提交 否=不能提交
+            if(options === void 0) {
+                options = {};
+            }
+            this.options = options;
+        }
+
+        // 初始化
+        Signatrue.prototype.init = function() {
+            var self = this;
+            console.log(getStyle(document.getElementById("rotate-container"), "height")); // 不知道为什么加，否则有些Apple出问题
+            this.hengshuping();
+            this.clear();
+            this.submit();
+
+            window.addEventListener('resize',function() {
+                self.hengshuping();
+            },false);
+        }
+
+        // 判断横竖屏
+        Signatrue.prototype.hengshuping = function() {
+            if (window.orientation == 90 || window.orientation == -90) {
+                this.entershuping = false; // 横屏
+                document.getElementById("canvas2").style.display = "none";
+                document.getElementById("canvas").style.display = "block";
+                this.canvas = document.getElementById("canvas");
+                this.ctx = this.canvas.getContext("2d");
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeStyle = "#000000";
+                this.drawEvent();
+                document.querySelector("#signature-container").style.width = window.innerWidth + "px";
+                document.querySelector("#signature-container").style.height = window.innerHeight + "px";
+                this.canvas.height = parseInt(getStyle(document.getElementById("canvas").parentNode, 'height'));
+                this.canvas.width = parseInt(getStyle(document.getElementById("canvas").parentNode, 'width'));
+                document.querySelector("#signature-container").style.transform = "rotate(0deg)";
+                document.querySelector("#signature-container").style.transformOrigin = "0 0";
+                document.querySelector("#signature-container").style.marginLeft = "0px";
+            } else { // 竖屏
+                this.entershuping = true;
+                document.getElementById("canvas").style.display = "none";
+                document.getElementById("canvas2").style.display = "block";
+                this.canvas = document.getElementById("canvas2");
+                this.ctx = this.canvas.getContext("2d");
+                this.canvas.height = window.innerHeight;
+                this.canvas.width = window.innerWidth - 40 - 40;
+                this.ctx.lineWidth = 1;
+                this.ctx.strokeStyle = "#000000";
+                this.drawEvent();
+                document.querySelector("#signature-container").style.width = window.innerHeight + "px";
+                document.querySelector("#signature-container").style.height = window.innerWidth + "px";
+                document.querySelector("#signature-container").style.transform = "rotate(90deg)";
+                document.querySelector("#signature-container").style.transformOrigin = "0 0";
+                document.querySelector("#signature-container").style.marginLeft = window.innerWidth + "px";
+            }
+        }
+
+        // 绘画事件
+        Signatrue.prototype.drawEvent = function() {
+            var self = this;
+            this.canvas.addEventListener("touchstart", function(evt) {
+                var oEvent = evt || event;
+                oEvent.preventDefault();
+                var position = self.pos(oEvent);
+                self.ctx.beginPath();
+                self.ctx.moveTo(position.x, position.y);
+                if (self.firstTouch) {
+                    self.minparams = {
+                        x: position.x,
+                        y: position.y
+                    };
+                    self.maxparams = {
+                        x: position.x,
+                        y: position.y
+                    };
+                    self.firstTouch = false;
+                } else {
+                    self.judgeSize(position);
+                }
+                self.canvas.addEventListener("touchmove", touchmove, false)
+
+                function touchmove(evt) {
+                    var oEvent = evt || event;
+                    oEvent.preventDefault();
+                    var position = self.pos(oEvent);
+                    self.ctx.lineTo(position.x, position.y);
+                    self.judgeSize(position);
+                    self.ctx.stroke();
+                }
+                document.addEventListener("touchend", touchend, false)
+
+                function touchend(evt) {
+                    var oEvent = evt || event;
+                    oEvent.preventDefault();
+                    self.allowSubmit = true;
+                    self.canvas.removeEventListener("touchmove", touchmove);
+                    document.removeEventListener("touchend", touchend);
+                }
+            })
+        }
+
+        // 清空画笔
+        Signatrue.prototype.clear = function() {
+            var self = this;
+            document.getElementById("clean_canvas").addEventListener("click", function() {
+                self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
+                self.allowSubmit = false;
+            })
+        }
+
+        // 提交画笔内容
+        Signatrue.prototype.submit = function() {
+            var self = this;
+            document.getElementById("sure_canvas").addEventListener("click", function() {
+                if (self.allowSubmit) {
+                    var imgSRC = self.canvas.toDataURL('image/png', 1);
+                    var img = new Image();
+                    img.src = imgSRC;
+                    self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
+                    img.onload = function() {
+                        var width = self.maxparams.x - self.minparams.x;
+                        var height = self.maxparams.y - self.minparams.y;
+                        var targetWidth = 200;
+                        var targetHeight = 100;
+                        var clipCanvas = document.createElement("canvas");
+                        clipCanvas.width = targetWidth;
+                        clipCanvas.height = targetHeight;
+                        var ctx2 = clipCanvas.getContext("2d");
+                        if (self.entershuping) {
+                            ctx2.translate(0, targetHeight);
+                            ctx2.rotate(-90 * Math.PI / 180);
+                            ctx2.drawImage(img, self.minparams.x, self.minparams.y, width, height, 0, 0, targetHeight, targetWidth);
+                        } else {
+                            ctx2.drawImage(img, self.minparams.x, self.minparams.y, width, height, 0, 0, targetWidth, targetHeight);
+                        }
+                        var imgSRC2 = clipCanvas.toDataURL('image/png', 1);
+                        if(self.options && self.options.callback && typeof self.options.callback == 'function') {
+                            self.options.callback(imgSRC2);
+                        }
+                        self.canvas = null;
+                        self.ctx = null;
+                        ctx2 = null;
+                        clipCanvas = null;
+
+                    }
+                } else {
+                    alert("没有手写签名，不能提交!")
+                }
+            })
+        }
+
+
+        // 获取当前位置
+        Signatrue.prototype.pos = function(event) {
+            var x = event.touches[0].pageX - event.target.offsetLeft;
+            var y = event.touches[0].pageY - event.target.offsetTop;
+            return {
+                x: x,
+                y: y
+            };
+        }
+
+        // 优化画笔界限，去掉空白区域
+        Signatrue.prototype.judgeSize = function(value) {
+            if (this.minparams.x > value.x) {
+                this.minparams.x = value.x;
+            }
+            if (this.maxparams.x < value.x) {
+                this.maxparams.x = value.x;
+            }
+            if (this.minparams.y > value.y) {
+                this.minparams.y = value.y;
+            }
+            if (this.maxparams.y < value.y) {
+                this.maxparams.y = value.y;
+            }
+        }
+
+        return Signatrue;
+    })();
+
+
+    // 点击去手写签名-展示手写签名弹框
+    document.getElementById('signature-button').addEventListener('click',function(){
+        document.getElementById('signature-pop').style.display = 'block';
+        var signatrueDraw = new SignatureClass({
+            callback: function(base64) {
+                document.getElementById('signature-img').src = base64;
+                document.getElementById('signature-pop').style.display = 'none';
+                document.getElementById('signature-img').style.display = 'block';
+            }
+        });
+        signatrueDraw.init();
+
+    },false);
+
+    // 点击弹框返回
+    document.getElementById('return').addEventListener('click',function(){
+        document.getElementById('signature-pop').style.display = 'none';
+    },false);
+</script>
 </html>
