@@ -1,0 +1,56 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>模板</title>
+    <style>
+        body{
+            width:700px;
+            margin:0 auto;
+            font-family:SimHei;
+        }
+        .number{
+            padding-top: 50px;
+        }
+        .title{
+            text-align: center;
+        }
+         .footer{
+            height: 350px;
+            margin-top: 60px;
+            padding-right: 80px;
+        }
+        .jia{
+            height: 60px;
+            padding-bottom: 60px;
+        }
+        .yi{
+            height: 60px;
+            padding-bottom: 60px;
+        }
+        span[class="dd"]{
+            text-decoration: underline;
+            font-weight: bold;
+        }
+</style>
+</head>
+<body>
+    <div class="number">合同编号:${合同编号}</div>
+    <div class="title">
+        <h1>房屋租赁合同</h1>
+    </div>
+
+    <div class="footer">
+        <div style="float:left">
+            <div class="jia">出租方(甲方)签章：${甲方姓名}</div>
+            <div>本合同签署时间:${签字日期}</div>
+        </div>
+
+        <div style="float:right">
+            <div class="yi">承租人(乙方)签章：</div>
+            <div>本合同签署时间:${签字日期}</div>
+        </div>
+    </div>
+</body>
+</html>
