@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <title>HTML5电子签名-jSignature</title>
+    <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../js/jSignature.js"></script>
+</head>
+<body>
+<h3>请在下方签名</h3>
+<div id="signature" style="height:100%;border:1px solid #000"></div>
+<br>
+<input id="clear" type="button" value="清除">
+<input id="export" type="button" value="输出图片">
+<input id="save" type="button" value="保存base64">
+
+<a href="javascript:;" onclick="submit();">提交</a>
+<div id="pic" />
+<p id="base" style="width:100%;"></p>
+
+<script type="text/javascript" charset="utf-8">
+    var param = {
+        width: '300px', //签名区域的宽
+        height: '100px', //签名区域的高
+        //cssclass: 'cans', //画布的类 可以写自定义的样式
+        UndoButton: false, //撤销按钮的状态 这个按钮的样式修改要去jSignature.js文件中去找
+        signatureLine: false, //去除默认画布上那条横线
+        lineWidth: '2', //画笔的大小
+        color:'#000' //画笔颜色
+    };
+
+    $(document).ready(function() {
+        $("#signature").jSignature(param)
+    });
+    //清除
+    $('#clear').click(function(){
+        $("#signature").jSignature("reset");
+        $("#pic")[0].innerHTML = '';
+    });
+    //输出图片
+    $('#export').click(function(){
+        var datapair = $("#signature").jSignature("getData", "image");
+        var i = new Image();
+        i.src = "data:" + datapair[0] + "," + datapair[1];
+        $(i).appendTo($("#pic"));
+    });
+    //保存base64
+    $('#save').click(function(){
+        var datapair = $("#signature").jSignature("getData", "image");
+        //var array = datapair.splice(",");
+        //mui.toast(array[1]);
+        console.log('--',datapair);
+    });
+    function submit(){
+        if( $("#signature").jSignature('getData', 'native').length == 0){
+            alert("请先进行签名");
+            return;
+        }
+    }
+</script>
+</body>
+</html>

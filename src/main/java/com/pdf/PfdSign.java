@@ -29,7 +29,7 @@ public class PfdSign {
 
 
 
-        Image image = Image.getInstance("I:/contract/2.png");
+        Image image = Image.getInstance("I:/contract/sign.png");
         //Fixed Positioning
         image.scaleAbsolute(100, 50);
         //Scale to new height and new width of image
