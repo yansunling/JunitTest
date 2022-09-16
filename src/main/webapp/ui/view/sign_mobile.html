@@ -4,6 +4,10 @@
     <title>手写签名demo</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+
+    <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../js/h5upload-1.0.1.js"></script>
+
     <style>
         html,body {
             padding:0;
@@ -113,12 +117,12 @@
     </style>
 </head>
 <body>
-<div class="app-container" style="padding-top: 100px;">
+<!--<div class="app-container" style="padding-top: 100px;">
     <button id="signature-button">开始手写签名</button>
     <div class="signature-result__img">
         <img src="" id="signature-img" alt="手写签名图片预览"/>
     </div>
-</div>
+</div>-->
 <div id="signature-pop">
     <div id="signature-container">
         <div class="demo-top-info" id="rotate-container">
@@ -266,7 +270,7 @@
             document.getElementById("clean_canvas").addEventListener("click", function() {
                 self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
                 self.allowSubmit = false;
-            })
+            });
         }
 
         // 提交画笔内容
@@ -274,7 +278,7 @@
             var self = this;
             document.getElementById("sure_canvas").addEventListener("click", function() {
                 if (self.allowSubmit) {
-                    var imgSRC = self.canvas.toDataURL('image/png', 1);
+                   /* var imgSRC = self.canvas.toDataURL('image/png', 1);
                     var img = new Image();
                     img.src = imgSRC;
                     self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
@@ -303,7 +307,37 @@
                         ctx2 = null;
                         clipCanvas = null;
 
-                    }
+                    }*/
+                    self.canvas.toBlob((blob) => {
+                        let file = new window.File([blob], 'sign.png' );
+                        let up = new uploader({
+                            //必填
+                            appId: 'crm_app',
+                            host: "https://tlwl.uat.tuolong56.com",
+                            multiple: false,
+                            //非必填
+                            error: function (ev) {
+                                console.log('error:' + ev);
+                                $$.showJcdfMessager('提示消息', ev, 'warning');
+                                return;
+                            },
+                            //三个参数一个完整data,一个下载路径，一个预览路径，一个文件id
+                            success: function (data, dl, pw, fileId) {
+                                console.log(data);
+                                var obj = JSON.parse(data);
+                                let url="https://tlwl.uat.tuolong56.com/fsm/api/fsm_api/download.do?file_app_id=crm_app&file_serial_no="+obj.data[0].file_serial_no;
+                                window.open(url);
+                            }
+                        });
+                        up.singleSend(file);
+
+                        self.ctx.clearRect(0, 0, self.canvas.width, self.canvas.height);
+                        self.allowSubmit = false;
+
+
+
+                    });
+
                 } else {
                     alert("没有手写签名，不能提交!")
                 }
@@ -342,7 +376,7 @@
 
 
     // 点击去手写签名-展示手写签名弹框
-    document.getElementById('signature-button').addEventListener('click',function(){
+   /* document.getElementById('signature-button').addEventListener('click',function(){
         document.getElementById('signature-pop').style.display = 'block';
         var signatrueDraw = new SignatureClass({
             callback: function(base64) {
@@ -353,11 +387,31 @@
         });
         signatrueDraw.init();
 
-    },false);
+    },false);*/
 
     // 点击弹框返回
     document.getElementById('return').addEventListener('click',function(){
         document.getElementById('signature-pop').style.display = 'none';
     },false);
+
+
+
+
+    //初始化页面
+    document.getElementById('signature-pop').style.display = 'block';
+    var signatrueDraw = new SignatureClass({
+        callback: function(base64) {
+            document.getElementById('signature-img').src = base64;
+            document.getElementById('signature-pop').style.display = 'none';
+            document.getElementById('signature-img').style.display = 'block';
+        }
+    });
+    signatrueDraw.init();
+
+
+
+
+
+
 </script>
 </html>
