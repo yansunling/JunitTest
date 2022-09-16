@@ -145,7 +145,7 @@
           <element id="library" level="project" name="Maven: net.jodah:lyra:0.5.5" />
           <element id="library" level="project" name="Maven: commons-httpclient:commons-httpclient:3.1" />
           <element id="library" level="project" name="Maven: com.github.jsqlparser:jsqlparser:4.0" />
-          <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk15on:1.60" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk15on:1.49" />
           <element id="library" level="project" name="Maven: cn.hutool:hutool-all:5.6.1" />
           <element id="library" level="project" name="Maven: com.dy.components:dy-annotations:v3.0.0-SNAPSHOT" />
           <element id="library" level="project" name="Maven: org.apache.httpcomponents:httpmime:4.5.3" />
@@ -237,6 +237,7 @@
           <element id="library" level="project" name="Maven: org.bouncycastle:bcprov-jdk14:1.38" />
           <element id="library" level="project" name="Maven: org.xhtmlrenderer:flying-saucer-core:9.1.6" />
           <element id="library" level="project" name="Maven: org.freemarker:freemarker:2.3.19" />
+          <element id="library" level="project" name="Maven: org.bouncycastle:bcpkix-jdk15on:1.49" />
         </element>
       </element>
       <element id="directory" name="META-INF">

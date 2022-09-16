@@ -294,7 +294,7 @@
             <version>2.9.2</version>
         </dependency>
 
-
+        <!-- pdf 生成 -->
         <dependency>
             <groupId>com.itextpdf.tool</groupId>
             <artifactId>xmlworker</artifactId>
@@ -317,6 +317,21 @@
             <artifactId>freemarker</artifactId>
             <version>2.3.19</version>
         </dependency>
+
+
+
+        <!-- pkcs12 生成 -->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcprov-jdk15on</artifactId>
+            <version>1.49</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk15on</artifactId>
+            <version>1.49</version>
+        </dependency>
+
 
 
 
