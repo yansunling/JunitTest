@@ -15,7 +15,7 @@ public class CompAssetStocktakingReportVO {
 
     @MyNotEmpty(message = "流水号为空")
     @CJ_column(name = "流水号")
-    private String serial_no;
+    private int serial_no;
 
     @CJ_column(name = "remark")
     private String remark;

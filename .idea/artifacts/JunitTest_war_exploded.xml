@@ -83,7 +83,7 @@
           <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:4.0.1" />
           <element id="file-copy" path="$MAVEN_REPOSITORY$/com/yd/foundation/2.7.1_foc-SNAPSHOT/foundation-2.7.1_foc-20220510.092551-43.jar" output-file-name="foundation-2.7.1_foc-SNAPSHOT.jar" />
           <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/foc-springmvc-proxy/1.0-SNAPSHOT/foc-springmvc-proxy-1.0-20210514.081235-11.jar" output-file-name="foc-springmvc-proxy-1.0-SNAPSHOT.jar" />
-          <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/foc-common-facade/1.0-SNAPSHOT/foc-common-facade-1.0-20220307.011553-18.jar" output-file-name="foc-common-facade-1.0-SNAPSHOT.jar" />
+          <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/foc-common-facade/1.0-SNAPSHOT/foc-common-facade-1.0-20220916.062050-19.jar" output-file-name="foc-common-facade-1.0-SNAPSHOT.jar" />
           <element id="library" level="project" name="Maven: com.google.inject:guice:4.2.3" />
           <element id="library" level="project" name="Maven: javax.inject:javax.inject:1" />
           <element id="library" level="project" name="Maven: com.google.code.gson:gson:2.8.5" />

@@ -1,5 +1,6 @@
 package com.word.autWord;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.toolkit.BeanUtils;
@@ -147,6 +148,7 @@ public class WordCreateByClass {
                     bean.setType("是");
                 }
                 Class<?> type = declaredField.getType();
+                System.out.println(type.getSimpleName());
                 if(type.getSimpleName().indexOf("List")>=0){
                     bean.setListType("Y");
                     String description = bean.getDescription();
@@ -155,7 +157,6 @@ public class WordCreateByClass {
                         bean.setDescription(description);
                     }
                 }
-
                 returnList.add(bean);
             }
         }
