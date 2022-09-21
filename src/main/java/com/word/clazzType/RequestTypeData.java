@@ -23,6 +23,8 @@ public class RequestTypeData extends CIPBasePO {
 
     @CJ_column(name = "类型")
     private CompAssetApplyRecordPO type;
+    @CJ_column(name = "集合")
+    private List<String> list;
 
 
 
