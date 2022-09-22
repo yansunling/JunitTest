@@ -1,5 +1,6 @@
 package com.img;
 
+import org.apache.commons.codec.binary.Base64;
 import org.aspectj.util.FileUtil;
 import sun.misc.BASE64Decoder;
 
@@ -11,27 +12,23 @@ public class Base64ToImgTest {
 	 * @param args
 	 * @throws Exception 
 	 */
-	public static String filePath = "I:/img/1.text";
-
 
 	public static void main(String[] args) throws Exception {
-		/*byte[] b1 = image2Bytes("D:\\1.jpg"); //path是绝对路径
+		String filePath = "I:/img/2.text";
+		byte[] b1 = image2Bytes("I:/img/3.jpg"); //path是绝对路径
 		byte[] b2 = Base64.encodeBase64(b1);
-		saveAsFileWriter(new String(b2));//将base64编码的数据保存到文件中*/
+//		saveAsFileWriter(new String(b2),filePath);//将base64编码的数据保存到文件中
 
 
 		//base64转图片
-		Base64ToImage(FileUtil.readAsString(new File(filePath)),"I:/img/3.jpg");
+		Base64ToImage(FileUtil.readAsString(new File(filePath)),"I:/img/4.jpg");
 
 
-		String signData = "";
-//		Base64ToImage(FileUtil.readAsString(new File("I:/contract/3.txt")),"I:/contract/3.png");
 
-//		Base64ToImage(signData,"I:/contract/3.png");
 
 	}
 
-	public static void saveAsFileWriter(String content) {
+	public static void saveAsFileWriter(String content,String filePath) {
 		FileWriter fwriter = null;
 		try {
 			// true表示不覆盖原来的内容，而是加到文件的后面。若要覆盖原来的内容，直接省略这个参数就好
