@@ -1,11 +1,13 @@
 package com.word;
 
+import com.yd.utils.common.StringUtils;
+
 import java.lang.reflect.Method;
 
 public class CreateSqlByEnum {
     public static void main(String[] args) throws Exception{
 
-       String[] clazzList={"ASSET_STATUS"};
+       String[] clazzList={"ASSET_APPLY_TYPE"};
        for(String clazzName:clazzList){
            String sql = buildSql(clazzName);
            System.out.println(sql);
@@ -20,6 +22,9 @@ public class CreateSqlByEnum {
         for(Object object:enums){
             Method codeType = clazz.getMethod("codeType");
             String key=codeType.invoke(object)+"";
+            if(StringUtils.isBlank(key)){
+                continue;
+            }
 
             Method codeName = clazz.getMethod("codeName");
             String value=codeName.invoke(object)+"";
