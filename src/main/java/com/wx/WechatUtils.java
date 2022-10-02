@@ -134,6 +134,43 @@ public class WechatUtils {
     }
 
 
+
+    public static MMS_wechat_wea_result sendTextCardMessage(String receiver, WechatTextcard textCard, String corpID, String agentId, String secret){
+
+        String token = null;
+        try {
+            token = getAccessToken(corpID, secret);
+        } catch (Exception e) {
+            logger.error("获取accessToken失败，{}", e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+
+        if(StringUtils.isEmpty(token)){
+            throw new RuntimeException("accessToken为空");
+        }
+        WechatMessage wechat = new WechatMessage();
+        wechat.setTouser(receiver);
+        wechat.setAgentid(Integer.parseInt(agentId));
+        wechat.setTextcard(textCard);
+        wechat.setMsgtype("textcard");
+        MessageFormat format=new MessageFormat(send_url);
+        Object[] args = {token};
+        String url=format.format(args);
+
+        JSONObject object=HttpUtils.httpRequest(url,"POST",JSON.toJSONString(wechat));
+        MMS_wechat_wea_result result = JSONObject.toJavaObject(object, MMS_wechat_wea_result.class);
+        logger.debug("企业微信发送结果：{}", result);
+        return result;
+    }
+
+
+
+
+
+
+
+
+
         /**
          * 新增临时素材
          *

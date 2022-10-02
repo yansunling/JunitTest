@@ -2,7 +2,7 @@ package com.wx.send;
 
 import com.wx.WechatUtils;
 
-public class SendTest {
+public class SendFileWechat {
     public static void main(String[] args) throws Exception{
 
         String receiver="T1113";
