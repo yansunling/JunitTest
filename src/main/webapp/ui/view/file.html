@@ -1,13 +1,40 @@
-<!DOCTYPE html>
+<!Doctype html>
+
 <html>
+
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <script type="text/javascript" >
+
+    <meta charset="utf-8" />
+
+    <title>html5 图片转base64编码</title>
+
+    <style>
+
+        * {
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        .demo{
+
+            width: 100%;
+
+            margin: 50px;
+
+        }
+
+    </style>
+
+    <script type="text/javascript">
+
         window.onload = function() {
 
             // 抓取上传图片，转换代码结果，显示图片的dom
 
-            var img_upload = document.getElementById("file");
+            var img_upload = document.getElementById("img_upload");
 
             var base64_code = document.getElementById("base64_code");
 
@@ -18,6 +45,9 @@
             img_upload.addEventListener('change', readFile, false);
 
         }
+
+
+
         function readFile() {
 
             var file = this.files[0];//这里是抓取到上传的对象。
@@ -29,42 +59,41 @@
                 return false;
 
             }
+
             var reader = new FileReader();
+
             reader.readAsDataURL(file);
+
             reader.onload = function() {
+
                 base64_code.innerHTML = this.result;
+
                 //this.result里的这个result是FileReader.readAsDataURL()接口当中转换完图片输出的base64结果存放在result当中
-                img_area.innerHTML = '<img src="' + this.result + '" alt=""/>';
+
+                img_area.innerHTML = '<div>图片img标签展示：</div><img src="' + this.result + '" alt=""/>';
+
             }
+
         }
+
     </script>
+
 </head>
+
+
+
 <body>
-<div id="area_form">
-    <form id="form_crmx_base_storefront_img" class="form">
-        <table border='0' style="width: 280px;">
-            <tr>
-                <td align='right' width=40%>
-                    <label for="file">附	件：</label>
-                </td>
-                <td width=70%>
-                    <input type="file" id="file" name="file" accept="image/gif,image/jpeg,image/jpg,image/png" multiple="multiple" style='height:26px;width:200px'/>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="file">base64：</label></td>
-                <td>
-                    <div id="base64_code"></div>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="file">图片：</label></td>
-                <td> <div id="img_area"></div></td>
-            </tr>
-        </table>
-    </form>
-    <div id="icon"></div>
+
+<div class="demo">
+
+    <input type="file" id="img_upload" />
+
+    <textarea id="base64_code" rows="30" cols="100"></textarea>
+
+    <p id="img_area"></p>
+
 </div>
 
 </body>
+
 </html>
