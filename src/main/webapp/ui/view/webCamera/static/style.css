@@ -1,0 +1,43 @@
+*{margin: 0px;padding: 0px;}
+/* 视频预览区 */
+#my_view{
+    border: 1px solid green;
+}
+/* 缩略图 */
+#my_thumbnail{
+    height: 85px;
+    overflow-x: auto;
+    border: 1px solid blue;
+}
+#my_thumbnail img{
+    margin: 0 5px;
+}
+/* 操作区 */
+#function_area{
+    background-color: thistle;
+    padding-bottom: 20px;
+}
+#area_title, #area_content{
+    padding-left: 20px;
+}
+#area_title ul{
+    display: table-row;
+}
+#area_title ul li{
+    list-style-type: none;
+    float: left;
+    padding: 5px 10px;
+}
+#area_title ul li:hover{
+    background-color: #fff;
+}
+#area_title ul li.active{
+    background-color: yellow;
+}
+/* 日志 */
+#my_log{
+    border: 1px solid red;
+    height: 200px;
+    overflow: auto;
+    padding: 10px;
+}

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript-WebCamera-Demo</title>
+    <link rel="stylesheet" href="./static/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+</head>
+<body>
+    <!-- 摄像头预览视图 -->
+    <div id="my_view">
+        <div id="view_chrome">
+            <img id="view1" src="" width="400px" height="300px" alt="主摄像头画面">
+            <img id="view2" src="" width="400px" height="300px" alt="副摄像头画面">
+        </div>
+        <div id="view_ie"></div>
+    </div>
+    <!-- 缩略图 -->
+    <div id="my_thumbnail"></div>
+    <!-- 功能按钮 -->
+    <div id="function_area">
+        <div id="area_title">
+            <ul>
+                <li>高拍仪</li>
+                <li>PDF</li>
+                <li>人脸</li>
+                <li>OCR</li>
+                <li>设备</li>
+                <li>串口</li>
+            </ul>
+        </div>
+        <hr>
+        <div id="area_content">
+            <!-- 高拍仪 -->
+            <div>
+                <fieldset>
+                    <legend>视频模式及分辨率设置</legend>
+                    主头视频模式：<select name="" id="view1_mode" onchange="change_view1_mode()"></select>
+                    主头分辨率：<select name="" id="view1_resolution_power"></select>
+                    副头视频模式：<select name="" id="view2_mode" onchange="change_view2_mode()"></select>
+                    副头头分辨率：<select name="" id="view2_resolution_power"></select>
+                    <button onclick="set_view1_resolution_power()">设置主头分辨率</button>
+                    <button onclick="set_view2_resolution_power()">设置副头分辨率</button>
+                    <br>
+                </fieldset>
+                <br>
+                <button onclick="open_view1()">打开主头视频</button>
+                <button onclick="close_view1()">关闭主头视频</button>
+                <button onclick="open_view2()">打开副头视频</button>
+                <button onclick="close_view2()">关闭副头视频</button>
+                <button onclick="rotate90()">左转</button>
+                <button onclick="rotate270()">右转</button>
+                <button onclick="open_deskew()">开启主头纠偏显示</button>
+                <button onclick="close_deskew()">关闭主头纠偏显示</button>
+                <br>
+                <button onclick="scan(0)">主头拍照</button>
+                <button onclick="scan(1)">副头拍照</button>
+                <button onclick="save_image_scan()">主头拍照并保存本地</button>
+                <button onclick="flattening_scan()">展平拍照</button>
+                <button onclick="open_auto_scan()">开启自动拍照</button>
+                <button onclick="close_auto_scan()">关闭自动拍照</button>
+                <br>
+                <button onclick="ocr_barcode()">条码识别</button>
+                <button onclick="get_biokey()">获取指纹</button>
+                <button onclick="read_IDCard()">读取身份证</button>
+                <br>
+                <button onclick="open_sign()">弹出签字窗口：GW500A & GW1000A</button>
+                <button onclick="close_sign()">关闭签字窗口：GW500A & GW1000A</button>
+                <button onclick="get_sign()">获取签字图片</button>
+                <br>
+                <button onclick="start_video()">开始录制视频</button>
+                <button onclick="end_video()">结束录制视频</button>
+                <button onclick="get_audio_list()">获取音频设备列表</button>
+                <button onclick="get_video_status()">获取录制视频状态</button>
+                <br>
+                <button onclick="open_a3a4()">开启A3A4幅面自动切换</button>
+                <button onclick="close_a3a4()">关闭A3A4幅面自动切换</button>
+            </div>
+            <!-- PDF -->
+            <div>
+                <button onclick="add_pdf()">拍照并添加到PDF队列</button>
+                <button onclick="save_pdf()">生成PDF文件</button>
+            </div>
+            <!-- 人脸 -->
+            <div>
+                <button onclick="is_living_person()">活体检测</button>
+                <button onclick="person_and_IDCard()">人证比对</button>
+            </div>
+            <!-- OCR -->
+            <div>
+                <button onclick="ocr()">OCR</button>
+            </div>
+            <!-- 设备 -->
+            <div>
+                <button onclick="getequipmenttype()">获取设备型号</button>
+                <button onclick="getsonixserialnumber()">获取设备序列号</button>
+                <button onclick="get_status()">获取设备状态</button>
+                <button onclick="is_connect()">判断设备是否连接</button>
+            </div>
+            <!-- 串口 -->
+            <div>
+                <button onclick="open_serialport()">打开串口</button>
+                <button onclick="close_serialport()">关闭串口</button>
+                <button onclick="sign_r()">打开签字窗口：GW500R & GW1000R</button>
+                <button onclick="sign_r_get()">获取签名图片：GW500R & GW1000R</button>
+            </div>
+        </div>
+    </div>
+    <!-- 日志 -->
+    <div id="my_log">本网页只是一个demo，做的判断、处理不够多，所以会出现一些小的问题，遇到问题不要慌，刷新网页，查看控制台就可以了。<br>我是操作日志</div>
+    <script src="./static/style.js"></script>
+    <script src="./api/gaopaiyi.js"></script>
+    <script src="./api/serialport.js"></script>
+    <script src="./api/pdf.js"></script>
+    <script src="./api/person.js"></script>
+    <script src="./api/equipment.js"></script>
+    <script src="./customized/thumbnail_customized.js"></script>
+    <script>
+        // 用于输出日志信息
+        function my_log(msg){
+            date = new Date().toTimeString().slice(0, 8);
+            var oldVal = $('#my_log').html();
+            $('#my_log').html(date + ' :\t' + msg + '<br>' + oldVal);
+        }
+
+        // 传递图片base64，缩略图框生成图片用来显示,并添加到PDF队列
+        function add_img(img_base64){
+            img = document.createElement('img');
+            img.id = 'hu' + String(Math.random());
+            img.src = "data:image/jpg;base64," + img_base64;
+            img.oncontextmenu = showOperation;
+            img.style.width = '80px';
+            img.style.height = '80px';
+            document.getElementById('my_thumbnail').appendChild(img)
+        }
+
+        /**
+         * OCR相关操作
+        */
+        // ocr
+        function ocr(){
+            my_log('将会识别本地图片，D:a.jpg，请确保图片已存在');
+            data = {
+                "ocrflag": "1",
+                "picfilepath": "D://a.jpg",
+                "savefilepath": "D://ocr.pdf"
+            }
+            $.post("http://127.0.0.1:38088/video=ocr", JSON.stringify(data), function(res){
+                if(res.code == '0'){
+                    my_log("识别成功，保存在：D:ocr.pdf")
+                }else{
+                    my_log("识别失败")
+                }
+            })
+        }
+    </script>
+</body>
+</html>
