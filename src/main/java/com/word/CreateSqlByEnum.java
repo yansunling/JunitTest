@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 public class CreateSqlByEnum {
     public static void main(String[] args) throws Exception{
 
-       String[] clazzList={"ASSET_APPLY_TYPE"};
+       String[] clazzList={"ASSET_TASK_TYPE"};
        for(String clazzName:clazzList){
            String sql = buildSql(clazzName);
            System.out.println(sql);
