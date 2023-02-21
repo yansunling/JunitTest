@@ -1,6 +1,5 @@
 package com.word.autWord;
 
-import cn.hutool.core.util.ObjectUtil;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.toolkit.BeanUtils;
@@ -8,16 +7,18 @@ import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
 import com.dy.test.autoTest.ParamBean;
 import com.dy.test.doc.GeneralTemplateTool;
-import com.word.controller.CompAssetApplyRecordController;
 import com.word.asset.interfaces.MyNotEmpty;
 import com.word.asset.interfaces.MyNotNull;
-import com.word.controller.CompAssetBaseCheckController;
-import com.word.controller.CompAssetStocktakingReportController;
+import com.word.controller.TMSP_claims_hand_docController;
+import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
+import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,6 +29,8 @@ public class WordCreateByClass {
 
     public static void main(String[] args) throws Exception{
 
+        closeWps();
+
         String filePath="C:/Users/admin/Desktop/api";
         //模板路径
         String templatePath=filePath+"/template.docx";
@@ -35,20 +38,26 @@ public class WordCreateByClass {
         GeneralTemplateTool gtt = new GeneralTemplateTool();
 
 
-        Class<CompAssetStocktakingReportController> clazz = CompAssetStocktakingReportController.class;
+        Class<TMSP_claims_hand_docController> clazz = TMSP_claims_hand_docController.class;
 
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
-        String rootPath="https://tlwl.uat.tuolong56.com/asset-api"+annotation.value()[0];
+        String rootPath="https://tlwl.uat.tuolong56.com/tmsp"+annotation.value()[0];
         //获得所有方法
         Method[] methods = clazz.getMethods();
+
+        List<String> fileList=new ArrayList<>();
 
         for (Method item : methods) {
             RequestMapping declaredAnnotation = item.getDeclaredAnnotation(RequestMapping.class);
             if(declaredAnnotation!=null){
                 String url = rootPath+declaredAnnotation.value()[0]+".do";
+                //获得描述
+                String desc = declaredAnnotation.name();
                 CJ_jcjs_esbMethodInfo methodInfo = item.getAnnotation(CJ_jcjs_esbMethodInfo.class);
-                String desc = methodInfo.desc();
+                if(methodInfo!=null){
+                    desc = methodInfo.desc();
+                }
                 if(item.getParameterTypes().length>0){
                     Class<?> parameterType = item.getParameterTypes()[0];
                     System.out.println(parameterType.getName());
@@ -60,8 +69,6 @@ public class WordCreateByClass {
                     params.put("name",desc);
                     //创建替代&生成模板里tab1标识的表格中的值开始
                     List<Map<String,String>> tab1list = new ArrayList<>();
-
-
                     Object requestParam = new HashMap<>();
 
                     try {
@@ -69,30 +76,38 @@ public class WordCreateByClass {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-
                     List<ParamBean> paramBeans=getParamsBean(parameterType);
-
-                    List<String> paramIsList=new ArrayList<>();
-                    for (ParamBean bean:paramBeans) {
-                        String paramName = bean.getName();
-                        Map<String, String> map = new HashMap<>();
-                        map.put("param", paramName);
-                        map.put("type", bean.getType());
-                        map.put("msg", bean.getDescription());
-                        tab1list.add(map);
-                        if(StringUtils.equals("Y",bean.getListType())){
-                            paramIsList.add(paramName);
+                    //集合对象
+                    List<ParamBean> listChildren=getTabList(tab1list,paramBeans);
+                    params.put("tab1", tab1list);
+                    //是否存在对象数组
+                    if(CollectionUtil.isNotEmpty(listChildren)){
+                        //获得目标文件
+                        templatePath = CopyWordParagraph.createListDocument(listChildren);
+                        for(int i=0;i<listChildren.size();i++){
+                            ParamBean paramBean = listChildren.get(i);
+                            List<ParamBean> childParamsBean = getParamsBean(Class.forName(paramBean.getClazz()));
+                            //获得子对象属性
+                            List<Map<String,String>> tab2list = new ArrayList<>();
+                            getTabList(tab2list,childParamsBean);
+                            params.put("tab"+(i+2), tab2list);
                         }
                     }
-                    params.put("tab1", tab1list);
-
+                    System.out.println(JSON.toJSONString(listChildren));
                     Map<String, Object> stringObjectMap = BeanUtils.beanToMap(requestParam);
-
-                    paramIsList.forEach(param->{
-                        stringObjectMap.put(param,new ArrayList<>());
-                    });
-
+                    for(ParamBean param:listChildren){
+                        String clazzName = param.getClazz();
+                        List list=new ArrayList();
+                        if(StringUtils.isNotBlank(param.getListType())){
+                            if(StringUtils.isNotBlank(clazzName)){
+                                Object o = Class.forName(clazzName).newInstance();
+                                list.add(o);
+                            }
+                            stringObjectMap.put(param.getName(),list);
+                        }else{
+                            stringObjectMap.put(param.getName(),Class.forName(clazzName).newInstance());
+                        }
+                    }
                     String pretty = JSON.toJSONString(stringObjectMap, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);
                     pretty=pretty.replaceAll("\n","\r");
                     pretty=pretty.replaceAll("null","\"\"");
@@ -109,6 +124,7 @@ public class WordCreateByClass {
 
                     String outFile = filePath + "/"+desc+".docx";
                     gtt.templateWrite(templatePath, outFile, params);
+                    fileList.add(outFile);
                     System.out.println("生成模板成功");
                     System.out.println(outFile);
 
@@ -123,17 +139,41 @@ public class WordCreateByClass {
 
 
 
-//        openWps();
+        openWps(fileList);
 
     }
+    @SneakyThrows
+    public static List<ParamBean> getTabList( List<Map<String,String>> tab1list,List<ParamBean> paramBeans){
+        List<ParamBean> listChildren=new ArrayList<>();
+        for (ParamBean bean:paramBeans) {
+            String paramName = bean.getName();
+            Map<String, String> map = new HashMap<>();
+            map.put("param", paramName);
+            map.put("type", bean.getType());
+            map.put("msg", bean.getDescription());
+            tab1list.add(map);
+            if(StringUtils.equals("Y",bean.getListType())){
+                if(StringUtils.isNotBlank(bean.getClazz())){
+                    listChildren.add(bean);
+                }
+            }else if(StringUtils.isNotBlank(bean.getClazz())){
+                listChildren.add(bean);
+            }
 
+        }
+        return listChildren;
+    }
+
+
+
+    @SneakyThrows
     public static  List<ParamBean> getParamsBean(Class clazz){
 
         List<ParamBean> returnList=new ArrayList<>();
         Field[] declaredFields = clazz.getDeclaredFields();
 
         for (Field declaredField : declaredFields) {
-
+            System.out.println(declaredField.getName());
             CJ_column cjColumn = declaredField.getAnnotation(CJ_column.class);
             if(cjColumn!=null){
                 ParamBean bean=new ParamBean(declaredField.getName(),cjColumn.name());
@@ -147,14 +187,33 @@ public class WordCreateByClass {
                 if(notEmpty!=null){
                     bean.setType("是");
                 }
-                Class<?> type = declaredField.getType();
-                System.out.println(type.getSimpleName());
-                if(type.getSimpleName().indexOf("List")>=0){
+                if(declaredField.getType() == java.util.List.class){
+                    // 如果是List类型，得到其Generic的类型
+                    Type genericType = declaredField.getGenericType();
+                    if(genericType == null) continue;
+                    // 如果是泛型参数的类型
+                    if(genericType instanceof ParameterizedType){
+                        ParameterizedType pt = (ParameterizedType) genericType;
+                        //得到泛型里的class类型对象
+                        Class<?> genericClazz = (Class<?>)pt.getActualTypeArguments()[0];
+                        bean.setClazz(genericClazz.getName());
+                    }
                     bean.setListType("Y");
                     String description = bean.getDescription();
                     if(description.indexOf("(集合)")<=0){
                         description=description+"(集合)";
                         bean.setDescription(description);
+                    }
+                }else{
+                    //不是基本类型
+                    Class<?> aClass = declaredField.getType();
+                    boolean primitive = aClass.isPrimitive();
+                    if(!primitive){
+                        String simpleName = aClass.getSimpleName();
+                        if(!simpleName.equals("String")&&!simpleName.equals("Object")&&!simpleName.equals("Boolean")
+                                &&!simpleName.equals("Double")&&!simpleName.equals("Integer")){
+                            bean.setClazz(aClass.getName());
+                        }
                     }
                 }
                 returnList.add(bean);
@@ -169,14 +228,17 @@ public class WordCreateByClass {
         p.waitFor();
     }
 
-    public static void openWps() throws Exception{
+    public static void openWps(String fileName) throws Exception{
         Runtime run =Runtime.getRuntime();
-
-//        Process p = run.exec("cmd /C start C:/Users/admin/Desktop/资产/资产接口说明.docx");
-//        p.waitFor();
-
-        Process p = run.exec("cmd /C start C:/Users/admin/Desktop/api/asset.docx");
+        Process p = run.exec("cmd /C start "+fileName);
         p.waitFor();
+    }
+
+
+    public static void openWps(List<String> list) throws Exception{
+        for(String fileName:list){
+            openWps(fileName);
+        }
 
     }
 

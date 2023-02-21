@@ -1,15 +1,19 @@
 package com.dy.test.autoTest;
 
+import lombok.Data;
+
+@Data
 public class ParamBean {
 	private String type;
 	private String name;
 	private String description;
 	private String listType;//集合类型
-	
+	private String Clazz;//对应对象类名
+
 	public ParamBean() {
 		super();
 	}
-	
+
 	public ParamBean(String type, String name, String description) {
 		super();
 		this.type = type;
@@ -22,32 +26,6 @@ public class ParamBean {
 		this.description = description;
 	}
 
-	public String getType() {
-		return type;
-	}
-	public void setType(String type) {
-		this.type = type;
-	}
-	public String getName() {
-		return name;
-	}
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getDescription() {
-		return description;
-	}
-	public void setDescription(String description) {
-		this.description = description;
-	}
-
-	public String getListType() {
-		return listType;
-	}
-
-	public void setListType(String listType) {
-		this.listType = listType;
-	}
 
 	@Override
 	public String toString() {
@@ -55,7 +33,7 @@ public class ParamBean {
 				+ "]";
 	}
 
-	
+
 	
 
 	
