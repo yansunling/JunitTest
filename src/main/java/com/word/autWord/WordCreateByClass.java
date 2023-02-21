@@ -77,8 +77,9 @@ public class WordCreateByClass {
                         e.printStackTrace();
                     }
                     List<ParamBean> paramBeans=getParamsBean(parameterType);
+                    Map<String, Object> stringObjectMap = new HashMap<>();
                     //集合对象
-                    List<ParamBean> listChildren=getTabList(tab1list,paramBeans);
+                    List<ParamBean> listChildren=getTabList(tab1list,paramBeans,stringObjectMap);
                     params.put("tab1", tab1list);
                     //是否存在对象数组
                     if(CollectionUtil.isNotEmpty(listChildren)){
@@ -89,23 +90,16 @@ public class WordCreateByClass {
                             List<ParamBean> childParamsBean = getParamsBean(Class.forName(paramBean.getClazz()));
                             //获得子对象属性
                             List<Map<String,String>> tab2list = new ArrayList<>();
-                            getTabList(tab2list,childParamsBean);
+                            Map<String, Object> childValueObj=new HashMap<>();
+                            getTabList(tab2list,childParamsBean,childValueObj);
                             params.put("tab"+(i+2), tab2list);
-                        }
-                    }
-                    System.out.println(JSON.toJSONString(listChildren));
-                    Map<String, Object> stringObjectMap = BeanUtils.beanToMap(requestParam);
-                    for(ParamBean param:listChildren){
-                        String clazzName = param.getClazz();
-                        List list=new ArrayList();
-                        if(StringUtils.isNotBlank(param.getListType())){
-                            if(StringUtils.isNotBlank(clazzName)){
-                                Object o = Class.forName(clazzName).newInstance();
-                                list.add(o);
+                            if(StringUtils.isNotBlank(paramBean.getListType())){
+                                List list=new ArrayList();
+                                list.add(childValueObj);
+                                stringObjectMap.put(paramBean.getName(),list);
+                            }else{
+                                stringObjectMap.put(paramBean.getName(),childValueObj);
                             }
-                            stringObjectMap.put(param.getName(),list);
-                        }else{
-                            stringObjectMap.put(param.getName(),Class.forName(clazzName).newInstance());
                         }
                     }
                     String pretty = JSON.toJSONString(stringObjectMap, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);
@@ -143,7 +137,7 @@ public class WordCreateByClass {
 
     }
     @SneakyThrows
-    public static List<ParamBean> getTabList( List<Map<String,String>> tab1list,List<ParamBean> paramBeans){
+    public static List<ParamBean> getTabList( List<Map<String,String>> tab1list,List<ParamBean> paramBeans,Map<String, Object> stringObjectMap){
         List<ParamBean> listChildren=new ArrayList<>();
         for (ParamBean bean:paramBeans) {
             String paramName = bean.getName();
@@ -158,6 +152,8 @@ public class WordCreateByClass {
                 }
             }else if(StringUtils.isNotBlank(bean.getClazz())){
                 listChildren.add(bean);
+            }else{
+                stringObjectMap.put(paramName,bean.getDescription());//设置对象属性
             }
 
         }
@@ -211,7 +207,7 @@ public class WordCreateByClass {
                     if(!primitive){
                         String simpleName = aClass.getSimpleName();
                         if(!simpleName.equals("String")&&!simpleName.equals("Object")&&!simpleName.equals("Boolean")
-                                &&!simpleName.equals("Double")&&!simpleName.equals("Integer")){
+                                &&!simpleName.equals("Double")&&!simpleName.equals("Integer")&&!simpleName.equals("Money")){
                             bean.setClazz(aClass.getName());
                         }
                     }
