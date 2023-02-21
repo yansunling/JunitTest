@@ -100,8 +100,7 @@ public class CopyWordParagraph {
         XWPFParagraph xwpfParagraph = document.insertNewParagraph(cursor);
         XWPFRun run = xwpfParagraph.createRun();
         run.setText(title);
-        run.setBold(true
-        );
+        run.setBold(true);
 
 
 
