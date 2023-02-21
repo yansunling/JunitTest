@@ -98,7 +98,11 @@ public class CopyWordParagraph {
         XWPFParagraph paragraph = paragraphList.get(paraIndex);
         XmlCursor cursor = paragraph.getCTP().newCursor();
         XWPFParagraph xwpfParagraph = document.insertNewParagraph(cursor);
-        xwpfParagraph.createRun().setText(title);
+        XWPFRun run = xwpfParagraph.createRun();
+        run.setText(title);
+        run.setBold(true
+        );
+
 
 
         paragraphList = document.getParagraphs();
