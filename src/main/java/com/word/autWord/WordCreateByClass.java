@@ -69,13 +69,7 @@ public class WordCreateByClass {
                     params.put("name",desc);
                     //创建替代&生成模板里tab1标识的表格中的值开始
                     List<Map<String,String>> tab1list = new ArrayList<>();
-                    Object requestParam = new HashMap<>();
 
-                    try {
-                        requestParam = parameterType.newInstance();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
                     List<ParamBean> paramBeans=getParamsBean(parameterType);
                     Map<String, Object> stringObjectMap = new HashMap<>();
                     //集合对象
