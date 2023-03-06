@@ -19,6 +19,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,16 +31,13 @@ public class WordCreateByClass {
     public static void main(String[] args) throws Exception{
 
         closeWps();
-
-        String filePath="C:/Users/admin/Desktop/api";
+        String path = WordCreateByClass.class.getClassLoader().getResource("").getPath();
+        String filePath=path+"api";
         //模板路径
         String templatePath=filePath+"/template.docx";
         //doc文档生成工具
         GeneralTemplateTool gtt = new GeneralTemplateTool();
-
-
         Class<TMSP_claims_hand_docController> clazz = TMSP_claims_hand_docController.class;
-
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
         String rootPath="https://tlwl.uat.tuolong56.com/tmsp"+annotation.value()[0];
@@ -220,6 +218,9 @@ public class WordCreateByClass {
 
     public static void openWps(String fileName) throws Exception{
         Runtime run =Runtime.getRuntime();
+        if(fileName.startsWith("/")){
+            fileName=fileName.substring(1);
+        }
         Process p = run.exec("cmd /C start "+fileName);
         p.waitFor();
     }

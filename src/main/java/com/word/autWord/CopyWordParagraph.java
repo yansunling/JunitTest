@@ -19,7 +19,11 @@ import java.util.List;
 public class CopyWordParagraph {
 
     public static String  createListDocument(List<ParamBean> beanList)throws Exception{
-        String filePath="C:/Users/admin/Desktop/api";
+//        String filePath="C:/Users/admin/Desktop/api";
+
+        String path = WordCreateByClass.class.getClassLoader().getResource("").getPath();
+        String filePath=path+"api";
+
         //模板路径
         String templatePath=filePath+"/template.docx";
 
