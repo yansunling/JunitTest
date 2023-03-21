@@ -7,6 +7,7 @@ import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.entity.mime.content.StringBody;
@@ -16,6 +17,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 
 public class UploadFile {
     public static void main(String[] args) {
@@ -27,10 +29,14 @@ public class UploadFile {
             RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(200000).setSocketTimeout(200000).build();
             httppost.setConfig(requestConfig);
 
-            FileBody bin = new FileBody(new File("C:/Users/admin/Desktop/1.png"));
+            FileBody bin = new FileBody(new File("C:/Users/admin/Desktop/销售app-uat.779d41d9.png"));
             StringBody comment = new StringBody("crm", ContentType.TEXT_PLAIN);
 
-            HttpEntity reqEntity = MultipartEntityBuilder.create().addPart("file0", bin).addPart("file_app_id", comment).build();
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            builder.setCharset(Charset.forName("UTF-8"));
+            builder.addPart("file0", bin).addPart("file_app_id", comment);
+            HttpEntity reqEntity = builder.build();
 
             httppost.setEntity(reqEntity);
 
