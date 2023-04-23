@@ -2,21 +2,26 @@ package com.excel;
 
 
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import cn.hutool.core.io.FileUtil;
+import com.my.util.CJExcelUtil;
+import com.word.autWord.WordCreateByClass;
 import org.apache.poi.POIXMLDocumentPart;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.ClientAnchor;
 import org.apache.poi.ss.usermodel.PictureData;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.*;
 import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.CTMarker;
 
+import javax.imageio.ImageIO;
 
 
 public class ExcelImgUtil {
@@ -178,12 +183,67 @@ public class ExcelImgUtil {
         return res;
     }
 
+    /**
+     * <一句话功能简述> excel插入图片
+     * <功能详细描述>
+     * author: zhanggw
+     * 创建时间:  2022/5/25
+     * @param book poi book对象
+     * @param drawingPatriarch 用于图片插入Represents a SpreadsheetML drawing
+     * @param rowIndex 图片插入的单元格第几行
+     * @param colIndex 图片插入的单元格第几列
+     * @param localPicPath 本地图片路径
+     */
+    public static void insertExcelPic(XSSFWorkbook book, XSSFDrawing drawingPatriarch, int rowIndex, int colIndex, String localPicPath) throws IOException {
+        // 获取图片后缀格式
+        String fileSuffix = localPicPath.substring(localPicPath.lastIndexOf(".") + 1);
+        fileSuffix = fileSuffix.toLowerCase();
+
+        // 将图片写入到字节数组输出流中
+        BufferedImage bufferImg;
+        ByteArrayOutputStream picByteOut = new ByteArrayOutputStream();
+        bufferImg = ImageIO.read(new File(localPicPath));
+        ImageIO.write(bufferImg, fileSuffix, picByteOut);
+
+        // 将图片字节数组输出流写入到excel中
+        XSSFClientAnchor anchor = new XSSFClientAnchor(12, 3, 0, 0,
+                (short) colIndex, rowIndex, (short) colIndex + 1, rowIndex + 1);
+        anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);
+        drawingPatriarch.createPicture(anchor, book.addPicture(picByteOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+        picByteOut.close();
+    }
+
+
+
     public static void main(String[] args) throws Exception{
-        XSSFWorkbook wb = new XSSFWorkbook(new File("C:\\Users\\admin\\Desktop\\2022上半年交旅劳保清单(1).xlsx"));
-
+        String path = ExcelImgUtil.class.getClassLoader().getResource("").getPath();
+        String filePath=path+"excel";
+        File file = new File(filePath+"/test.xlsx");
+        File exportFile=new File("C:\\Users\\admin\\Desktop\\test2.xlsx");
+        //删除备份文件
+        boolean exists = exportFile.exists();
+        if(exists){
+            exportFile.delete();
+        }
+        FileUtil.copyFile(file,exportFile);
+        File picture=new File(filePath+"/test1.png");
+        XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(exportFile));
         final XSSFSheet sheet = wb.getSheetAt(0);// 得到Excel工作表对象
+        XSSFRow row = sheet.createRow(1);
+        row.setHeight((short)(100*20));
+        row.createCell(0).setCellValue("test");
+        XSSFDrawing drawingPatriarch = sheet.createDrawingPatriarch(); // 插入图片
+        insertExcelPic(wb,drawingPatriarch,1,1,picture.getPath());
+        sheet.setColumnWidth(2,6000);
+        FileOutputStream out = new FileOutputStream(exportFile);
+        wb.write(out);
+        out.close();
+        wb.close();
 
-        Map<String, PictureData> map = ExcelImgUtil.getPictures(sheet);//获取图片和位置
+        //读取excel图片
+        /*Map<String, PictureData> map = ExcelImgUtil.getPictures(sheet);//获取图片和位置
+        System.out.println(map.keySet());*/
+
 
     }
 
