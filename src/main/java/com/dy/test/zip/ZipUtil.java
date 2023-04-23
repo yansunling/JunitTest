@@ -1,14 +1,18 @@
 package com.dy.test.zip;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 
+import javax.crypto.Cipher;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.Base64;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -105,7 +109,7 @@ public class ZipUtil {
     }
 
     public static void main(String[] args) throws Exception{
-        StringBuffer sb=new StringBuffer();
+        /*StringBuffer sb=new StringBuffer();
         for(int i=0;i<100;i++){
             sb.append("tes中国t").append(i);
         }
@@ -119,9 +123,34 @@ public class ZipUtil {
         String baseStr="test中国";
 
         String encode = new BASE64Encoder().encode(baseStr.getBytes());
-        System.out.println(encode);
+        System.out.println(encode);*/
+
+        String message="a+fTVzkV0fg=";
+        String kStr = "1441194498741aAbBcCeEfFg";
+        byte[] code = Base64.decodeBase64(message);
+        String data = toHexString(code);
+        System.out.println(data.toUpperCase());
+        byte[] decode = decryptMode(kStr.getBytes("utf8"),code);
+        System.out.println(new String(decode, "utf8"));
+    }
+
+    private static final char[] HEXDIGITS = "0123456789abcdef".toCharArray();
+    private static String toHexString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder(bytes.length * 3);
+        for (int b : bytes) {
+            b &= 0xff;
+            sb.append(HEXDIGITS[b >> 4]);
+            sb.append(HEXDIGITS[b & 15]);
+        }
+        return sb.toString();
+    }
 
 
+    private static byte[] decryptMode(byte[] keybyte, byte[] src) throws Exception {
+        SecretKey deskey = new SecretKeySpec(keybyte, "DESede");
+        Cipher c1 = Cipher.getInstance("DESede");
+        c1.init(2, deskey);
+        return c1.doFinal(src);
     }
 
 

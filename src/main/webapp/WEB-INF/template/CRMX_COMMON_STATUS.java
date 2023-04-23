@@ -10,7 +10,7 @@ import java.util.Map;
 
 
 @CJ_domain(name = "状态")
-public enum CRMX_COMMON_STATUS implements Cacheable{
+public enum CRMX_COMMON_STATUS implements EnumService{
 
 {content}
   ;
@@ -47,7 +47,7 @@ public enum CRMX_COMMON_STATUS implements Cacheable{
         return toMap().get(value);
     }
 	
-	public static String nameToCode(String name){
+	public  String nameToCode(String name){
         CRMX_COMMON_STATUS[] values = CRMX_COMMON_STATUS.values();
         for(CRMX_COMMON_STATUS val:values){
             if(StringUtils.equals(name,val.code_name)){

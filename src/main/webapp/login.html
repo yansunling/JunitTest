@@ -2,8 +2,29 @@
 <html>
 <head>
     <title>Title</title>
-    <script>
+    <script src="https://cdn.bootcss.com/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+    <script src="./ui/js/jquery-2.1.1.min.js"></script>
+    <script src="./ui/js/base64.js"></script>
+    <script src="./ui/js/crypto-js.js"></script>
+    <script type="text/javascript">
 
+        //DES加密
+        function decryptByDES(ciphertext) {
+            var key="1441194498741aAbBcCeEfFg";
+            var keyHex = CryptoJS.enc.Utf8.parse(key);
+            var decrypted = CryptoJS.TripleDES.decrypt(ciphertext, keyHex, {
+                mode: CryptoJS.mode.ECB,
+                padding: CryptoJS.pad.Pkcs7
+            });
+            return decrypted.toString(CryptoJS.enc.Utf8);
+        }
+
+
+        $(function () {
+            let message="a+fTVzkV0fg=";
+            let result = decryptByDES(message);
+            console.log(result);
+        });
     </script>
 </head>
 <body>

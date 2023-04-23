@@ -1,8 +1,5 @@
 package com.oa;
 
-import cn.hutool.http.HttpUtil;
-import com.dy.components.logs.api.logerror.GlobalErrorInfoException;
-import com.yd.common.runtime.CIPRuntimeConfigure;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.httpclient.Cookie;
@@ -10,14 +7,12 @@ import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.NameValuePair;
 import org.apache.commons.httpclient.cookie.CookiePolicy;
-import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
@@ -51,17 +46,14 @@ public class ImageDownUtil {
             e.printStackTrace();
         }*/
 
-       downImg();
+//       downImg();
 
 
-
-
-
-
-
-
-
-
+        String cookie = getCookie("T1113");
+        System.out.println(cookie);
+//        String username="T1113";
+//        String aCase = MD5Util.md5(username + "gcCK9o9kCy51L1Jy").toUpperCase();
+//        System.out.println(aCase);
 
     }
 
@@ -161,4 +153,68 @@ public class ImageDownUtil {
         }
         return tmpcookies;
     }
+
+
+
+
+    public static String getCookie(String username){
+        //String loginUrl = OATask.conf.getProperty("client.url")+"login/VerifyLogin.jsp";  //登陆 Url
+        String loginUrl = "https://oa.uat.tuolong56.com/login/VerifyLogin.jsp";  //登陆 Url
+        String tmpcookies= "";  //存储cookie值
+        //初始cookie值
+        HttpClient httpClient = new HttpClient();
+        PostMethod loginMethod = new PostMethod(loginUrl);
+        //设置登陆时要求的信息
+        NameValuePair[] logindata = {
+                new NameValuePair("logintype", "1"),
+                new NameValuePair("fontName", "微软雅黑"),
+                new NameValuePair("formmethod", "post"),
+                new NameValuePair("isie", "false"),
+                new NameValuePair("islanguid", "7"),
+                new NameValuePair("loginid", username),
+                new NameValuePair("dongyu", MD5Util.md5(username+"gcCK9o9kCy51L1Jy").toUpperCase()),
+				new NameValuePair("userpassword","test"),
+                new NameValuePair("submit", "登录")
+        };
+
+        loginMethod.setRequestBody(logindata);
+        loginMethod.getParams().setContentCharset("utf-8");
+
+        try {
+            //设置 HttpClient 接收 Cookie,用与浏览器一样的策略
+            httpClient.getParams().setCookiePolicy(CookiePolicy.BROWSER_COMPATIBILITY);
+            int  statusCode=httpClient.executeMethod(loginMethod);
+            //判断登录是否成功
+            if  (statusCode  !=  HttpStatus.SC_OK) {
+                return null;
+            }
+            //获得登陆后的 Cookie
+            Cookie[] cookies=httpClient.getState().getCookies();
+            for(Cookie c:cookies){
+                tmpcookies = tmpcookies+c.toString()+";";
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //释放连接
+            loginMethod.releaseConnection();
+        }
+        return tmpcookies;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

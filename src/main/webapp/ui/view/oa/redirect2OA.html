@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+
+</head>
+<body>
+test
+    <form id="oaform" action="" method="post">
+        
+        
+        <input type="hidden" name="logintype" value="1"/>
+        <input type="hidden" name="fontName" value="微软雅黑"/>
+        <input type="hidden" name="formmethod" value="post"/>
+        <input type="hidden" name="isie" value="false"/>
+        <input type="hidden" name="dongyu" value="1753E4607B54BA3D455A1FC2F172E64A">
+        <input type="hidden" name="islanguid" value="7"/>
+        <input type="hidden" name="loginid" value="T1113"/>
+        <input type="hidden" name="userpassword" value="test"/>
+        <input type="hidden" name="submit" value="登录"/>
+        <input type="submit" style="display:none"/>
+    </form>
+</body>
+<!-- jQuery 2.2.3 -->
+<script src="../../js/jquery-2.1.1.min.js"></script>
+<script language="JavaScript">
+
+	//OA的访问域名改为跟门户的当前域名相同
+	
+		$(function(){
+		   /*setCookie("loginfileweaver","%2Fwui%2Ftheme%2Fecology8%2Fpage%2Flogin.jsp%3FtemplateId%3D3%26logintype%3D1%26gopage%3D",1);
+		   setCookie("loginidweaver","10448",1);
+		   setCookie("languageidweaver","7",1);
+		   setCookie("ecology_JSessionId","abc4jxFwlTcfY9kDdNNCy",1);
+		   setCookie("JSESSIONID","abc4jxFwlTcfY9kDdNNCy",1);
+		   setCookie("ecology_JSessionid","abc4jxFwlTcfY9kDdNNCy",1);
+		   setCookie("testBanCookie","test",1);*/
+		  
+			//window.location.href='https://oa.uat.tuolong56.com/workflow/request/ViewRequest.jsp?requestid=349632&isovertime=0';
+			// window.document.cookie="Hm_lvt_6f6dcdf1cf6beff0de1b03f3e959c679=1677122657; query_cip_sessionid=a6dcb04b-958d-4ec1-ab05-c3422ead38fe-1680057811161; cip_c_c_c_=jGCg2jD6O5A=; auth_sessionid=e25fe2259d604000876be4a92b31d6ed; auth_sso_sessionid=e25fe2259d604000876be4a92b31d6ed; query_sessionid=e25fe2259d604000876be4a92b31d6ed";
+			
+			// window.location.href='https://kp.tuolong56.com/query/ui/view/index.html?actionId=index&access_token=46a77eb6e21d467da56b19ba8b768d0b&expires_at=1680313658389&user_id=T1113&sign=1bf87fa99dd23dd81a25870f90f4e6a9';
+
+            /*$.ajax({
+                url: "https://oa.uat.tuolong56.com/crmx/corscookie.do",
+                type: "GET",
+                dataType: "jsonp",
+                success: function(data){
+                    window.open("https://tlwl.uat.tuolong56.com/query/ui/view/query/query_base_list_total.html?actionId=query_base_list_total&queryId=query_tms_cashier_daily_detail", "_blank");
+                }
+            });*/
+            let obj={name:"test"};
+            fetch('https://oa.uat.tuolong56.com/crmx/corscookie.do', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body:JSON.stringify(obj),
+            }).then(function(response) {
+                response.json().then(function(json) {
+                    console.log(json);
+                });
+            });
+
+		});
+		
+		
+		
+	
+	// $("#oaform").attr("action", "https://oa.uat.tuolong56.com/login/VerifyLogin.jsp")
+   
+	//$("input[type='submit']").trigger("click");
+	
+		//设置cookie
+	function setCookie(cname, cvalue, exdays) {
+		var d = new Date();
+		d.setTime(d.getTime() + (exdays*24*60*60*1000));
+		var expires = "expires="+d.toUTCString();
+		window.document.cookie = cname + "=" + cvalue + ";path=/;" + expires;
+	}
+
+	
+	
+
+</script>
+</html>
