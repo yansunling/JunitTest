@@ -1,60 +1,176 @@
-@charset "utf-8";
-/*
-//author relaxWang begin 2015/12
-//last modify 2016/12/13
-//Version 0.15
-//移动端样式定义，兼容PC端浏览器
-*/
 
-/* reset */
-*{ /*font-family:"Microsoft YaHei","微软雅黑","Helvetica Neue",Helvetica,STHeiTi,sans-serif;*/ font-family:tahoma,arial,'Hiragino Sans GB','\5b8b\4f53',sans-seri; box-sizing:border-box;}
-html,body,h1,h2,h3,h4,h5,h6,dl,dt,dd,p,ul,li,form,iframe,object,input{ margin:0px; padding:0px;}
-a{ text-decoration:none;}
-h1,h2,h3,h4,h5,h6,strong{ font-weight:bold;}
-ul,ol,dl{list-style: none outside none;}
-input,textarea,select{ font-family:inherit;}
-a:active, a:focus, input:active, input:focus, button:active, button:focus{ outline:none; -moz-outline:none;} /*去掉移动端firefox a标签的虚线框 PC chrome文本输入框的边框焦点时候的颜色 */
-input[type="button"]::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, button::-moz-focus-inner{ border:none;} /*去掉移动端firefox 按钮获得焦点显示虚线框的样式 */
-table { border-collapse:collapse; border-spacing:0; width:100%;}
-html,body{ position:relative; height:100%; width:100%;}  /* 注意 某些版本的IE中（IE9）会导致iframe的内容定位错误，请参考是否去掉该属性，或者为iframe增加relative的属性 */
-iframe{ width:100%; height:100%; position:relative;}
-/* 清除现代IE浏览器的输入框和密码框的默认交互按钮 */
-::-ms-clear, ::-ms-reveal{display: none;}
-/* 针对不支持语义化标签浏览器做的应对*/
-article,aside,dialog,footer,header,section,footer,nav,figure,menu{display:block}
-/* chrome内核浏览器对cursor:pointer的样式对象，点击触发样式中会有浅蓝色背景框，用该样式去除 */
-/* -webkit-tap-highlight-color:rgba(255,255,255,0); */
-/* reset end */
+	.header{
+	height:55px;
+	overflow:hidden;	
+	background: #F5F5F5;
+}
+.logo{
+	height:55px;
+	width:200px;
+	text-align:center;
+	float:left;
+}
+.title{
+	height:55px;
+	font-size:30px;
+	float:left;
+	line-height:55px;
+	padding-left:10px;
+}
+#welcomMSG{
+	height:55px;
+	width:200px;
+	font-size:16px;
+	float:right;
+	padding-top:10px;
+}
+.footer{
+	height:30px;
+	background: #f0f0f0;
+}
+#operation{
+	width:200px;
+	float:left;
+	height:100%;
+	text-align:center;
+}
+/*左下角图标*/
+#operation .l-btn{
+}
+#operation .l-btn-plain:hover{
+    border: 1px solid #ffcc00;
+    border-radius:5px;
+}
+#copyright{
+	 /* width:100%; */
+	text-align:center;
+	background: #f0f0f0!important;
+	/* height:100%; */
+	overflow:hidden;
+	height:30px;
+	line-height:30px;
+	font-family:"微软雅黑",Arial,Helvetica,sans-serif;
+	
+}
+#prefer-tool{
+	width:100%;
+	height:100%;
+	background: url('../img/main.jpg');
+	background-position: center; 
+	background-repeat: no-repeat;
+	background-size: cover;	
+	-moz-box-shadow: 0px 0px 2px #000000;
+	-webkit-box-shadow: 0px 0px 2px #000000;
+	box-shadow: 0px 0px 2px #000000;
+	/*IE 7 AND 8 DO NOT SUPPORT BLUR PROPERTY OF SHADOWS*/
+/* 	filter: progid: DXImageTransform.Microsoft.gradient(startColorstr = '#8c8c8f', endColorstr = '#8a4e82');
+ */	/*INNER ELEMENTS MUST NOT BREAK THIS ELEMENTS BOUNDARIES*/
+	/*Element must have a height (not auto)*/
+	/*All filters must be placed together*/
+/* 	-ms-filter: "progid: DXImageTransform.Microsoft.gradient(startColorstr = '#8c8c8f', endColorstr = '#8a4e82')";
+ */	/*Element must have a height (not auto)*/
+	/*All filters must be placed together*/
+	/* background-image: -moz-linear-gradient(top, #8c8c8f, #8a4e82);
+	background-image: -ms-linear-gradient(top, #8c8c8f, #8a4e82);
+	background-image: -o-linear-gradient(top, #8c8c8f, #8a4e82);
+	background-image: -webkit-gradient(linear, center top, center bottom, from(#8c8c8f), to(#8a4e82));
+	background-image: -webkit-linear-gradient(top, #8c8c8f, #8a4e82);
+	background-image: linear-gradient(top, #8c8c8f, #8a4e82); */
+	/*--IE9 DOES NOT SUPPORT GRADIENT BACKGROUNDS--*/
 
-
-body {min-width: 1280px;}
-.container {padding:30px 50px 100px;}
-.container h3 {margin:10px 0;}
-.container h2 {height: 36px;line-height: 36px;margin:20px 0;}
-.container a {margin-left:20px;color: #428bca;font-size: 16px;font-weight: 700;}
-.container a:hover {color: #2a6496;text-decoration: underline;}
-pre {background-color: #f5f5f5;border:1px solid #ccc;padding:10px;overflow: auto;color: #c82829;}
-pre span {color: #718c00;}
-pre span.b {color: #0086b3;}
-p {padding-left: 50px;}
-p a {color: #428bca;}
-p a:hover {color: #2a6496;text-decoration: underline;}
-table {width: 90%;background-color: #eaeff2;}
-table tr th {padding: 10px;}
-table tr td {padding:10px 10px 10px 20px;background-color: #fff;border:1px solid #eaeff2;}
-table tr td:first-child {background-color: #eaeff2;border-color: #fff;}
-.paramItem {overflow: hidden;}
-.paramItem > strong {display:block;font-weight:normal;color:#fff;padding:5px 10px;background-color: #39A4DC;margin:10px 0;}
-.paramItem > div {overflow: hidden;}
-
-canvas {border:1px solid #ccc;}
-img {border:1px solid #ccc;}
-button {padding:5px 15px;border:1px solid #ccc;color:#666;background-color: #fff;border-radius: 6px;}
-
-
-
-
-
-
-
-
+}
+/*index常用页面显示*/
+.tool{
+	margin-left:40px;
+	margin-right:40px;	
+	color:#ffffff;
+	padding:15px 0px 0px 0px;
+}
+.image{
+	 margin-top:-3px;
+	 padding:0px 5px 0px 0px;
+	 height:18px;
+	 width:18px;
+	 vertical-align: middle;
+}
+.line {
+	height:2px; 
+	}
+#tool-icon{
+	 margin:10px 40px 10px 40px;
+   width: 95%;
+	 height:80%;	
+}
+.toolParent{
+	 width:110px;
+	 height:140px;
+	 float:left;
+	 margin-left:15px;
+	 margin-top:20px;
+}
+/*定义工具图标样式*/
+.tool-icon{
+	 width:110px;
+	 height:108px;	
+	/*  margin-bottom:1px!important; */
+     background: url('../img/welicon.png') no-repeat -810px -404px; 
+	 border-style:none; 
+}
+/*工具图标鼠标事件*/
+.tool-icon:hover{
+	cursor:pointer;
+}
+/*定义工具资源名称样式*/
+.tool-name{
+	  height:32px;
+	  font-size: 13px;
+	  font-family:"微软雅黑",Arial,Helvetica,sans-serif;
+	  color:#ffffff;
+	  text-align:center;
+	  margin-top:5px;
+	  margin-bottom:10px;
+	  /* float:left */;
+}
+/*右上角编辑鼠标事件*/
+#edit:hover{
+cursor:pointer;
+color:#facc00;
+}
+/*定义删除工具图标样式*/
+.tool_del{
+	 width:24px;
+	 height:24px;	
+	 border-style:none;
+	 display:none;
+/* 	 background: url('../img/tool_del.png') no-repeat 0px 0px; 
+ */	 float:right;
+}
+#welcomMSG_title{
+	text-align: right;
+	font-size:17px;
+	width:200px;
+}
+#welcome_top{
+	width:15px;
+	height:16px;
+	background:url(../img/welcome_top.png) no-repeat 0 0;
+	margin-top:6px;
+	margin-left:90px;
+	float:left;
+}
+#deal_countdiv{
+	font-size:13px;
+	margin-top:3px;
+	height:16px;
+	line-height:16px;
+	margin-bottom:1px;
+	/* float:right; */
+}
+#deal_count{
+	color:red;
+	font-size:14px;
+	text-align: right;
+}
+#deal_count:hover{
+	cursor:pointer;
+}

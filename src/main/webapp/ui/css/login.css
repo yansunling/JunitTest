@@ -1,0 +1,233 @@
+/*@import url(http://fonts.googleapis.com/css?family=Source+Sans+Pro);*/
+
+body {
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
+	margin:0px;
+	padding:0px;
+	background:#F5F5F5 ;
+	overflow: hidden;
+}
+
+
+input {
+	width: 183px;
+	height: 32px;
+	line-height: 32px;
+	border: 1px inset #585a5a;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	display: block;
+	font-family: "eras medium itc";
+	font-size: 16px;
+	color: #FFFFFF;
+	padding-right: 20px;
+	margin-top: 35px;
+	margin-left: 50px;
+	float: left;
+}
+
+#main_form {
+	margin-top: 35px;
+	margin-bottom: 50px;
+	margin-right: 10%;
+	float: right;
+	width: 350px;
+	height: 402px;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+	border:1px solid #333333;
+	background: #666666;
+}
+#username{
+	background:rgba(0, 0, 0, .6) url(../img/usericons.png) no-repeat 15px 6px;	
+}
+#password{
+	background:rgba(0, 0, 0, .6) url(../img/passwordicons.png) no-repeat 15px 6px;	
+}
+#passcode{
+	background:rgba(0, 0, 0, .6) url(../img/passcodecons.png) no-repeat 15px 7px;
+}
+
+#top {
+	width: 100%;
+	height: 19%;
+	/*background:url(../img/loginlogo.png) no-repeat 78px 25px;*/
+	float: left;
+}
+
+#line {
+	float: left;
+	margin-top: 30px;
+	margin-left: 313px;
+}
+
+span.apptitle {
+	float: left;
+	padding: 35px 30px;
+}
+
+#top_bom {
+	width: 100%;
+	height: 10px;
+	background: #CCE6FF;
+	float: left;
+}
+
+#main {
+	width: 100%;
+	height: 470px;
+	/*background: url(../img/login_main.jpg) no-repeat center center;*/
+	background-size:100% 100%;
+	float: left;
+}
+
+img.user_icons {
+	float: left;
+	padding-top: 10px;
+	padding-right: 80px;
+}
+
+#bottom {
+	width: 100%;
+	height: 20%;
+	float: left;
+}
+#bottom_txt{
+	width:900px;
+	height: 70px;
+	/*background: url(../img/bottom_txt.png) no-repeat center;*/
+	margin-bottom: 0;
+	margin-left:24.5%;
+	margin-top: 40px;
+	float: left;
+}
+
+
+.copyright_r {
+	width: 80px;
+	font-size: 12px;
+	font-family:"΢���ź�",Arial,Helvetica,sans-serif;
+	color: #666666;
+}
+.copyright_l{
+	width: 250px;
+	font-size: 12px;
+	font-family:"΢���ź�",Arial,Helvetica,sans-serif;
+	color: #666666;
+	float:left;
+}
+#copyright{
+	position:fixed;
+	bottom:10px;
+	margin-left:41%;
+}
+
+#imgCode {
+	margin-top: 37px;
+	width: 75px;
+	height: 30px;
+	margin-left: 5px;
+}
+
+.tabs-title {
+	padding-top: 30px;
+	padding-left: 125px;
+	font-family: "eras medium itc";
+	font-size: 25px;
+	color: #cacaca;
+}
+
+input[type=submit] {
+	cursor: pointer;
+	margin-left: 49px;
+}
+
+input.passcode {
+	width: 103px;
+	height: 32px;
+	border: 1px inset #585a5a;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	display: block;
+	font-family: 'Source Sans Pro', sans-serif;
+	font-size: 14px;
+	color: #fff;
+	margin-top: 35px;
+	padding-left: 49px;
+}
+
+input.name {
+	padding-left: 48px;
+}
+
+::-webkit-input-placeholder {
+	color: #fff;
+}
+
+:-moz-placeholder {
+	color: #fff;
+}
+
+::-moz-placeholder {
+	color: #fff;
+}
+
+:-ms-input-placeholder {
+	color: #fff;
+}
+
+input:focus,
+textarea:focus {
+	background-color: rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 0 0 1px 1px rgba(0, 0, 0, .5);
+	-webkit-box-shadow: 0 0 1px 1px rgba(0, 0, 0, .5);
+	box-shadow: 0 0 1px 1px rgba(0, 0, 0, .5);
+	overflow: hidden;
+}
+
+.btn {
+	width: 253px;
+	height: 36px;
+	float: left;
+	border: 1px solid #253737;
+	background: #F2F2F2;
+	padding: 5px 18px;
+	-webkit-border-radius: 6px;
+	-moz-border-radius: 6px;
+	border-radius: 6px;
+	-webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, inset rgba(255, 255, 255, 0.7) 0 1px 0;
+	-moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, inset rgba(255, 255, 255, 0.7) 0 1px 0;
+	box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, inset rgba(255, 255, 255, 0.7) 0 1px 0;
+	text-shadow: #333333 0 0px 0;
+	line-height: 11px;
+	color: #666666;
+	font-size: 20px;
+	margin-top: 30px;
+}
+
+.btn:active {
+	margin-top: 30px;
+	border: 1px solid #253737;
+	color: #666666;
+	background: #F2F2F2;
+	-webkit-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, inset rgba(255, 255, 255, 0.7) 0 1px 0;
+	-moz-box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, inset rgba(255, 255, 255, 0.7) 0 1px 0;
+	box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, inset rgba(255, 255, 255, 0.7) 0 1px 0;
+}
+#errorMsg{
+	float:Left;
+	color:red;
+	width:250px;
+	height:30px;
+	line-height:30px;
+	text-align:center;
+	font-size:14px;	
+	margin-left:50px;
+	margin-top:5px;
+}
