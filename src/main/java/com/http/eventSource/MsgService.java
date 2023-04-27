@@ -27,7 +27,7 @@ public class MsgService {
 
     @Scheduled(initialDelay = 0, fixedDelay = 3*1000)
     public void run() {
-        log.info("start task");
+        log.info("start task list_res size:"+list_res.size());
         this.removeErrorResponse();
         Iterator<HttpServletResponse> it = list_res.iterator();
         Random rand =new Random();
