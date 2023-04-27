@@ -25,7 +25,7 @@ public class MsgService {
         return list_res;
     }
 
-    @Scheduled(initialDelay = 0, fixedDelay = 3*1000)
+//    @Scheduled(initialDelay = 0, fixedDelay = 3*1000)
     public void run() {
         log.info("start task list_res size:"+list_res.size());
         this.removeErrorResponse();

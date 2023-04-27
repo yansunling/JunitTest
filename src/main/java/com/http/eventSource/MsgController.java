@@ -1,15 +1,18 @@
 package com.http.eventSource;
 
-import org.springframework.stereotype.Component;
+import com.util.CommonUtil;
+import com.yd.common.data.CIPResponseMsg;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
+@Slf4j
 @RestController
 public class MsgController {
     @Resource(name="msgService")
@@ -29,5 +32,14 @@ public class MsgController {
         DeferredResult<String> df = new DeferredResult<String>(60000l);
         return df;
     }
+
+    @RequestMapping(value = "/getTest")
+    public CIPResponseMsg importData(HttpServletRequest request) throws Exception {
+        return CommonUtil.success();
+    }
+
+
+
+
 
 }
