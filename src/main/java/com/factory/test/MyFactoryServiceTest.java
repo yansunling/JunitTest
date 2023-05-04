@@ -31,10 +31,13 @@ public class MyFactoryServiceTest implements ApplicationContextAware {
 
     @Test
     public  void test() throws Exception{
-        CompAssetBaseInfoChangeVO changeVO=new CompAssetBaseInfoChangeVO();
-        changeVO.setAsset_company("33");
-        //cat.catEat(changeVO);
-        cat.eat("22");
+//        CompAssetBaseInfoChangeVO changeVO=new CompAssetBaseInfoChangeVO();
+//        changeVO.setAsset_company("33");
+//        //cat.catEat(changeVO);
+//        cat.eat("22");
+
+        String type = myFactoryService.factoryMode("cat");
+        System.out.println(type);
 
     }
 

@@ -2,7 +2,9 @@ package com.aop;
 
 import com.alibaba.fastjson.JSONObject;
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +33,21 @@ public class AdviceTest {
                 System.out.println(json);
             }
         }
-
     }
+
+
+    @Around("execution(* com.factory.C*.food(..))")
+    public Object getReturnTest(ProceedingJoinPoint point) throws Throwable {
+        Object[] args = point.getArgs();
+        System.out.println("around args----"+JSONObject.toJSONString(args));
+        Object result = point.proceed(args);
+        System.out.println("around result----"+JSONObject.toJSONString(result));
+        return "吃老鼠";
+    }
+
+
+
+
+
+
 }
