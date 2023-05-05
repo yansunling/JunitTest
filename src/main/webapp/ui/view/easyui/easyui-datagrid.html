@@ -27,11 +27,11 @@ $(function(){
         showFooter: true,
         pagination:true,
         rownumbers:true,
-        pageList:[20,50,100,1000],
+        pageList:[50,100,200,500,1000],
         fitColumns:true,
         onBeforeLoad: function (param) {
             console.log(param);
-            param.rows=20;
+            param.rows=50;
         },
         onLoadSuccess: function (data) {
            /* console.log(data);
@@ -65,16 +65,17 @@ $(function(){
         var scrollTop = $(this).scrollTop();
         var range = panelHeight - scrollTop ;
         console.log("panelHeight:"+panelHeight+"scrollTop:"+scrollTop+";range:"+range+",limit:"+parseInt($(this).height()+50));
-        if (range < parseInt($(this).height()+50) && loading) { // 滚动到底部且未加载数据
+        if (range < parseInt($(this).height()+100) && loading) { // 滚动到底部且未加载数据
             var pagerOptions = $("#datagrid").datagrid('getPager').data("pagination").options;
-            var total = pagerOptions.total || 0;
+            var total = pagerOptions.total
+            let pageSize = pagerOptions.pageSize;
             var rows = $("#datagrid").datagrid('getRows').length;
             console.log(rows);
-            if (rows < total) { // 还有数据未加载
+            if (rows < total&&rows<pageSize) { // 还有数据未加载
                 pageNumber++;
                 loading=false;
                 $.ajaxSettings.async = false;
-                $.post('http://localhost/query/actions/query_new_search/formSearchPage/V1.0.0/tmsp_claim_get_domain.do?ssid=null', { page: pageNumber, rows: 20 }, function (data) {
+                $.post('http://localhost/query/actions/query_new_search/formSearchPage/V1.0.0/tmsp_claim_get_domain.do?ssid=null', { page: pageNumber, rows: 50 }, function (data) {
                     data.rows.forEach(item=>{
                         $('#datagrid').datagrid('appendRow', item);
                     });
