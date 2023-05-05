@@ -33,27 +33,6 @@ $(function(){
             console.log(param);
             param.rows=50;
         },
-        onLoadSuccess: function (data) {
-           /* console.log(data);
-            if(!first){
-                data.rows.forEach(item=>{
-                    $('#datagrid').datagrid('appendRow', item);
-                });
-                loading=true;
-            }*/
-
-           /* // 渲染数据
-            $('#datagrid').datagrid('appendRows', data.rows);
-            // 设置数据总数和页数
-            $('#datagrid').datagrid('options').total = data.total;
-            $('#datagrid').datagrid('options').pageNumber = Math.ceil(data.total / data.rows.length);
-            // 更新分页栏
-            $('#datagrid').datagrid('getPager').pagination('refresh', {
-                total: data.total,
-                pageNumber: Math.ceil(data.total / data.rows.length),
-            });*/
-        },
-
         columns:[[
             {field:'dictlabel',title:'价格',width:150},
             {field:'dictvalue',title:'数量',width:150}
