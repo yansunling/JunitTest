@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="icon" href="yiyuan.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="yiyuan.ico" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" href="../../js/jquery-easyui/themes/gray/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../js/jquery-easyui/themes/icon.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/common.css"/>
+    <link rel="stylesheet" type="text/css" href="../../css/viewer.min.css"/>
+    <script type="text/javascript" src="../../js/viewer.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../js/h5upload-1.0.1.js"></script>
+</head>
+<script type="text/javascript">
+$(function(){
+    var loading = true; // 滚动事件是否正在加载数据
+    let pageNumber=1;
+    $("#datagrid").datagrid({
+        url:'http://localhost/query/actions/query_new_search/formSearchPage/V1.0.0/tmsp_claim_get_domain.do?ssid=null',
+        method:'POST',
+        remoteSort:true,
+        pageSize:100,
+        toolbar: '#crmx_base_address_list_menu',
+        showFooter: true,
+        pagination:true,
+        rownumbers:true,
+        pageList:[20,50,100,1000],
+        fitColumns:true,
+        onBeforeLoad: function (param) {
+            console.log(param);
+            param.rows=20;
+        },
+        onLoadSuccess: function (data) {
+           /* console.log(data);
+            if(!first){
+                data.rows.forEach(item=>{
+                    $('#datagrid').datagrid('appendRow', item);
+                });
+                loading=true;
+            }*/
+
+           /* // 渲染数据
+            $('#datagrid').datagrid('appendRows', data.rows);
+            // 设置数据总数和页数
+            $('#datagrid').datagrid('options').total = data.total;
+            $('#datagrid').datagrid('options').pageNumber = Math.ceil(data.total / data.rows.length);
+            // 更新分页栏
+            $('#datagrid').datagrid('getPager').pagination('refresh', {
+                total: data.total,
+                pageNumber: Math.ceil(data.total / data.rows.length),
+            });*/
+        },
+
+        columns:[[
+            {field:'dictlabel',title:'价格',width:150},
+            {field:'dictvalue',title:'数量',width:150}
+        ]]
+    });
+    $(".datagrid-body").bind('scroll', function(e) {
+        var panel = $(e.target);
+        var panelHeight = panel.get(0).scrollHeight;
+        var scrollTop = $(this).scrollTop();
+        var range = panelHeight - scrollTop ;
+        console.log("panelHeight:"+panelHeight+"scrollTop:"+scrollTop+";range:"+range+",limit:"+parseInt($(this).height()+50));
+        if (range < parseInt($(this).height()+50) && loading) { // 滚动到底部且未加载数据
+            var pagerOptions = $("#datagrid").datagrid('getPager').data("pagination").options;
+            var total = pagerOptions.total || 0;
+            var rows = $("#datagrid").datagrid('getRows').length;
+            console.log(rows);
+            if (rows < total) { // 还有数据未加载
+                pageNumber++;
+                loading=false;
+                $.ajaxSettings.async = false;
+                $.post('http://localhost/query/actions/query_new_search/formSearchPage/V1.0.0/tmsp_claim_get_domain.do?ssid=null', { page: pageNumber, rows: 20 }, function (data) {
+                    data.rows.forEach(item=>{
+                        $('#datagrid').datagrid('appendRow', item);
+                    });
+                    loading=true;
+                }, 'json');
+            }
+        }
+    });
+
+
+});
+</script>
+<body class="easyui-layout">
+<div data-options="region:'north', split:false, border:false" style="height:100%">
+
+<table id="datagrid" class="easyui-datagrid" title="异步滚动渲染" style="width:800px;height:300px;overflow-y: auto;"
+       data-options="">
+</table>
+</div>
+</body>
+
+</html>
