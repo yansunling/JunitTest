@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: com.dy.components:logs-api:1.0.3-SNAPSHOT">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/dy/components/logs-api/1.0.3-SNAPSHOT/logs-api-1.0.3-20210129.060958-30.jar!/" />
+      <root url="jar://F:/m2/repository/com/dy/components/logs-api/1.0.3-SNAPSHOT/logs-api-1.0.3-20210129.060958-30.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/com/dy/components/logs-api/1.0.3-SNAPSHOT/logs-api-1.0.3-20210129.060958-30-javadoc.jar!/" />
+      <root url="jar://F:/m2/repository/com/dy/components/logs-api/1.0.3-SNAPSHOT/logs-api-1.0.3-20210129.060958-30-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/com/dy/components/logs-api/1.0.3-SNAPSHOT/logs-api-1.0.3-20210129.060958-30-sources.jar!/" />
+      <root url="jar://F:/m2/repository/com/dy/components/logs-api/1.0.3-SNAPSHOT/logs-api-1.0.3-20210129.060958-30-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

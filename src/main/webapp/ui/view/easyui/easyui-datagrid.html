@@ -33,6 +33,15 @@ $(function(){
             console.log(param);
             param.rows=50;
         },
+        onLoadSuccess(){
+            var pagerOptions = $("#datagrid").datagrid('getPager').data("pagination").options;
+            let pageSize = pagerOptions.pageSize;
+            let startNum=pagerOptions.pageNumber-1;
+            pageNumber=startNum*pageSize/50;
+            console.log(pageNumber);
+        },
+
+
         columns:[[
             {field:'dictlabel',title:'价格',width:150},
             {field:'dictvalue',title:'数量',width:150}
@@ -43,7 +52,7 @@ $(function(){
         var panelHeight = panel.get(0).scrollHeight;
         var scrollTop = $(this).scrollTop();
         var range = panelHeight - scrollTop ;
-        console.log("panelHeight:"+panelHeight+"scrollTop:"+scrollTop+";range:"+range+",limit:"+parseInt($(this).height()+50));
+        //console.log("panelHeight:"+panelHeight+"scrollTop:"+scrollTop+";range:"+range+",limit:"+parseInt($(this).height()+50));
         if (range < parseInt($(this).height()+100) && loading) { // 滚动到底部且未加载数据
             var pagerOptions = $("#datagrid").datagrid('getPager').data("pagination").options;
             var total = pagerOptions.total
