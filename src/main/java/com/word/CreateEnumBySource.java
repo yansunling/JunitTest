@@ -1,44 +1,24 @@
 package com.word;
 
 
-import com.sqlFile.SqlFileUtil;
 import com.titleMap.CreateTitleData;
-import com.yd.common.exception.CIPServiceException;
-import com.yd.common.runtime.CIPErrorCode;
-import com.yd.crm.util.SqlUtil;
-import com.yd.utils.datasource.DruidComboPoolDataSource;
-import com.yd.utils.datasource.YDDriverManagerDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
-import org.apache.poi.util.StringUtil;
 import org.aspectj.util.FileUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCallback;
-import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
 
 
 @Slf4j

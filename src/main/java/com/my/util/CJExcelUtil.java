@@ -4,6 +4,7 @@ import com.yd.common.runtime.CIPRuntime;
 import com.yd.common.runtime.CIPRuntimeOperator;
 import org.apache.commons.lang.StringUtils;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -101,6 +102,13 @@ public class CJExcelUtil {
     }
 
 
+    public static void delFile(String path){
+        File file = new File(path);
+        boolean exists = file.exists();
+        if(exists){
+            file.delete();
+        }
+    }
 
 
 }

@@ -1,12 +1,25 @@
 package com.excel;
 
 
+import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URLDecoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import cn.hutool.core.io.FileUtil;
+import com.yd.common.runtime.CIPRuntimeConfigure;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
@@ -16,12 +29,15 @@ import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.*;
 import org.openxmlformats.schemas.drawingml.x2006.spreadsheetDrawing.*;
 
+import javax.imageio.ImageIO;
+
 
 /**
  * 重写平台导入功能
  * @author Administrator
  * 2019-03-19
  */
+@Slf4j
 public class ExcelsUtil {
     public static void getDataFromExcel(String filePath) throws IOException {
         //String filePath = "E:\\123.xlsx";
@@ -161,17 +177,6 @@ public class ExcelsUtil {
 
                             }
 
-
-
-
-
-
-
-
-
-
-
-
                         }else{
                             XSSFPicture picture = (XSSFPicture) shape;
                             XSSFClientAnchor anchor = picture.getPreferredSize();
@@ -215,6 +220,81 @@ public class ExcelsUtil {
         }
         // }
 
+    }
+
+
+    @SneakyThrows
+    public static File downFile(String serialNo,String FSM_URL){
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpPost httppost = new HttpPost(FSM_URL+"/fsm/api/fsm_api/download.do?file_app_id=crm&file_serial_no="+serialNo);
+        RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(200000).setSocketTimeout(200000).build();
+        httppost.setConfig(requestConfig);
+        CloseableHttpResponse response = httpclient.execute(httppost);
+        File file=null;
+        try {
+            System.out.println(response.getStatusLine());
+            Header firstHeader = response.getFirstHeader("Content-Disposition");
+            String fileName = firstHeader.getValue().replace("attachment;filename=","");
+            fileName= URLDecoder.decode(fileName, "utf-8");
+            HttpEntity resEntity = response.getEntity();
+            if (resEntity != null) {
+                InputStream is = resEntity.getContent();
+                file = new File("E:/"+fileName);
+                FileOutputStream fos = new FileOutputStream(file);
+                byte[] buffer = new byte[4096];
+                int len = -1;
+                while((len = is.read(buffer) )!= -1){
+                    fos.write(buffer, 0, len);
+                }
+                fos.close();
+                is.close();
+            }
+            EntityUtils.consume(resEntity);
+        } finally {
+            response.close();
+        }
+        return file;
+    }
+
+    public static void delFile(String path){
+        File file = new File(path);
+        boolean exists = file.exists();
+        if(exists){
+            file.delete();
+        }
+    }
+
+    public static void insertExcelPic(XSSFWorkbook book, XSSFDrawing drawingPatriarch, int rowIndex, int colIndex, String localPicPath) throws IOException {
+        // 获取图片后缀格式
+        String fileSuffix = localPicPath.substring(localPicPath.lastIndexOf(".") + 1);
+        fileSuffix = fileSuffix.toLowerCase();
+
+        // 将图片写入到字节数组输出流中
+        BufferedImage bufferImg;
+        ByteArrayOutputStream picByteOut = new ByteArrayOutputStream();
+        bufferImg = ImageIO.read(new File(localPicPath));
+        ImageIO.write(bufferImg, fileSuffix, picByteOut);
+
+        // 将图片字节数组输出流写入到excel中
+        XSSFClientAnchor anchor = new XSSFClientAnchor(12, 3, 0, 0,
+                (short) colIndex, rowIndex, (short) colIndex + 1, rowIndex + 1);
+        anchor.setAnchorType(ClientAnchor.AnchorType.MOVE_AND_RESIZE);
+        drawingPatriarch.createPicture(anchor, book.addPicture(picByteOut.toByteArray(), HSSFWorkbook.PICTURE_TYPE_JPEG));
+        picByteOut.close();
+    }
+
+
+    public static boolean isImage(File file) {
+        try {
+            // 尝试读取图片文件并检查是否为支持的图片格式
+            BufferedImage image = ImageIO.read(file);
+            if(image != null){
+                return true;
+            }
+        } catch (IOException e) {
+            log.info("isImage:"+file.getAbsolutePath(),e);
+        }
+        return false;
     }
 
     public static void main(String[] args) throws Exception {
