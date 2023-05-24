@@ -1,8 +1,6 @@
 package com.excel;
 
 import cn.hutool.core.io.FileUtil;
-import cn.hutool.poi.excel.ExcelUtil;
-import com.my.util.CJExcelUtil;
 import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
 import org.apache.poi.ss.usermodel.*;

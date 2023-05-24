@@ -1,6 +1,5 @@
 package com.dts;
 
-import com.dy.test.util.RedisUtil;
 import com.tlwl.dts.data.WorkflowTableUpdateData;
 import com.tlwl.dts.util.WorkFlowUtil;
 import com.yd.common.runtime.CIPRuntimeOperator;
@@ -12,8 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import redis.clients.jedis.Jedis;
-import redis.clients.jedis.JedisPool;
 
 import java.util.HashMap;
 import java.util.Map;

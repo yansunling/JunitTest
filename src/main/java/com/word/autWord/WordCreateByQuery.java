@@ -1,31 +1,14 @@
 package com.word.autWord;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.baomidou.mybatisplus.core.toolkit.BeanUtils;
-import com.dy.components.annotations.CJ_column;
-import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
-import com.dy.components.ucms.ConfigurationConstants;
-import com.dy.components.ucms.utils.ConfigurationManager;
-import com.dy.test.autoTest.ParamBean;
-import com.dy.test.autoTest.po.MDM_crm_base_customer_unionPO;
-import com.dy.test.doc.GeneralTemplateTool;
+import com.word.doc.GeneralTemplateTool;
 import com.word.autWord.query.QueryNewColumnsData;
 import com.word.autWord.query.QueryNewRegisterData;
 import com.word.autWord.query.QueryNewWhereParamData;
-import com.word.controller.CompAssetApplyRecordController;
-import com.word.asset.interfaces.MyNotEmpty;
-import com.word.asset.interfaces.MyNotNull;
-import com.yd.query.util.QueryUtil;
 import com.yd.query.util.QueryVueUtil;
 import com.yd.query.vo.QueryBean;
-import com.yd.utils.common.StringUtils;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class WordCreateByQuery {

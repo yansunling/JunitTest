@@ -3,7 +3,7 @@ package com.word.autWord;
 
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.dy.test.autoTest.ParamBean;
+import com.dy.autoTest.ParamBean;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTbl;
