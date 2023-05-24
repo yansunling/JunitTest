@@ -1,6 +1,7 @@
 package com.dy.autoTest;
 
 
+import com.dy.service.DruidCustomer;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
@@ -9,8 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.dy.test.pojo.TMS_job_order;
-import com.dy.service.DruidCustomer;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -53,8 +52,5 @@ public class MQCustomerTest implements ApplicationContextAware{
           Thread.sleep(100);
 	}	
 
-	public static void main(String[] args) {
-		TMS_job_order message=new TMS_job_order();
-		System.out.println(message.getClass().getSimpleName());
-	}
+
 }

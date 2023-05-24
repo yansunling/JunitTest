@@ -1,7 +1,6 @@
 package com.dy.mq;
 
 
-import com.dy.test.pojo.TMS_job_order;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;

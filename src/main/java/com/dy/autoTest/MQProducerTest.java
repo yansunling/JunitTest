@@ -1,6 +1,7 @@
 package com.dy.autoTest;
 
 
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
@@ -8,7 +9,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import com.dy.test.pojo.TMS_job_order;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -42,8 +42,5 @@ public class MQProducerTest implements ApplicationContextAware{
          
 	}	
 
-	public static void main(String[] args) {
-		TMS_job_order message=new TMS_job_order();
-		System.out.println(message.getClass().getSimpleName());
-	}
+
 }
