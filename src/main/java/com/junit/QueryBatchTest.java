@@ -1,7 +1,7 @@
 package com.junit;
 
 import com.alibaba.fastjson.JSONObject;
-import com.http.SslUtils;
+import com.util.SslUtils;
 import com.junit.po.Query_base_columnsVO;
 import com.yd.query.util.QueryUtil;
 import com.yd.query.vo.QueryBean;
