@@ -12,7 +12,7 @@ public class SqlFileUtil {
 
     public static void insertFile(List<String> dataList) {
         try {
-            File file=new File("C:\\Users\\admin\\Desktop\\sql\\insert"+num+".sql");
+            File file=new File("C:\\Users\\yansunling\\Desktop\\sql\\insert"+num+".sql");
             if(!file.exists()){
                 file.createNewFile();
             }
@@ -36,7 +36,7 @@ public class SqlFileUtil {
 
     public static BufferedWriter getBufferedWriter(String tableName) {
         try {
-            File file=new File("C:\\Users\\admin\\Desktop\\sql\\"+tableName+".sql");
+            File file=new File("C:\\Users\\yansunling\\Desktop\\sql\\"+tableName+".sql");
             if(!file.exists()){
                 file.createNewFile();
             }

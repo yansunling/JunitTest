@@ -14,7 +14,7 @@ public class CreateTitleData {
 
 
 
-        List<String> list = FileUtils.readLines(new File("C:\\Users\\admin\\Desktop\\CrmxMarketCustomerImportData.java"));
+        List<String> list = FileUtils.readLines(new File("C:\\Users\\yansunling\\Desktop\\CrmxMarketCustomerImportData.java"));
 
         Map<String,String> map=new LinkedHashMap<>();
         List<String> tempList=new ArrayList<>();

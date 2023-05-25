@@ -40,14 +40,13 @@ public class CreateEnumBySource implements ApplicationContextAware{
 	@Test
 	public  void test() throws Exception {
         List<String> domainList = Arrays.asList("compete_relation_new");
-        String path="C:\\Users\\admin\\Desktop\\enum\\";
+        String path="C:\\Users\\yansunling\\Desktop\\enum\\";
 		File dir=new File(path);
 
 		FileUtils.deleteDirectory(dir);
 		//创建目录
 		dir.mkdirs();
-		String classpath =  CreateTitleData.class.getResource( "/" ).getPath().replaceFirst( "/" ,  "" );
-		String filePath = classpath.replaceAll( "/classes/" ,  "")+"/JuninTest/WEB-INF/template/CRMX_COMMON_STATUS.java";
+		String filePath = getClass().getClassLoader().getResource("").getPath()+"java/TemplateEnum.java";
 		File file=new File(filePath);
 
 		String content = FileUtil.readAsString(file);

@@ -50,6 +50,8 @@ public class CreatePoBySource implements ApplicationContextAware{
 		String filePath = getClass().getClassLoader().getResource("").getPath();
 		String content = FileUtil.readAsString(new File(filePath+"java/TemplatePO.java"));
 		String mapperContent=FileUtil.readAsString(new File(filePath+"java/TemplateMapper.java"));
+		String serviceContent=FileUtil.readAsString(new File(filePath+"java/TemplateService.java"));
+		String implContent=FileUtil.readAsString(new File(filePath+"java/TemplateServiceImpl.java"));
 
 
 		for(String tableName:tableNames){
@@ -78,17 +80,34 @@ public class CreatePoBySource implements ApplicationContextAware{
 			for(int i=1;i<strs.length;i++){
 				prexName+=StringUtils.upperFirst(strs[i]);
 			}
+			//生成PO
 			String className=prexName+"PO";
 			String newContent=content.replaceAll("\\{content\\}",sb.toString())
 					.replaceAll("\\{table_comment\\}",tableComment)
 					.replaceAll("\\{table_name\\}",tableName)
 					.replaceAll("\\{class_name\\}",className);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +className+ ".java"),newContent);
+			//生成mapper
 			String classMapper=prexName+"Mapper";
 			mapperContent=mapperContent.replaceAll("\\{class_name\\}",className).replaceAll("\\{class_mapper\\}",classMapper);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +classMapper+ ".java"),mapperContent);
+			//生成service
+			String classService=prexName+"Service";
+			serviceContent=serviceContent.replaceAll("\\{class_name\\}",className).replaceAll("\\{class_service\\}",classService);
+			FileUtil.writeAsString(new File(path+tableName+"\\" +classService+ ".java"),serviceContent);
 
-        }
+			//生成impl
+			String classImpl=prexName+"ServiceImpl";
+			implContent=implContent.replaceAll("\\{class_name\\}",className)
+					.replaceAll("\\{class_impl\\}",classImpl)
+					.replaceAll("\\{class_mapper\\}",classMapper)
+					.replaceAll("\\{table_name\\}",tableName)
+					.replaceAll("\\{class_service\\}",classService);
+			FileUtil.writeAsString(new File(path+tableName+"\\" +classImpl+ ".java"),implContent);
+
+
+
+		}
     }
 
 }

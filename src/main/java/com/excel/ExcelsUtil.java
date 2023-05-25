@@ -298,9 +298,9 @@ public class ExcelsUtil {
     }
 
     public static void main(String[] args) throws Exception {
-//        getDataFromExcel("C:\\Users\\admin\\Desktop\\2022上半年交旅劳保清单(1).xlsx");
+//        getDataFromExcel("C:\\Users\\yansunling\\Desktop\\2022上半年交旅劳保清单(1).xlsx");
 
-        getDataFromExcel("C:\\Users\\admin\\Desktop\\crmx_market_customer.xlsx");
+        getDataFromExcel("C:\\Users\\yansunling\\Desktop\\crmx_market_customer.xlsx");
 
 
 

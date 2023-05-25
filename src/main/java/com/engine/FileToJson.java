@@ -10,7 +10,7 @@ import java.util.*;
 
 public class FileToJson {
     public static void main(String[] args) throws Exception{
-        File file=new File("C:\\Users\\admin\\Desktop\\condition.txt");
+        File file=new File("C:\\Users\\yansunling\\Desktop\\condition.txt");
         List<String> list = FileUtil.readLines(file, "UTF-8");
         Map<String,Object> map=new LinkedHashMap<>();
         String today = DateUtils.format(new Date());

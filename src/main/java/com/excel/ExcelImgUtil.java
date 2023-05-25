@@ -217,7 +217,7 @@ public class ExcelImgUtil {
         String path = ExcelImgUtil.class.getClassLoader().getResource("").getPath();
         String filePath=path+"excel";
         File file = new File(filePath+"/test.xlsx");
-        File exportFile=new File("C:\\Users\\admin\\Desktop\\test2.xlsx");
+        File exportFile=new File("C:\\Users\\yansunling\\Desktop\\test2.xlsx");
         //删除备份文件
         boolean exists = exportFile.exists();
         if(exists){

@@ -10,7 +10,7 @@ import java.util.*;
 
 public class FileToRequired {
     public static void main(String[] args) throws Exception{
-        File file=new File("C:\\Users\\admin\\Desktop\\required.txt");
+        File file=new File("C:\\Users\\yansunling\\Desktop\\required.txt");
         List<String> list = FileUtil.readLines(file, "UTF-8");
         Map<String,String> map=new LinkedHashMap<>();
         list.forEach(item->{

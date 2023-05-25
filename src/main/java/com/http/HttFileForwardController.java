@@ -52,7 +52,7 @@ public class HttFileForwardController {
             MultipartFile file = multiRequest.getFile(iter.next());
             if (file != null) {
                 String filename = file.getOriginalFilename();
-                String path = "C:\\Users\\admin\\Desktop\\sql\\" + filename;
+                String path = "C:\\Users\\yansunling\\Desktop\\sql\\" + filename;
                 // 上传
                 try {
                     file.transferTo(new File(path));

@@ -19,7 +19,7 @@ import java.util.Map;
 
 public class ExecelReadMarket {
     public static void main(String[] args) throws Exception{
-        String filePath="C:\\Users\\admin\\Desktop\\crmx_customer_import_market.xlsx";
+        String filePath="C:\\Users\\yansunling\\Desktop\\crmx_customer_import_market.xlsx";
         File file=new File(filePath);
 
         ExcelReader excelReader = new ExcelReader(file);
@@ -82,7 +82,7 @@ public class ExecelReadMarket {
         WorkbookUtil.createWorkBook(wb,"未找到市场", CRMX_base_market_messageData.titleMap, null,notFindMarket);
         WorkbookUtil.createWorkBook(wb,"正确市场", CRMX_base_market_messageData.titleMap, null,correctMarket);
 
-        OutputStream out = new FileOutputStream("C:\\Users\\admin\\Desktop\\market.xlsx");
+        OutputStream out = new FileOutputStream("C:\\Users\\yansunling\\Desktop\\market.xlsx");
 
         wb.write(out);
         out.close();

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class ExecelReadTest2 {
     public static void main(String[] args) throws Exception{
-        String filePath="C:\\Users\\admin\\Desktop\\1.xlsx";
+        String filePath="C:\\Users\\yansunling\\Desktop\\1.xlsx";
 
         List<String[]> list = XLSXCovertCSVReader.readerExcel(filePath, "二三期", 50);
         String[] titleStr=new String[35];
@@ -47,7 +47,7 @@ public class ExecelReadTest2 {
         XSSFWorkbook wb = new XSSFWorkbook();
         WorkbookUtil.createWorkBook(wb,"二三期", MarketExeclData.getExcelTitle(), null,excelData);
 
-        OutputStream out = new FileOutputStream("C:\\Users\\admin\\Desktop\\3.xlsx");
+        OutputStream out = new FileOutputStream("C:\\Users\\yansunling\\Desktop\\3.xlsx");
 
         wb.write(out);
         out.close();

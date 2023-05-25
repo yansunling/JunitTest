@@ -10,7 +10,7 @@ import java.util.List;
 
 public class CreateSqlFile {
     public static void main(String[] args)throws Exception {
-        File file=new File("C:\\Users\\admin\\Desktop\\insert.sql");
+        File file=new File("C:\\Users\\yansunling\\Desktop\\insert.sql");
         if(!file.exists()){
             file.createNewFile();
         }

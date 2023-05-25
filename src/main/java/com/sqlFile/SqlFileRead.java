@@ -9,7 +9,7 @@ import java.util.List;
 
 public class SqlFileRead {
     public static void main(String[] args) throws Exception{
-        File file=new File("C:\\Users\\admin\\Desktop\\address.sql");
+        File file=new File("C:\\Users\\yansunling\\Desktop\\address.sql");
         List<String> list = FileUtils.readLines(file, "utf-8");
         List<String> outLineList=new ArrayList<>();
         list.forEach(line->{
@@ -20,7 +20,7 @@ public class SqlFileRead {
                 outLineList.add(customerId);
             }
         });
-        File outfile=new File("C:\\Users\\admin\\Desktop\\customer.text");
+        File outfile=new File("C:\\Users\\yansunling\\Desktop\\customer.text");
         FileUtils.writeLines(outfile,"utf-8",outLineList);
 
     }
