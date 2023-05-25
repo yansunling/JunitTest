@@ -41,20 +41,19 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_sale_application");
+        List<String> tableNames = Arrays.asList("crm_sale_application","crm_sale_approver");
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
 		//创建目录
 		dir.mkdirs();
 		String filePath = getClass().getClassLoader().getResource("").getPath();
-		String content = FileUtil.readAsString(new File(filePath+"java/TemplatePO.java"));
-		String mapperContent=FileUtil.readAsString(new File(filePath+"java/TemplateMapper.java"));
-		String serviceContent=FileUtil.readAsString(new File(filePath+"java/TemplateService.java"));
-		String implContent=FileUtil.readAsString(new File(filePath+"java/TemplateServiceImpl.java"));
-
-
 		for(String tableName:tableNames){
+			String content = FileUtil.readAsString(new File(filePath+"java/TemplatePO.java"));
+			String mapperContent=FileUtil.readAsString(new File(filePath+"java/TemplateMapper.java"));
+			String serviceContent=FileUtil.readAsString(new File(filePath+"java/TemplateService.java"));
+			String implContent=FileUtil.readAsString(new File(filePath+"java/TemplateServiceImpl.java"));
+			String controllerContent=FileUtil.readAsString(new File(filePath+"java/TemplateController.java"));
             String sql="select  CONCAT(\n" +
 					"if(c.column_key='PRI','    @TableId\\n',''),\n" +
 					"if(c.column_name='version','    @Version\\n',''),\n" +
@@ -104,6 +103,18 @@ public class CreateJavaFile implements ApplicationContextAware{
 					.replaceAll("\\{table_name\\}",tableName)
 					.replaceAll("\\{class_service\\}",classService);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +classImpl+ ".java"),implContent);
+
+
+			//生成controller
+			String classController=prexName+"Controller";
+			controllerContent=controllerContent.replaceAll("\\{class_name\\}",className)
+					.replaceAll("\\{class_impl\\}",classImpl)
+					.replaceAll("\\{class_controller\\}",classController)
+					.replaceAll("\\{table_name\\}",tableName)
+					.replaceAll("\\{class_service\\}",classService);
+			FileUtil.writeAsString(new File(path+tableName+"\\" +classController+ ".java"),controllerContent);
+
+
 
 
 
