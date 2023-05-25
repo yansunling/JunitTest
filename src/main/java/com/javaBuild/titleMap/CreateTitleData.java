@@ -1,4 +1,4 @@
-package com.titleMap;
+package com.javaBuild.titleMap;
 
 import org.apache.commons.io.FileUtils;
 

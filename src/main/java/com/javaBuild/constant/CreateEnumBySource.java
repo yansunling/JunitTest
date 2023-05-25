@@ -1,7 +1,7 @@
-package com.word;
+package com.javaBuild.constant;
 
 
-import com.titleMap.CreateTitleData;
+import com.javaBuild.titleMap.CreateTitleData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.aspectj.util.FileUtil;

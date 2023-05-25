@@ -1,4 +1,4 @@
-package com.word;
+package com.javaBuild.constant;
 
 public class CreateMdmEnum {
     public static void main(String[] args) {

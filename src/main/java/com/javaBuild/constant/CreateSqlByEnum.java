@@ -1,4 +1,4 @@
-package com.word;
+package com.javaBuild.constant;
 
 import com.yd.utils.common.StringUtils;
 

@@ -1,4 +1,4 @@
-package com.word;
+package com.javaBuild.constant;
 
 import com.word.constansts.CRMX_DENSITY_TYPE;
 
