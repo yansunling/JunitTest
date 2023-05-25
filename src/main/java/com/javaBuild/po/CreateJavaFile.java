@@ -54,6 +54,8 @@ public class CreateJavaFile implements ApplicationContextAware{
 			String serviceContent=FileUtil.readAsString(new File(filePath+"java/TemplateService.java"));
 			String implContent=FileUtil.readAsString(new File(filePath+"java/TemplateServiceImpl.java"));
 			String controllerContent=FileUtil.readAsString(new File(filePath+"java/TemplateController.java"));
+			String htmlContent=FileUtil.readAsString(new File(filePath+"java/TemplateList.html"));
+			String jsContent=FileUtil.readAsString(new File(filePath+"java/TemplateJavaScript.js"));
             String sql="select  CONCAT(\n" +
 					"if(c.column_key='PRI','    @TableId\\n',''),\n" +
 					"if(c.column_name='version','    @Version\\n',''),\n" +
@@ -113,10 +115,19 @@ public class CreateJavaFile implements ApplicationContextAware{
 					.replaceAll("\\{table_name\\}",tableName)
 					.replaceAll("\\{class_service\\}",classService);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +classController+ ".java"),controllerContent);
-
-
-
-
+			//生成html页面
+			String htmlGroup=strs[1];
+			String htmlName=tableName.replaceAll("crm_","crmx_")+"_list";
+			htmlContent=htmlContent.replaceAll("\\{html_group\\}",htmlGroup)
+					.replaceAll("\\{html_name\\}",htmlName);
+			FileUtil.writeAsString(new File(path+tableName+"\\" +htmlName+ ".html"),htmlContent);
+			//生成js页面
+			String jsName=tableName.replaceAll("crm_","crmx_");
+			jsContent=jsContent.replaceAll("\\{html_group\\}",htmlGroup)
+					.replaceAll("\\{js_name\\}",jsName)
+					.replaceAll("\\{table_name\\}",tableName)
+					.replaceAll("\\{table_comment\\}",tableComment);
+			FileUtil.writeAsString(new File(path+tableName+"\\" +htmlName+ ".js"),jsContent);
 
 		}
     }
