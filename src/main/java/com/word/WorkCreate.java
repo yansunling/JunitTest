@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.baomidou.mybatisplus.core.toolkit.BeanUtils;
 import com.dy.components.annotations.CJ_column;
-import com.dy.autoTest.ParamBean;
+import com.junit.po.ParamBean;
 import com.word.doc.GeneralTemplateTool;
 import com.word.asset.vo.CompAssetStocktakingReportVO;
 import com.word.asset.interfaces.MyNotEmpty;
