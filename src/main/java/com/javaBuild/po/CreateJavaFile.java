@@ -26,7 +26,7 @@ import java.util.Map;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:applicationContext.xml"})
-public class CreatePoBySource implements ApplicationContextAware{
+public class CreateJavaFile implements ApplicationContextAware{
 	ApplicationContext ac;
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
