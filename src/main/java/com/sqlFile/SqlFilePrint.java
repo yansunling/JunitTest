@@ -1,13 +1,8 @@
 package com.sqlFile;
 
 import cn.hutool.core.io.FileUtil;
-import com.alibaba.fastjson.JSONObject;
-import com.word.autWord.WordCreateByClass;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.List;
 
 public class SqlFilePrint {

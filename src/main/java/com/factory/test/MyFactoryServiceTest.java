@@ -3,7 +3,7 @@ package com.factory.test;
 
 import com.factory.Cat;
 import com.factory.MyFactoryService;
-import com.word.asset.vo.CompAssetBaseInfoChangeVO;
+import com.word.dataSource.vo.CompAssetBaseInfoChangeVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
