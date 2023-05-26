@@ -20,7 +20,7 @@ import java.util.Map;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:applicationContext.xml"})
-public class ExcelTest implements ApplicationContextAware {
+public class ExcelAppendPhoto implements ApplicationContextAware {
     ApplicationContext ac;
 
     @Override
@@ -42,7 +42,7 @@ public class ExcelTest implements ApplicationContextAware {
                 " limit 10;";
         List<Map<String, Object>> listData = jdbcTemplate.queryForList(sql);
         List<String> columns = Arrays.asList("serial_no", "customer_id", "file_seq_no");
-        String path = ExcelTest.class.getClassLoader().getResource("").getPath();
+        String path = ExcelAppendPhoto.class.getClassLoader().getResource("").getPath();
         String filePath=path+"excel";
         File file = new File(filePath+"/cert.xlsx");
         ExcelAppend.appendFile(file,listData,columns);

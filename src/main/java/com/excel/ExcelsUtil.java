@@ -3,15 +3,20 @@ package com.excel;
 
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.URLDecoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 import cn.hutool.core.io.FileUtil;
+import com.dy.components.annotations.CJ_column;
+import com.dy.components.logs.api.logerror.GlobalErrorInfoException;
 import com.yd.common.runtime.CIPRuntimeConfigure;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
@@ -296,6 +301,92 @@ public class ExcelsUtil {
         }
         return false;
     }
+
+
+    @SneakyThrows
+    public static <T> List<T> excelToObj(List<String[]> list, Class<T> mainClazz) {
+        List<T> data = new ArrayList<>();
+        if(list.size()<1){
+            return data;
+        }
+        Field titleField = mainClazz.getDeclaredField("title");
+        // 设置操作权限，允许访问private属性
+        titleField.setAccessible(true);
+        // 创建Person类的对象
+        T obj = mainClazz.newInstance();
+        // 获取person对象的name属性值
+        List<String> columns = (List<String>) titleField.get(obj);
+        try {
+            Field field;
+            for (int i = 1; i < list.size(); i++) {
+                String[] record = list.get(i);
+                //碰到空行跳出
+                if(record==null){
+                    break;
+                }
+                int j = 0;
+                T po = mainClazz.newInstance();
+                for (String column : columns) {
+                    if(j>=record.length){
+                        break;
+                    }
+                    String str = String.valueOf(record[j]);
+                    if (StringUtils.isNotBlank(str)) {
+                        str = str.trim();
+                    }
+                    //值为空值时，字符串默认为空串
+                    if(StringUtils.equalsIgnoreCase("null",str)){
+                        str="";
+                    }
+                    field = po.getClass().getDeclaredField(column);
+                    field.setAccessible(true);
+                    Class clazz = field.getType();
+                    if (clazz.isEnum()) {//判断是不是枚举
+                        Method method = clazz.getMethod("values");
+                        Object[] enums = (Object[]) method.invoke(null);
+                        //设置枚举值
+                        Method enumMethod = clazz.getMethod("nameToEnum",String.class);
+                        Object invoke = enumMethod.invoke(enums[0], str);
+                        field.set(po, invoke);
+                        //设置属性值
+                        Method codeType = clazz.getMethod("nameToCode",String.class);
+                        String value = codeType.invoke(enums[0],str) + "";
+                        Field valueField = po.getClass().getDeclaredField(column.replace("_name", ""));
+                        valueField.setAccessible(true);
+                        valueField.set(po,value);
+                    }else {
+                        field.set(po, str);
+                    }
+
+                    j++;
+                }
+                data.add(po);
+            }
+            return data;
+
+
+        } catch (Exception e) {
+            log.info("convertExcelData error",e);
+            throw new RuntimeException("导入数据有误");
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public static void main(String[] args) throws Exception {
 //        getDataFromExcel("C:\\Users\\yansunling\\Desktop\\2022上半年交旅劳保清单(1).xlsx");
