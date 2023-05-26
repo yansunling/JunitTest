@@ -1,5 +1,6 @@
 package com.excel.read;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.excel.ExcelsUtil;
 import com.excel.XLSXCovertCSVReader;
 import com.excel.data.CheckData;
@@ -9,7 +10,9 @@ import com.yd.utils.common.StringUtils;
 import org.springframework.util.Base64Utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ExecelReadCheck {
     public static void main(String[] args) throws Exception{
@@ -21,14 +24,23 @@ public class ExecelReadCheck {
         if (!f.exists()) {
             f.mkdirs(); // 创建目录
         }
+        List<Map<String,Object>> listData=new ArrayList();
         checkData.forEach(item->{
+            Map<String, Object> objectMap = BeanUtil.beanToMap(item);
             String img = item.getImg();
             if(StringUtils.isNotBlank(img)){
                 String content = img.split(",")[1];
                 String type = img.split(";")[0].split("/")[1];
                 String picPath=dir+"/"+item.getUser_name()+item.getUser_id()+"."+type;
                 ImgUtil.Base64ToImage(content,picPath);
+                objectMap.put("img",new File(picPath));
             }
+            listData.add(objectMap);
         });
+
+        String excelPath="C:\\Users\\yansunling\\Desktop\\checkImg.xls";
+        ExcelsUtil.createExcel(excelPath,listData,CheckData.title);
+
+
     }
 }
