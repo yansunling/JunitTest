@@ -9,6 +9,7 @@ public class ParamBean {
 	private String description;
 	private String listType;//集合类型
 	private String Clazz;//对应对象类名
+	private String enumFlag;//是否是枚举
 
 	public ParamBean() {
 		super();

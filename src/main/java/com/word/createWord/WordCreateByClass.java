@@ -7,14 +7,15 @@ import com.annotation.MyNotNull;
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
 import com.junit.po.ParamBean;
+import com.word.constansts.Cacheable;
 import com.word.dataSource.controller.CrmxSaleApplicationController;
-import com.word.dataSource.controller.TMSP_claims_hand_docController;
 import com.word.doc.GeneralTemplateTool;
 import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
 import lombok.SneakyThrows;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
@@ -78,18 +79,27 @@ public class WordCreateByClass {
                         templatePath = CopyWordParagraph.createListDocument(listChildren);
                         for(int i=0;i<listChildren.size();i++){
                             ParamBean paramBean = listChildren.get(i);
-                            List<ParamBean> childParamsBean = getParamsBean(Class.forName(paramBean.getClazz()));
                             //获得子对象属性
                             List<Map<String,String>> tab2list = new ArrayList<>();
                             Map<String, Object> childValueObj=new HashMap<>();
-                            getTabList(tab2list,childParamsBean,childValueObj);
+                            if(StringUtils.equals(paramBean.getEnumFlag(),"Y")){
+                                getEnumData(tab2list,paramBean);
+                            }else{
+                                List<ParamBean> childParamsBean = getParamsBean(Class.forName(paramBean.getClazz()));
+                                getTabList(tab2list,childParamsBean,childValueObj);
+                            }
                             params.put("tab"+(i+2), tab2list);
                             if(StringUtils.isNotBlank(paramBean.getListType())){
                                 List list=new ArrayList();
                                 list.add(childValueObj);
                                 stringObjectMap.put(paramBean.getName(),list);
                             }else{
-                                stringObjectMap.put(paramBean.getName(),childValueObj);
+                                if(StringUtils.equals("Y",paramBean.getEnumFlag())){
+                                    stringObjectMap.put(paramBean.getName(),paramBean.getDescription());
+                                }else{
+                                    stringObjectMap.put(paramBean.getName(),childValueObj);
+                                }
+
                             }
                         }
                     }
@@ -106,16 +116,16 @@ public class WordCreateByClass {
                     pretty = JSON.toJSONString(responseJson, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);
                     pretty=pretty.replaceAll("\n","\r");
                     params.put("response_json", pretty);
-
-                    String outFile = filePath + "/"+desc+".docx";
+                    String dir="C:/Users/yansunling/Desktop/api/";
+                    File dirFile = new File(dir);
+                    if (!dirFile.exists()) {
+                        dirFile.mkdirs(); // 创建目录
+                    }
+                    String outFile =dir+desc+".docx";
                     gtt.templateWrite(templatePath, outFile, params);
                     fileList.add(outFile);
                     System.out.println("生成模板成功");
                     System.out.println(outFile);
-
-
-
-
                 }
             }
         }
@@ -151,6 +161,27 @@ public class WordCreateByClass {
         return listChildren;
     }
 
+    @SneakyThrows
+    public static  void getEnumData(List<Map<String,String>> tab1list,ParamBean paramBean){
+        Class clazz=Class.forName(paramBean.getClazz());
+        Method method = clazz.getMethod("values");
+        Object[] enums = (Object[]) method.invoke(null);
+        StringBuffer sql=new StringBuffer();
+        for(Object object:enums){
+            Method codeType = clazz.getMethod("codeType");
+            String key=codeType.invoke(object)+"";
+            if(StringUtils.isBlank(key)){
+                continue;
+            }
+            Method codeName = clazz.getMethod("codeName");
+            String value=codeName.invoke(object)+"";
+            Map<String, String> map = new HashMap<>();
+            map.put("param", paramBean.getName());
+            map.put("type", key);
+            map.put("msg", value);
+            tab1list.add(map);
+        }
+    }
 
 
     @SneakyThrows
@@ -198,7 +229,10 @@ public class WordCreateByClass {
                     if(!primitive){
                         String simpleName = aClass.getSimpleName();
                         if(!simpleName.equals("String")&&!simpleName.equals("Object")&&!simpleName.equals("Boolean")
-                                &&!simpleName.equals("Double")&&!simpleName.equals("Integer")&&!simpleName.equals("Money")){
+                                &&!simpleName.equals("Double")&&!simpleName.equals("Integer")&&!simpleName.equals("Money")&&!simpleName.equals("Timestamp")){
+                            if(aClass.isEnum()){
+                                bean.setEnumFlag("Y");
+                            }
                             bean.setClazz(aClass.getName());
                         }
                     }

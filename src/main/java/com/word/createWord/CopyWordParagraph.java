@@ -4,15 +4,13 @@ package com.word.createWord;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.junit.po.ParamBean;
+import com.yd.utils.common.StringUtils;
 import org.apache.poi.xwpf.usermodel.*;
 import org.apache.xmlbeans.XmlCursor;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTbl;
 import org.springframework.beans.BeanUtils;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.List;
 
 
@@ -35,7 +33,7 @@ public class CopyWordParagraph {
         int startTable=2;
         for(int i=0;i<beanList.size();i++){
             ParamBean paramBean = beanList.get(i);
-            copyTable(document,table,startParagraph,startTable,paramBean.getName()+"参数");
+            copyTable(document,table,startParagraph,startTable,paramBean.getName()+"参数",paramBean);
             startTable+=1;
             startParagraph+=2;
         }
@@ -59,7 +57,8 @@ public class CopyWordParagraph {
 
         WordCreateByClass.closeWps();
 
-        String filePath="C:/Users/admin/Desktop/api";
+        String path = WordCreateByClass.class.getClassLoader().getResource("").getPath();
+        String filePath=path+"api";
         //模板路径
         String templatePath=filePath+"/template.docx";
 
@@ -69,13 +68,20 @@ public class CopyWordParagraph {
 
         int startParagraph=8;
         int startTable=2;
-        for(int i=0;i<3;i++){
-            copyTable(document,table,startParagraph,startTable,"detail_list"+(i+1)+"参数");
+        for(int i=0;i<1;i++){
+            ParamBean paramBean = new ParamBean();
+            paramBean.setEnumFlag("Y");
+            copyTable(document,table,startParagraph,startTable,"detail_list"+(i+1)+"参数",paramBean);
             startTable+=1;
             startParagraph+=2;
         }
         //保存文件
-        String fileName = filePath+"模板.docx";
+        String dir="C:/Users/yansunling/Desktop/api/";
+        File dirFile = new File(dir);
+        if (!dirFile.exists()) {
+            dirFile.mkdirs(); // 创建目录
+        }
+        String fileName =dir+"模板.docx";
         OutputStream outputStream = new FileOutputStream(fileName);
         document.write(outputStream);
 
@@ -85,7 +91,7 @@ public class CopyWordParagraph {
         WordCreateByClass.openWps(fileName);
     }
 
-    public static void copyTable(XWPFDocument document,XWPFTable table,int paraIndex,int tableNum,String title){
+    public static void copyTable(XWPFDocument document,XWPFTable table,int paraIndex,int tableNum,String title,ParamBean paramBean){
         CTTbl ctTbl = CTTbl.Factory.newInstance(); // 创建新的 CTTbl ， table
         ctTbl.set(document.getTables().get(0).getCTTbl()); // 复制原来的CTTbl
         IBody iBody = document.getTables().get(0).getBody();
@@ -98,6 +104,12 @@ public class CopyWordParagraph {
         List<XWPFRun> runs = paragraphs.get(0).getRuns();
         runs.get(0).setText("${tab"+tableNum+"}",0);
 
+        if(StringUtils.equals(paramBean.getEnumFlag(),"Y")){
+            XWPFTableCell cell = tableCells.get(1);
+            List<XWPFParagraph> paragraphs1 = cell.getParagraphs();
+            List<XWPFRun> runs1 = paragraphs1.get(0).getRuns();
+            runs1.get(0).setText("选项值",0);
+        }
         List<XWPFParagraph> paragraphList = document.getParagraphs();
         XWPFParagraph paragraph = paragraphList.get(paraIndex);
         XmlCursor cursor = paragraph.getCTP().newCursor();
