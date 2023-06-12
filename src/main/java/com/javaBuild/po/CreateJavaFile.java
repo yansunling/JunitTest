@@ -41,7 +41,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_sale_application","crm_sale_approver");
+        List<String> tableNames = Arrays.asList("crm_base_customer_ton_price_region");
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);

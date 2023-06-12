@@ -9,8 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@CJ_domain(name = "状态")
-public enum CRMX_COMMON_STATUS implements EnumService{
+@CJ_domain(name = "")
+public enum CRMX_COMMON_STATUS {
 
 {content}
   ;

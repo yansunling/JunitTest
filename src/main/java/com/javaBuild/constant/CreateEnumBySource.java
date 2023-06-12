@@ -39,7 +39,7 @@ public class CreateEnumBySource implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> domainList = Arrays.asList("compete_relation_new");
+        List<String> domainList = Arrays.asList("price_customer_type");
         String path="C:\\Users\\yansunling\\Desktop\\enum\\";
 		File dir=new File(path);
 
@@ -56,7 +56,7 @@ public class CreateEnumBySource implements ApplicationContextAware{
             List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
 			StringBuffer sb=new StringBuffer();
 			mapList.forEach(map->{
-				sb.append("    "+item.toUpperCase()).append("_").append(map.get("code_type"))
+				sb.append("    "+item.toUpperCase()).append("_").append(String.valueOf(map.get("code_type")).toUpperCase())
 						.append("(\""+map.get("code_type")+"\",\""+map.get("code_name")+"\"),\n");
 			});
 			String className="CRMX_"+item.toUpperCase();
