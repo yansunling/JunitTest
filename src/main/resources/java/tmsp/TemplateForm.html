@@ -10,31 +10,24 @@
 	<script type="text/javascript" src="../../js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
 	<script type="text/javascript" src="../../js/cip-page1.0.js"></script>
 	<script type="text/javascript" src="../../js/jcdf-contants-1.0.js"></script>
-	<script type="text/javascript" src="../../js/dy_pagetools_1.0.js"></script>
 	<script type="text/javascript" src="../../js/query_namespace_vue.js"></script>
 	<script type="text/javascript" src="../../logic/{html_group}/{html_name}.js"></script>
 	<script type="text/javascript" >
 		$(document).ready(init);
 	</script>
-</head> 
-<body class="easyui-layout">
-<div data-options="region:'north', split:false, border:false" style="height: 60%">
-	<div id="mycx" name="查询条件区"></div>
-	<div id="crmx_base_table_list_menu">
-		<a href="#" class="easyui-linkbutton" iconCls="icon-search" id="icon-search">查询</a>
+</head>
+<body>
+	<div id="area_form" >
+	<form id="form_tmsp_data" class="form">
+		<input type='hidden' id='serial_no' name='serial_no' />
+		<table id="ref_table">
+{table_content}
+		</table>
+	</form>
 	</div>
-	<table id="crmx_base_table_list" fit="true"  style="width:100%;height:100%;"></table>
-</div>
-
-<div id='tab_tt' data-options="region:'center', split:false, border:false" class="easyui-tabs" style="height: 40%">
-	<div data-options="split:false, border:false" title="操作日志" >
-		<div id="crm_share_data_log_list_menu">
-		</div>
-		<table id="crm_share_data_log_good_list" fit="true"  style="width:100%;height:100%;"></table>
+	<div class="button-section">
+		<a id="btn_save" href="#" class="easyui-linkbutton" iconCls="icon-ok">确定</a>
+		<a id="btn_cancel" href="#" class="easyui-linkbutton" iconCls="icon-cancel">取消</a>
 	</div>
-</div>
-
-
-
 </body>
 </html>

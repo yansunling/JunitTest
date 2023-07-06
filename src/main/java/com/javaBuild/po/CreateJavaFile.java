@@ -41,7 +41,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_base_customer_ton_price_region");
+        List<String> tableNames = Arrays.asList("tmsp_own_oa_record","tmsp_oil_loan_info");
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
@@ -66,7 +66,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 					"c.data_type,column_name,c.column_comment,c.table_name,tb.table_comment from information_schema.columns c\n" +
 					"left join information_schema.tables tb on c.table_name=tb.table_name  and c.table_schema=tb.table_schema\n" +
 					"where 1=1\n" +
-					"and c.table_schema ='crm' " +
+					"and c.table_schema ='tmsp' " +
 					"and tb.table_name in( '"+tableName+"');";
             List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
 			StringBuffer sb=new StringBuffer();
@@ -77,7 +77,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 
 			String[] strs = tableName.split("_");
-			String prexName="Crmx";
+			String prexName="Tmsp";
 			for(int i=1;i<strs.length;i++){
 				prexName+=StringUtils.upperFirst(strs[i]);
 			}
