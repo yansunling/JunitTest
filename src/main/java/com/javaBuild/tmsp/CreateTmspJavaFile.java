@@ -40,7 +40,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("tmsp_own_vehicle_insurance");
+        List<String> tableNames = Arrays.asList("tmsp_own_send_msg");
 		String htmlGroup="ownCar";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
@@ -66,8 +66,10 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 
 
 			List<ColumnData> columnDataList=new ArrayList<>();
-			List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time","version","op_user_id","creator","serial_no");
-
+			List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time",
+                    "version","op_user_id","creator","serial_no","oa_flag","oa_apply_user_id","oa_apply_time","loan_process_number","repayment_process_number",
+                    "expense_process_number","oa_status","approval_amount","archived_amount","violation_process_number","file_attachment");
+			StringBuffer remarkTd=new StringBuffer();
 
 
 
@@ -76,6 +78,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 					"if(c.column_name='version','    @Version\\n',''),\n" +
 					"if(c.column_name in('create_time','create_user_id','creator'),'    @TableField(fill = FieldFill.INSERT)\\n',''),\n" +
 					"if(c.column_name in('operator','update_time','op_user_id','update_user_id'),'    @TableField(fill = FieldFill.INSERT_UPDATE)\\n',''),\n" +
+					"if((c.data_type='date' or c.data_type='datetime' and c.column_name not in('create_time','update_time','oa_apply_time')),'    @JsonFormat(pattern = \"yyyy-MM-dd\",timezone = \"GMT+8\")\\n',''),\n" +
 					"'    @CJ_column(name = \"',c.column_comment,'\")\\n',\n" +
 					"'    private ',case when c.data_type in('Integer','int') then 'Integer ' when c.data_type in('bigint') then 'Money ' when c.data_type='decimal ' then 'Double ' when c.data_type='date' or c.data_type='datetime'    then 'Timestamp ' else 'String ' end,c.column_name,';\\n\\n') as filed,\n" +
 					"c.data_type,column_name,c.column_comment,c.table_name,tb.table_comment from information_schema.columns c\n" +
@@ -88,6 +91,18 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 			mapList.forEach(map->{
 				sb.append(map.get("filed")+"\n\n\n");
 				String columnId=map.get("column_name")+"";
+				if(StringUtils.equalsIgnoreCase("remark",columnId)){
+					remarkTd.append("\t\t\t<tr>\n" +
+							"\t\t\t\t<td align='right' width=13%>\n" +
+							"\t\t\t\t\t<label>备注:</label>\n" +
+							"\t\t\t\t</td>\n" +
+							"\t\t\t\t<td width=20% colspan=\"5\">\n" +
+							"\t\t\t\t\t<textarea id='remark' name='remark' type='text' data-options='required:false' class='easyui-validatebox' style='height:50px;width:800px'></textarea>\n" +
+							"\t\t\t\t</td>\n" +
+							"\t\t\t</tr>");
+
+					return;
+				}
 				if(!exceptColumns.contains(columnId)){
 					columnDataList.add(new ColumnData(columnId,map.get("column_comment")+"",map.get("data_type")+""));
 				}
@@ -193,23 +208,24 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 
 			List<List<ColumnData>> partition = Lists.partition(columnDataList, 3);
 			StringBuffer formTable=new StringBuffer();
+
 			partition.forEach(tds->{
 				StringBuffer tr=new StringBuffer();
 				tr.append("\t\t\t<tr>\n");
 				tds.forEach(td->{
-					if(StringUtils.equalsIgnoreCase(td.getColumnId(),"remark")){
-						tr.append("\t\t\t\t<td align='right' width=13%>\n" +
-								"\t\t\t\t\t<label>"+td.getColumnName()+":</label>\n" +
-								"\t\t\t\t</td>\n" +
-								"\t\t\t\t<td width=20%>\n" +
-								"\t\t\t\t\t<textarea id='remark' name='remark' type='text' data-options='required:false' class='easyui-validatebox' style='height:50px;width:800px'></textarea>\n" +
-								"\t\t\t\t</td>\n");
-					}else if(StringUtils.equalsIgnoreCase("bigint",td.getData_type())){
+					if(StringUtils.equalsIgnoreCase("bigint",td.getData_type())){
 						tr.append("\t\t\t\t<td align='right' width=13%>\n" +
 								"\t\t\t\t\t<label>"+td.getColumnName()+":</label>\n" +
 								"\t\t\t\t</td>\n" +
 								"\t\t\t\t<td width=20%>\n" +
 								"\t\t\t\t\t<input type='text' id='"+td.getColumnId()+"' name='"+td.getColumnId()+"'   class=\"easyui-numberbox\"  data-options='required:true,min:1,precision:2'  style='height:30px;width:175px' />\n" +
+								"\t\t\t\t</td>\n");
+					}else if(StringUtils.equalsIgnoreCase("date",td.getData_type())||StringUtils.equalsIgnoreCase("datetime",td.getData_type())){
+						tr.append("\t\t\t\t<td align='right' width=13%>\n" +
+								"\t\t\t\t\t<label>"+td.getColumnName()+":</label>\n" +
+								"\t\t\t\t</td>\n" +
+								"\t\t\t\t<td width=20%>\n" +
+								"\t\t\t\t\t<input type='text' id='"+td.getColumnId()+"' name='"+td.getColumnId()+"'   class=\"easyui-datebox\"  data-options='required:true'  style='height:30px;width:175px' />\n" +
 								"\t\t\t\t</td>\n");
 					} else{
 						tr.append("\t\t\t\t<td align='right' width=13%>\n" +
@@ -223,7 +239,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 				tr.append("\t\t\t</tr>\n");
 				formTable.append(tr);
 			});
-
+			formTable.append(remarkTd);
 
 			//生成html页面
 			String formName=tableName+"_form";

@@ -42,7 +42,7 @@ public enum CRMX_COMMON_STATUS implements Cacheable<CRMX_COMMON_STATUS> {
         return toMap().get(value);
     }
 	
-	public  CRMX_COMMON_STATUS nameToCode(String name){
+	public  CRMX_COMMON_STATUS nameToEnum(String name){
         CRMX_COMMON_STATUS[] values = CRMX_COMMON_STATUS.values();
         for(CRMX_COMMON_STATUS val:values){
             if(StringUtils.equals(name,val.code_name)){

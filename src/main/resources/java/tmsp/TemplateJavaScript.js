@@ -45,6 +45,11 @@ var bda_data_str_field = {
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
 			return;
 		}
+		let oaStatus=selectRows[0].oa_status;
+		if(oaStatus!='待申请'){
+			$$.showJcdfMessager('提示消息',  "当前OA流程状态不为待申请，无法进行修改！", 'info');
+			return;
+		}
 		let formUrl='ui/view/{html_group}/{js_name}_form.html?actionId={js_name}_form';
 		let techParam = {
 			appId: appId,
@@ -64,6 +69,11 @@ var bda_data_str_field = {
 		let selectRows = $("#"+metaData.listTemplate).datagrid('getChecked');
 		if(selectRows.length==0){
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
+			return;
+		}
+		let oaStatus=selectRows[0].oa_status;
+		if(oaStatus!='待申请'){
+			$$.showJcdfMessager('提示消息',  "当前OA流程状态不为待申请，无法进行修改！", 'info');
 			return;
 		}
 		let title = "确认";
@@ -164,6 +174,164 @@ var bda_data_str_field = {
 			}
 		});
 	},
+	{js_name}_applyData : function (buttonId,actionUrl){
+		let selectRows = $("#"+metaData.listTemplate).datagrid('getChecked');
+		if(selectRows.length==0){
+			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
+			return;
+		}
+		let belong_departs=[];
+		let expireList=[];
+		let applyList=[];
+		let serialList=[];
+		let total=0;
+		selectRows.forEach(row=>{
+			//判断是否是同一个归属部门
+			if(belong_departs.indexOf(row.belong_depart)<0){
+				belong_departs.push(row.belong_depart);
+			}
+			//保险状态不对
+			if(row.insurance_status!='生效中'&&row.insurance_status!='待生效'){
+				expireList.push(row.serial_no)
+			}
+			//oa申请状态
+			if(row.oa_insurance_status!='待申请'){
+				applyList.push(row.serial_no);
+			}
+			serialList.push(row.serial_no);
+			total+=Number(row.apply_amount);
+		});
+		if(belong_departs.length>1){
+			$$.showJcdfMessager('提示消息',  "存在不同的归属单位，无法进行借支操作！", 'info');
+			return;
+		}
+		if(expireList.length>0){
+			$$.showJcdfMessager('提示消息', expireList.join(",")+"保险状态不为待生效/生效中，无法进行借支申请！", 'info');
+			return;
+		}
+		if(applyList.length>0){
+			$$.showJcdfMessager('提示消息', applyList.join(",")+"OA流程状态不为待申请，无法进行借支申请！", 'info');
+			return;
+		}
+		//请求参数
+		let requestData={"serial_no":serialList.join(","),"apply_amount":total};
+		let formUrl='ui/view/ownCar/tmsp_own_vehicle_insurance_borrow.html?actionId=tmsp_own_vehicle_insurance_borrow';
+		let techParam = {
+			appId: appId,
+			srcPageId: metaData.objectId,
+			srcTableId: metaData.listTemplate,
+			row:encodeURIComponent(JSON.stringify(requestData))
+		};
+		techParam.actionId = buttonId;
+		techParam.mode = 'update';
+		techParam.refActionUrl = actionUrl;
+		techParam.refActionId = buttonId;
+		let callUrl = $$.buildPageUrl(formUrl, techParam, null);
+		$$.openJcdfDialog(callUrl, '借支申请', 600, 740);
+
+	},
+	{js_name}_repayData : function (buttonId,actionUrl){
+		let selectRows = $("#"+metaData.listTemplate).datagrid('getChecked');
+		if(selectRows.length==0){
+			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
+			return;
+		}
+		let applyList=[];
+		let serialList=[];
+		selectRows.forEach(row=>{
+			//oa申请状态
+			if(row.oa_status!='待申请'){
+				applyList.push(row.serial_no);
+			}
+			serialList.push({"serial_no":row.serial_no,"org_id":row.org_id,"apply_amount":row.apply_amount});
+
+		});
+		if(applyList.length>0){
+			$$.showJcdfMessager('提示消息', "数据流水号"+applyList.join(",")+"OA流程状态不为待申请，无法进行付款申请！", 'info');
+			return;
+		}
+		//请求参数
+		let formUrl='ui/view/ownCar/tmsp_own_vehicle_common_repay.html?actionId=tmsp_own_vehicle_common_repay';
+		let techParam = {
+			appId: appId,
+			srcPageId: metaData.objectId,
+			srcTableId: metaData.listTemplate,
+			row:encodeURIComponent(JSON.stringify(serialList))
+		};
+		techParam.actionId = buttonId;
+		techParam.mode = 'update';
+		techParam.refActionUrl = actionUrl;
+		techParam.refActionId = buttonId;
+		let callUrl = $$.buildPageUrl(formUrl, techParam, null);
+		$$.openJcdfDialog(callUrl, '还借支申请', 650, 840);
+	},
+	{js_name}_payData : function (buttonId,actionUrl){
+		let selectRows = $("#"+metaData.listTemplate).datagrid('getChecked');
+		if(selectRows.length==0){
+			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
+			return;
+		}
+		let expireList=[];
+		let applyList=[];
+		let serialList=[];
+		let total=0;
+		selectRows.forEach(row=>{
+			//oa申请状态
+			if(row.oa_status!='待申请'){
+				applyList.push(row.serial_no);
+			}
+			//oa申请状态
+			if(row.is_cash_name!='现金'){
+				expireList.push(row.serial_no);
+			}
+
+			serialList.push(row.serial_no);
+			total+=Number(row.apply_amount);
+		});
+		if(expireList.length>0){
+			$$.showJcdfMessager('提示消息', "数据流水号"+expireList.join(",")+"的支付类型不为现金，无法进行申请付款，请核实后进行操作！", 'info');
+			return;
+		}
+		if(applyList.length>0){
+			$$.showJcdfMessager('提示消息', "数据流水号"+applyList.join(",")+"OA流程状态不为待申请，无法进行付款申请！", 'info');
+			return;
+		}
+		//请求参数
+		let requestData={"serial_no":serialList.join(","),"apply_amount":total};
+		let formUrl='ui/view/ownCar/tmsp_own_vehicle_insurance_payment.html?actionId=tmsp_own_vehicle_insurance_payment';
+		let techParam = {
+			appId: appId,
+			srcPageId: metaData.objectId,
+			srcTableId: metaData.listTemplate,
+			row:encodeURIComponent(JSON.stringify(requestData))
+		};
+		techParam.actionId = buttonId;
+		techParam.mode = 'update';
+		techParam.refActionUrl = actionUrl;
+		techParam.refActionId = buttonId;
+		let callUrl = $$.buildPageUrl(formUrl, techParam, null);
+		$$.openJcdfDialog(callUrl, '付款申请', 600, 740);
+	},
+	{js_name}_importData: function (buttonId, actionUrl) {
+		var form = {};
+		form.formId = "cip_import_form";
+		form.formUrl = "ui/view/public/cip_import_form.html?actionId=cip_import_form";
+
+		var techParam = {
+			appId: appId,
+			srcPageId: metaData.objectId,
+			srcTableId: metaData.listTemplate
+		};
+		techParam.actionId = form.formId;
+		techParam.templateName = metaData.objectId + '.xlsx';//需要优化
+		techParam.objectName = metaData.objectName;
+		techParam.refActionUrl = actionUrl;
+		techParam.refActionId = buttonId;
+		var callUrl = $$.buildPageUrl(form.formUrl, techParam, null);
+		$$.openJcdfDialog(callUrl, '导入' + metaData.objectName, 250, 600);
+	},
+
+
 
 
 };
@@ -194,6 +362,7 @@ function doAction(buttonId){
 	}
 };
 
+var downUrl = "/../fsm/api/fsm_api/download.do?file_app_id=tmsp&file_serial_no=";
 function queryData() {
 	query.init(metaData.queryId, metaData.listTemplate, gridMenuId,true);
 	//初始化日志
@@ -209,7 +378,12 @@ function queryData() {
 
 		queryLog.queryResult();
 	});
+	//保险附件
+	query.getColumnOption("attachment_url").formatter=function (value, row, index) {
+		if(value) {
+			return "<a href='" + downUrl + value + "'  style='cursor: pointer;text-decoration:none' width='30px' height='30px' for='im' >下载</a>";
+		}
+	};
 }
-
 
 

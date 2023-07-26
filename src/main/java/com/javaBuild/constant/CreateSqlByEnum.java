@@ -7,19 +7,19 @@ import java.lang.reflect.Method;
 public class CreateSqlByEnum {
     public static void main(String[] args) throws Exception{
 
-       String[] clazzList={"CRMX_UPDATE_TYPE"};
+       String[] clazzList={"CRMX_REGION_RANK_TYPE"};
        /*for(String clazzName:clazzList){
            String sql = buildSql(clazzName,null);
            System.out.println(sql);
        }*/
 
-        String sql = buildSql(clazzList[0],"update_type");
+        String sql = buildSql(clazzList[0],clazzList[0].replaceAll("CRMX_","").toLowerCase());
         System.out.println(sql);
 
     }
 
     public static  String buildSql(String clazzName,String domainId) throws Exception{
-        Class clazz=Class.forName("com.word.constansts."+clazzName);
+        Class clazz=Class.forName("com.javaBuild.enumData."+clazzName);
         Method method = clazz.getMethod("values");
         Object[] enums = (Object[]) method.invoke(null);
         StringBuffer sql=new StringBuffer();

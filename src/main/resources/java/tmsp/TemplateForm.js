@@ -3,6 +3,7 @@ let formTemplate = '#form_tmsp_data';
 let callUrl;
 let tableId;
 let pageId;
+let mode='add';
 function init(){
 
 
@@ -11,10 +12,24 @@ function init(){
 	pageId=techParam.srcPageId;
 	tableId=techParam.srcTableId;
 	callUrl = techParam.refActionUrl + '?actionId=' + techParam.refActionId;
+	$("#vehicle_law_id").queryCombobox({
+		onHidePanel:function () {
+			let data = $("#vehicle_law_id").queryCombobox("getData");
+			let value = $("#vehicle_law_id").queryCombobox("getValue");
+			for(let i=0;i<data.length;i++){
+				if(data[i].keyname==value){
+					$(formTemplate).form("load",data[i]);
+					break;
+				}
+			}
+		}
+	});
+
 	let row = techParam.row;
 	if(row){
 		row=JSON.parse(decodeURIComponent(row));
 		$(formTemplate).form("load",row);
+		mode='edit';
 	}else{
 		$('#create_date').datebox('setValue', new Date().toLocaleDateString());
 	}
@@ -35,8 +50,21 @@ function submitData(){
 	}
 	var jsonData = $$.serializeToJson(formTemplate);
 	if(!jsonData) return false;
+	//附件上传
+	let fileId="file_attachment";
+	let file = document.getElementById(fileId).files[0];
+	if(!file&&mode=='add'){
+		$$.showJcdfMessager('提示消息', '请上传附件', 'info');
+		return;
+	}
 	//如果数据验证通过(即数据合法)
 	$$.openProcessingDialog();
+	if(file){
+		let up = new uploader(document.getElementById(fileId), {appId: "tmsp", multiple: false});
+		up.singleSend(file);
+		let load=up.data.data[0].file_serial_no;
+		jsonData[fileId]=up.data.data[0].file_serial_no;
+	}
 	//ajax提交数据
 	$.ajax({
 		type : 'POST',
