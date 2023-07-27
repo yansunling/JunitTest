@@ -11,6 +11,7 @@ import com.junit.po.ParamBean;
 import com.word.createWord.CopyWordParagraph;
 import com.word.dataSource.controller.CrmxSaleApplicationController;
 import com.word.doc.GeneralTemplateTool;
+import com.word.doc.POIMergeDocUtil;
 import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
 import lombok.SneakyThrows;
@@ -21,10 +22,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WordCreateTmspByClass {
 
@@ -139,10 +137,11 @@ public class WordCreateTmspByClass {
         }
 
 
+        String[] file =fileList.toArray(new String[0]);
+        String  apiDoc="C:/Users/yansunling/Desktop/api/品质差错.docx";
+        POIMergeDocUtil.mergeDoc(file,apiDoc);
 
-
-
-        openWps(fileList);
+        openWps(Arrays.asList(apiDoc));
 
     }
     @SneakyThrows

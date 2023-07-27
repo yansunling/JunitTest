@@ -3,6 +3,7 @@ package com.javaBuild.tmsp.api.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
+import com.javaBuild.tmsp.api.data.TmspQualityErrorInfoApproveData;
 import com.javaBuild.tmsp.api.data.TmspQualityErrorInfoData;
 import com.word.util.CrmxCommonUtil;
 import com.yd.common.data.CIPResponseMsg;
@@ -23,15 +24,33 @@ public class TmspQualityErrorInfoController {
     @RequestMapping(value="/addData")
     public CIPResponseMsg addData(@RequestBody TmspQualityErrorInfoData param){
         log.info("addData param:"+ JSON.toJSONString(param));
-
         return CrmxCommonUtil.success();
     }
-    @CJ_jcjs_esbMethodInfo(desc = "品质差错二次申请", author = "T1113", alias = "quality_error_addData")
+    @CJ_jcjs_esbMethodInfo(desc = "品质差错二次申请", author = "T1113", alias = "quality_error_updateData")
     @RequestMapping(value="/updateData")
     public CIPResponseMsg updateData(@RequestBody TmspQualityErrorInfoData param){
         log.info("updateData param:"+ JSON.toJSONString(param));
-
         return CrmxCommonUtil.success();
     }
+    @CJ_jcjs_esbMethodInfo(desc = "品质差错审批通过", author = "T1113", alias = "quality_error_addData")
+    @RequestMapping(value="/passData")
+    public CIPResponseMsg passData(@RequestBody TmspQualityErrorInfoApproveData param){
+        log.info("updateData param:"+ JSON.toJSONString(param));
+        return CrmxCommonUtil.success();
+    }
+    @CJ_jcjs_esbMethodInfo(desc = "品质差错审批退回", author = "T1113", alias = "quality_error_addData")
+    @RequestMapping(value="/rejectData")
+    public CIPResponseMsg rejectData(@RequestBody TmspQualityErrorInfoApproveData param){
+        log.info("updateData param:"+ JSON.toJSONString(param));
+        return CrmxCommonUtil.success();
+    }
+    @CJ_jcjs_esbMethodInfo(desc = "品质差错审批(质控)", author = "T1113", alias = "quality_error_addData")
+    @RequestMapping(value="/passQualityData")
+    public CIPResponseMsg passQualityData(@RequestBody TmspQualityErrorInfoApproveData param){
+        log.info("updateData param:"+ JSON.toJSONString(param));
+        return CrmxCommonUtil.success();
+    }
+
+
 
 }

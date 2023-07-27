@@ -2,10 +2,12 @@ package com.word.createWord;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.javaBuild.tmsp.WordCreateTmspByClass;
 import com.word.doc.GeneralTemplateTool;
 import com.word.createWord.query.QueryNewColumnsData;
 import com.word.createWord.query.QueryNewRegisterData;
 import com.word.createWord.query.QueryNewWhereParamData;
+import com.word.doc.POIMergeDocUtil;
 import com.yd.query.util.QueryVueUtil;
 import com.yd.query.vo.QueryBean;
 
@@ -17,7 +19,8 @@ public class WordCreateByQuery {
 
     public static void main(String[] args) throws Exception{
 
-        String filePath="C:/Users/admin/Desktop/api";
+        String path = WordCreateTmspByClass.class.getClassLoader().getResource("").getPath();
+        String filePath=path+"api";
         //模板路径
         String templatePath=filePath+"/template_query.docx";
         //doc文档生成工具
@@ -26,8 +29,9 @@ public class WordCreateByQuery {
         QueryVueUtil queryUtil=new QueryVueUtil();
         queryUtil.setHOST_ADDRESS("https://tlwl.uat.tuolong56.com");
 
-        List<String> queryList = Arrays.asList("comp_asset_stocktaking_relation_report");
+        List<String> queryList = Arrays.asList("tmsp_quality_error_info_file","tmsp_quality_error_info_list","tmsp_quality_error_log_list","tmsp_quality_error_log_report","tmsp_quality_error_subtype_select","tmsp_quality_error_type_select","tmsp_quality_order_except","tmsp_quality_order_list","tmsp_quality_penalty_reward_list","tmsp_quality_penalty_reward_report","tmsp_quality_penalty_reward_select");
 
+        List<String> fileList=new ArrayList<>();
         for (String  queryId : queryList) {
 
             String url="https://tlwl.uat.tuolong56.com/query/auth/query_new_search/searchTotalData/V1.0.0/"+queryId+".do";
@@ -95,13 +99,13 @@ public class WordCreateByQuery {
             pretty=pretty.replaceAll("\n","\r");
             params.put("response_json", pretty);
 
-            String outFile = filePath + "/"+desc+".docx";
+            String outFile =  "C:/Users/yansunling/Desktop/api/"+desc+".docx";
             gtt.templateWrite(templatePath, outFile, params);
-            System.out.println("生成模板成功");
-            System.out.println(outFile);
-
+            fileList.add(outFile);
         }
-
+        String[] file =fileList.toArray(new String[0]);
+        String  apiDoc="C:/Users/yansunling/Desktop/api/查询接口.docx";
+        POIMergeDocUtil.mergeDoc(file,apiDoc);
 
     }
 
