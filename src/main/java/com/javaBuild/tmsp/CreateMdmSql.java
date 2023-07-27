@@ -1,12 +1,12 @@
-package com.javaBuild.constant;
+package com.javaBuild.tmsp;
 
-public class CreateEnum {
+public class CreateMdmSql {
     public static void main(String[] args) {
-        String name="现金，银行卡";
+        String name="奖励，罚款";
         String[] list = name.split("，");
         StringBuffer sb=new StringBuffer();
         StringBuffer sql=new StringBuffer();
-        String domainId="tmsp_oa_pay_way";
+        String domainId="penalty_reward";
         for(int i=0;i<list.length;i++){
             Integer key=i;
             String value=list[i].trim();

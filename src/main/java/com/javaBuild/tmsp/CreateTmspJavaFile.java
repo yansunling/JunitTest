@@ -40,7 +40,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("tmsp_own_send_msg");
+        List<String> tableNames = Arrays.asList("tmsp_quality_error_info","tmsp_quality_error_log","tmsp_quality_penalty_reward");
 		String htmlGroup="ownCar";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);

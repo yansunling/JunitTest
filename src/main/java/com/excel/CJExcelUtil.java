@@ -25,7 +25,8 @@ public class CJExcelUtil {
 
         List<T> data = new ArrayList<>();
         try {
-            CIPRuntimeOperator user = CIPRuntime.getOperateSubject();
+            CIPRuntimeOperator user = new CIPRuntimeOperator();
+            user.setSubject_id("T1113");
             Set<String> columns = titles.keySet();
             Field field;
             for (int i = 0; i < list.size(); i++) {

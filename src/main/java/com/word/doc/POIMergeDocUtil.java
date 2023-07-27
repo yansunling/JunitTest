@@ -21,8 +21,8 @@ import java.util.List;
 public class POIMergeDocUtil {
     public static void main(String[] args) throws Exception {
 
-        String[] srcDocxs = {"e:\\插入值后文档1572398162282.docx", "e:\\插入值后文档1572398180470.docx"};
-        String destDocx = "e:\\wzxz_new.docx";
+        String[] srcDocxs = {"C:\\Users\\yansunling\\Desktop\\api\\品质差错二次申请.docx", "C:\\Users\\yansunling\\Desktop\\api\\品质差错申请.docx"};
+        String destDocx = "C:\\Users\\yansunling\\Desktop\\api/全部接口.docx";
         mergeDoc(srcDocxs, destDocx);
     }
 
