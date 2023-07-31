@@ -122,7 +122,7 @@ public class WordCreateTmspByClass {
                     pretty = JSON.toJSONString(responseJson, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);
                     pretty=pretty.replaceAll("\n","\r");
                     params.put("response_json", pretty);
-                    String dir="C:/Users/yansunling/Desktop/api/";
+                    String dir="C:/Users/yansunling/Desktop/api/detail";
                     File dirFile = new File(dir);
                     if (!dirFile.exists()) {
                         dirFile.mkdirs(); // 创建目录

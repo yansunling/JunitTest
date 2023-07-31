@@ -11,6 +11,7 @@ import com.word.doc.POIMergeDocUtil;
 import com.yd.query.util.QueryVueUtil;
 import com.yd.query.vo.QueryBean;
 
+import java.io.File;
 import java.util.*;
 
 public class WordCreateByQuery {
@@ -99,7 +100,12 @@ public class WordCreateByQuery {
             pretty=pretty.replaceAll("\n","\r");
             params.put("response_json", pretty);
 
-            String outFile =  "C:/Users/yansunling/Desktop/api/"+desc+".docx";
+            String dir="C:/Users/yansunling/Desktop/api/detail";
+            File dirFile = new File(dir);
+            if (!dirFile.exists()) {
+                dirFile.mkdirs(); // 创建目录
+            }
+            String outFile = dir+"/"+desc+".docx";
             gtt.templateWrite(templatePath, outFile, params);
             fileList.add(outFile);
         }
