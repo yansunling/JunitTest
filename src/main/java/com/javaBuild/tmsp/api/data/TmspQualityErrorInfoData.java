@@ -14,6 +14,8 @@ public class TmspQualityErrorInfoData {
 
     @CJ_column(name = "差错上报流程编号")
     private String serial_no;
+    @CJ_column(name = "责任大区")
+    private String region_id;
 
     @CJ_column(name = "运单号")
     private String order_id;
@@ -57,7 +59,7 @@ public class TmspQualityErrorInfoData {
 
 
     @CJ_column(name = "附件明细")
-    private List<TMSP_share_filePO> fileList;
+    private List<TMSP_share_filePO> file_list;
 
 
 

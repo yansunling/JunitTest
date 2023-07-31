@@ -44,10 +44,6 @@ public class TmspQualityPenaltyRewardPO extends Model<TmspQualityPenaltyRewardPO
     @CJ_column(name = "金额(元)")
     private Money amount;
 
-    @CJ_column(name = "处理意见")
-    private String operate_content;
-
-
 
 
 
