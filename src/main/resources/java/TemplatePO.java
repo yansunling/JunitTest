@@ -14,15 +14,12 @@ import java.sql.Timestamp;
 @Data
 @CJ_table(name = "{table_comment}")
 @TableName(value = "{table_name}", autoResultMap = true)
-public class {class_name} extends CIPBasePO {
+public class {class_name} {
 
 {content}
 
 
 
 
-    @Override
-    public Object[] toKeys() {
-        return new Object[]{serial_no};
-    }
+
 }

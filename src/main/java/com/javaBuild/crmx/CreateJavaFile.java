@@ -51,6 +51,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 		for(String tableName:tableNames){
 			String content = FileUtil.readAsString(new File(filePath+"java/TemplatePO.java"));
 			String mapperContent=FileUtil.readAsString(new File(filePath+"java/TemplateMapper.java"));
+			String mapperXml=FileUtil.readAsString(new File(filePath+"java/TemplateMapper.xml"));
 			String serviceContent=FileUtil.readAsString(new File(filePath+"java/TemplateService.java"));
 			String implContent=FileUtil.readAsString(new File(filePath+"java/TemplateServiceImpl.java"));
 			String controllerContent=FileUtil.readAsString(new File(filePath+"java/TemplateController.java"));
@@ -77,7 +78,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 
 			String[] strs = tableName.split("_");
-			String prexName="Tmsp";
+			String prexName="Crmx";
 			for(int i=1;i<strs.length;i++){
 				prexName+=StringUtils.upperFirst(strs[i]);
 			}
@@ -92,6 +93,13 @@ public class CreateJavaFile implements ApplicationContextAware{
 			String classMapper=prexName+"Mapper";
 			mapperContent=mapperContent.replaceAll("\\{class_name\\}",className).replaceAll("\\{class_mapper\\}",classMapper);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +classMapper+ ".java"),mapperContent);
+			//生成xml
+			mapperXml=mapperXml.replaceAll("\\{class_mapper\\}",classMapper);
+			FileUtil.writeAsString(new File(path+tableName+"\\" +classMapper+ ".xml"),mapperXml);
+
+
+
+
 			//生成service
 			String classService=prexName+"Service";
 			serviceContent=serviceContent.replaceAll("\\{class_name\\}",className).replaceAll("\\{class_service\\}",classService);
