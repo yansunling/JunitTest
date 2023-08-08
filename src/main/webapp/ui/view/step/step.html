@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)https://www.jq22.com/demo/jquery-Steps-scw201801012053/ -->
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="./css/ystep.css">
+    <script type="text/javascript" src="../../js/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script src="./js/setStep.js"></script>
+    <style type="text/css">
+        fieldset:not(:first-of-type) {
+            display: none;
+        }
+        #progressbar {
+            width: 100%;
+            margin-bottom: 30px;
+            margin: 0 auto;
+            overflow: hidden;
+            /*CSS counters to number the steps*/
+            counter-reset: step;
+        }
+        #progressbar li {
+            list-style-type: none;
+            color: black;
+            text-transform: uppercase;
+            font-size: 9px;
+            float: left;
+            position: relative;
+
+        }
+        #progressbar li:before {
+            content: counter(step);
+            counter-increment: step;
+            width: 20px;
+            line-height: 20px;
+            display: block;
+            font-size: 10px;
+            color: #333;
+            background: black;
+            border-radius: 3px;
+            margin: 0 auto 5px auto;
+        }
+        /*progressbar connectors*/
+        #progressbar li:after {
+            content: '';
+            width: 100%;
+            height: 2px;
+            background: black;
+            position: absolute;
+            left: -50%;
+            top: 9px;
+            z-index: -1; /*put it behind the numbers*/
+        }
+        #progressbar li:first-child:after {
+            /*connector not needed before the first step*/
+            content: none;
+        }
+        /*marking active/completed steps green*/
+        /*The number of the step and the connector before it = green*/
+        #progressbar li.active:before,  #progressbar li.active:after{
+            background: #EFA748;
+            color: white;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            let step1 = new SetStep({
+                content: '.stepCont1',
+                showBtn: false,
+                curStep:5
+            });
+            // step1.setProgress(step1.stepContainer,2,step1.opt.stepCounts)
+
+        });
+
+
+
+    </script>
+</head>
+<body style="">
+<table  border="1">
+    <tr>
+        <td width="100px">厕所</td>
+        <td width="200px">输入</td>
+        <td width="100px">输入</td>
+        <td width="200px">输入</td>
+    </tr>
+    <tr>
+        <td width="100px">客户开发进度</td>
+        <td colspan="3">
+            <div class="stepCont stepCont1" >
+                <!-- 菜单导航显示-->
+                <div class='ystep-container ystep-lg ystep-blue'></div>
+
+            </div>
+        </td>
+    </tr>
+</table>
+
+<form id="hcm_emp_form" class="hcm_emp_form" data-options="left:'1100px',top:'200px'">
+    <ul id="progressbar">
+        <li onclick="skipfieldset(this)" class="active" style="width: 12%;">个人资料</li>
+
+        <li onclick="skipfieldset(this)" style="width: 11%;">基础资料</li>
+        <li onclick="skipfieldset(this)" style="width: 11%;">联系信息</li>
+        <li onclick="skipfieldset(this)" style="width: 11%;">教育信息</li>
+        <!-- 			<li onclick="skipfieldset(this)" style="width: 10%;">社保信息</li> -->
+        <li onclick="skipfieldset(this)" style="width: 11%;">录入合同</li>
+        <li onclick="skipfieldset(this)" style="width: 11%;">工作经验</li>
+        <li onclick="skipfieldset(this)" style="width: 11%;">家庭关系</li>
+        <li onclick="skipfieldset(this)" style="width: 12%;">户籍信息</li>
+    </ul>
+    <fieldset id="fieldset0">
+        <table>
+            <thead>
+            <h2 class="fs-title">个人资料信息</h2>
+            </thead>
+            <tr>
+                <td class="right"><label for="reg_type">员工工号:</label></td>
+                <td class="left"><input type="text" id="emp_id" name="emp_id"
+                                        style="width: 208px; height: 30px;" placeholder="" maxlength="11"
+                                        class="easyui-validatebox" data-options="required:false" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="emp_name">员工姓名:</label></td>
+                <td class="left"><input type="text" id="emp_name"
+                                        name="emp_name" style="width: 208px; height: 30px;" maxlength="50"
+                                        class="easyui-validatebox" data-options="required:true" /><font
+                        color="red">*</font></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="identity">身份证号:</label></td>
+                <td class="left"><input type="text" id="identity"
+                                        name="identity" data-options='required:true,validType:"idcared"'
+                                        maxLength='18' style="width: 208px; height: 30px;"
+                                        class="easyui-validatebox"  onblur="searchIdcard()" /><font color="red">*</font></td>
+
+            </tr>
+            <tr>
+                <td class="right"><label for="identity_date">身份证到期日:</label></td>
+                <td class="left"><input type="text" id="identity_date"
+                                        name="identity_date" data-options='required:true'
+                                        style="width: 208px; height: 30px;"
+                                        class="easyui-datebox"/><font color="red">*</font></td>
+
+            </tr>
+            <tr>
+                <td class="right"><label for="entry_channel">入职渠道:</label></td>
+                <td class="left"><input type="text" id="entry_channel"
+                                        name="entry_channel" editable="false"
+                                        style="width: 208px; height: 30px;" class="easyui-combobox"
+                                        data-options='required:true' maxLength='18' /><font color="red">*</font>
+                </td>
+            </tr>
+            <tr id="internal_id_t">
+                <td class="right"><label for="internal_id">内部推荐人:</label></td>
+                <td class="left"><input type="text" id="internal_id"
+                                        name="internal_id"
+                                        style="width: 208px; height: 30px;" class="easyui-combobox"
+                                        data-options='required:false' maxLength='18' /><font color="red">*</font>
+                </td>
+            </tr>
+            <tr id="school_batch_t">
+                <td class="right"><label for="school_batch">校招批次:</label></td>
+                <td class="left"><input type="text" id="school_batch"
+                                        name="school_batch"
+                                        style="width: 208px; height: 30px;" class="easyui-validatebox"
+                                        data-options='required:false' maxLength='18' /><font color="red">*</font>
+                </td>
+            </tr>
+            <tr>
+                <td class="right"><label for="birth_date">出生日期:</label></td>
+                <td class="left"><input type="text" id="birth_date"
+                                        name="birth_date" style="width: 220px; height: 30px;" editable="false"
+                                        class="easyui-datebox"  /><font
+                        color="red">*</font></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="sex">性别:</label></td>
+                <td class="left"><input type="text" id="sex" name="sex"
+                                        style="width: 220px; height: 30px;" class="easyui-combobox"
+                                        data-options="required:false" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="marriage">婚姻状况:</label></td>
+                <td class="left"><input type="text" id="marriage"
+                                        name="marriage" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" data-options="required:false" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="high">身高(单位/cm):</label></td>
+                <td class="left"><input type="" id="high" name="high"
+                                        style="width: 220px; height: 30px;" class="easyui-numberbox"
+                                        maxlength="5" max="300" data-options="required:false" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="weight">体重(单位/kg):</label></td>
+                <td class="left"><input type="" id="weight" name="weight"
+                                        style="width: 220px; height: 30px;" class="easyui-validatebox"
+                                        maxlength="5" max="300" data-options="required:false" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="nation">民族:</label></td>
+                <td class="left"><input type="text" id="nation" name="nation"
+                                        style="width: 220px; height: 30px;" class="easyui-combobox" editable="false"
+                                        data-options="required:false" /> <!-- <select id="nation" name="nation" editable="false" style="width:220px;height:30px;">
+					<option value="Han">汉族</option>
+					<option value="Man">满族</option>
+					<option value="Hui">回族</option>
+					<option value="Zhuang">壮族</option>
+					<option value="Meng">蒙古族</option>
+					<option value="Other">其他民族</option>
+				</select> --></td>
+            </tr>
+            <tr hidden>
+                <td class="right"><label for="blood_type">血型:</label></td>
+                <td class="left"><input type="text" id="blood_type"
+                                        name="blood_type" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" data-options="required:false" /></td>
+            </tr>
+            <tr hidden>
+                <td class="right"><label for="conste">星座:</label></td>
+                <td class="left"><input type="text" id="conste" name="conste"
+                                        style="width: 208px; height: 30px;" class="easyui-validatebox"
+                                        data-options="required:false" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="political_status">政治面貌:</label></td>
+                <td class="left"><input type="text" id="political_status"
+                                        name="political_status" style="width: 220px; height: 30px;"
+                                        editable="false" class="easyui-combobox"
+                                        data-options="required:false" /></td>
+            </tr>
+            <tr hidden>
+                <td class="right"><label for="join_time">入党团时间:</label></td>
+                <td class="left"><input type="text" id="join_time"
+                                        name="join_time" style="width: 220px; height: 30px;"
+                                        class="easyui-datebox" data-options="required:false" /></td>
+            </tr>
+            <!-- <tr>
+                <td class="right"><label for="position_id">所属岗位:</label></td>
+                <td class="left"><input type="" id="position_id"
+                    name="position_id" style="width: 220px; height: 30px;" maxlength="8"
+                    class="easyui-combotree" data-options="required:false"
+                    editable="false" /></td>
+                <td></td>
+            </tr> -->
+
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" id="save" class="submit action-button" onclick="hold()" value="暂存" />
+                    <input id="next_boss_id" type="button" name="next" class="next action-button"  value="下一步" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+
+    <fieldset id="fieldset1">
+        <table>
+            <thead>
+            <h2 class="fs-title">员工基础资料</h2>
+            </thead>
+            <tr hidden>
+
+                <td class="right"><label for="company">所属公司:</label></td>
+                <td class="left"><input type="text" id="company"
+                                        name="company" style="width: 208px; height: 30px;"
+                                        readonly="readonly" class="easyui-validatebox"
+                                        data-options="required:false" /><font color="red">*</font></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="dept">所属部门:</label></td>
+                <td class="left"><input type="" id="dept" name="dept"
+                                        style="width: 220px; height: 30px;" maxlength="8" editable="false" readonly="readonly"
+                                        class="easyui-combotree" data-options="required:true" /><font
+                        color="red">*</font></td>
+                <td></td>
+            </tr>
+
+            <!-- <tr>
+                <td class="right"><label for="dept">所属部门:</label></td>
+                <td class="left"><select id='dept' name='dept'
+                    style='width: 220px; height: 30px;' onchange='loadPosition()'
+                    class='easyui-combotree' data-options='required:false'>
+                    </select></td>
+                <td></td>
+            </tr> -->
+            <tr>
+                <td class="right"><label for="position">岗位名称:</label></td>
+                <td class="left"><input type="text" id="position"
+                                        name="position" editable="false" style="width: 220px; height: 30px;"  class="easyui-combobox"
+                                        data-options="required:true" /><font color="red">*</font></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="boss_id">直属领导:</label></td>
+                <td class="left"><input type="text" id="boss_id" maxlength="8"
+                                        name="boss_id" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" data-options="required:true" />
+                    <font color="red">*</font></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="interviewer">面试官:</label></td>
+                <td class="left"><input type="text" id="interviewer" maxlength="8"
+                                        name="interviewer" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" data-options="required:true" />
+                    <font color="red">*</font></td>
+            </tr>
+            <!--<tr>-->
+            <!--<td class="right"><label for="job_category">岗位类别:</label></td>-->
+            <!--<td class="left"><input type="text" id="job_category" maxlength="8"-->
+            <!--name="job_category" style="width: 220px; height: 30px;"-->
+            <!--class="easyui-combobox" data-options="required:true" />-->
+            <!--<font color="red">*</font></td>-->
+            <!--</tr>-->
+            <!--<tr>-->
+            <!--<td class="right"><label for="rank">所属职级:</label></td>-->
+            <!--<td class="left"><input type="" class="easyui-combobox"-->
+            <!--id="rank" name="rank" style="width: 220px; height: 30px;"-->
+            <!--data-options="required:true" /><font color="red">*</font></td>-->
+            <!--</tr>-->
+            <tr>
+                <td class="right"><label for="org_power">权限:</label></td>
+                <td class="left"><input type="text" id="org_power"
+                                        name="org_power" style="width: 220px; height: 30px;" readonly="readonly"
+                                        class="easyui-combotree" data-options="required:true" /><font
+                        color="red">*</font></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="emp_type">员工类型:</label></td>
+                <td class="left"><input type="text" id="emp_type"
+                                        name="emp_type" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" data-options="required:true" /><font
+                        color="red">*</font></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="reg_type">试用期类型:</label></td>
+                <td class="left"><input type="text" id="reg_type"
+                                        name="reg_type" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" data-options="required:false" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="entry_date">入职日期:</label></td>
+                <td class="left"><input type="text" id="entry_date"
+                                        name="entry_date" style="width: 220px; height: 30px;"
+                                        class="easyui-datebox" data-options="required:true" /><font
+                        color="red">*</font></td>
+            </tr>
+            <tr hidden>
+                <td class="right"><label for="seat_number">座位号:</label></td>
+                <td class="left"><input type="text" id="seat_number"
+                                        name="seat_number" style="width: 208px; height: 30px;"
+                                        maxlength="20" class="easyui-validatebox"
+                                        data-options="required:false" /></td>
+            </tr>
+
+            <tr hidden>
+                <td class="right"><label for="schedule_id">考勤班次:</label></td>
+                <td class="left"><input type="text" id="schedule_id"
+                                        name="schedule_id" style="width: 220px; height: 30px;"
+                                        editable="false" maxlength="3" class="easyui-validatebox"
+                                        data-options="required:false" /></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" id="save1" class="submit action-button" onclick="hold()" value="暂存" />
+                    <input type="button" name="previous" class="previous action-button" value="上一步" />
+                    <input type="button" name="next" class="next action-button" value="下一步" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset id="fieldset2">
+        <table>
+            <thead>
+            <h2 class="fs-title">员工联系信息</h2>
+            </thead>
+            <tr>
+                <td class="right"><label for="phone_no">手机号码:</label></td>
+                <td class="left"><input type="text" id="phone_no"
+                                        name="phone_no"  maxLength='11'
+                                        style="width: 208px; height: 30px;" class="easyui-validatebox"
+                                        data-options="required:true" /> <font color="red">*</font></td>
+            </tr>
+            <tr hidden>
+                <td class="right"><label for="tel_number">电话号码:</label></td>
+                <td class="left"><input type="text" id="tel_number"
+                                        name="tel_number" validtype="phone" maxLength='12'
+                                        style="width: 208px; height: 30px;" class="easyui-validatebox"
+                                        data-options="required:false" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="rtx">腾讯通:</label></td>
+                <td class="left"><input type="text" id="rtx" name="rtx"
+                                        maxlength="10" style="width: 208px; height: 30px;"
+                                        class="easyui-validatebox" data-options="required:false" /></td>
+            </tr>
+            <tr hidden>
+                <td class="right"><label for="email">公司邮箱:</label></td>
+                <td class="left"><input type="text" id="email" name="email"
+                                        validtype="email" style="width: 208px; height: 30px;" maxLength='30'
+                                        class="easyui-validatebox" data-options="required:false" /></td>
+            </tr>
+            <tr hidden>
+                <td class="right"><label for="person_wx">人员微信:</label></td>
+                <td class="left"><input type="text" id="person_wx"
+                                        name="person_wx" style="width:208px; height: 30px;"
+                                        editable="false" class="easyui-validatebox" maxLength='50'
+                                        data-options="required:false" /></td>
+            </tr>
+            <tr hidden>
+                <td class="right"><label for="person_mail">人员邮件:</label></td>
+                <td class="left"><input type="text" id="person_mail" name="person_mail" maxLength='50'
+                                        style="width:208px; height: 30px;" validtype="email" class="easyui-validatebox"
+                                        data-options="required:false" /></td>
+            </tr>
+            <tr hidden>
+                <td class="right"><label for="person_remark">备注:</label></td>
+                <td class="left"><textarea type="text" id="person_remark" name="person_remark"
+                                           style="width:208px; height: 30px;" maxLength="200"
+                                           class="easyui-validatebox" data-options="required:false" /></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="right"><label for="emergency">紧急联系人:</label></td>
+                <td class="left"><input type="text" id="emergency"
+                                        name="emergency" style="width: 208px; height: 30px;" maxLength='10'
+                                        class="easyui-validatebox" data-options="required:true" /><font
+                        color="red">*</font></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="emergency_number">紧急联系人电话:</label></td>
+                <td class="left"><input type="text" id="emergency_number"
+                                        name="emergency_number"  maxLength='11'
+                                        style="width: 208px; height: 30px;" class="easyui-validatebox"
+                                        data-options="required:true" /><font color="red">*</font></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center" style="padding: 20px;">
+                    <input type="button" id="save2" class="submit action-button" onclick="hold()" value="暂存" />
+                    <input type="button" name="previous" class="previous action-button" value="上一步" />
+                    <input type="button" name="next" class="next action-button" value="下一步" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset id="fieldset3">
+        <table>
+            <thead>
+            <h2 class="fs-title">员工教育信息</h2>
+            </thead>
+
+            <tr>
+                <td class="right"><label for="diploma_no">毕业证编号:</label></td>
+                <td class="left"><input type="text" id="diploma_no"
+                                        name="diploma_no" style="width: 208px; height: 30px;"
+                                        class="easyui-validatebox" maxlength="18"
+                                        data-options="required:false,validType:'length[0,18]'" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="edu_his">最高学历:</label></td>
+                <td class="left"><input type="text" id="edu_his"
+                                        name="edu_his" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" editable="false"
+                                        data-options="required:true,validType:'length[0,50]'"/></td>
+            </tr>
+
+            <tr>
+                <td class="right"><label for="major">专业:</label></td>
+                <td class="left"><input type="text" id="major" name="major"
+                                        style="width: 208px; height: 30px;" class="easyui-validatebox"
+                                        maxlength="25"
+                                        data-options="required:false,validType:'length[0,25]'" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="entrance_date">入学时间:</label></td>
+                <td class="left"><input type="text" id="entrance_date"
+                                        name="entrance_date" style="width: 220px; height: 30px;"
+                                        class="easyui-datebox" editable="false"
+                                        data-options="required:false,validType:'length[0,10]'" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="graduate_date">毕业时间:</label></td>
+                <td class="left"><input type="text" id="graduate_date"
+                                        name="graduate_date" style="width: 220px; height: 30px;"
+                                        class="easyui-datebox" editable="false"
+                                        data-options="required:false,validType:'length[0,10]'" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="school">毕业院校:</label></td>
+                <td class="left"><input type="text" id="school" name="school"
+                                        style="width: 208px; height: 30px;" class="easyui-validatebox"
+                                        maxlength="30"
+                                        data-options="required:false,validType:'length[0,30]'" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="verify_status">是否毕业验证:</label></td>
+                <td class="left"><input type="text" id="verify_status"
+                                        name="verify_status" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" editable="false"
+                                        data-options="required:false,validType:'length[0,50]'" /></td>
+            </tr>
+
+            <!-- <tr>
+            <td class="right">
+                <label for="create_date">创建时间:</label>
+            </td>
+            <td class="left">
+                <input type="text" id="create_date" name="create_date" style="width:220px;height:30px;" class="easyui-datebox"
+                    data-options="required:false,validType:'length[0,19]'"  />
+            </td>
+        </tr> -->
+            <tr>
+                <td colspan="2" align="center" style="padding: 20px;">
+                    <input type="button" id="save3" class="submit action-button" onclick="hold()" value="暂存" />
+                    <input type="button" name="previous" class="previous action-button" value="上一步" />
+                    <input type="button" name="next" class="next action-button" value="下一步" />
+                </td>
+            </tr>
+
+        </table>
+
+    </fieldset>
+    <!-- 		<fieldset> -->
+    <!-- 			<table> -->
+    <!-- 				<thead> -->
+    <!-- 					<h2 class="fs-title">员工社保信息</h2> -->
+    <!-- 				</thead> -->
+
+    <!-- 				<tr> -->
+    <!-- 					<td class="right"><label for="fund_no">公积金账户:</label></td> -->
+    <!-- 					<td class="left"><input type="text" id="fund_no" -->
+    <!-- 						name="fund_no" validtype="fund" maxLength="12" -->
+    <!-- 						style="width: 208px; height: 30px;" class="easyui-validatebox" -->
+    <!-- 						data-options="required:false,validType:'length[0,50]'" /></td> -->
+    <!-- 				</tr> -->
+    <!-- 				<tr> -->
+    <!-- 					<td class="right"><label for="open_bank">银行卡账号:</label></td> -->
+    <!-- 					<td class="left"><input type="text" id="open_bank" -->
+    <!-- 						name="open_bank" style="width: 208px; height: 30px;" -->
+    <!-- 						class="easyui-validatebox" maxLength="25" -->
+    <!-- 						data-options="required:false,validType:'length[0,25]'" /></td> -->
+    <!-- 				</tr> -->
+    <!-- 				<tr> -->
+    <!-- 					<td class="right"><label for="bank_type">银行类型:</label></td> -->
+    <!-- 					<td class="left"><input type="text" id="bank_type" -->
+    <!-- 						name="bank_type" style="width: 220px; height: 30px;" -->
+    <!-- 						class="easyui-combobox" editable="false" -->
+    <!-- 						data-options="required:false,validType:'length[0,50]'" /></td> -->
+    <!-- 				</tr> -->
+    <!-- 				<tr> -->
+    <!-- 					<td class="right"><label for="work_property">用工类型:</label></td> -->
+    <!-- 					<td class="left"><input type="text" id="work_property" -->
+    <!-- 						name="work_property" style="width: 220px; height: 30px;" -->
+    <!-- 						class="easyui-combobox" editable="false" -->
+    <!-- 						data-options="required:false,validType:'length[0,50]'" /></td> -->
+    <!-- 				</tr> -->
+    <!-- 				<tr> -->
+    <!-- 					<td class="right"><label for="social_date">社保缴纳始月:</label></td> -->
+    <!-- 					<td class="left"><input type="text" id="social_date" -->
+    <!-- 						name="social_date" style="width: 220px; height: 30px;" -->
+    <!-- 						editable="false" class="easyui-datebox" -->
+    <!-- 						data-options="required:false" /></td> -->
+    <!-- 				</tr> -->
+
+
+
+    <!-- 				<tr> -->
+    <!-- 					<td class="right"><label for="quit_date">退保退金月:</label></td> -->
+    <!-- 					<td class="left"><input type="text" id="quit_date" -->
+    <!-- 						name="quit_date" style="width: 220px; height: 30px;" -->
+    <!-- 						class="easyui-datebox" /></td> -->
+    <!-- 				</tr> -->
+    <!-- 				<tr> -->
+    <!-- 					<td class="right"><label for="insure_type">保险类型:</label></td> -->
+    <!-- 					<td class="left"><input type="text" id="insure_type" -->
+    <!-- 						name="insure_type" style="width: 220px; height: 30px;" -->
+    <!-- 						class="easyui-combobox" editable="false" -->
+    <!-- 						data-options="required:false,validType:'length[0,50]'" /></td> -->
+    <!-- 				</tr> -->
+    <!-- 				<tr> -->
+    <!-- 					<td class="right"><label for="city_type">城镇类别:</label></td> -->
+    <!-- 					<td class="left"><input type="text" id="city_type" -->
+    <!-- 						name="city_type" style="width: 220px; height: 30px;" -->
+    <!-- 						class="easyui-combobox" editable="false" -->
+    <!-- 						data-options="required:false,validType:'length[0,50]'" /></td> -->
+    <!-- 				</tr> -->
+    <!-- 				<tr> -->
+    <!-- 					<td class="right"><label for="fund_date">公积金缴纳始月:</label></td> -->
+    <!-- 					<td class="left"><input type="text" id="fund_date" -->
+    <!-- 						name="fund_date" style="width: 220px; height: 30px;" -->
+    <!-- 						class="easyui-datebox" -->
+    <!-- 						data-options="required:false,validType:'length[0,10]'" /></td> -->
+    <!-- 				</tr> -->
+    <!-- 				<tr> -->
+    <!-- 					<td class="right"><label for="remark">备注:</label></td> -->
+    <!-- 					<td class="left"><textarea type="text" id="remark" -->
+    <!-- 							name="remark" style="width: 208px; height: 30px;" -->
+    <!-- 							class="easyui-validatebox" -->
+    <!-- 							data-options="required:false,validType:'length[0,255]'" -->
+    <!-- 							style="height:100px;"></textarea></td> -->
+    <!-- 				</tr> -->
+
+    <!-- 				<tr> -->
+    <!-- 					<td colspan="4" align="center" style="padding: 20px;"><input -->
+    <!-- 						type="button" name="previous" class="previous action-button" -->
+    <!-- 						value="上一步" /> <input type="button" name="next" -->
+    <!-- 						class="next action-button" value="下一步" /></td> -->
+    <!-- 				</tr> -->
+    <!-- 			</table> -->
+    <!-- 		</fieldset> -->
+    <fieldset id="fieldset4">
+        <table>
+            <thead>
+            <h2 h2 class="fs-title">录入合同</h2>
+            </thead>
+            <!--<tr>-->
+            <!--<td class="right"><label for="pact_no">合同编号:</label></td>-->
+            <!--<td class="left"><input type="text" id="pact_no"-->
+            <!--name="pact_no" validtype="length[0,35]" maxLength="35"-->
+            <!--style="width: 208px; height: 30px;" class="easyui-validatebox"-->
+            <!--data-options="required:false,validType:'length[0,35]'" /></td>-->
+            <!--</tr>-->
+            <tr>
+                <td class="right"><label for="pact_main_part">合同主体:</label>
+                    <font color="red">*</font></td>
+                <td class="left"><input type="text" id="pact_main_part"
+                                        name="pact_main_part" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" data-options="required:true" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="pact_sign_manner">签订方式:</label>
+                    <font color="red">*</font></td>
+                <td class="left"><input type="text" id="pact_sign_manner"
+                                        name="pact_sign_manner" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" data-options="required:true" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="status">是否有效:</label>
+                    <font color="red">*</font></td>
+                <td class="left"><input type="text" id="status"
+                                        name="status" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" data-options="required:true" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="pact_storage_location">存储地点:</label>
+                    <font color="red">*</font></td>
+                <td class="left"><input type="text" id="pact_storage_location"
+                                        name="pact_storage_location" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" data-options="required:true" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="start_date">合同起始时间:</label>
+                    <font color="red">*</font></td>
+                <td class="left"><input type="text" id="start_date"
+                                        name="start_date" style="width: 220px; height: 30px;"
+                                        class="easyui-datebox" editable="false"
+                                        data-options="required:true,validType:'length[0,10]'" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="end_date">合同结束时间:</label>
+                    <font color="red">*</font></td>
+                <td class="left"><input type="text" id="end_date"
+                                        name="end_date" style="width: 220px; height: 30px;"
+                                        class="easyui-datebox" editable="false"
+                                        data-options="required:true,validType:'length[0,10]'" /></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" id="save4" class="submit action-button" onclick="hold()" value="暂存" />
+                    <input type="button" name="previous" class="previous action-button" value="上一步" />
+                    <input type="button" name="next" class="next action-button" value="下一步" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset id="fieldset5">
+        <table>
+            <thead>
+            <h2 class="fs-title">员工工作经验</h2>
+            </thead>
+            <tr style="width: 200px;">
+
+                <td colspan="6">
+                    <h4>经验1</h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="right" style="width: 100px;"><label
+                        for="start_date1">时间:</label></td>
+                <td class="left"><input type="text" class="easyui-datebox"
+                                        id="start_date1" name="start_date1" editable="false"
+                                        style="width: 95px; height: 30px;" data-options="required:false" />
+                    <label for="end_date1">到</label><input type="text"
+                                                           class="easyui-datebox" id="end_date1" name="end_date1"
+                                                           style="width: 95px; height: 30px;" editable="false" /></td>
+                <td class="right" style="width: 100px;"><label
+                        for="company_name1">公司名称:</label></td>
+                <td class="left"><input type="text" id="company_name1"
+                                        name="company_name1" style="width: 200px; height: 30px;" maxLength='50'
+                                        class="easyui-validatebox" data-options="required:false" /></td>
+            </tr>
+            <tr>
+                <td class="right" style="width: 65px;"><label
+                        for="position_name1">职位名称:</label></td>
+                <td class="left"><input type="text" id="position_name1"
+                                        name="position_name1" style="width: 200px; height: 30px;"
+                                        maxlength="30" class="easyui-validatebox" maxLength='30'
+                                        data-options="required:false" /></td>
+
+                <td class="right" style="width: 65px;"><label
+                        for="position_content1">任职内容:</label></td>
+                <td class="left"><textarea type="text" id="position_content1"
+                                           name="position_content1" style="width: 200px; height: 30px;"
+                                           maxlength="100" class="easyui-validatebox" maxLength='100'
+                                           data-options="required:false" style="height:80px;"></textarea></td>
+            </tr>
+            <tr style="width: 200px;">
+                <td colspan="6">
+                    <h4>经验2</h4>
+                </td>
+            </tr>
+            <tr>
+                <td class="right" style="width: 100px;"><label
+                        for="start_date2">时间:</label></td>
+                <td class="left"><input type="text" class="easyui-datebox"
+                                        id="start_date2" name="start_date2" editable="false"
+                                        style="width: 95px; height: 30px;" data-options="required:false" />
+                    <label for="end_date2">到</label><input type="text"
+                                                           class="easyui-datebox" id="end_date2" name="end_date2"
+                                                           style="width: 95px; height: 30px;"  editable="false"/></td>
+                <td class="right" style="width: 100px;"><label
+                        for="company_name2">公司名称:</label></td>
+                <td class="left"><input type="text" id="company_name2"
+                                        name="company_name2" style="width: 200px; height: 30px;" maxLength='50'
+                                        class="easyui-validatebox" data-options="required:false" /></td>
+            </tr>
+            <tr>
+                <td class="right" style="width: 65px;"><label
+                        for="position_name2">职位名称:</label></td>
+                <td class="left"><input type="text" id="position_name2"
+                                        name="position_name2" style="width: 200px; height: 30px;"
+                                        maxlength="30" class="easyui-validatebox" maxLength='30'
+                                        data-options="required:false" /></td>
+
+                <td class="right" style="width: 65px;"><label
+                        for="position_content2">任职内容:</label></td>
+                <td class="left"><textarea type="text" id="position_content2"
+                                           name="position_content2" style="width: 200px; height: 30px;"
+                                           maxlength="100" class="easyui-validatebox" maxLength='100'
+                                           data-options="required:false" style="height:80px;"></textarea></td>
+            </tr>
+
+            <tr style="width: 400px;">
+                <td colspan="6">
+                    <h4>经验3</h4>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="right" style="width: 100px;"><label
+                        for="start_date3">时间:</label></td>
+                <td class="left"><input type="text" class="easyui-datebox"
+                                        id="start_date3" name="start_date3" editable="false"
+                                        style="width: 95px; height: 30px;" data-options="required:false" />
+                    <label for="end_date3">到</label><input type="text"
+                                                           class="easyui-datebox" id="end_date3" name="end_date3"
+                                                           style="width: 95px; height: 30px;" editable="false" /></td>
+                <td class="right" style="width: 100px;"><label
+                        for="company_name3">公司名称:</label></td>
+                <td class="left"><input type="text" id="company_name3"
+                                        name="company_name3" style="width: 200px; height: 30px;" maxLength='50'
+                                        class="easyui-validatebox" data-options="required:false" /></td>
+            </tr>
+
+            <tr>
+                <td class="right" style="width: 65px;"><label
+                        for="position_name3">职位名称:</label></td>
+                <td class="left"><input type="text" id="position_name3"
+                                        name="position_name3" style="width: 200px; height: 30px;"
+                                        maxlength="30" class="easyui-validatebox" maxLength='30'
+                                        data-options="required:false" /></td>
+
+                <td class="right" style="width: 65px;"><label
+                        for="position_content3">任职内容:</label></td>
+                <td class="left"><textarea type="text" id="position_content3"
+                                           name="position_content3" style="width: 200px; height: 30px;"
+                                           maxlength="10" class="easyui-validatebox" maxLength='100'
+                                           data-options="required:false" style="height:80px;"></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="4" align="center" style="padding: 20px;">
+                    <input type="button" id="save5" class="submit action-button" onclick="hold()" value="暂存" />
+                    <input type="button" name="previous" class="previous action-button" value="上一步" />
+                    <input type="button" name="next" class="next action-button" value="下一步" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset id="fieldset6">
+
+        <table>
+            <thead>
+            <h2 class="fs-title">员工家庭关系</h2>
+            </thead>
+            <tr>
+                <td class="right" style="width: 60px;"><label for="relation1">关系1:</label>
+                </td>
+                <td class="left"><input type="text" id="relation1"
+                                        name="relation1" style="width: 142px; height: 30px;"
+                                        editable="false" class="easyui-combobox"
+                                        data-options="required:true" /><font color="red">*</font></td>
+
+                <td class="right" style="width: 60px;"><label for="name1">姓名:</label>
+                </td>
+                <td class="left"><input type="text" id="name1" name="name1" maxLength='50'
+                                        style="width: 130px; height: 30px;" class="easyui-validatebox"
+                                        data-options="required:true" /><font color="red">*</font></td>
+                <td class="right" style="width: 80px;"><label for="telephone1">联系方式:</label>
+                </td>
+                <td class="left"><input type="text" id="telephone1"
+                                        name="telephone1" style="width: 130px; height: 30px;"
+                                        maxLength="11" class="easyui-validatebox"
+                                        data-options="required:true" /><font color="red">*</font></td>
+            </tr>
+            <!-- 				<tr> -->
+            <!-- 					<td class="right" style="width: 60px;"><label for="relation2">关系2:</label> -->
+            <!-- 					</td> -->
+            <!-- 					<td class="left"><input type="text" id="relation2" -->
+            <!-- 						name="relation2" style="width: 142px; height: 30px;" -->
+            <!-- 						editable="false" class="easyui-combobox" -->
+            <!-- 						data-options="required:false" /></td> -->
+
+            <!-- 					<td class="right" style="width: 60px;"><label for="name2">姓名:</label> -->
+            <!-- 					</td> -->
+            <!-- 					<td class="left"><input type="text" id="name2" name="name2" maxLength='50' -->
+            <!-- 						style="width: 130px; height: 30px;" class="easyui-validatebox" -->
+            <!-- 						data-options="required:false" /></td> -->
+            <!-- 					<td class="right" style="width: 60px;"><label for="telephone2">联系方式:</label> -->
+            <!-- 					</td> -->
+            <!-- 					<td class="left"><input type="text" id="telephone2" -->
+            <!-- 						validtype="mobile" maxLength="11" name="telephone2" -->
+            <!-- 						style="width: 130px; height: 30px;" class="easyui-validatebox" -->
+            <!-- 						data-options="required:false" /></td> -->
+            <!-- 				</tr> -->
+            <!-- 				<tr> -->
+            <!-- 					<td class="right" style="width: 60px;"><label for="relation3">关系3:</label> -->
+            <!-- 					</td> -->
+            <!-- 					<td class="left"><input type="text" id="relation3" -->
+            <!-- 						editable="false" name="relation3" maxLength='50' -->
+            <!-- 						style="width: 142px; height: 30px;" class="easyui-combobox" -->
+            <!-- 						data-options="required:false" /></td> -->
+
+            <!-- 					<td class="right" style="width: 60px;"><label for="name3">姓名:</label> -->
+            <!-- 					</td> -->
+            <!-- 					<td class="left"><input type="text" id="name3" name="name3" -->
+            <!-- 						style="width: 130px; height: 30px;" class="easyui-validatebox" -->
+            <!-- 						data-options="required:false" /></td> -->
+            <!-- 					<td class="right" style="width: 60px;"><label for="telephone3">联系方式:</label> -->
+            <!-- 					</td> -->
+            <!-- 					<td class="left"><input type="text" id="telephone3" -->
+            <!-- 						name="telephone3" style="width: 130px; height: 30px;" -->
+            <!-- 						validtype="mobile" maxLength="11" class="easyui-validatebox" -->
+            <!-- 						data-options="required:false" /></td> -->
+            <!-- 				</tr> -->
+            <!-- 				<tr> -->
+            <!-- 					<td class="right" style="width: 60px;"><label for="relation4">关系4:</label> -->
+            <!-- 					</td> -->
+            <!-- 					<td class="left"><input type="text" id="relation4" -->
+            <!-- 						editable="false" name="relation4" maxLength='50' -->
+            <!-- 						style="width: 142px; height: 30px;" class="easyui-combobox" -->
+            <!-- 						data-options="required:false" /></td> -->
+
+            <!-- 					<td class="right" style="width: 60px;"><label for="name4">姓名:</label> -->
+            <!-- 					</td> -->
+            <!-- 					<td class="left"><input type="text" id="name4" name="name4" -->
+            <!-- 						style="width: 130px; height: 30px;" class="easyui-validatebox" -->
+            <!-- 						data-options="required:false" /></td> -->
+            <!-- 					<td class="right" style="width: 60px;"><label for="telephone4">联系方式:</label> -->
+            <!-- 					</td> -->
+            <!-- 					<td class="left"><input type="text" id="telephone4" -->
+            <!-- 						name="telephone4" style="width: 130px; height: 30px;" -->
+            <!-- 						validtype="mobile" maxLength="11" class="easyui-validatebox" -->
+            <!-- 						data-options="required:false" /></td> -->
+            <!-- 				</tr> -->
+
+            <tr>
+                <td colspan="6" align="center" style="padding: 20px;">
+                    <input type="button" id="save6" class="submit action-button" onclick="hold()" value="暂存" />
+                    <input type="button" name="previous" class="previous action-button" value="上一步" />
+                    <input type="button" name="next" class="next action-button" value="下一步" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset id="fieldset7">
+        <table>
+            <thead>
+            <h2 class="fs-title">员工户籍信息</h2>
+            </thead>
+            <tr>
+                <td class="right"><label for="nationality">国籍:</label></td>
+                <td class="left"><input type="text" id="nationality"
+                                        name="nationality" style="width: 208px; height: 30px;"
+                                        maxlength="10" value="中国" class="easyui-validatebox"
+                                        data-options="required:true" /><font color="red">*</font></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="origin">籍贯:</label></td>
+                <td class="left"><input type="text" id="origin" name="origin"
+                                        style="width: 208px; height: 30px;" maxlength="20"
+                                        data-options="required:true" class="easyui-validatebox" /><font color="red">*</font>
+                </td>
+            </tr>
+            <tr>
+                <td class="right"><label for="residence_type">户口性质:</label></td>
+                <td class="left"><input type="text" id="residence_type"
+                                        name="residence_type" style="width: 220px; height: 30px;"
+                                        class="easyui-combobox" editable="false"
+                                        data-options="required:false,validType:'length[0,50]'" /></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="residence_adress">户籍所在地:</label>
+                </td>
+                <td class="left"><textarea type="text" id="residence_adress"
+                                           name="residence_adress" style="width: 208px; height: 30px;"
+                                           maxlength="100" class="easyui-validatebox"
+                                           data-options="required:false" style="height:100px;"></textarea>
+                </td>
+            </tr>
+            <tr>
+                <td class="right"><label for="home_adress">家庭住址:</label></td>
+                <td class="left"><textarea type="text" id="home_adress"
+                                           name="home_adress" style="width: 208px; height: 30px;"
+                                           maxlength="100" class="easyui-validatebox"
+                                           data-options="required:false" style="height:100px;"></textarea></td>
+            </tr>
+            <tr>
+                <td class="right"><label for="live_adress">现居住地地址:</label></td>
+                <td class="left"><textarea type="text" id="live_adress"
+                                           name="live_adress" style="width: 208px; height: 30px;"
+                                           maxlength="100" class="easyui-validatebox"
+                                           data-options="required:false" style="height:100px;"></textarea></td>
+            </tr>
+
+            <tr>
+                <td colspan="2" align="center">
+                    <input type="button" id="save7" class="submit action-button" onclick="hold()" value="暂存" />
+                    <input type="button" name="previous" class="previous action-button" value="上一步" />
+                    <input type="button" id="btn_save" class="submit action-button" value="提交" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+</form>
+
+
+
+</body>
+</html>
