@@ -5,9 +5,9 @@ import java.lang.reflect.Method;
 public class CreateSqlByStr {
     public static void main(String[] args) throws Exception{
 
-        String data="采购、租赁、自建、受捐、受赠";
-        String domainId="asset_source";
-       String[] clazzList=data.split("、");
+        String data="潜在,搁置,意向,逼单,试发,合作,挖潜,流失";
+        String domainId="sale_progress";
+       String[] clazzList=data.split(",");
         StringBuffer sql=new StringBuffer();
        for(int i=0;i<clazzList.length;i++){
            String value = clazzList[i];
