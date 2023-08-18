@@ -1,6 +1,6 @@
 package com.javaBuild.constant;
 
-import com.word.constansts.CRMX_DENSITY_TYPE;
+import com.javaBuild.enumData.CRMX_DENSITY_TYPE;
 
 public class DenistyTypeTest {
     public static void main(String[] args) {
@@ -10,7 +10,7 @@ public class DenistyTypeTest {
             String densityName = value.densityName();
             String[] split = densityName.split("-");
             if(split.length==2){
-                sb.append(" when t.goods_weight/t.goods_cube>="+split[0]+" and t.goods_weight/t.goods_cube<"+split[1]+" then '"+value.bubbleName()+"' \n");
+                sb.append(" when t.goods_weight/t.goods_cube>"+split[0]+" and t.goods_weight/t.goods_cube<="+split[1]+" then '"+value.bubbleName()+"' \n");
             }
         }
         System.out.println(sb.toString());
