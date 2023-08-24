@@ -5,13 +5,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.dy.components.logs.api.logerror.GlobalErrorInfoException;
 import com.yd.utils.common.CollectionUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
+@Slf4j
 @Service
 public class {class_impl} implements {class_service} {
 
@@ -27,6 +28,8 @@ public class {class_impl} implements {class_service} {
     @Transactional
     public void addData({class_name} param) {
 
+        //更新数据
+        dataMapper.add(param);
         //记录变更日志
         CRMX_share_data_logConfig config = CRMX_share_data_logConfig.build()
                 .setOperateType(CRMX_share_data_logService.C_OPERATETYPE_ADD)
@@ -44,7 +47,13 @@ public class {class_impl} implements {class_service} {
 
         //获得变更前数据
         {class_name} before = dataMapper.selectById(param.getSerial_no());
-
+        //获得变更后数据
+        {class_name} after = new {class_name}();
+        BeanUtils.copyProperties(before,after);
+        //更新复制后数据
+        BeanUtils.copyProperties(param, after, CrmxCommonUtil.getNullPropertyNames(param));
+        //更新数据
+        dataMapper.updateById(param);
         //记录变更日志
         CRMX_share_data_logConfig config = CRMX_share_data_logConfig.build();
         logService.addChangeLog(before,param,config);
@@ -55,7 +64,7 @@ public class {class_impl} implements {class_service} {
     public void deleteData({class_name} param) {
         //获得变更前数据
         {class_name} before = dataMapper.selectById(param.getSerial_no());
-        //删除审批人
+        //删除数据
         dataMapper.deleteById(param.getSerial_no());
         //记录变更日志
         CRMX_share_data_logConfig config = CRMX_share_data_logConfig.build()

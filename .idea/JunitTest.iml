@@ -272,5 +272,6 @@
     <orderEntry type="library" name="Maven: org.xhtmlrenderer:flying-saucer-core:9.1.6" level="project" />
     <orderEntry type="library" name="Maven: org.freemarker:freemarker:2.3.19" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcpkix-jdk15on:1.49" level="project" />
+    <orderEntry type="library" name="Maven: com.github.jsonzou:jmockdata:4.2.0" level="project" />
   </component>
 </module>

@@ -2,6 +2,8 @@ package com.javaBuild.crmx;
 
 
 import cn.hutool.core.util.IdUtil;
+import com.google.common.collect.Lists;
+import com.javaBuild.tmsp.ColumnData;
 import com.yd.utils.common.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -18,6 +20,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +44,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_base_customer_region_rank");
+        List<String> tableNames = Arrays.asList("crm_base_customer_spanned_area");
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
@@ -57,6 +60,16 @@ public class CreateJavaFile implements ApplicationContextAware{
 			String controllerContent=FileUtil.readAsString(new File(filePath+"java/TemplateController.java"));
 			String htmlContent=FileUtil.readAsString(new File(filePath+"java/TemplateList.html"));
 			String jsContent=FileUtil.readAsString(new File(filePath+"java/TemplateJavaScript.js"));
+
+            String formHtml=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateForm.html"));
+            String formJs=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateForm.js"));
+            List<ColumnData> columnDataList=new ArrayList<>();
+            List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time",
+                    "version","op_user_id","creator","serial_no","oa_flag","oa_apply_user_id","oa_apply_time","loan_process_number","repayment_process_number",
+                    "expense_process_number","oa_status","approval_amount","archived_amount","violation_process_number","file_attachment");
+            StringBuffer remarkTd=new StringBuffer();
+
+
             String sql="select  CONCAT(\n" +
 					"if(c.column_key='PRI','    @TableId\\n',''),\n" +
 					"if(c.column_name='version','    @Version\\n',''),\n" +
@@ -73,6 +86,24 @@ public class CreateJavaFile implements ApplicationContextAware{
 			StringBuffer sb=new StringBuffer();
 			mapList.forEach(map->{
 				sb.append(map.get("filed")+"\n\n\n");
+
+                String columnId=map.get("column_name")+"";
+                if(StringUtils.equalsIgnoreCase("remark",columnId)){
+                    remarkTd.append("\t\t\t<tr>\n" +
+                            "\t\t\t\t<td align='right' width=13%>\n" +
+                            "\t\t\t\t\t<label>备注:</label>\n" +
+                            "\t\t\t\t</td>\n" +
+                            "\t\t\t\t<td width=20% colspan=\"5\">\n" +
+                            "\t\t\t\t\t<textarea id='remark' name='remark' type='text' data-options='required:false' class='easyui-validatebox' style='height:50px;width:800px'></textarea>\n" +
+                            "\t\t\t\t</td>\n" +
+                            "\t\t\t</tr>");
+
+                    return;
+                }
+                if(!exceptColumns.contains(columnId)){
+                    columnDataList.add(new ColumnData(columnId,map.get("column_comment")+"",map.get("data_type")+""));
+                }
+
 			});
 			String tableComment=mapList.get(0).get("table_comment")+"";
 
@@ -137,7 +168,66 @@ public class CreateJavaFile implements ApplicationContextAware{
 					.replaceAll("\\{table_comment\\}",tableComment);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +htmlName+ ".js"),jsContent);
 
-		}
+
+
+
+
+            List<List<ColumnData>> partition = Lists.partition(columnDataList, 3);
+            StringBuffer formTable=new StringBuffer();
+
+            partition.forEach(tds->{
+                StringBuffer tr=new StringBuffer();
+                tr.append("\t\t\t<tr>\n");
+                tds.forEach(td->{
+                    if(StringUtils.equalsIgnoreCase("bigint",td.getData_type())){
+                        tr.append("\t\t\t\t<td align='right' width=13%>\n" +
+                                "\t\t\t\t\t<label>"+td.getColumnName()+":</label>\n" +
+                                "\t\t\t\t</td>\n" +
+                                "\t\t\t\t<td width=20%>\n" +
+                                "\t\t\t\t\t<input type='text' id='"+td.getColumnId()+"' name='"+td.getColumnId()+"'   class=\"easyui-numberbox\"  data-options='required:true,min:1,precision:2'  style='height:30px;width:175px' />\n" +
+                                "\t\t\t\t</td>\n");
+                    }else if(StringUtils.equalsIgnoreCase("date",td.getData_type())||StringUtils.equalsIgnoreCase("datetime",td.getData_type())){
+                        tr.append("\t\t\t\t<td align='right' width=13%>\n" +
+                                "\t\t\t\t\t<label>"+td.getColumnName()+":</label>\n" +
+                                "\t\t\t\t</td>\n" +
+                                "\t\t\t\t<td width=20%>\n" +
+                                "\t\t\t\t\t<input type='text' id='"+td.getColumnId()+"' name='"+td.getColumnId()+"'   class=\"easyui-datebox\"  data-options='required:true'  style='height:30px;width:175px' />\n" +
+                                "\t\t\t\t</td>\n");
+                    } else{
+                        tr.append("\t\t\t\t<td align='right' width=13%>\n" +
+                                "\t\t\t\t\t<label>"+td.getColumnName()+":</label>\n" +
+                                "\t\t\t\t</td>\n" +
+                                "\t\t\t\t<td width=20%>\n" +
+                                "\t\t\t\t\t<input type='text' id='"+td.getColumnId()+"' name='"+td.getColumnId()+"' class=\"easyui-validatebox\"  data-options='required:true'  style='height:26px;width:168px' />\n" +
+                                "\t\t\t\t</td>\n");
+                    }
+                });
+                tr.append("\t\t\t</tr>\n");
+                formTable.append(tr);
+            });
+            formTable.append(remarkTd);
+
+            //生成html页面
+            tableName=tableName.replace("crm_","crmx_");
+            String formName=tableName+"_form";
+            formHtml=formHtml.replaceAll("\\{html_group\\}",htmlGroup)
+                    .replaceAll("\\{html_name\\}",formName)
+                    .replaceAll("\\{table_name\\}",tableName)
+                    .replaceAll("\\{table_content\\}",formTable.toString())
+                    .replaceAll("\\{table_comment\\}",tableComment);
+            FileUtil.writeAsString(new File(path+tableName+"\\" +formName+ ".html"),formHtml);
+
+
+            //生成js页面
+            formJs=formJs.replaceAll("\\{html_group\\}",htmlGroup)
+                    .replaceAll("\\{table_name\\}",tableName)
+                    .replaceAll("\\{table_comment\\}",tableComment);
+            FileUtil.writeAsString(new File(path+tableName+"\\" +formName+ ".js"),formJs);
+
+
+
+
+        }
     }
 
 }
