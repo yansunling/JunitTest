@@ -1,4 +1,4 @@
-package com.javaBuild.constant;
+package com.javaBuild.crmx;
 
 
 import com.javaBuild.titleMap.CreateTitleData;
@@ -39,7 +39,7 @@ public class CreateEnumBySource implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> domainList = Arrays.asList("sale_progress");
+        List<String> domainList = Arrays.asList("order_pay_type");
         String path="C:\\Users\\yansunling\\Desktop\\enum\\";
 		File dir=new File(path);
 

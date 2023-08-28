@@ -44,7 +44,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_base_customer_spanned_area");
+        List<String> tableNames = Arrays.asList("crm_customer_order_pay_type");
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
@@ -208,11 +208,11 @@ public class CreateJavaFile implements ApplicationContextAware{
             formTable.append(remarkTd);
 
             //生成html页面
-            tableName=tableName.replace("crm_","crmx_");
-            String formName=tableName+"_form";
+            String tableName1=tableName.replace("crm_","crmx_");
+            String formName=tableName+"_form".replace("crm_","crmx_");
             formHtml=formHtml.replaceAll("\\{html_group\\}",htmlGroup)
                     .replaceAll("\\{html_name\\}",formName)
-                    .replaceAll("\\{table_name\\}",tableName)
+                    .replaceAll("\\{table_name\\}",tableName1)
                     .replaceAll("\\{table_content\\}",formTable.toString())
                     .replaceAll("\\{table_comment\\}",tableComment);
             FileUtil.writeAsString(new File(path+tableName+"\\" +formName+ ".html"),formHtml);
@@ -220,7 +220,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
             //生成js页面
             formJs=formJs.replaceAll("\\{html_group\\}",htmlGroup)
-                    .replaceAll("\\{table_name\\}",tableName)
+                    .replaceAll("\\{table_name\\}",tableName1)
                     .replaceAll("\\{table_comment\\}",tableComment);
             FileUtil.writeAsString(new File(path+tableName+"\\" +formName+ ".js"),formJs);
 

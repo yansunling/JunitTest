@@ -11,15 +11,15 @@ public class CreateCrmxAuthSql {
     public static void main(String[] args) {
 
         String env="uat";
-        String fun="crmx_base_customer_spanned_area";
+        String fun="crm_customer_order_pay_type";
         String sysId="crm";
         String funId=fun+"_list";
-        String parentFun="customer";
-        String listUrl="../crmx/ui/view/base/"+funId+".html?actionId=crmx_base_customer_list";
+        String parentFun="contract";
+        String listUrl="../crmx/ui/view/contract/"+funId+".html?actionId=crmx_base_customer_list";
         int num=280;
 
 
-        String functionName="大区客户地址维护";
+        String functionName="付款方式维护";
 
 
 
@@ -36,8 +36,8 @@ public class CreateCrmxAuthSql {
         map.put("addData",new ButtonType("icon-add","新增"));
         map.put("updateData",new ButtonType("icon-edit","修改"));
         map.put("deleteData",new ButtonType("icon-remove","删除"));
-//        map.put("enableData",new ButtonType("icon-ok","启用"));
-//        map.put("disableData",new ButtonType("icon-cancel","禁用"));
+        map.put("enableData",new ButtonType("icon-ok","启用"));
+        map.put("disableData",new ButtonType("icon-cancel","禁用"));
         map.put("importData",new ButtonType("icon-upload","导入"));
         map.put("exportData",new ButtonType("icon-download","导出"));
 //        map.put("appyData",new ButtonType("icon-add","还借支申请"));

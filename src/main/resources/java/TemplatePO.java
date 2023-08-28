@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_table;
-import com.yd.common.data.CIPBasePO;
 import lombok.Data;
 
 import java.sql.Timestamp;
