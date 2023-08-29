@@ -11,7 +11,7 @@ public class CreateCrmxAuthSql {
     public static void main(String[] args) {
 
         String env="uat";
-        String fun="crm_customer_order_pay_type";
+        String fun="crmx_customer_order_pay_type";
         String sysId="crm";
         String funId=fun+"_list";
         String parentFun="contract";

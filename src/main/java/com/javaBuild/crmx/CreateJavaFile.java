@@ -62,7 +62,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 			String jsContent=FileUtil.readAsString(new File(filePath+"java/TemplateJavaScript.js"));
 
             String formHtml=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateForm.html"));
-            String formJs=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateForm.js"));
+            String formJs=FileUtil.readAsString(new File(filePath+"java/TemplateForm.js"));
             List<ColumnData> columnDataList=new ArrayList<>();
             List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time",
                     "version","op_user_id","creator","serial_no","oa_flag","oa_apply_user_id","oa_apply_time","loan_process_number","repayment_process_number",
@@ -151,13 +151,14 @@ public class CreateJavaFile implements ApplicationContextAware{
 			controllerContent=controllerContent.replaceAll("\\{class_name\\}",className)
 					.replaceAll("\\{class_impl\\}",classImpl)
 					.replaceAll("\\{class_controller\\}",classController)
-					.replaceAll("\\{table_name\\}",tableName)
+					.replaceAll("\\{table_name\\}",tableName.replaceAll("crm_","crmx_"))
 					.replaceAll("\\{class_service\\}",classService);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +classController+ ".java"),controllerContent);
 			//生成html页面
 			String htmlGroup=strs[1];
 			String htmlName=tableName.replaceAll("crm_","crmx_")+"_list";
 			htmlContent=htmlContent.replaceAll("\\{html_group\\}",htmlGroup)
+					.replaceAll("\\{table_name\\}",tableName)
 					.replaceAll("\\{html_name\\}",htmlName);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +htmlName+ ".html"),htmlContent);
 			//生成js页面
@@ -209,7 +210,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
             //生成html页面
             String tableName1=tableName.replace("crm_","crmx_");
-            String formName=tableName+"_form".replace("crm_","crmx_");
+            String formName=(tableName+"_form").replace("crm_","crmx_");
             formHtml=formHtml.replaceAll("\\{html_group\\}",htmlGroup)
                     .replaceAll("\\{html_name\\}",formName)
                     .replaceAll("\\{table_name\\}",tableName1)

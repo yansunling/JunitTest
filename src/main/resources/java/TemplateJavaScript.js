@@ -1,9 +1,8 @@
 //-------------------- 代码可变区
 //---------- 数据定义区
 var authActions = {};
-var listTemplate = '#crmx_base_table_list';
+var listTemplate = '#{table_name}_list';
 var gridMenuId = '#crmx_base_table_list_menu';
-const formTemplate="#crmx_base_form";
 //当前用户需要特殊处理的按钮，不在menubar上显示的
 const queryLog=new queryNameSpace();
 const query=new queryNameSpace();
