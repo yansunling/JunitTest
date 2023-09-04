@@ -10,5 +10,5 @@ public class CheckData {
     private String user_id;
     private String user_name;
     private String img;
-    public static List<String> title= Arrays.asList("user_id","img","user_name");
+    public static List<String> title= Arrays.asList("user_id","user_name","img");
 }
