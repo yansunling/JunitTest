@@ -7,7 +7,7 @@ import com.dy.components.foundation.comm.facade.exception.CIPErrorCode;
 import com.dy.components.foundation.comm.facade.exception.CIPRuntimeException;
 import com.dy.tmsp.ownCar.service.TmspOwnVehicleRepairService;
 import com.yd.common.data.CIPResponseMsg;
-import com.dy.tmsp.ownCar.util.OilCardUtil;
+import com.yd.tmsp.ownCar.util.OilCardUtil;
 import com.yd.common.utils.CIPUtil;
 import com.yd.tmsp.ownCar.oa.TmspOwnOaCommonData;
 import com.yd.tmsp.ownCar.po.TmspOwnVehicleRepairPO;
@@ -58,6 +58,12 @@ public class {class_controller} {
         dataService.repayData(param);
         return OilCardUtil.success();
     }
+    @RequestMapping(value="/enableData")
+    public CIPResponseMsg enableData(@RequestBody {class_name} param){
+        log.info("enableData param:"+ JSON.toJSONString(param));
+        dataService.updateStatus(param);
+        return OilCardUtil.success();
+     }
     @RequestMapping(value="/disableData")
     public CIPResponseMsg disableData(@RequestBody {class_name} param){
         log.info("disableData param:"+ JSON.toJSONString(param));

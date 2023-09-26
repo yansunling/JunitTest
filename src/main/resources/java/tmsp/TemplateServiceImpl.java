@@ -12,7 +12,7 @@ import com.dy.tmsp.ownCar.log.TmspShareDataLogService;
 import com.dy.tmsp.ownCar.log.config.TmspShareDataLogConfig;
 import com.dy.tmsp.ownCar.service.TmspOaService;
 import com.dy.tmsp.ownCar.service.TmspOwnVehicleRepairService;
-import com.dy.tmsp.ownCar.util.OilCardUtil;
+import com.yd.tmsp.ownCar.util.OilCardUtil;
 import com.error.auto.GlobalErrorInfoEnum;
 import com.yd.bmsp.constants.FEE_ITEM;
 import com.yd.common.runtime.CIPRuntime;

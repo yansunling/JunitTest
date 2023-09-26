@@ -36,5 +36,32 @@ public class {class_controller} {
         dataService.deleteData(param);
         return CrmxCommonUtil.success();
     }
+    @RequestMapping(value="/importData")
+    public CIPResponseMsg importData(HttpServletRequest request, HttpServletResponse response){
+        CIPResponseMsg msg = new CIPResponseMsg();
+        String templateName=request.getParameter("templateName");//下载模板的名字
+        //参数中带了下载模板的名字则进行模板下载,否则就是处理文件导入的逻辑
+        if(!StringUtils.isEmpty(templateName)){
+        try {
+                templateName = URLDecoder.decode(templateName,"utf-8");
+                //生成模板文件
+                response.reset(); //非常重要
+                response.setContentType("application/x-msdownload");
+                response.setHeader("Content-Disposition","attachment;filename="+templateName);
+                OutputStream out = response.getOutputStream();
+                response.setCharacterEncoding("UTF-8");
+                SXSSFWorkbook wb = ExcelSheetParser.createWorkBook(templateName, {class_name}.getExcelTitle(), null);
+                wb.write(out);
+            } catch (Exception e) {
+                 throw new CIPRuntimeException(new CIPErrorCode(500,"亲,不好意思,下载模板出错了!"));
+            }
+        } else {
+            File file = CIPUtil.uploadFile(request, response);
+            dataService.importData(file, CIPRuntime.getOperateSubject());
+            msg.errorCode = CIPErrorCode.CALL_SUCCESS.code;
+            msg.msg = CIPErrorCode.CALL_SUCCESS.name;
+            }
+            return msg;
+       }
 
 }

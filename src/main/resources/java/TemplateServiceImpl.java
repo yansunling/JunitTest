@@ -64,10 +64,10 @@ public class {class_impl} implements {class_service} {
         //更新复制后数据
         BeanUtils.copyProperties(param, after, CrmxCommonUtil.getNullPropertyNames(param));
         //更新数据
-        dataMapper.updateById(param);
+        dataMapper.updateById(after);
         //记录变更日志
         CRMX_share_data_logConfig config = CRMX_share_data_logConfig.build();
-        logService.addChangeLog(before,param,config);
+        logService.addChangeLog(before,after,config);
 
     }
 

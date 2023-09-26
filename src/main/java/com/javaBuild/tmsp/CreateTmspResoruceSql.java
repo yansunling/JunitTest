@@ -10,13 +10,13 @@ import java.util.Set;
 public class CreateTmspResoruceSql {
     public static void main(String[] args) {
 
-        String fun="tmsp_own_vehicle_mileage";
+        String fun="tmsp_base_arrive_print_rule";
         String parentId=fun+"_list";
 
-        String supParent="violation";
-        String parentName="车辆里程维护";
-        String model="ownCar";
-        int num=40;
+        String supParent="baseinfo";
+        String parentName="到达联打印规则维护";
+        String model="base";
+        int num=1430;
 
         String listSql="INSERT INTO `tmsp`.`foc_plugins_auth_resource`(`resource_id`, `resource_name`, `resource_desc`, `sys_uri`, `resource_type`, `create_time`, `update_time`, `operator`, `icon_id`)" +
                 " VALUES ('"+parentId+"', '"+parentName+"', '', 'ui/view/"+model+"/"+parentId+".html', 'A', now(), now(), 'T1113', '');";
@@ -29,11 +29,11 @@ public class CreateTmspResoruceSql {
 
 
         Map<String, ButtonType> map=new LinkedHashMap<>();
-//        map.put("addData",new ButtonType("icon-add","新增"));
+        map.put("addData",new ButtonType("icon-add","新增"));
         map.put("updateData",new ButtonType("icon-edit","修改"));
-        map.put("deleteData",new ButtonType("icon-remove","删除"));
-//        map.put("enableData",new ButtonType("icon-ok","启用"));
-//        map.put("disableData",new ButtonType("icon-cancel","禁用"));
+//        map.put("deleteData",new ButtonType("icon-remove","删除"));
+        map.put("enableData",new ButtonType("icon-ok","启用"));
+        map.put("disableData",new ButtonType("icon-cancel","禁用"));
 //        map.put("applyViolation",new ButtonType("icon-add","事故上报"));
 //        map.put("completeData",new ButtonType("icon-ok","事故完结"));
 //        map.put("applyData",new ButtonType("icon-add","借支"));

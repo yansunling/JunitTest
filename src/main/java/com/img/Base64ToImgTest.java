@@ -14,7 +14,7 @@ public class Base64ToImgTest {
 	 */
 
 	public static void main(String[] args) throws Exception {
-		String filePath = "I:/img/2.text";
+		String filePath = "I:/img/2.txt";
 //		byte[] b1 = image2Bytes("I:/img/3.jpg"); //path是绝对路径
 //		byte[] b2 = Base64.encodeBase64(b1);
 //		saveAsFileWriter(new String(b2),filePath);//将base64编码的数据保存到文件中

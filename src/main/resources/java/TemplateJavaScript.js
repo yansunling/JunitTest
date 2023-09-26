@@ -50,7 +50,7 @@ var bda_data_str_field = {
 			appId: appId,
 			srcPageId: metaData.objectId,
 			srcTableId: metaData.queryId,
-			row:encodeURIComponent(JSON.stringify(selectRows[0]))
+			row:encodeURIComponent(encodeURIComponent(JSON.stringify(selectRows[0])))
 		};
 		techParam.actionId = buttonId;
 		techParam.mode = 'update';
@@ -92,8 +92,98 @@ var bda_data_str_field = {
 			}
 		});
 	},
+	{js_name}_enableData: function (buttonId,actionUrl){
+		let selectRows = $(listTemplate).datagrid('getChecked');
+		if(selectRows.length==0){
+			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
+			return;
+		}
+		let usageStatusName = selectRows[0].common_status;
+		if(usageStatusName!='禁用'){
+			$$.showJcdfMessager('提示消息',  "当前状态不为禁用，无法进行启用操作！", 'info');
+			return;
+		}
+		let title = "确认";
+		let msg = "确定启用所选记录?";
 
+		$.messager.confirm(title, msg, function (r) {
+			if (r) {
+				$$.openProcessingDialog();
+				$.ajax({
+					type: "POST",
+					url: actionUrl + "?actionId=" + buttonId,
+					dataType: "json",
+					data: JSON.stringify({"serial_no":selectRows[0].serial_no,"common_status":"ENABLE"}),
+					contentType: "application/json",
+					success: function (data) {
+						$$.closeProcessingDialog();
+						if (data && data.errorCode == 0) {
+							$$.showJcdfMessager('提示消息', '操作成功', 'info');
+							$$.refreshJcdfDatagrid(metaData.objectId,listTemplate);
+							$$.refreshJcdfDatagrid(metaData.objectId,"crm_share_data_log_good_list");
+						} else {
+							$$.showJcdfMessager('提示消息', data.msg, 'warning');
+						}
+					}
+				});
+			}
+		});
+	},
+	{js_name}_disableData: function (buttonId,actionUrl){
+		let selectRows = $(listTemplate).datagrid('getChecked');
+		if(selectRows.length==0){
+			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
+			return;
+		}
+		let usageStatusName = selectRows[0].common_status;
+		if(usageStatusName!='启用'){
+			$$.showJcdfMessager('提示消息',  "当前状态不为启用，无法进行禁用操作！", 'info');
+			return;
+		}
+		let title = "确认";
+		let msg = "确定禁用所选记录?";
+		$.messager.confirm(title, msg, function (r) {
+			if (r) {
+				$$.openProcessingDialog();
+				$.ajax({
+					type: "POST",
+					url: actionUrl + "?actionId=" + buttonId,
+					dataType: "json",
+					data: JSON.stringify({"serial_no":selectRows[0].serial_no,"common_status":"DISABLE"}),
+					contentType: "application/json",
+					success: function (data) {
+						$$.closeProcessingDialog();
+						if (data && data.errorCode == 0) {
+							$$.showJcdfMessager('提示消息', '操作成功', 'info');
+							$$.refreshJcdfDatagrid(metaData.objectId,listTemplate);
+							$$.refreshJcdfDatagrid(metaData.objectId,"crm_share_data_log_good_list");
+						} else {
+							$$.showJcdfMessager('提示消息', data.msg, 'warning');
+						}
+					}
+				});
+			}
+		});
+	},
+	{js_name}_importData : function (buttonId,actionUrl){
+		var form = {};
+		form.formId = "cip_import_form";
+		form.formUrl = "ui/view/public/cip_import_form.html?actionId=cip_import_form";
 
+		var techParam = {
+			appId:appId,
+			srcPageId:metaData.objectId,
+			srcTableId:metaData.queryId
+		};
+		techParam.actionId = form.formId;
+		techParam.templateName = metaData.objectId + '.xlsx';//需要优化
+		techParam.objectName = metaData.objectName;
+		techParam.refActionUrl = actionUrl;
+		techParam.refActionId = buttonId;
+		var callUrl = $$.buildPageUrl(form.formUrl,techParam,null);
+		$$.openJcdfDialog(callUrl, '导入'+metaData.objectName, 250, 600);
+
+	},
 
 };
 
@@ -140,6 +230,13 @@ function queryData() {
 
 		queryLog.queryResult();
 	});
+	query.getColumnOption("common_status").formatter=function (value) {
+		if(value=='禁用'){
+			return '<span style="color: red">'+value+'</span>';
+		}else{
+			return value;
+		}
+	}
 }
 
 

@@ -44,7 +44,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_sale_progress_report");
+        List<String> tableNames = Arrays.asList("crm_sale_project");
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
@@ -61,7 +61,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 			String htmlContent=FileUtil.readAsString(new File(filePath+"java/TemplateList.html"));
 			String jsContent=FileUtil.readAsString(new File(filePath+"java/TemplateJavaScript.js"));
 
-            String formHtml=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateForm.html"));
+            String formHtml=FileUtil.readAsString(new File(filePath+"java/TemplateForm.html"));
             String formJs=FileUtil.readAsString(new File(filePath+"java/TemplateForm.js"));
             List<ColumnData> columnDataList=new ArrayList<>();
             List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time",
