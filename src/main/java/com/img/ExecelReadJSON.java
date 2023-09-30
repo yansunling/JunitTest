@@ -26,21 +26,23 @@ public class ExecelReadJSON {
             f.mkdirs(); // 创建目录
         }
         List<Map<String,Object>> listData=new ArrayList();
-        records.forEach(item->{
+
+        for(int i=0;i<records.size();i++){
+            CheckImgData item = records.get(i);
             Map<String, Object> objectMap = BeanUtil.beanToMap(item);
             String img = item.getMediaids();
             if(StringUtils.isNotBlank(img)){
                 String content = img.split(",")[1];
                 String type = img.split(";")[0].split("/")[1];
-                String picPath=dir+"/"+item.getEmp_name()+item.getEmp_id()+"."+type;
+                String picPath=dir+"/"+item.getEmp_name()+item.getEmp_id()+"_"+i+"."+type;
                 ImgUtil.Base64ToImage(content,picPath);
                 objectMap.put("mediaids",new File(picPath));
             }
             listData.add(objectMap);
-        });
+        }
 
-        String excelPath="C:\\Users\\yansunling\\Desktop\\checkImg.xls";
-        ExcelsUtil.createExcel(excelPath,listData,CheckImgData.title);
+//        String excelPath="C:\\Users\\yansunling\\Desktop\\checkImg.xls";
+//        ExcelsUtil.createExcel(excelPath,listData,CheckImgData.title);
 
     }
     @Data
