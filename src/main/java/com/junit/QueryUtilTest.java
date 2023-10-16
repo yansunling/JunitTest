@@ -6,6 +6,7 @@ import com.junit.po.Query_base_columnsVO;
 import com.yd.common.data.CIPReqCondition;
 import com.yd.common.runtime.CIPRuntimeOperator;
 import com.yd.query.util.QueryUtil;
+import com.yd.query.util.QueryVueUtil;
 import com.yd.query.vo.QueryBean;
 import com.yd.query.vo.QueryLogAddBean;
 import org.junit.Test;
@@ -81,9 +82,14 @@ public class QueryUtilTest implements ApplicationContextAware{
 
 
 
-		QueryBean queryBean=new QueryBean("query_base_columns_list", "V1.0.0");
+//		QueryBean queryBean=new QueryBean("mdms_monit_logger", "V1.0.0");
+
+
+		QueryBean queryBean=new QueryBean("query_base_register_list", "V1.0.0");
 		Query_base_columnsVO columnVO=new Query_base_columnsVO();
-		columnVO.setQuery_id("");
+		columnVO.setMonit_object_1("22");
+		QueryUtil queryUtil=new QueryUtil();
+		queryUtil.setHOST_ADDRESS("https://tlwl.uat.tuolong56.com");
 		List<QUERY_base_registerPO> list = QueryUtil.sendSearch(queryBean, columnVO,QUERY_base_registerPO.class);
 		System.out.println(list.size());
 		System.out.println(JSON.toJSONString(list));

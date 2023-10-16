@@ -18,6 +18,7 @@ public class Query_base_columnsVO {
 
 	private String version;
 
+	private String monit_object_1;
 
 	
 	

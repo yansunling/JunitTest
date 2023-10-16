@@ -15,7 +15,7 @@ import java.util.*;
 
 public class ExecelReadJSON {
     public static void main(String[] args) throws Exception{
-        String filePath="C:\\Users\\yansunling\\Desktop\\无标题.json";
+        String filePath="C:\\Users\\yansunling\\Desktop\\考勤信息.json";
 
         String json = FileUtil.readAsString(new File(filePath));
         RecordData recordData = JSON.parseObject(json, RecordData.class);
