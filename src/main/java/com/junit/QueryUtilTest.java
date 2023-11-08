@@ -87,9 +87,11 @@ public class QueryUtilTest implements ApplicationContextAware{
 
 		QueryBean queryBean=new QueryBean("query_base_register_list", "V1.0.0");
 		Query_base_columnsVO columnVO=new Query_base_columnsVO();
-		columnVO.setMonit_object_1("22");
+//		columnVO.setMonit_object_1("2532906");
 		QueryUtil queryUtil=new QueryUtil();
-		queryUtil.setHOST_ADDRESS("https://tlwl.uat.tuolong56.com");
+		queryUtil.setHOST_ADDRESS("http://localhost:8082");
+		queryBean.setPage(1);
+		queryBean.setRows(15);
 		List<QUERY_base_registerPO> list = QueryUtil.sendSearch(queryBean, columnVO,QUERY_base_registerPO.class);
 		System.out.println(list.size());
 		System.out.println(JSON.toJSONString(list));

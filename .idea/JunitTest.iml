@@ -112,7 +112,7 @@
     <orderEntry type="library" name="Maven: javax.validation:validation-api:2.0.1.Final" level="project" />
     <orderEntry type="library" name="Maven: org.springframework:spring-test:4.1.6.RELEASE" level="project" />
     <orderEntry type="library" name="Maven: com.belerweb:pinyin4j:2.5.1" level="project" />
-    <orderEntry type="library" name="Maven: com.yd.query:query-util:v3.1" level="project" />
+    <orderEntry type="library" name="Maven: com.yd.query:query-util:v3.3" level="project" />
     <orderEntry type="library" name="Maven: com.dy.components:logs-error-spring:1.0.3-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: com.yd:foundation:2.7.1_foc-SNAPSHOT" level="project" />

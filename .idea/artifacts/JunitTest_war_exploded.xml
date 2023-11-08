@@ -78,7 +78,7 @@
           <element id="library" level="project" name="Maven: javax.validation:validation-api:2.0.1.Final" />
           <element id="library" level="project" name="Maven: org.springframework:spring-test:4.1.6.RELEASE" />
           <element id="library" level="project" name="Maven: com.belerweb:pinyin4j:2.5.1" />
-          <element id="library" level="project" name="Maven: com.yd.query:query-util:v3.1" />
+          <element id="library" level="project" name="Maven: com.yd.query:query-util:v3.3" />
           <element id="file-copy" path="$MAVEN_REPOSITORY$/com/dy/components/logs-error-spring/1.0.3-SNAPSHOT/logs-error-spring-1.0.3-20200925.021534-11.jar" output-file-name="logs-error-spring-1.0.3-SNAPSHOT.jar" />
           <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:4.0.1" />
           <element id="file-copy" path="$MAVEN_REPOSITORY$/com/yd/foundation/2.7.1_foc-SNAPSHOT/foundation-2.7.1_foc-20230804.060654-48.jar" output-file-name="foundation-2.7.1_foc-SNAPSHOT.jar" />

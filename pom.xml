@@ -68,7 +68,7 @@
         <dependency>
             <groupId>com.yd.query</groupId>
             <artifactId>query-util</artifactId>
-            <version>v3.1</version>
+            <version>v3.3</version>
             <exclusions>
                 <exclusion>
                     <artifactId>foundation</artifactId>

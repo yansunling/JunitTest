@@ -44,7 +44,8 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_store_cust_visiting");
+        List<String> tableNames = Arrays.asList("crm_base_key_man");
+		String prexName="Crmx";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
@@ -73,6 +74,8 @@ public class CreateJavaFile implements ApplicationContextAware{
             String sql="select  CONCAT(\n" +
 					"if(c.column_key='PRI','    @TableId\\n',''),\n" +
 					"if(c.column_name='version','    @Version\\n',''),\n" +
+					"if(c.data_type='date','    @JsonFormat(pattern = \"yyyy-MM-dd\", timezone = \"GMT+8\")\\n','')," +
+					"if(c.data_type='datetime','    @JsonFormat(pattern = \"yyyy-MM-dd HH:mm:ss\", timezone = \"GMT+8\")\\n',''),\n"+
 					"if(c.column_name in('create_time','create_user_id','creator'),'    @TableField(fill = FieldFill.INSERT)\\n',''),\n" +
 					"if(c.column_name in('operator','update_time','op_user_id'),'    @TableField(fill = FieldFill.INSERT_UPDATE)\\n',''),\n" +
 					"'    @CJ_column(name = \"',c.column_comment,'\")\\n',\n" +
@@ -109,7 +112,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 
 			String[] strs = tableName.split("_");
-			String prexName="Crmx";
+
 			for(int i=1;i<strs.length;i++){
 				prexName+=StringUtils.upperFirst(strs[i]);
 			}

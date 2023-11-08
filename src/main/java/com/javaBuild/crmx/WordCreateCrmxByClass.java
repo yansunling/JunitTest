@@ -8,6 +8,7 @@ import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
 import com.javaBuild.crmx.controller.CrmxStoreCustVisitingAppController;
 import com.javaBuild.crmx.controller.CrmxStoreCustomerAppController;
+import com.javaBuild.crmx.controller.MarketingBaseCustomerController;
 import com.javaBuild.tmsp.api.controller.TmspQualityErrorInfoController;
 import com.junit.po.ParamBean;
 import com.word.createWord.CopyWordParagraph;
@@ -33,7 +34,7 @@ public class WordCreateCrmxByClass {
 
         closeWps();
 
-        Class<?> clazz = CrmxStoreCustomerAppController.class;
+        Class<?> clazz = MarketingBaseCustomerController.class;
 
         String path = WordCreateCrmxByClass.class.getClassLoader().getResource("").getPath();
         String filePath=path+"api";
@@ -48,9 +49,9 @@ public class WordCreateCrmxByClass {
 
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
-        String rootPath="https://tlwl.uat.tuolong56.com/tmsp"+annotation.value()[0];
+        String rootPath="https://tlwl.uat.tuolong56.com/marketing-api"+annotation.value()[0];
         //走网关
-        rootPath="https://tlwl.uat.tuolong56.com/esb-api/api/d/";
+//        rootPath="https://tlwl.uat.tuolong56.com/esb-api/api/d/";
 
         //获得所有方法
         Method[] methods = clazz.getMethods();
@@ -114,6 +115,8 @@ public class WordCreateCrmxByClass {
 
                             }
                         }
+                    }else{
+                        templatePath=filePath+"/template.docx";
                     }
                     String pretty = JSON.toJSONString(stringObjectMap, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);
                     pretty=pretty.replaceAll("\n","\r");
@@ -162,8 +165,11 @@ public class WordCreateCrmxByClass {
             map.put("msg", bean.getDescription());
             tab1list.add(map);
             if(StringUtils.equals("Y",bean.getListType())){
-                if(StringUtils.isNotBlank(bean.getClazz())){
+                if(StringUtils.isNotBlank(bean.getClazz())&&!StringUtils.equals(bean.getClazz(),"java.lang.String")){
                     listChildren.add(bean);
+                }
+                if(StringUtils.equals(bean.getClazz(),"java.lang.String")){
+                    stringObjectMap.put(paramName,Arrays.asList(bean.getDescription()));//设置对象属性
                 }
             }else if(StringUtils.isNotBlank(bean.getClazz())){
                 listChildren.add(bean);
