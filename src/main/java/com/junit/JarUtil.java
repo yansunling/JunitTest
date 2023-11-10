@@ -23,7 +23,7 @@ public class JarUtil {
       	
       	
 		 // 新建文件输入流并对它进行缓冲
-        String filePath=JarUtil.class.getClassLoader().getResource("").getPath()+"java/JavaPO.java";
+        String filePath=JarUtil.class.getClassLoader().getResource("").getPath()+ "java/crm/JavaPO.java";
         FileInputStream input = new FileInputStream(new File(filePath));
         BufferedInputStream inBuff = new BufferedInputStream(input);
 

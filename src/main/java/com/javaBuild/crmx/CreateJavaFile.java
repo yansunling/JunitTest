@@ -1,7 +1,6 @@
 package com.javaBuild.crmx;
 
 
-import cn.hutool.core.util.IdUtil;
 import com.google.common.collect.Lists;
 import com.javaBuild.tmsp.ColumnData;
 import com.yd.utils.common.StringUtils;
@@ -46,6 +45,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 	public  void test() throws Exception {
         List<String> tableNames = Arrays.asList("crm_base_key_man");
 		String prexName="Crmx";
+		String dataBase="crm";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
@@ -53,17 +53,17 @@ public class CreateJavaFile implements ApplicationContextAware{
 		dir.mkdirs();
 		String filePath = getClass().getClassLoader().getResource("").getPath();
 		for(String tableName:tableNames){
-			String content = FileUtil.readAsString(new File(filePath+"java/TemplatePO.java"));
-			String mapperContent=FileUtil.readAsString(new File(filePath+"java/TemplateMapper.java"));
-			String mapperXml=FileUtil.readAsString(new File(filePath+"java/TemplateMapper.xml"));
-			String serviceContent=FileUtil.readAsString(new File(filePath+"java/TemplateService.java"));
-			String implContent=FileUtil.readAsString(new File(filePath+"java/TemplateServiceImpl.java"));
-			String controllerContent=FileUtil.readAsString(new File(filePath+"java/TemplateController.java"));
-			String htmlContent=FileUtil.readAsString(new File(filePath+"java/TemplateList.html"));
-			String jsContent=FileUtil.readAsString(new File(filePath+"java/TemplateJavaScript.js"));
+			String content = FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplatePO.java"));
+			String mapperContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateMapper.java"));
+			String mapperXml=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateMapper.xml"));
+			String serviceContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateService.java"));
+			String implContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateServiceImpl.java"));
+			String controllerContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateController.java"));
+			String htmlContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateList.html"));
+			String jsContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateJavaScript.js"));
 
-            String formHtml=FileUtil.readAsString(new File(filePath+"java/TemplateForm.html"));
-            String formJs=FileUtil.readAsString(new File(filePath+"java/TemplateForm.js"));
+            String formHtml=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateForm.html"));
+            String formJs=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateForm.js"));
             List<ColumnData> columnDataList=new ArrayList<>();
             List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time",
                     "version","op_user_id","creator","serial_no","oa_flag","oa_apply_user_id","oa_apply_time","loan_process_number","repayment_process_number",
@@ -83,7 +83,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 					"c.data_type,column_name,c.column_comment,c.table_name,tb.table_comment from information_schema.columns c\n" +
 					"left join information_schema.tables tb on c.table_name=tb.table_name  and c.table_schema=tb.table_schema\n" +
 					"where 1=1\n" +
-					"and c.table_schema ='crm' " +
+					"and c.table_schema ='"+dataBase+"' " +
 					"and tb.table_name in( '"+tableName+"');";
             List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
 			StringBuffer sb=new StringBuffer();

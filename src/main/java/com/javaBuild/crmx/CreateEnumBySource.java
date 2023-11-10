@@ -1,7 +1,6 @@
 package com.javaBuild.crmx;
 
 
-import com.javaBuild.titleMap.CreateTitleData;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.aspectj.util.FileUtil;
@@ -46,7 +45,7 @@ public class CreateEnumBySource implements ApplicationContextAware{
 		FileUtils.deleteDirectory(dir);
 		//创建目录
 		dir.mkdirs();
-		String filePath = getClass().getClassLoader().getResource("").getPath()+"java/TemplateEnum.java";
+		String filePath = getClass().getClassLoader().getResource("").getPath()+ "java/crm/TemplateEnum.java";
 		File file=new File(filePath);
 
 		String content = FileUtil.readAsString(file);
