@@ -1,6 +1,6 @@
 package com.javaBase.array;
 
-import com.redis.RedisUtil;
+import com.redis.MyRedisUtil;
 
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +23,7 @@ public class ArrayToList {
 //        Long dd = RedisUtil.delByStr("dd");
 
 
-        Long aLong = RedisUtil.decrBy(key);
+        Long aLong = MyRedisUtil.decrBy(key);
         System.out.println(aLong);
 
 

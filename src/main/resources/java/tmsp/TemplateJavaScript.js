@@ -41,7 +41,7 @@ var bda_data_str_field = {
 	},
 	{js_name}_updateData : function (buttonId,actionUrl){
 		let selectRows = $("#"+metaData.listTemplate).datagrid('getChecked');
-		if(selectRows.length==0){
+		if(selectRows.length!=1){
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
 			return;
 		}
@@ -67,7 +67,7 @@ var bda_data_str_field = {
 	},
 	{js_name}_deleteData: function (buttonId,actionUrl){
 		let selectRows = $("#"+metaData.listTemplate).datagrid('getChecked');
-		if(selectRows.length==0){
+		if(selectRows.length!=1){
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
 			return;
 		}

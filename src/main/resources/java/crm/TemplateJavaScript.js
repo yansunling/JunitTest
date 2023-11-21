@@ -85,7 +85,7 @@ var bda_data_str_field = {
 
 	{js_name}_deleteData: function (buttonId,actionUrl){
 		let selectRows = $(listTemplate).datagrid('getChecked');
-		if(selectRows.length!=1){
+		if(selectRows.length==0){
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
 			return;
 		}
@@ -99,7 +99,7 @@ var bda_data_str_field = {
 					type: "POST",
 					url: actionUrl + "?actionId=" + buttonId,
 					dataType: "json",
-					data: JSON.stringify({"serial_no":selectRows[0].serial_no}),
+					data: JSON.stringify(selectRows),
 					contentType: "application/json",
 					success: function (data) {
 						$$.closeProcessingDialog();

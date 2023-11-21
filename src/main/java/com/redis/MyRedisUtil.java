@@ -1,19 +1,29 @@
 package com.redis;
 
+import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
+import com.dy.components.ucms.utils.ConfigurationManager;
 import com.yd.common.cache.CIPRedisUtils;
+import com.yd.common.runtime.CIPRuntimeConfigure;
 import com.yd.common.utils.RedisUtils;
+import lombok.SneakyThrows;
+import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import java.io.*;
+import java.util.Collections;
+import java.util.Date;
 import java.util.Properties;
 import java.util.Set;
 
-public class RedisUtil {
+public class MyRedisUtil {
     private static Logger log = Logger.getLogger(RedisUtils.class);
 
     private static JedisPool jedisPool=null;
@@ -21,7 +31,7 @@ public class RedisUtil {
     private static JedisPool tlJedisPool=null;
 
 
-    public RedisUtil() {
+    public MyRedisUtil() {
     }
 
 
@@ -46,6 +56,43 @@ public class RedisUtil {
         return flag;
     }
 
+
+
+    public static String asynGetRedisDayNo(String busiType, int length) {
+        String today = DateUtil.format(new Date(), "yyyyMMdd");
+        String redisKey = "tlwl:tmsp:public:cache:numstart:" + today + ":" + busiType;
+        String value="";
+        Jedis jedis = null;
+        try {
+            jedis = creatDataSource();
+
+            String script = "local val = redis.call('incr', KEYS[1]) return val";
+            // 执行Lua脚本
+            Object result = jedis.eval(script, 1, redisKey);
+            value = result.toString();
+        } catch (Exception e) {
+            log.info("getRedisDayNo error",e);
+        }finally {
+            if(jedis!=null){
+                jedis.close();
+            }
+
+
+        }
+        //数据累加
+        return busiType + today + StringUtils.leftPad(value, length, "0");
+    }
+
+
+
+
+
+
+
+
+
+
+
     public static Long  decrBy(String key) {
 
         Jedis jedis =  creatDataSource();
@@ -54,7 +101,7 @@ public class RedisUtil {
 
 
 
-        jedisPool.returnBrokenResource(jedis);
+        jedisPool.returnResource(jedis);
 
         return aLong;
 
@@ -66,7 +113,8 @@ public class RedisUtil {
 
         Jedis jedis =  creatDataSource();
         String value = jedis.get(key);
-        jedisPool.returnBrokenResource(jedis);
+        jedis.close();
+
 
         return value;
     }
@@ -156,41 +204,31 @@ public class RedisUtil {
 
 
 
-
+    @SneakyThrows
     public static Jedis creatDataSource() {
-        if(jedisPool!=null){
+        if (jedisPool != null) {
             Jedis resource = jedisPool.getResource();
             return resource;
         }
-
-        String dbConfigPath = "/root/properties/";
-        InputStream is = null;
-        File file = new File(dbConfigPath);
-        if (!file.exists()) {
-            is = Thread.currentThread().getContextClassLoader().getResourceAsStream("redis.properties");
-        } else {
-            if (!dbConfigPath.endsWith("/")) {
-                dbConfigPath = dbConfigPath + "/";
-            }
-
-            try {
-                is = new FileInputStream(new File(dbConfigPath + "mq.properties"));
-            } catch (FileNotFoundException var8) {
-                throw new RuntimeException("加载数据库文件失败 : " + var8.getMessage(), var8);
-            }
-        }
-
+        String rootConfigFilePath = "/conf/config.properties";
+        Resource res = new ClassPathResource(rootConfigFilePath);
+        File file = res.getFile();
         Properties prop = new Properties();
+        FileInputStream fis = new FileInputStream(file);
+        prop.load(fis);
+        fis.close();
 
-        try {
-            prop.load((InputStream)is);
-        } catch (IOException var7) {
-            var7.printStackTrace();
-
-        }
         String redisHost = prop.getProperty("redis.host");
         Integer redisPort = Integer.parseInt(prop.getProperty("redis.port"));
         JedisPoolConfig poolConfig = new JedisPoolConfig();
+        poolConfig.setMaxIdle(10);
+        poolConfig.setMaxTotal(1000);
+        poolConfig.setMaxWaitMillis(100000L);
+        poolConfig.setMinEvictableIdleTimeMillis(60000L);
+        poolConfig.setTimeBetweenEvictionRunsMillis(30000L);
+        poolConfig.setTestOnBorrow(true);
+        poolConfig.setTestOnReturn(true);
+        poolConfig.setTestWhileIdle(true);
         jedisPool = new JedisPool(poolConfig, redisHost, redisPort);
         return jedisPool.getResource();
     }

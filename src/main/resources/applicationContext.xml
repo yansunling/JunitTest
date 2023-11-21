@@ -178,7 +178,6 @@
 	</bean>
 	<!-- dao,service,controller,component scan -->
     <context:component-scan base-package="com.yd.utils" />
-    <context:component-scan base-package="com.dy.test" />
  	<context:component-scan base-package="com.yd.query.util" />
  	<context:component-scan base-package="com.http" />
  	<context:component-scan base-package="com.factory" />

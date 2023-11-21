@@ -1,13 +1,13 @@
 package com.module.mq;
 
-import com.redis.RedisUtil;
+import com.redis.MyRedisUtil;
 
 public class MQConstant {
 
 
     public static void isSuccess(String key){
         try {
-            RedisUtil.putWithStringKey(key,"true",-1);
+            MyRedisUtil.putWithStringKey(key,"true",-1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -15,7 +15,7 @@ public class MQConstant {
     public static void isERROR(String key){
 
         try {
-            RedisUtil.putWithStringKey(key,"false",-1);
+            MyRedisUtil.putWithStringKey(key,"false",-1);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -25,7 +25,7 @@ public class MQConstant {
     public static String getKey(String key){
 
         try {
-            return RedisUtil.getString(key);
+            return MyRedisUtil.getString(key);
         } catch (Exception e) {
             e.printStackTrace();
         }

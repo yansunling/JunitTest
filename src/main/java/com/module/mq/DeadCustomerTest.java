@@ -1,7 +1,7 @@
 package com.module.mq;
 
 
-import com.redis.RedisUtil;
+import com.redis.MyRedisUtil;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -38,9 +38,9 @@ public class DeadCustomerTest implements ApplicationContextAware {
 
 
         String key="dy:task:mq:quence:TASK_INPUT_INFO_TASK";
-        RedisUtil.putWithStringKey(key,"test",-1);
+        MyRedisUtil.putWithStringKey(key,"test",-1);
 
-        String value = RedisUtil.getString(key);
+        String value = MyRedisUtil.getString(key);
         System.out.println(value);
 
         //2 获取Connection

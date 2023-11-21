@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSON;
 import com.excel.ExcelsUtil;
 import com.excel.XLSXCovertCSVReader;
 import com.excel.data.CheckData;
+import com.http.GetDownFileUtil;
 import com.util.ImgUtil;
 import com.yd.utils.common.StringUtils;
 import lombok.Data;
@@ -30,13 +31,15 @@ public class ExecelReadJSON {
         for(int i=0;i<records.size();i++){
             CheckImgData item = records.get(i);
             Map<String, Object> objectMap = BeanUtil.beanToMap(item);
-            String img = item.getMediaids();
+            String img = item.getPhoto_url();
             if(StringUtils.isNotBlank(img)){
-                String content = img.split(",")[1];
-                String type = img.split(";")[0].split("/")[1];
+                String type = img.split("\\.")[1];
+
                 String picPath=dir+"/"+item.getEmp_name()+item.getEmp_id()+"_"+i+"."+type;
-                ImgUtil.Base64ToImage(content,picPath);
-                objectMap.put("mediaids",new File(picPath));
+                GetDownFileUtil.downFile(picPath,img);
+
+
+//                objectMap.put("mediaids",new File(picPath));
             }
             listData.add(objectMap);
         }
@@ -53,12 +56,12 @@ public class ExecelReadJSON {
     static class CheckImgData{
         private String emp_id;
         private String emp_name;
-        private String mediaids;
+        private String photo_url;
         static Map<String,String> title=new LinkedHashMap<>();
         static {
             title.put("emp_id","用户工号");
             title.put("emp_name","用户名称");
-            title.put("mediaids","用户照片");
+            title.put("photo_url","用户照片");
         }
 
     }

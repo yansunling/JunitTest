@@ -11,7 +11,7 @@ public class RedisDelTest {
 
     public static void main(String[] args) {
         String pattern="dy:query:public:cache:columns:*";
-        Set<String> keys = RedisUtil.patternKey(pattern);
+        Set<String> keys = MyRedisUtil.patternKey(pattern);
         for(String key:keys){
             System.out.println(key);
             String newKey = key.replace("dy:query:public:cache:columns:", "");
@@ -24,9 +24,9 @@ public class RedisDelTest {
             }
             String tlUserKey = key.replace(userId, newUserId);
             System.out.println(tlUserKey);
-            String value=RedisUtil.getString(key);
+            String value= MyRedisUtil.getString(key);
             System.out.println(value);
-            RedisUtil.tlPutWithStringKey(tlUserKey,value,-1);
+            MyRedisUtil.tlPutWithStringKey(tlUserKey,value,-1);
         }
     }
 
