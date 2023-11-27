@@ -43,7 +43,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_base_customer_region_detail");
+        List<String> tableNames = Arrays.asList("crm_credit_black_record");
 		String prexName="Crmx";
 		String dataBase="crm";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
@@ -128,7 +128,12 @@ public class CreateJavaFile implements ApplicationContextAware{
 			mapperContent=mapperContent.replaceAll("\\{class_name\\}",className).replaceAll("\\{class_mapper\\}",classMapper);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +classMapper+ ".java"),mapperContent);
 			//生成xml
+			String[] splits = tableName.split("_");
+			String packageName=splits[1];
+
+
 			mapperXml=mapperXml.replaceAll("\\{class_mapper\\}",classMapper);
+			mapperXml=mapperXml.replaceAll("\\{packageName\\}",packageName);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +classMapper+ ".xml"),mapperXml);
 
 
