@@ -52,7 +52,7 @@ public class DownQueryFile {
             System.out.println(response.getStatusLine());
             Header firstHeader = response.getFirstHeader("Content-Disposition");
             String fileName = firstHeader.getValue().replace("attachment;fileName=","");
-            fileName= new String(fileName.getBytes("iso8859-1"),"utf-8");
+            fileName= new String(fileName.getBytes("iso-8859-1"),"utf-8");
             HttpEntity resEntity = response.getEntity();
             if (resEntity != null) {
                 InputStream is = resEntity.getContent();
