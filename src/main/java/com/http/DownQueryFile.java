@@ -29,7 +29,7 @@ public class DownQueryFile {
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
 
-        String cookie="JSESSIONID=B4136998EF5F6D7217A262607FF1C038; _jfinal_captcha=75b3a47b7d6d4db09d60cec86ed6e3ce; oripassword=13445AC455E8EDB1996BFB2CA0C78570; auth_sessionid=e87c7ddc64ec487998380dabe45ce3d3; auth_sso_sessionid=e87c7ddc64ec487998380dabe45ce3d3; cip_sso_token=6f560839-f09a-4738-9b2f-65ed207cd32e-1701134529977; orgid=25020203; net_org_id=250108010401";
+        String cookie=HttpAuthLoginUtil.getAuthCookie();
 
         String host="https://tlwl.uat.tuolong56.com";
         HttpPost httppost = new HttpPost(host+"/query/actions/query_new_search/exportData/V1.0.0/query_new_register_list.do?loadColumnType=all");
