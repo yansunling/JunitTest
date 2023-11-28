@@ -2,6 +2,7 @@ package com.encryption;
 
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.bouncycastle.util.encoders.Hex;
 
 
 import java.security.MessageDigest;
@@ -13,7 +14,16 @@ public class Md5Base64Util {
 
 	public static void main(String[] args) throws Exception{
 
-		System.out.println(getMD5("0834"));
+		String md5 = getMD5("0834");
+		System.out.println("md5:"+md5);
+		String md5Base64 = getMd5Base64("0834");
+		System.out.println("md5Base64:"+md5Base64);
+		byte[] decode = Base64.getDecoder().decode(md5Base64);
+
+		String hexString = Hex.toHexString(decode);
+		System.out.println("hexString:"+hexString);
+
+
 	}
 
 	public static String getMD5(String input) {
@@ -44,7 +54,7 @@ public class Md5Base64Util {
 
 
 	@SneakyThrows
-	public static String md5Base64(String data){
+	public static String getMd5Base64(String data){
 		// 创建 MessageDigest 实例，选择 MD5 加密算法
 		MessageDigest md = MessageDigest.getInstance("MD5");
 		// 对数据进行 MD5 加密

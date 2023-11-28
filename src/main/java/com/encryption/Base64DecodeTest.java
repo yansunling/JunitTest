@@ -10,7 +10,7 @@ public class Base64DecodeTest {
         String base64="eyJhbGdvcml0aG0iOiJIUzI1NiIsInR5cGUiOiJKV1QifQ==";
         byte[] decode = Base64.decode(base64);
 
-        System.out.println(new String(decode));
+        System.out.println("decodeData:"+new String(decode));
         //base64编码
         String data = new String(decode);
         byte[] encode = Base64.encode(data.getBytes());
