@@ -14,7 +14,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
 
-public class DownFile {
+public class DownFsmFile {
     public static void main(String[] args) throws Exception{
 
         CloseableHttpClient httpclient = HttpClients.createDefault();
@@ -35,7 +35,7 @@ public class DownFile {
             HttpEntity resEntity = response.getEntity();
             if (resEntity != null) {
                 InputStream is = resEntity.getContent();
-                File file = new File("C:/Users/admin/Desktop/"+fileName);
+                File file = new File("C:/Users/yansunling/Desktop/"+fileName);
                 FileOutputStream fos = new FileOutputStream(file);
                 byte[] buffer = new byte[4096];
                 int len = -1;

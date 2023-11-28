@@ -13,7 +13,7 @@ import org.apache.http.util.EntityUtils;
 import java.util.HashMap;
 import java.util.Map;
 
-public class HttpClientExample {
+public class HttpPostExample {
     public static void main(String[] args) throws Exception{
 
         String url="https://tlwl.uat.tuolong56.com/asset-api/asset/comp_asset_base_info/deleteData.do";
