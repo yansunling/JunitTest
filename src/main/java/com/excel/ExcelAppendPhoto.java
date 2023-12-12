@@ -1,6 +1,7 @@
 package com.excel;
 
 import com.cmd.CmdUtil;
+import com.http.DownFsmFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,6 +14,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -38,14 +41,29 @@ public class ExcelAppendPhoto implements ApplicationContextAware {
     public  void test()throws Exception{
 
         CmdUtil.closeWps();
-        String sql="select * from crm.crm_base_customer_cert_img where creator='T1113' and date_format(create_time,'%Y-%m-%d %H:%i')='2022-05-27 10:27' and file_name not in('临欠通告模板.pptx','临欠通告.pdf' )\n" +
-                " limit 10;";
-        List<Map<String, Object>> listData = jdbcTemplate.queryForList(sql);
-        List<String> columns = Arrays.asList("serial_no", "customer_id", "file_seq_no");
-        String path = ExcelAppendPhoto.class.getClassLoader().getResource("").getPath();
+        String sql="select * from crm.crm_base_customer limit 100000" ;
+
+//        List<Map<String, Object>> listData = jdbcTemplate.queryForList(sql);
+//        System.out.println(listData.size());
+//        List<String> columns = Arrays.asList("customer_id","creator");
+       /* String path = ExcelAppendPhoto.class.getClassLoader().getResource("").getPath();
         String filePath=path+"excel";
         File file = new File(filePath+"/cert.xlsx");
-        ExcelAppend.appendFile(file,listData,columns);
+        ExcelAppendUtil.appendFile(file,listData,columns,1);*/
+
+        String serialNo="crm_f930f0b1-5da2-4e7f-a01a-dca4cd3ff286_1";
+        String host="http://localhost";
+        File templateFile = DownFsmFileUtil.downFile(host, serialNo);
+
+//        ExcelAppendUtil.appendExcelData(templateFile,listData,columns,2);
+
+        //生成文件地址
+        String newFilePath= "C:/Users/yansunling/Desktop/append/text.xlsx";
+        FileOutputStream out = new FileOutputStream(newFilePath);
+        ExcelAppendUtil.queryForStream(jdbcTemplate,sql,out,new ArrayList<>(),templateFile,2);
+
+
+
 
     }
 

@@ -1,5 +1,6 @@
 package com.http;
 
+import lombok.SneakyThrows;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
@@ -14,19 +15,23 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
 
-public class DownFsmFile {
-    public static void main(String[] args) throws Exception{
+public class DownFsmFileUtil {
 
-        CloseableHttpClient httpclient = HttpClients.createDefault();
+    public static void main(String[] args) {
         String serialNo="portal_tms_85340605-d4c1-4de2-80ff-e3c6f51c5433_2";
         String host="http://localhost";
-        host="https://kp.tuolong56.com";
-        HttpPost httppost = new HttpPost(host+"/fsm/api/fsm_api/download.do?file_app_id=crm&file_serial_no="+serialNo);
+        downFile(host,serialNo);
+    }
 
+
+    @SneakyThrows
+    public static File downFile(String host,String serialNo) {
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        HttpPost httppost = new HttpPost(host+"/fsm/api/fsm_api/download.do?file_app_id=crm&file_serial_no="+serialNo);
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(200000).setSocketTimeout(200000).build();
         httppost.setConfig(requestConfig);
-
         CloseableHttpResponse response = httpclient.execute(httppost);
+        File file=null;
         try {
             System.out.println(response.getStatusLine());
             Header firstHeader = response.getFirstHeader("Content-Disposition");
@@ -35,7 +40,7 @@ public class DownFsmFile {
             HttpEntity resEntity = response.getEntity();
             if (resEntity != null) {
                 InputStream is = resEntity.getContent();
-                File file = new File("C:/Users/yansunling/Desktop/"+fileName);
+                file = new File("C:/Users/yansunling/Desktop/"+fileName);
                 FileOutputStream fos = new FileOutputStream(file);
                 byte[] buffer = new byte[4096];
                 int len = -1;
@@ -49,6 +54,6 @@ public class DownFsmFile {
         } finally {
             response.close();
         }
-
+        return file;
     }
 }

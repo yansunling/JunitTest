@@ -128,6 +128,7 @@ public class WechatUtils {
         String url=format.format(args);
 
         JSONObject object=HttpUtils.httpRequest(url,"POST",JSON.toJSONString(wechat));
+        logger.info("JSONObject:"+JSONObject.toJSONString(object));
         MMS_wechat_wea_result result = JSONObject.toJavaObject(object, MMS_wechat_wea_result.class);
         logger.debug("企业微信发送结果：{}", result);
         return result;
