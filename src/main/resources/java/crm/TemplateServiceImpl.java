@@ -72,19 +72,21 @@ public class {class_impl} implements {class_service} {
     }
 
     @Transactional
-    public void deleteData({class_name} param) {
-        //获得变更前数据
-        {class_name} before = dataMapper.selectById(param.getSerial_no());
-        //删除数据
-        dataMapper.deleteById(param.getSerial_no());
-        //记录变更日志
-        CRMX_share_data_logConfig config = CRMX_share_data_logConfig.build()
-                .setOperateType(CRMX_share_data_logService.C_OPERATETYPE_DELETE)
-                .setBusi_table_name("{table_name}")
-                .setBusi_doc_id(param.getSerial_no())
-                .setLog_pre_content(JSONObject.toJSONString(before))
-                .setLog_content("");
-        logService.addLog(config);
+    public void deleteData(List<{class_name}> params) {
+        for({class_name} param:params){
+            //获得变更前数据
+            {class_name} before = dataMapper.selectById(param.getSerial_no());
+            //删除数据
+            dataMapper.deleteById(param.getSerial_no());
+            //记录变更日志
+            CRMX_share_data_logConfig config = CRMX_share_data_logConfig.build()
+            .setOperateType(CRMX_share_data_logService.C_OPERATETYPE_DELETE)
+            .setBusi_table_name("{table_name}")
+            .setBusi_doc_id(param.getSerial_no())
+            .setLog_pre_content(JSONObject.toJSONString(before))
+            .setLog_content("");
+            logService.addLog(config);
+        }
     }
     @Override
     @Transactional

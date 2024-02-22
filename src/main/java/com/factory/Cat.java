@@ -1,33 +1,22 @@
 package com.factory;
 
+import com.factory.data.CatData;
 import com.word.dataSource.vo.CompAssetBaseInfoChangeVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class Cat implements AnimalFactory {
+@CIPHandler(group = "tmsp",
+        handlerType = "cat")
+public class Cat extends AnimalFactory<CatData> {
 
-    @Autowired
-    private Dog dog;
+
 
     @Override
-    public String food() {
+    public String food(CatData data) {
         return "吃鱼";
     }
 
-    @Override
-    public String animal() {
-        return "猫";
-    }
 
-    public void catEat(CompAssetBaseInfoChangeVO changeVO){
-        System.out.println(changeVO.getAsset_company());
-        dog.animal();
-    }
 
-    public void eat(String changeVO){
-        System.out.println(changeVO);
-        dog.animal();
-    }
 
 }

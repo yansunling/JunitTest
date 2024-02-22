@@ -27,9 +27,9 @@ public class MsgService {
 
 //    @Scheduled(initialDelay = 0, fixedDelay = 3*1000)
     public void run() {
-        log.info("start task list_res size:"+list_res.size());
         this.removeErrorResponse();
         Iterator<HttpServletResponse> it = list_res.iterator();
+        log.info("size:"+list_res.size());
         Random rand =new Random();
         int num=rand.nextInt(100);
         while(it.hasNext())
@@ -41,6 +41,7 @@ public class MsgService {
                 {
                     continue;
                 }
+                log.info("data:msg: hello, the random num is: " + num + "\n\n");
                 pw.write("data:msg: hello, the random num is: " + num + "\n\n");
                 pw.flush();
             } catch (Exception e) {
@@ -49,24 +50,22 @@ public class MsgService {
         }
     }
 
-    public synchronized void removeErrorResponse(){
+    public synchronized void removeErrorResponse() {
         Iterator<HttpServletResponse> it = list_res.iterator();
-        while(it.hasNext())
-        {
+        while (it.hasNext()) {
             PrintWriter pw = null;
             try {
                 pw = it.next().getWriter();
-                if(pw == null)
-                {
+                if (pw == null) {
                     it.remove();
                     continue;
-                }
-                else if(pw.checkError()){
+                } else if (pw.checkError()) {
                     pw.close();
                     it.remove();
                     continue;
                 }
             } catch (Exception e) {
+                e.printStackTrace();
                 it.remove();
             }
         }

@@ -40,7 +40,8 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("tmsp_base_arrive_print_rule");
+        List<String> tableNames = Arrays.asList("tmsp_wx_group_config");
+        String sysId="tmsp";
 		String htmlGroup="ownCar";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
@@ -84,7 +85,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 					"c.data_type,column_name,c.column_comment,c.table_name,tb.table_comment from information_schema.columns c\n" +
 					"left join information_schema.tables tb on c.table_name=tb.table_name  and c.table_schema=tb.table_schema\n" +
 					"where 1=1\n" +
-					"and c.table_schema ='tmsp' " +
+					"and c.table_schema ='"+sysId+"' " +
 					"and tb.table_name in( '"+tableName+"');";
             List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
 			StringBuffer sb=new StringBuffer();
@@ -121,7 +122,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 					"c.data_type,column_name,c.column_comment,c.table_name,tb.table_comment from information_schema.columns c\n" +
 					"left join information_schema.tables tb on c.table_name=tb.table_name  and c.table_schema=tb.table_schema\n" +
 					"where 1=1\n" +
-					"and c.table_schema ='tmsp' and tb.table_name in( '"+tableName+"');";
+					"and c.table_schema ='"+sysId+"' and tb.table_name in( '"+tableName+"');";
 
 
 			mapList = jdbcTemplate.queryForList(dataSql);

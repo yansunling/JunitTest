@@ -1,8 +1,12 @@
 package com.factory.test;
 
 
+import com.factory.AnimalContext;
+import com.factory.AnimalFactory;
 import com.factory.Cat;
 import com.factory.MyFactoryService;
+import com.factory.data.CatData;
+import com.factory.data.DogData;
 import com.word.dataSource.vo.CompAssetBaseInfoChangeVO;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,10 +28,12 @@ public class MyFactoryServiceTest implements ApplicationContextAware {
         ac=applicationContext;
 
     }
+//    @Autowired
+//    private MyFactoryService myFactoryService;
     @Autowired
-    private MyFactoryService myFactoryService;
+    private AnimalFactory<CatData> factory;
     @Autowired
-    private Cat cat;
+    private AnimalContext<DogData> context;
 
     @Test
     public  void test() throws Exception{
@@ -36,9 +42,11 @@ public class MyFactoryServiceTest implements ApplicationContextAware {
 //        //cat.catEat(changeVO);
 //        cat.eat("22");
 
-        String type = myFactoryService.factoryMode("cat");
-        System.out.println(type);
+//        String type = myFactoryService.factoryMode("cat");
+//        System.out.println(type);
 
+//        System.out.println(factory.animal(new CatData()));
+        System.out.println(context.should(new DogData()));
     }
 
 

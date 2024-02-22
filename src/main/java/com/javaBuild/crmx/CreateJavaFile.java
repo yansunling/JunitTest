@@ -43,7 +43,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_credit_black_record");
+        List<String> tableNames = Arrays.asList("crm_cargo_logistics_limit");
 		String prexName="Crmx";
 		String dataBase="crm";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";

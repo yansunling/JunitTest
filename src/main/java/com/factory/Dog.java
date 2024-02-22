@@ -1,18 +1,17 @@
 package com.factory;
 
+import com.factory.data.DogData;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-@Component("dog")
-public class Dog implements AnimalFactory {
+@CIPHandler(group = "tmsp",
+        handlerType = "dog")
+public class Dog extends AnimalFactory<DogData> {
 
     @Override
-    public String food() {
+    public String food(DogData dogData) {
         return "吃骨头";
     }
 
-    @Override
-    public String animal() {
-        return "狗";
-    }
+
 }

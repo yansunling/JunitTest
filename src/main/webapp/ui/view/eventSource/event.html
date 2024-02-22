@@ -17,6 +17,7 @@
         }
         eventSource.addEventListener('error', function (event) {
             console.log("错误：" + event);
+            // eventSource.close();
         });
         eventSource.addEventListener('open', function (event) {
             console.log("建立连接：" + event);

@@ -31,7 +31,7 @@ public class {class_controller} {
         return CrmxCommonUtil.success();
     }
     @RequestMapping(value="/deleteData")
-    public CIPResponseMsg deleteData(@RequestBody {class_name} param){
+    public CIPResponseMsg deleteData(@RequestBody List<{class_name}> param){
         log.info("{table_name} deleteData param:"+ JSON.toJSONString(param));
         dataService.deleteData(param);
         return CrmxCommonUtil.success();

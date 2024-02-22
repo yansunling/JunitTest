@@ -2,13 +2,13 @@ package com.javaBuild.constant;
 
 public class CreateMdmEnum {
     public static void main(String[] args) {
-        String name="修改基本信息、修改地址、修改联系人、删除地址、删除联系人、新增地址、新增联系人";
+        String name=">5000、5000>X>=4000、4000>X>=3000、3000>X>=2000、2000>X>=1000、1000>X>=500、500>X>=300、300>X>=100、100>X>=50、50>X>=30、30>X>=10、10>X>=5、5>X>=3、3>X>=1、1>X";
         String[] list = name.split("、");
         StringBuffer sb=new StringBuffer();
         StringBuffer sql=new StringBuffer();
         StringBuffer cipSql=new StringBuffer();
 
-        String enumStart="UPDATE_TYPE";
+        String enumStart="weight_range";
         String domainId=enumStart.toLowerCase();
         if(!enumStart.endsWith("_")){
             enumStart+="_";
@@ -27,5 +27,24 @@ public class CreateMdmEnum {
         System.out.println(sb.toString());
         System.out.println(sql.toString());
         System.out.println(cipSql.toString());
+
+
+
+        for(int i=1;i<16;i++){
+            System.out.println("@CJ_column(name = \"货物重量"+i+"\")\n" +
+                    "    private Double weight_total"+i+";\n" +
+                    "\n" +
+                    "\n" +
+                    "\n" +
+                    "\n" +
+                    "    @CJ_column(name = \"客户数量"+i+"\")\n" +
+                    "    private Integer cust_num"+i+";\n\n");
+
+        }
+
+
+
+
+
     }
 }
