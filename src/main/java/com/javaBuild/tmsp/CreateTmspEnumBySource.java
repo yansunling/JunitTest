@@ -1,6 +1,7 @@
 package com.javaBuild.tmsp;
 
 
+import com.yd.utils.common.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.aspectj.util.FileUtil;
@@ -15,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -38,7 +40,7 @@ public class CreateTmspEnumBySource implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> domainList = Arrays.asList("quality_operate_type","quality_approval_status","penalty_reward");
+        List<String> domainList = Arrays.asList("emission_standard");
         String path="C:\\Users\\yansunling\\Desktop\\enum\\";
 		File dir=new File(path);
 
@@ -54,16 +56,21 @@ public class CreateTmspEnumBySource implements ApplicationContextAware{
             String sql="select code_type,code_name from mdm.mdm_ddic_ddic_codes where sys_id='tmsp' and  domain_id in('"+item+"') order by code_order";
             List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
 			StringBuffer sb=new StringBuffer();
+
+			List<String> dictList=new ArrayList<>();
 			mapList.forEach(map->{
 				sb.append("    "+item.toUpperCase()).append("_").append(String.valueOf(map.get("code_type")).toUpperCase())
 						.append("(\""+map.get("code_type")+"\",\""+map.get("code_name")+"\"),\n");
+
+				dictList.add("{code:\""+map.get("code_type")+"\",name:\""+map.get("code_name")+"\"}");
+
 			});
 			String className="TMSP_"+item.toUpperCase();
 			String newContent=content.replaceAll("\\{content\\}",sb.toString()).replaceAll("CRMX_COMMON_STATUS",className);
-
-
-
 			FileUtil.writeAsString(new File(path +className+ ".java"),newContent);
+
+			System.out.println(StringUtils.join(",",dictList.toArray()));
+
         }
 
     }

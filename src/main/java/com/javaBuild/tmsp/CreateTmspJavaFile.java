@@ -4,6 +4,7 @@ package com.javaBuild.tmsp;
 import cn.hutool.core.collection.ListUtil;
 import com.google.common.collect.Lists;
 import com.javaBuild.po.ButtonType;
+import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -40,7 +41,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("tmsp_wx_group_config");
+        List<String> tableNames = Arrays.asList("tmsp_own_forklift_info");
         String sysId="tmsp";
 		String htmlGroup="ownCar";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
@@ -81,7 +82,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 					"if(c.column_name in('operator','update_time','op_user_id','update_user_id'),'    @TableField(fill = FieldFill.INSERT_UPDATE)\\n',''),\n" +
 					"if((c.data_type='date' or c.data_type='datetime' and c.column_name not in('create_time','update_time','oa_apply_time')),'    @JsonFormat(pattern = \"yyyy-MM-dd\",timezone = \"GMT+8\")\\n',''),\n" +
 					"'    @CJ_column(name = \"',c.column_comment,'\")\\n',\n" +
-					"'    private ',case when c.data_type in('Integer','int') then 'Integer ' when c.data_type in('bigint') then 'Money ' when c.data_type='decimal ' then 'Double ' when c.data_type='date' or c.data_type='datetime'    then 'Timestamp ' else 'String ' end,c.column_name,';\\n\\n') as filed,\n" +
+					"'    private ',case when c.data_type in('Integer','int') then 'Integer ' when left(c.column_comment,2)='是否' then 'IS_NOT ' when c.data_type in('bigint') then 'Money ' when left(c.column_name,2)='是否' then 'IS_NOT ' when c.data_type='decimal ' then 'Double ' when c.data_type='date' or c.data_type='datetime'    then 'Timestamp ' else 'String ' end,c.column_name,';\\n\\n') as filed,\n" +
 					"c.data_type,column_name,c.column_comment,c.table_name,tb.table_comment from information_schema.columns c\n" +
 					"left join information_schema.tables tb on c.table_name=tb.table_name  and c.table_schema=tb.table_schema\n" +
 					"where 1=1\n" +
@@ -117,7 +118,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 					" if(c.data_type in('bigint'),concat('    @MyPositiveMoney(message = \"',c.column_comment,'为正数的数字\")\\n'),\n" +
 					" if(c.column_name in('operator','serial_no','update_time','op_user_id','update_user_id','create_user_id','create_time'),'','    @MyNotEmpty\\n')),\n" +
 					"'    @CJ_column(name = \"',c.column_comment,'\")\\n',\n" +
-					"'    private ',case when c.data_type in('Integer','int') then 'Integer ' when c.data_type in('bigint') then 'Money ' when c.data_type='decimal ' then 'Double ' when c.data_type='date' or c.data_type='datetime'    then 'Timestamp ' else 'String ' end,c.column_name,';\\n\\n') as filed,\n" +
+					"'    private ',case when c.data_type in('Integer','int') then 'Integer ' when c.data_type in('bigint') then 'Money ' when left(c.column_comment,2)='是否' then 'IS_NOT ' when c.data_type='decimal ' then 'Double ' when c.data_type='date' or c.data_type='datetime'    then 'Timestamp ' else 'String ' end,c.column_name,';\\n\\n') as filed,\n" +
 					"CONCAT('titleMap.put(\"',c.column_name,'\",\"',c.column_comment,'\");') as title,\n" +
 					"c.data_type,column_name,c.column_comment,c.table_name,tb.table_comment from information_schema.columns c\n" +
 					"left join information_schema.tables tb on c.table_name=tb.table_name  and c.table_schema=tb.table_schema\n" +
@@ -126,6 +127,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 
 
 			mapList = jdbcTemplate.queryForList(dataSql);
+            System.out.println(dataSql);
 			StringBuffer dataSb=new StringBuffer();
 			StringBuffer dataTitle=new StringBuffer();
 			mapList.forEach(map->{
@@ -229,12 +231,33 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 								"\t\t\t\t\t<input type='text' id='"+td.getColumnId()+"' name='"+td.getColumnId()+"'   class=\"easyui-datebox\"  data-options='required:true'  style='height:30px;width:175px' />\n" +
 								"\t\t\t\t</td>\n");
 					} else{
-						tr.append("\t\t\t\t<td align='right' width=13%>\n" +
-								"\t\t\t\t\t<label>"+td.getColumnName()+":</label>\n" +
-								"\t\t\t\t</td>\n" +
-								"\t\t\t\t<td width=20%>\n" +
-								"\t\t\t\t\t<input type='text' id='"+td.getColumnId()+"' name='"+td.getColumnId()+"' class=\"easyui-validatebox\"  data-options='required:true'  style='height:26px;width:168px' />\n" +
-								"\t\t\t\t</td>\n");
+						String domainId=td.getColumnId();
+						if(td.getColumnName().startsWith("是否")){
+							domainId="is_not";
+						}
+						String dictSql="select code_type,code_name from mdm.mdm_ddic_ddic_codes where sys_id='tmsp' and  domain_id in('"+domainId+"') order by code_order";
+						List<Map<String, Object>> dictResult = jdbcTemplate.queryForList(dictSql);
+						if(CollectionUtil.isNotEmpty(dictResult)){
+							List<String> dictList=new ArrayList<>();
+							dictResult.forEach(map->{
+								dictList.add("{code:\""+map.get("code_type")+"\",name:\""+map.get("code_name")+"\"}");
+
+							});
+							tr.append("\t\t\t\t<td align='right' width=13%>\n" +
+									"\t\t\t\t\t<label>"+td.getColumnName()+":</label>\n" +
+									"\t\t\t\t</td>\n" +
+									"\t\t\t\t<td width=20%>\n" +
+									"\t\t\t\t\t<input type='text' id='"+td.getColumnId()+"' name='"+td.getColumnId()+"' class=\"easyui-combobox\"  data-options='required:false,valueField:\"code\",textField:\"name\",data:["+StringUtils.join(",",dictList.toArray())+"]'  style='height:30px;width:175px' />\n" +
+									"\t\t\t\t</td>\n");
+
+						}else{
+							tr.append("\t\t\t\t<td align='right' width=13%>\n" +
+									"\t\t\t\t\t<label>"+td.getColumnName()+":</label>\n" +
+									"\t\t\t\t</td>\n" +
+									"\t\t\t\t<td width=20%>\n" +
+									"\t\t\t\t\t<input type='text' id='"+td.getColumnId()+"' name='"+td.getColumnId()+"' class=\"easyui-validatebox\"  data-options='required:true'  style='height:26px;width:168px' />\n" +
+									"\t\t\t\t</td>\n");
+						}
 					}
 				});
 				tr.append("\t\t\t</tr>\n");
