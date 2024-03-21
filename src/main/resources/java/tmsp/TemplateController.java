@@ -52,32 +52,6 @@ public class {class_controller} {
         dataService.deleteData(param);
         return OilCardUtil.success();
     }
-    @RequestMapping(value="/repayData")
-    public CIPResponseMsg repayData(@RequestBody TmspOwnOaRepayData param){
-        log.info("repayData param:"+ JSON.toJSONString(param));
-        dataService.repayData(param);
-        return OilCardUtil.success();
-    }
-    @RequestMapping(value="/enableData")
-    public CIPResponseMsg enableData(@RequestBody {class_name} param){
-        log.info("enableData param:"+ JSON.toJSONString(param));
-        dataService.updateStatus(param);
-        return OilCardUtil.success();
-     }
-    @RequestMapping(value="/disableData")
-    public CIPResponseMsg disableData(@RequestBody {class_name} param){
-        log.info("disableData param:"+ JSON.toJSONString(param));
-        dataService.updateStatus(param);
-        return OilCardUtil.success();
-    }
-    @RequestMapping(value = "/payData")
-    public CIPResponseMsg payData(@RequestBody TmspOwnOaCommonData param){
-        log.info("applyOa param:"+JSON.toJSONString(param));
-        dataService.payData(param);
-        return OilCardUtil.success();
-      }
-
-
     @RequestMapping(value = "/importData")
     public CIPResponseMsg importData(HttpServletRequest request,HttpServletResponse response){
         String templateName=request.getParameter("templateName");//下载模板的名字
