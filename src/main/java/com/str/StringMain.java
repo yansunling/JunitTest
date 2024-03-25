@@ -1,21 +1,36 @@
 package com.str;
 
+import com.google.common.base.Strings;
+
+import java.text.DecimalFormat;
+
 public class StringMain {
     public static void main(String[] args) {
         String errorMsg="%s带饭";
         errorMsg=String.format(errorMsg,"测试");
         System.out.println(errorMsg);
 
-        String sql = "(SELECT\n" +
-                "\tmain.*,\n" +
-                "\tcount( plus2user.user_id ) AS user_count \n" +
-                "FROM\n" +
-                "\tauth.auth_resource_role_plus main\n" +
-                "\tLEFT JOIN auth.auth_resource_role_plus2user plus2user ON main.company_id = plus2user.company_id \n" +
-                "\tAND main.name_space_id = plus2user.name_space_id \n" +
-                "\tAND main.role_plus_id = plus2user.role_plus_id\n" +
-                "\tGROUP BY main.company_id, main.name_space_id, main.role_plus_id)";
-        System.out.println(sql);
+//        Double t=2.3;
+        String t="3";
+        System.out.println(String.format("%.2f",10.0));
+
+        String message = String.format("Value: %d, Float: %.2f, Hex: %x, Bool: %b, Char: %c",
+                5,
+                12222222223.456,
+                255,
+                true,
+                'A');
+        System.out.println(message);
+
+
+        double number = 123.001789;
+
+        // 创建 DecimalFormat 对象，指定格式模式
+        DecimalFormat decimalFormat = new DecimalFormat("#.00");
+        String formattedNumber = decimalFormat.format(number);
+
+        System.out.println("格式化后的数字: " + formattedNumber);
+
 
 
     }
