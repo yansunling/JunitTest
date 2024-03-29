@@ -3,11 +3,9 @@ package com.factory.test;
 
 import com.factory.AnimalContext;
 import com.factory.AnimalFactory;
-import com.factory.Cat;
-import com.factory.MyFactoryService;
 import com.factory.data.CatData;
 import com.factory.data.DogData;
-import com.word.dataSource.vo.CompAssetBaseInfoChangeVO;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.BeansException;
@@ -20,6 +18,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:applicationContext.xml"})
 public class MyFactoryServiceTest implements ApplicationContextAware {
+
+    @Autowired
+    private SqlSessionFactory sqlSessionFactory;
 
     ApplicationContext ac;
     @Override
