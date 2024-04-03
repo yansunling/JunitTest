@@ -302,11 +302,8 @@ update tmm.tmm_report_trans_time set unload_org8 = '<新机构ID>' where unload_
 
 
 -- CRM
-update crm.crm_base_customer set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 update crm.crm_base_customer set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.cip_admin_hr_org set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-update crm.crm_base_file set upload_org_id = '<新机构ID>' where upload_org_id in('<老机构ID>');
-update crm.crm_base_storefront_img set upload_org_id = '<新机构ID>' where upload_org_id in('<老机构ID>');
 update crm.crm_compete_similar_analysis set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_contract_attach set upload_org_id = '<新机构ID>' where upload_org_id in('<老机构ID>');
 update crm.crm_org_dept_user_rel set org_id = '<新机构ID>' where org_id in('<老机构ID>');
@@ -317,11 +314,8 @@ update crm.crm_org_salesman set org_id = '<新机构ID>' where org_id in('<老�
 update crm.crm_report_goods set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID>');
 update crm.crm_report_goods_detailed set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID>');
 update crm.crm_report_month_extension set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
-update crm.crm_report_resource_log set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-update crm.crm_report_target set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 update crm.crm_sale_pipeline set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_sms_record set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-update crm.crm_base_file set upload_org_id = '<新机构ID>' where upload_org_id in('<老机构ID>');
 update crm.crm_org_group set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_org_position set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_org_salesman set org_id = '<新机构ID>' where org_id in('<老机构ID>');
@@ -332,13 +326,16 @@ update crm.crm_report_resource_log set org_id = '<新机构ID>' where org_id in(
 update crm.crm_report_target set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 update crm.crm_sale_pipeline set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_sms_record set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-
-update crm.crm_base_customer_ton_price_region set business_region_id = '<新机构ID>' where business_region_id in('<老机构ID>');
+update crm.crm_base_grade set resp_busi_region='<新机构大区>' where resp_busi_region in(select business_region_id from hcm.hcm_org_relation where org_id in('<老机构ID>'));
 update crm.crm_base_customer_delivery_config set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_base_customer_update_apply set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
 update crm.crm_base_cust_visiting set visit_org_id = '<新机构ID>' where visit_org_id in('<老机构ID>');
 update crm.crm_base_customer set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID>');
 update crm.crm_base_cust_goods_name_limit set org_id = '<新机构ID>',business_region_id = '<新机构大区ID>' where org_id in('<老机构ID>');
+update crm.crm_base_customer_spanned_area set business_region_id='<新机构大区>' where business_region_id in(select business_region_id from hcm.hcm_org_relation where org_id in('<老机构ID>'));
+
+
+
 -- 主键特殊处理
 INSERT IGNORE INTO crm.crm_org_dept
 SELECT
