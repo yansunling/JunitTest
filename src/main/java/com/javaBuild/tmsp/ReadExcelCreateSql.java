@@ -6,6 +6,7 @@ import lombok.Data;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -60,12 +61,17 @@ public class ReadExcelCreateSql {
 
         public String getColumnData(int i){
             try {
-                Method method = this.getClass().getMethod("getColumn" + i);
-                Object invoke = method.invoke(this);
+                // 获取Person类的Class对象
+                Class<?> clazz = this.getClass();
+                // 根据属性名查找对应的Field对象
+                Field field = clazz.getDeclaredField("column"+i);
+                // 设置访问权限，因为private属性默认不能直接访问
+                field.setAccessible(true);
+                // 获取并返回该Field的值
+                Object invoke = field.get(this);
                 if(invoke!=null){
                     return invoke+"";
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
