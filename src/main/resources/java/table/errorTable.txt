@@ -116,3 +116,5 @@ tmsp.tmsp_base_vehicle_type_temp
 tmsp.tmsp_net_org2new_temp
 hcm.hcm_org_info
 tmsp.foc_plugins_review_report
+tmsp.tmsp_net_org_rebuild
+tmsp.tmsp_net_org_map

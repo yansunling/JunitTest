@@ -46,8 +46,7 @@ update tmsp.tmsp_send_order_turn set end_site_id = '<新机构ID>' where end_sit
 update tmsp.tmsp_send_order_turn set end_site_name = '<新机构名称>' where end_site_name in('<老机构名称>');
 update tmsp.tmsp_send_order_cust set end_site_id = '<新机构ID>' where end_site_id in('<老机构ID>');
 update tmsp.tmsp_send_order_cust set end_site_name = '<新机构名称>' where end_site_name in ('<老机构名称>');
-update tmsp.tmsp_net_org_remote_stock set ticket_org_id = '<新机构ID>' WHERE ticket_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_remote_stock set inventory_org_id = '<新机构ID>' WHERE inventory_org_id in('<老机构ID单个>');
+
 
 
 update tmsp.tmsp_alter_order_flow_record set review_org_id = '<新机构ID>' where review_org_id in('<老机构ID>');
@@ -117,20 +116,16 @@ update tmsp.tmsp_hand_unload_task set end_org_id = '<新机构ID>' where end_org
 update tmsp.tmsp_msg_dyapp_record set busi_org_id = '<新机构ID>' where busi_org_id in('<老机构ID>');
 update tmsp.tmsp_net_end_org set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update tmsp.tmsp_net_order_import_authority set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-update tmsp.tmsp_net_org set org_id = '<新机构ID>',org_name='<新机构名称>' where org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org set own_site_org_id = '<新机构ID>' where own_site_org_id in('<老机构ID单个>');
+
 
 update tmsp.tmsp_net_org_barcode set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_debt_limit set depart_org_id = '<新机构ID>' where depart_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_ext set org_id = '<新机构ID>' where org_id in('<老机构ID单个>') limit 1;
-update tmsp.tmsp_net_org_hr set org_id = '<新机构ID>' where org_id in('<老机构ID单个>') limit 1;
-update tmsp.tmsp_net_org_hr set hr_org_id = '<新机构ID>' where hr_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_map set old_org_id = '<新机构ID>' where old_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_map set new_org_id = '<新机构ID>' where new_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_rebuild set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_rebuild set own_site_org_id = '<新机构ID>' where own_site_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_stock set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_stock set sync_org_id = '<新机构ID>' where sync_org_id in('<老机构ID单个>');
+
+
+
+
+
+
+
 update tmsp.tmsp_net_org_switch_log set org_id_before = '<新机构ID>' where org_id_before in('<老机构ID>');
 update tmsp.tmsp_net_org_switch_log set org_id_after = '<新机构ID>' where org_id_after in('<老机构ID>');
 update tmsp.tmsp_net_org_unload_resp set org_id = '<新机构ID>' where org_id in('<老机构ID>');
@@ -209,8 +204,10 @@ update tmsp.tmsp_turn_order set other_org_id = '<新机构ID>' where other_org_i
 update tmsp.tmsp_turn_order set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID>');
 update tmsp.tmsp_msg_model set msg_model_org = '<新机构ID>' where msg_model_org in('<老机构ID>');
 update tmsp.tmsp_claims_profile set apply_big_area = '<新机构大区ID>' where judge_org_id = '<新机构ID>';
-update tmsp.tmsp_net_org set business_district_id = '<新机构小区ID>' where org_id = '<新机构ID>';
-update tmsp.tmsp_net_org set business_region_id = '<新机构大区ID>' where org_id = '<新机构ID>';
+
+
+
+
 update tmsp.tmsp_tcp_vehicle set belong_region = '<新机构大区ID>' where belong_org_id in('<老机构ID>');
 update tmsp.tmsp_base_box set own_org_id = '<新机构ID>' where own_org_id in('<老机构ID>');
 update tmsp.tmsp_base_box set org_id = '<新机构ID>' where org_id in('<老机构ID>');
@@ -264,12 +261,29 @@ update tmsp.tmsp_net_rail_group set arrive_org_id = '<新机构ID>' where arrive
 update tmsp.tmsp_net_rail_group_item set load_org_id = '<新机构ID>' where load_org_id in('<老机构ID>');
 update tmsp.tmsp_net_rail_group_item set arrive_org_id = '<新机构ID>' where arrive_org_id in('<老机构ID>');
 
--- TMSP
+-- TMSP insert
 INSERT ignore INTO tmsp.tmsp_net_org_product_line(serial_no, depart_org_id, product_type, last_city, is_area_net, income_org_id, effective_date, expiry_date, activate_status, delivery_gis_flag, share_ratio, version, remark, update_user_id, update_time, create_user_id, create_time)select UUID_SHORT(), '<新机构ID>', product_type, last_city, is_area_net, income_org_id, effective_date, expiry_date, activate_status, delivery_gis_flag, share_ratio, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_product_line where depart_org_id in('<老机构ID>') ;
-INSERT ignore INTO tmsp.tmsp_net_site_depart(serial_no, site_org_id, depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构id>', depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart  where site_org_id in('<老机构id>');
-INSERT ignore INTO tmsp.tmsp_net_site_depart(serial_no, site_org_id, depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),site_org_id,'<新机构id>', version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart  where depart_org_id in('<老机构id>');
-INSERT ignore INTO tmsp.tmsp_net_updown(serial_no, org_id, next_org_id, hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>',next_org_id, hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_updown where org_id in('<老机构ID>');
-INSERT ignore INTO tmsp.tmsp_net_updown(serial_no, org_id, next_org_id, hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),org_id,'<新机构ID>', hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_updown where next_org_id in('<老机构ID>');
+
+
+INSERT ignore INTO tmsp.tmsp_net_site_depart(serial_no, site_org_id, depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构id>', tmsp.org_ref(depart_org_id), version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart  where site_org_id in('<老机构id>');
+INSERT ignore INTO tmsp.tmsp_net_site_depart(serial_no, site_org_id, depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),tmsp.org_ref(site_org_id),'<新机构id>', version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart  where depart_org_id in('<老机构id>');
+INSERT ignore INTO tmsp.tmsp_net_updown(serial_no, org_id, next_org_id, hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>',tmsp.org_ref(next_org_id), hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_updown where org_id in('<老机构ID>');
+INSERT ignore INTO tmsp.tmsp_net_updown(serial_no, org_id, next_org_id, hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),tmsp.org_ref(org_id),'<新机构ID>', hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_updown where next_org_id in('<老机构ID>');
+INSERT ignore INTO tmsp.tmsp_net_org(serial_no, org_id, org_code, org_name, org_short_name, org_status, resp_user_id, org_type, net_station_type, country_code, prov_code, city_code, area_code, org_address, longitude, latitude, org_tel, committee_id, business_region_id, business_district_id, shutdown_user_id, shutdown_time, sale_mode, send_hr_org, send_decision, is_self_car, is_local_net, own_site_org_id, enable_order, send_city, send_city_name, enable_trans, enable_stock, enable_last, enable_rail, last_city, enable_aging, version, remark, update_user_id, update_time, create_user_id, create_time)select UUID_SHORT(),'<新机构ID>',org_code, '<新机构名称>', org_short_name, 'run', resp_user_id, org_type, net_station_type, country_code, prov_code, city_code, area_code, org_address, longitude, latitude, org_tel, committee_id, '<新机构大区ID>', '<新机构小区ID>', shutdown_user_id, shutdown_time, sale_mode, send_hr_org, send_decision, is_self_car, is_local_net, own_site_org_id, enable_order, send_city, send_city_name, enable_trans, enable_stock, enable_last, enable_rail, last_city, enable_aging, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org where org_id in('<老机构ID>');
+INSERT ignore INTO tmsp.tmsp_net_org_ext(serial_no, org_id, brand, enable_remote_stock, driver_prefix, sign_radius, is_recode_recive, is_record_stock, recive_price, recive_price_car, recive_price_cube, recive_price_weight, resp_tel, org_name_tl, prov_code_tl, city_code_tl, area_code_tl, org_address_tl, longitude_tl, latitude_tl, org_name_zx, prov_code_zx, city_code_zx, area_code_zx, org_address_zx, longitude_zx, latitude_zx, is_lht, print_brand_name, is_start_print, is_delivery_line, delivery_serial_start, cust_area, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>' , brand, enable_remote_stock, driver_prefix, sign_radius, is_recode_recive, is_record_stock, recive_price, recive_price_car, recive_price_cube, recive_price_weight, resp_tel, org_name_tl, prov_code_tl, city_code_tl, area_code_tl, org_address_tl, longitude_tl, latitude_tl, org_name_zx, prov_code_zx, city_code_zx, area_code_zx, org_address_zx, longitude_zx, latitude_zx, is_lht, print_brand_name, is_start_print, is_delivery_line, delivery_serial_start, cust_area, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_ext where org_id in('<老机构ID>');
+INSERT ignore INTO tmsp.tmsp_net_org_debt_limit(serial_no, depart_org_id, max_limit, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>', max_limit, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_debt_limit where depart_org_id in('<老机构ID>');
+INSERT ignore INTO tmsp.tmsp_net_org_hr(serial_no, org_id, hr_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>','<新机构ID>',version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_hr where org_id in('<老机构ID>');
+INSERT ignore INTO tmsp.tmsp_net_org_remote_stock(serial_no, ticket_org_id, inventory_org_id, activate_status, effect_time, disabled_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>',tmsp.org_ref(inventory_org_id), activate_status, effect_time, disabled_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_remote_stock where ticket_org_id in('<老机构ID>');
+INSERT ignore INTO tmsp.tmsp_net_org_remote_stock(serial_no, ticket_org_id, inventory_org_id, activate_status, effect_time, disabled_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),tmsp.org_ref(ticket_org_id),'<新机构ID>', activate_status, effect_time, disabled_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_remote_stock where inventory_org_id in('<老机构ID>');
+INSERT ignore INTO tmsp.tmsp_net_org_stock(serial_no, stock_pos_id, org_id, stock_pos_name, sup_stock_pos_id, stock_pos_level, stock_position_no, is_sync, sync_org_id, driver_id, vehicle_id, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time)select UUID_SHORT(), stock_pos_id, '<新机构ID>', stock_pos_name, sup_stock_pos_id, stock_pos_level, stock_position_no, is_sync, tmsp.org_ref(sync_org_id), driver_id, vehicle_id, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_stock where org_id in('<老机构ID>') ;
+INSERT ignore INTO tmsp.tmsp_net_org_stock(serial_no, stock_pos_id, org_id, stock_pos_name, sup_stock_pos_id, stock_pos_level, stock_position_no, is_sync, sync_org_id, driver_id, vehicle_id, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time)select UUID_SHORT(), stock_pos_id, tmsp.org_ref(org_id), stock_pos_name, sup_stock_pos_id, stock_pos_level, stock_position_no, is_sync, '<新机构ID>', driver_id, vehicle_id, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_stock where sync_org_id in('<老机构ID>') ;
+
+
+
+
+
+
+
 
 
 -- TMM
