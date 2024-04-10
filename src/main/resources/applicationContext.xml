@@ -184,6 +184,7 @@
  	<context:component-scan base-package="com.aop" />
 	<context:component-scan base-package="com.cookie" />
 	<context:component-scan base-package="com.squirrel" />
+	<context:component-scan base-package="com.org" />
 
 
 </beans>

@@ -38,6 +38,10 @@ public class CJExcelUtil {
                 int j = 0;
                 T po = class1.newInstance();
                 for (String column : columns) {
+                    if(StringUtils.isBlank(column)){
+                        j++;
+                        continue;
+                    }
                     if(j>=record.length){
                         break;
                     }

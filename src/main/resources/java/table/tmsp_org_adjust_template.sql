@@ -101,7 +101,7 @@ update tmsp.tmsp_hand_schedule_car set route_way=REPLACE(route_way,'<替换老�
 update tmsp.tmsp_hand_schedule_car_detail set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update tmsp.tmsp_hand_schedule_carplan set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update tmsp.tmsp_hand_schedule_externalplan set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
-update tmsp.tmsp_hand_schedule_train set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID>');
+update tmsp.tmsp_hand_schedule_train set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID单个>');
 update tmsp.tmsp_hand_schedule_train set end_org_id = '<新机构ID>' where end_org_id in('<老机构ID单个>');
 update tmsp.tmsp_hand_schedule_trainplan set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update tmsp.tmsp_hand_seal_info set seal_org_id = '<新机构ID>' where seal_org_id in('<老机构ID>');
@@ -114,7 +114,7 @@ update tmsp.tmsp_hand_unload_scan_detail set scan_org_id = '<新机构ID>' where
 update tmsp.tmsp_hand_unload_task set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID>');
 update tmsp.tmsp_hand_unload_task set end_org_id = '<新机构ID>' where end_org_id in('<老机构ID>');
 update tmsp.tmsp_msg_dyapp_record set busi_org_id = '<新机构ID>' where busi_org_id in('<老机构ID>');
-update tmsp.tmsp_net_end_org set org_id = '<新机构ID>' where org_id in('<老机构ID>');
+update tmsp.tmsp_net_end_org set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update tmsp.tmsp_net_order_import_authority set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 
 
@@ -133,8 +133,8 @@ update tmsp.tmsp_net_org_unload_resp set send_org_id = '<新机构ID>' where sen
 update tmsp.tmsp_net_org_user set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update tmsp.tmsp_net_predict_vehicle_amt set site_org_id = '<新机构ID>' where site_org_id in('<老机构ID>');
 update tmsp.tmsp_net_predict_vehicle_amt set site_org_name = '<新机构名称>' where site_org_name in('<老机构名称>');
-update tmsp.tmsp_net_receive_range set book_org_id = '<新机构ID>' where book_org_id in('<老机构ID>');
-update tmsp.tmsp_net_receive_range set last_org_id = '<新机构ID>' where last_org_id in('<老机构ID>');
+update tmsp.tmsp_net_receive_range set book_org_id = '<新机构ID>' where book_org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_receive_range set last_org_id = '<新机构ID>' where last_org_id in('<老机构ID单个>');
 update tmsp.tmsp_net_route_line set stock_org_id = '<新机构ID>' where stock_org_id in('<老机构ID单个>');
 update tmsp.tmsp_net_route_line set pass_org_id1 = '<新机构ID>' where pass_org_id1 in('<老机构ID单个>');
 update tmsp.tmsp_net_route_line set pass_org_id2 = '<新机构ID>' where pass_org_id2 in('<老机构ID单个>');
@@ -232,39 +232,41 @@ update tmsp.tmsp_net_trans_time_schedule set org_id = '<新机构ID>' where org_
 update tmsp.tmsp_order_route_org_detail set send_org_id = '<新机构ID>' where send_org_id in('<老机构ID>');
 update tmsp.tmsp_order_route_org_detail set arr_org_id = '<新机构ID>' where arr_org_id in('<老机构ID>');
 update tmsp.tmsp_order_route_org_detail set before_send_org1 = '<新机构ID>' where before_send_org1 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set before_send_org1_name = '<新机构名称>' where before_send_org1_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set before_send_org1_name = '<新机构名称>' where before_send_org1_name in('<老机构名称>');
 update tmsp.tmsp_order_route_org_detail set before_arr_org1 = '<新机构ID>' where before_arr_org1 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set before_arr_org1_name = '<新机构名称>' where before_arr_org1_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set before_arr_org1_name = '<新机构名称>' where before_arr_org1_name in('<老机构名称>');
 update tmsp.tmsp_order_route_org_detail set before_send_org2 = '<新机构ID>' where before_send_org2 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set before_send_org2_name = '<新机构名称>' where before_send_org2_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set before_send_org2_name = '<新机构名称>' where before_send_org2_name in('<老机构名称>');
 update tmsp.tmsp_order_route_org_detail set before_arr_org2 = '<新机构ID>' where before_arr_org2 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set before_arr_org2_name = '<新机构名称>' where before_arr_org2_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set before_arr_org2_name = '<新机构名称>' where before_arr_org2_name in('<老机构名称>');
 update tmsp.tmsp_order_route_org_detail set before_send_org3 = '<新机构ID>' where before_send_org3 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set before_send_org3_name = '<新机构名称>' where before_send_org3_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set before_send_org3_name = '<新机构名称>' where before_send_org3_name in('<老机构名称>');
 update tmsp.tmsp_order_route_org_detail set before_arr_org3 = '<新机构ID>' where before_arr_org3 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set before_arr_org3_name = '<新机构名称>' where before_arr_org3_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set before_arr_org3_name = '<新机构名称>' where before_arr_org3_name in('<老机构名称>');
 update tmsp.tmsp_order_route_org_detail set after_send_org1 = '<新机构ID>' where after_send_org1 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set after_send_org1_name = '<新机构名称>' where after_send_org1_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set after_send_org1_name = '<新机构名称>' where after_send_org1_name in('<老机构名称>');
 update tmsp.tmsp_order_route_org_detail set after_arr_org1 = '<新机构ID>' where after_arr_org1 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set after_arr_org1_name = '<新机构名称>' where after_arr_org1_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set after_arr_org1_name = '<新机构名称>' where after_arr_org1_name in('<老机构名称>');
 update tmsp.tmsp_order_route_org_detail set after_send_org2 = '<新机构ID>' where after_send_org2 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set after_send_org2_name = '<新机构名称>' where after_send_org2_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set after_send_org2_name = '<新机构名称>' where after_send_org2_name in('<老机构名称>');
 update tmsp.tmsp_order_route_org_detail set after_arr_org2 = '<新机构ID>' where after_arr_org2 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set after_arr_org2_name = '<新机构名称>' where after_arr_org2_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set after_arr_org2_name = '<新机构名称>' where after_arr_org2_name in('<老机构名称>');
 update tmsp.tmsp_order_route_org_detail set after_send_org3 = '<新机构ID>' where after_send_org3 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set after_send_org3_name = '<新机构名称>' where after_send_org3_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set after_send_org3_name = '<新机构名称>' where after_send_org3_name in('<老机构名称>');
 update tmsp.tmsp_order_route_org_detail set after_arr_org3 = '<新机构ID>' where after_arr_org3 in('<老机构ID>');
-update tmsp.tmsp_order_route_org_detail set after_arr_org3_name = '<新机构名称>' where after_arr_org3_name in('<老机构ID>');
+update tmsp.tmsp_order_route_org_detail set after_arr_org3_name = '<新机构名称>' where after_arr_org3_name in('<老机构名称>');
 update tmsp.tmsp_turn_transfer_fee set site_org_id = '<新机构ID>' where site_org_id in('<老机构ID>');
 update tmsp.tmsp_turn_transfer_fee set site_org_name = '<新机构名称>' where site_org_name in('<老机构ID>');
 update tmsp.tmsp_net_rail_group set arrive_org_id = '<新机构ID>' where arrive_org_id in('<老机构ID>');
 update tmsp.tmsp_net_rail_group_item set load_org_id = '<新机构ID>' where load_org_id in('<老机构ID>');
 update tmsp.tmsp_net_rail_group_item set arrive_org_id = '<新机构ID>' where arrive_org_id in('<老机构ID>');
+update tmsp.tmsp_net_org set org_status='close' where org_id in('<老机构ID>');
+
 
 -- TMSP insert
 INSERT ignore INTO tmsp.tmsp_net_org_product_line(serial_no, depart_org_id, product_type, last_city, is_area_net, income_org_id, effective_date, expiry_date, activate_status, delivery_gis_flag, share_ratio, version, remark, update_user_id, update_time, create_user_id, create_time)select UUID_SHORT(), '<新机构ID>', product_type, last_city, is_area_net, income_org_id, effective_date, expiry_date, activate_status, delivery_gis_flag, share_ratio, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_product_line where depart_org_id in('<老机构ID>') ;
-INSERT ignore INTO tmsp.tmsp_net_site_depart(serial_no, site_org_id, depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构id>', tmsp.org_ref(depart_org_id), version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart  where site_org_id in('<老机构id>');
-INSERT ignore INTO tmsp.tmsp_net_site_depart(serial_no, site_org_id, depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),tmsp.org_ref(site_org_id),'<新机构id>', version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart  where depart_org_id in('<老机构id>');
+INSERT ignore INTO tmsp.tmsp_net_site_depart(serial_no, site_org_id, depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>', tmsp.org_ref(depart_org_id), version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart  where site_org_id in('<老机构ID>');
+INSERT ignore INTO tmsp.tmsp_net_site_depart(serial_no, site_org_id, depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),tmsp.org_ref(site_org_id),'<新机构ID>', version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart  where depart_org_id in('<老机构ID>');
 INSERT ignore INTO tmsp.tmsp_net_updown(serial_no, org_id, next_org_id, hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>',tmsp.org_ref(next_org_id), hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_updown where org_id in('<老机构ID>');
 INSERT ignore INTO tmsp.tmsp_net_updown(serial_no, org_id, next_org_id, hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),tmsp.org_ref(org_id),'<新机构ID>', hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_updown where next_org_id in('<老机构ID>');
 INSERT ignore INTO tmsp.tmsp_net_org(serial_no, org_id, org_code, org_name, org_short_name, org_status, resp_user_id, org_type, net_station_type, country_code, prov_code, city_code, area_code, org_address, longitude, latitude, org_tel, committee_id, business_region_id, business_district_id, shutdown_user_id, shutdown_time, sale_mode, send_hr_org, send_decision, is_self_car, is_local_net, own_site_org_id, enable_order, send_city, send_city_name, enable_trans, enable_stock, enable_last, enable_rail, last_city, enable_aging, version, remark, update_user_id, update_time, create_user_id, create_time)select UUID_SHORT(),'<新机构ID>',org_code, '<新机构名称>', org_short_name, 'run', resp_user_id, org_type, net_station_type, country_code, prov_code, city_code, area_code, org_address, longitude, latitude, org_tel, committee_id, '<新机构大区ID>', '<新机构小区ID>', shutdown_user_id, shutdown_time, sale_mode, send_hr_org, send_decision, is_self_car, is_local_net, own_site_org_id, enable_order, send_city, send_city_name, enable_trans, enable_stock, enable_last, enable_rail, last_city, enable_aging, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org where org_id in('<老机构ID>');
@@ -326,13 +328,13 @@ update crm.crm_report_resource_log set org_id = '<新机构ID>' where org_id in(
 update crm.crm_report_target set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 update crm.crm_sale_pipeline set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_sms_record set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-update crm.crm_base_grade set resp_busi_region='<新机构大区>' where resp_busi_region in(select business_region_id from hcm.hcm_org_relation where org_id in('<老机构ID>'));
+update crm.crm_base_grade set resp_busi_region='<新机构大区ID>' where resp_busi_region in('<老机构大区ID>');
 update crm.crm_base_customer_delivery_config set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_base_customer_update_apply set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
 update crm.crm_base_cust_visiting set visit_org_id = '<新机构ID>' where visit_org_id in('<老机构ID>');
 update crm.crm_base_customer set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID>');
 update crm.crm_base_cust_goods_name_limit set org_id = '<新机构ID>',business_region_id = '<新机构大区ID>' where org_id in('<老机构ID>');
-update crm.crm_base_customer_spanned_area set business_region_id='<新机构大区>' where business_region_id in(select business_region_id from hcm.hcm_org_relation where org_id in('<老机构ID>'));
+update crm.crm_base_customer_spanned_area set business_region_id='<新机构大区>' where business_region_id in('<老机构大区ID>');
 
 
 
@@ -388,7 +390,7 @@ DELETE FROM crm.crm_org_dept_hr_rel WHERE org_id in('<老机构ID>');
 -- MPP
 update mpp2.mpp2_arrive_storeage_price_ver set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_auth_apply set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
-update mpp2.mpp2_auth_code_info set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_auth_code_info set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_auth_dept_link set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_cost_base set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_cost_base set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
@@ -503,9 +505,9 @@ update mpp2.mpp2_prise_count_item_his set creator_org_id = '<新机构ID>' where
 update mpp2.mpp2_prise_count_item_his set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
 update mpp2.mpp2_prise_dept_ver set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_prise_dept_ver_his set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
-update mpp2.mpp2_prise_ver_cust set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_prise_ver_cust set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_prise_ver_cust set inventory_org_id = '<新机构ID>' where inventory_org_id in('<老机构ID>');
-update mpp2.mpp2_prise_ver_cust_his set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_prise_ver_cust_his set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_prise_ver_cust_his set inventory_org_id = '<新机构ID>' where inventory_org_id in('<老机构ID>');
 update mpp2.mpp2_apply_approve_oa_rel set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update mpp2.mpp2_apply_price set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
@@ -529,7 +531,6 @@ update mpp2.mpp2_base_cost_h set depart_org = '<新机构ID>',big_area='<新机�
 update mpp2.mpp2_increment_base_cust_fee set depart_org = '<新机构ID>',big_area = '<新机构大区ID>' where depart_org in('<老机构ID单个>');
 update mpp2.mpp2_arrive_storeage_price_ver set small_area = '<新机构小区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_auth_apply set small_area = '<新机构小区ID>' where depart_org = '<新机构ID>';
-update mpp2.mpp2_auth_code_info set small_area = '<新机构小区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_auth_dept_link set small_area = '<新机构小区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_cost_base set small_area = '<新机构小区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_cost_base_his set small_area = '<新机构小区ID>' where depart_org = '<新机构ID>';
@@ -554,14 +555,11 @@ update mpp2.mpp2_prise_count set small_area = '<新机构小区ID>' where depart
 update mpp2.mpp2_prise_count_his set small_area = '<新机构小区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_prise_dept_ver set small_area = '<新机构小区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_prise_dept_ver_his set small_area = '<新机构小区ID>' where depart_org = '<新机构ID>';
-update mpp2.mpp2_prise_ver_cust set small_area = '<新机构小区ID>' where depart_org = '<新机构ID>';
-update mpp2.mpp2_prise_ver_cust_his set small_area = '<新机构小区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_increment_send_lht set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID单个>');
 
 
 update mpp2.mpp2_arrive_storeage_price_ver set big_area = '<新机构大区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_auth_apply set big_area = '<新机构大区ID>' where depart_org = '<新机构ID>';
-update mpp2.mpp2_auth_code_info set big_area = '<新机构大区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_auth_dept_link set big_area = '<新机构大区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_cost_base set big_area = '<新机构大区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_cost_base_his set big_area = '<新机构大区ID>' where depart_org = '<新机构ID>';
@@ -589,8 +587,8 @@ update mpp2.mpp2_prise_count set big_area = '<新机构大区ID>' where depart_o
 update mpp2.mpp2_prise_count_his set big_area = '<新机构大区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_prise_dept_ver set big_area = '<新机构大区ID>' where depart_org = '<新机构ID>';
 update mpp2.mpp2_prise_dept_ver_his set big_area = '<新机构大区ID>' where depart_org = '<新机构ID>';
-update mpp2.mpp2_prise_ver_cust set big_area = '<新机构大区ID>' where depart_org = '<新机构ID>';
-update mpp2.mpp2_prise_ver_cust_his set big_area = '<新机构大区ID>' where depart_org = '<新机构ID>';
+
+
 
 
 
@@ -602,8 +600,8 @@ update bmsp.bmsp_report_income_day set income_dept = '<新机构ID>' where incom
 update bmsp.bmsp_report_income_day set collection_dept = '<新机构ID>' where collection_dept in('<老机构ID>');
 update bmsp.bmsp_borrow_info set borrow_user_org = '<新机构ID>' where borrow_user_org in('<老机构ID>');
 update bmsp.bmsp_bank_channel set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-update bmsp.bmsp_archives_house_contract set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-update bmsp.bmsp_archives_purchase_contract set org_id = '<新机构ID>' where org_id in('<老机构ID>');
+update bmsp.bmsp_archives_house_contract set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',org_id = '<新机构ID>' where org_id in('<老机构ID>');
+update bmsp.bmsp_archives_purchase_contract set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update bmsp.bmsp_balance_inorder set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update bmsp.bmsp_balance_inorder_clear set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update bmsp.bmsp_balance_outcost set org_id = '<新机构ID>' where org_id in('<老机构ID>');
@@ -644,10 +642,8 @@ update bmsp.bmsp_ticket_arrive_cancel set print_org_id = '<新机构ID>' where p
 update bmsp.bmsp_ticket_arrive_cancel set cancel_org_id = '<新机构ID>' where cancel_org_id in('<老机构ID>');
 update bmsp.bmsp_ticket_arrive_clear set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 
-update bmsp.bmsp_archives_house_contract set small_area = '<新机构小区ID>' where org_id = '<新机构ID>';
-update bmsp.bmsp_archives_purchase_contract set small_area = '<新机构小区ID>' where org_id = '<新机构ID>';
-update bmsp.bmsp_archives_house_contract set big_area = '<新机构大区ID>' where org_id = '<新机构ID>';
-update bmsp.bmsp_archives_purchase_contract set big_area = '<新机构大区ID>' where org_id = '<新机构ID>';
+
+
 
 
 -- BDS
