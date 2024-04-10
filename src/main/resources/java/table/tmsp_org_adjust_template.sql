@@ -327,7 +327,6 @@ update crm.crm_report_month_extension set resp_org_id = '<新机构ID>' where re
 update crm.crm_report_resource_log set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_report_target set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 update crm.crm_sale_pipeline set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-update crm.crm_sms_record set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_base_grade set resp_busi_region='<新机构大区ID>' where resp_busi_region in('<老机构大区ID>');
 update crm.crm_base_customer_delivery_config set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_base_customer_update_apply set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
