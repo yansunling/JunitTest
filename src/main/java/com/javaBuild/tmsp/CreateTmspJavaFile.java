@@ -41,9 +41,13 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("tmsp_wx_group_config_detail");
+        List<String> tableNames = Arrays.asList("tmsp_contact_form_apply","tmsp_contact_form_approval","tmsp_contact_form_approval_config");
         String sysId="tmsp";
-		String htmlGroup="ownCar";
+		String htmlGroup="";
+
+
+
+
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
@@ -51,30 +55,25 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 		dir.mkdirs();
 		String filePath = getClass().getClassLoader().getResource("").getPath();
 		for(String tableName:tableNames){
+			if(StringUtils.isBlank(htmlGroup)){
+				String[] strings = tableName.split("_");
+				htmlGroup=strings[1];
+			}
 			String content = FileUtil.readAsString(new File(filePath+"java/tmsp/TemplatePO.java"));
 			String dataContent = FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateData.java"));
-
-
 			String mapperContent=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateMapper.java"));
 			String serviceContent=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateService.java"));
 			String implContent=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateServiceImpl.java"));
 			String controllerContent=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateController.java"));
 			String htmlContent=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateList.html"));
 			String jsContent=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateJavaScript.js"));
-
 			String formHtml=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateForm.html"));
 			String formJs=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateForm.js"));
-
-
-
 			List<ColumnData> columnDataList=new ArrayList<>();
 			List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time",
                     "version","op_user_id","creator","serial_no","oa_flag","oa_apply_user_id","oa_apply_time","loan_process_number","repayment_process_number",
                     "expense_process_number","oa_status","approval_amount","archived_amount","violation_process_number","file_attachment");
 			StringBuffer remarkTd=new StringBuffer();
-
-
-
             String sql="select  CONCAT(\n" +
 					"if(c.column_key='PRI','    @TableId\\n',''),\n" +
 					"if(c.column_name='version','    @Version\\n',''),\n" +

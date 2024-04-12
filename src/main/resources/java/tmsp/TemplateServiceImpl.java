@@ -22,7 +22,6 @@ import com.yd.tmsp.constants.IS_NOT;
 import com.yd.tmsp.constants.OA_TYPE;
 import com.yd.tmsp.constants.TMSP_OA_INSURANCE_STATUS;
 import com.yd.tmsp.ownCar.data.TmspEmpEntData;
-import com.yd.tmsp.ownCar.mapper.TmspOwnOaRecordDetailMapper;
 import com.yd.tmsp.ownCar.mapper.TmspOwnOaRecordMapper;
 import com.yd.tmsp.ownCar.mapper.TmspOwnVehicleRepairMapper;
 import com.yd.tmsp.ownCar.oa.*;
@@ -52,10 +51,6 @@ public class {class_impl} implements {class_service} {
     private {class_mapper} dataMapper;
     @Autowired
     private TmspShareDataLogService logService;
-
-    @Autowired
-    private TmspOwnOaRecordDetailMapper recordDetailMapper;
-
 
 
     @Transactional
