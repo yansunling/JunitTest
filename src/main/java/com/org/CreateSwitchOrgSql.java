@@ -28,6 +28,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.Collectors;
@@ -35,177 +36,202 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:applicationContext.xml"})
-public class CreateSwitchOrgSql implements ApplicationContextAware{
-	ApplicationContext ac;
-	@Override
-	public void setApplicationContext(ApplicationContext applicationContext)
-			throws BeansException {
-		ac=applicationContext;
-		
-	}
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
-	@Qualifier("dataSource")
-	@Autowired
-	private YDDriverManagerDataSource ydDriverManagerDataSource;
+@ContextConfiguration(locations = {"classpath:applicationContext.xml"})
+public class CreateSwitchOrgSql implements ApplicationContextAware {
+    ApplicationContext ac;
 
-	@Test
-	public  void test() throws Exception {
-		String excelFilePath="C:\\Users\\yansunling\\Desktop\\TL_绍兴机构切换调整明细_20240318.xlsx";
-		List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-		SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\org\\"));
-		jdbcTemplate.setQueryTimeout(500);
-		DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource)ydDriverManagerDataSource.getObject();
-		dataSource.setMaxActive(100);
-		//排除基础表
-		List<String> sqlTotalList=new ArrayList<>();
-		for(OrgData orgData:orgDataList){
-			String orgSql="select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
-			List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
-			List<String> orgList=new ArrayList<>();
-			List<String> orgNameList=new ArrayList<>();
-			maps.forEach(item->{
-				orgList.add(item.get("org_id")+"");
-				orgNameList.add(item.get("org_name")+"");
-			});
-			String schemaSql="select table_schema from information_schema.`TABLES` " +
-					"where  table_schema not in('information_schema'," +
-					"'query','dct','ouyang','portal','biq','das','acs','dctx','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','wac','kjob','crmx','jeewx-boot') " +
-					"  group by table_schema";
-			List<String> schemaList = jdbcTemplate.queryForList(schemaSql, String.class);
-			List<String> errorTable=new ArrayList<>();
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext)
+            throws BeansException {
+        ac = applicationContext;
 
-			String filePath = getClass().getClassLoader().getResource("").getPath();
-			List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/errorTable.txt"), "utf-8");
+    }
 
-			String tableFilesStr=StringUtils.join(",",tableFiles.toArray())+",";
-			//排除基础表
-			List<String> sqlList=new ArrayList<>();
-			List<String> odlSqlList = FileUtils.readLines(new File(filePath + "java/table/tmsp_org_adjust_template.sql"), "utf-8");
-			odlSqlList.forEach(item->{
-				boolean addFlag=true;
-				for(String table:tableFiles){
-					if(item.indexOf(" "+table+" ")>=0){
-						addFlag=false;
-						break;
-					}
-				}
-				if(addFlag){
-					String newItem = SwitchUtil.replaceName(item, orgData);
-					if(StringUtils.isNotBlank(newItem)){
-						sqlList.add(newItem);
-					}
-				}
-			});
-			String existSql=StringUtils.join(",",sqlList.toArray());
-			ExecutorService executorService = Executors.newFixedThreadPool(50);
-			List<String> allData=new ArrayList<>();
-			for(String schema:schemaList){
-				String sql="select table_name from information_schema.`TABLES` where table_schema='"+schema+"' and table_type!='VIEW' ";
-				List<String> tableList = jdbcTemplate.queryForList(sql, String.class);
-				CountDownLatch countDownLatch = new CountDownLatch(tableList.size());
-				List<String> totalSql=new ArrayList<>();
-				for(String table:tableList){
-					String newTable=schema+"."+table;
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Qualifier("dataSource")
+    @Autowired
+    private YDDriverManagerDataSource ydDriverManagerDataSource;
 
-					executorService.submit(new FutureTask<String>(new Callable<String>() {
-						@Override
-						public String call() throws Exception {
-							try {
-								//已存在配置
-								if(existSql.indexOf(" "+newTable+" ")>0){
-									return "";
-								}
+    @Test
+    public void test() throws Exception {
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\TL_绍兴机构切换调整明细_20240318.xlsx";
+        List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
+        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\org\\"));
+        jdbcTemplate.setQueryTimeout(500);
+        DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
+        dataSource.setMaxActive(100);
+        //排除基础表
+        List<String> sqlTotalList = new ArrayList<>();
+        Map<String, List<String>> schemaMap = new HashMap<>();
+        List<String> sqlBaseList = buildBaseSql(schemaMap);
+        List<String> notSchema=new ArrayList<>();
+        for (OrgData orgData : orgDataList) {
+            List<String> newSqlList = new ArrayList<>();
+            sqlBaseList.forEach(item->{
+                String newItem = SwitchUtil.replaceName(item, orgData);
+                if(StringUtils.isNotBlank(newItem)){
+                    newSqlList.add(newItem);
+                    schemaMap.forEach((key,value)->{
+                        if(newItem.indexOf(" "+key+".")>0){
+                            value.add(newItem);
+                        }
+                    });
+                    Set<String> keySet = schemaMap.keySet();
+                    boolean addFlag=true;
+                    for(String key:keySet){
+                        if(newItem.indexOf(" "+key+".")>0){
+                            schemaMap.get(key).add(newItem);
+                            addFlag=false;
+                            break;
+                        }
+                    }
+                    if(addFlag){
+                        notSchema.add(newItem);
+                    }
+                }
+            });
+            String fileName = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
+            fileName = fileName.replaceAll("'", "");
+            File allFile = new File("C:\\Users\\yansunling\\Desktop\\org\\" + fileName + ".sql");
+            sqlTotalList.add("\n\n\n");
+            sqlTotalList.addAll(newSqlList);
+            FileUtils.writeLines(allFile, "utf-8", newSqlList);
+            sqlTotalList.addAll(newSqlList);
+        }
+        File allFile = new File("C:\\Users\\yansunling\\Desktop\\org\\allSql.sql");
+        FileUtils.writeLines(allFile,"utf-8",sqlTotalList);
 
-								if(tableFilesStr.indexOf(newTable+",")>0){
-									return "";
-								}
-								if(SwitchUtil.matchTables(newTable)){
-									return "";
-								}
-								String columnsSql="select column_name from  information_schema.COLUMNS where table_name='"+table+"' and table_schema='"+schema+"' " +
-										"and column_name not in('serial_no','create_user_id','update_user_id','remark','salesman_id') and data_type not in('decimal','datetime','date','int') ";
-								List<String> columnList = jdbcTemplate.queryForList(columnsSql, String.class);
-								if(CollectionUtil.isNotEmpty(columnList)){
-									List<String> sqlList=new ArrayList<>();
-									columnList.forEach(column->{
-										String dataSql="select `"+column+"` from "+newTable+" where  ifnull(`"+column+"`,'')!=''  limit 1";
-										List<String> valueList = jdbcTemplate.queryForList(dataSql, String.class);
-										if(CollectionUtil.isEmpty(valueList)){
-											return;
-										}
-										String newValue=valueList.get(0);
-										if(StringUtils.isBlank(newValue)){
-											return;
-										}
-										boolean concat=false;
-										if(newValue.indexOf(",")>0){
-											String[] split = newValue.split(",");
-											newValue=split[0];
-											concat=true;
-										}
-										if(SwitchUtil.containsChinese(column)){
-											column="`"+column+"`";
-										}
+        schemaMap.forEach((key,list)->{
+            try {
+                if(CollectionUtil.isNotEmpty(list)){
+                    File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\org\\"+key+".sql");
+                    FileUtils.writeLines(schemaFile,"utf-8",list);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+        File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\org\\notSchema.sql");
+        FileUtils.writeLines(notSchemaFile,"utf-8",notSchema);
+    }
 
-										if(orgList.contains(newValue)){
-											sqlList.add(SwitchUtil.matchColumn(column,newTable,"ID",concat));
-										}else if(orgNameList.contains(newValue)){
-											sqlList.add(SwitchUtil.matchColumn(column,newTable,"名称",concat));
-										}
-									});
-									totalSql.addAll(sqlList);
-								}
-							} catch (Exception e) {
-								e.printStackTrace();
-								errorTable.add(newTable);
-							}finally {
-								countDownLatch.countDown();
-							}
-							return "";
-						}
-					}));
+    @SneakyThrows
+    public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
+        String schemaSql = "select table_schema from information_schema.`TABLES` " +
+                "where  table_schema not in('bds','costx','information_schema'," +
+                "'query','dct','ouyang','portal','biq','das','acs','dctx','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','wac','kjob','crmx','jeewx-boot') " +
+                "  group by table_schema";
+        List<String> schemaList = jdbcTemplate.queryForList(schemaSql, String.class);
+        String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
+        List<String> orgList = new ArrayList<>();
+        List<String> orgNameList = new ArrayList<>();
+        maps.forEach(item -> {
+            orgList.add(item.get("org_id") + "");
+            orgNameList.add(item.get("org_name") + "");
+        });
+        String filePath = getClass().getClassLoader().getResource("").getPath();
+        List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/errorTable.txt"), "utf-8");
+        String tableFilesStr = StringUtils.join(",", tableFiles.toArray()) + ",";
+        //排除基础表
+        List<String> sqlList = new ArrayList<>();
+        List<String> odlSqlList = FileUtils.readLines(new File(filePath + "java/table/tmsp_org_adjust_template_new.sql"), "utf-8");
+        odlSqlList.forEach(item -> {
+            boolean addFlag = true;
+            for (String table : tableFiles) {
+                if (item.indexOf(" " + table + " ") >= 0) {
+                    addFlag = false;
+                    break;
+                }
+            }
+            if (addFlag) {
+                sqlList.add(item);
+            }
+        });
+        String existSql = StringUtils.join(",", sqlList.toArray());
+        ExecutorService executorService = Executors.newFixedThreadPool(50);
+        List<String> allData = new ArrayList<>();
+        for (String schema : schemaList) {
+            //设置初始值
+            schemaMap.put(schema,new ArrayList<>());
 
-				}
-				countDownLatch.await();
-				if(CollectionUtil.isNotEmpty(totalSql)){
-					List<String> newTotalSql=new ArrayList<>();
-					totalSql.forEach(item->{
-						String newItem = SwitchUtil.replaceName(item, orgData);
-						if(StringUtils.isNotBlank(newItem)){
-							newTotalSql.add(newItem);
-						}
-					});
-					if(CollectionUtil.isNotEmpty(newTotalSql)){
-						allData.add("\n\n  -- "+schema.toUpperCase());
-						allData.addAll(newTotalSql);
-					}
-				}
-			}
-			File outfile=new File("C:\\Users\\yansunling\\Desktop\\org\\errorTable.sql");
-			FileUtils.writeLines(outfile,"utf-8",errorTable,true);
-			String fileName=orgData.getNewOrgName()+"["+orgData.getNewOrgId()+"]切为"+orgData.getOldOrgName()+"["+orgData.getOldOrgId()+"]";
-			fileName=fileName.replaceAll("'","");
-			File allFile=new File("C:\\Users\\yansunling\\Desktop\\org\\"+fileName+".sql");
-			sqlList.add("\n\n\n");
-			sqlList.addAll(allData);
-			FileUtils.writeLines(allFile,"utf-8",sqlList);
-			sqlTotalList.addAll(sqlList);
-		}
-		File allFile=new File("C:\\Users\\yansunling\\Desktop\\org\\allSql.sql");
-		FileUtils.writeLines(allFile,"utf-8",sqlTotalList);
+            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW' ";
+            List<String> tableList = jdbcTemplate.queryForList(sql, String.class);
+            CountDownLatch countDownLatch = new CountDownLatch(tableList.size());
+            List<String> totalSql = new ArrayList<>();
+            for (String table : tableList) {
+                String newTable = schema + "." + table;
+                executorService.submit(new FutureTask<String>(new Callable<String>() {
+                    @Override
+                    public String call() throws Exception {
+                        try {
+                            //已存在配置
+                            if (existSql.indexOf(" " + newTable + " ") > 0) {
+                                return "";
+                            }
 
-	}
+                            if (tableFilesStr.indexOf(newTable + ",") > 0) {
+                                return "";
+                            }
+                            if (SwitchUtil.matchTables(newTable)) {
+                                return "";
+                            }
+                            String columnsSql = "select column_name from  information_schema.COLUMNS where table_name='" + table + "' and table_schema='" + schema + "' " +
+                                    "and column_name not in('serial_no','create_user_id','update_user_id','remark','salesman_id') and data_type not in('decimal','datetime','date','int') ";
+                            List<String> columnList = jdbcTemplate.queryForList(columnsSql, String.class);
+                            if (CollectionUtil.isNotEmpty(columnList)) {
+                                List<String> sqlList = new ArrayList<>();
+                                columnList.forEach(column -> {
+                                    String dataSql = "select `" + column + "` from " + newTable + " where  ifnull(`" + column + "`,'')!=''  limit 1";
+                                    List<String> valueList = jdbcTemplate.queryForList(dataSql, String.class);
+                                    if (CollectionUtil.isEmpty(valueList)) {
+                                        return;
+                                    }
+                                    String newValue = valueList.get(0);
+                                    if (StringUtils.isBlank(newValue)) {
+                                        return;
+                                    }
+                                    boolean concat = false;
+                                    if (newValue.indexOf(",") > 0) {
+                                        String[] split = newValue.split(",");
+                                        newValue = split[0];
+                                        concat = true;
+                                    }
+                                    if (SwitchUtil.containsChinese(column)) {
+                                        column = "`" + column + "`";
+                                    }
 
+                                    if (orgList.contains(newValue)) {
+                                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "ID", concat));
+                                    } else if (orgNameList.contains(newValue)) {
+                                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "名称", concat));
+                                    }
+                                });
+                                totalSql.addAll(sqlList);
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        } finally {
+                            countDownLatch.countDown();
+                        }
+                        return "";
+                    }
+                }));
 
-
-
-
-
-
-
-
+            }
+            countDownLatch.await();
+            if (CollectionUtil.isNotEmpty(totalSql)) {
+                List<String> newTotalSql = new ArrayList<>();
+                if (CollectionUtil.isNotEmpty(newTotalSql)) {
+                    allData.add("\n\n  -- " + schema.toUpperCase());
+                    allData.addAll(totalSql);
+                }
+            }
+        }
+        sqlList.addAll(allData);
+        return sqlList;
+    }
 
 
 }

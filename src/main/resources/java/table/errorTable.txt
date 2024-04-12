@@ -15,11 +15,12 @@ costx.costxp_in_order_profile
 hcm.hcm_user_info_3566_0801
 hcmp.hcmp_wages_info_copy1
 hcmp.hcmp_wages_info_copy2
-hcm.hcm_org_rec
 hcm.test
+hcm.hcm_org_rec
 hcm.hcm_org_rel
 hcm.hcm_org_relation_all
 hcm.hcm_org_info
+hcm.hcm_org_relation
 mpp2.mpp2_apply_approve_oa_rel_old
 mpp2.mpp2_apply_approve_oa_rel
 mpp2.mpp2_apply_approve_oa_rel_copy1

@@ -3,7 +3,6 @@
 
 
 -- HCM
--- delete from hcm.hcm_org_relation where org_id in('<老机构ID>');
 update hcm.hcm_user_info set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update hcm.hcm_emp_ent set dept = '<新机构ID>' where dept in('<老机构ID>');
 update hcm.hcm_emp_ent set org_power = '<新机构ID>' where org_power in('<老机构ID>');
@@ -320,52 +319,9 @@ update crm.crm_base_customer_spanned_area set business_region_id='<新机构大�
 
 
 -- 主键特殊处理
-INSERT IGNORE INTO crm.crm_org_dept
-SELECT
-'<新机构ID>' AS org_id,
-'<新机构小区ID>' AS sup_org_id,
-'<新机构名称>',
-main.org_type,
-main.org_charge,
-main.org_level,
-main.org_status,
-main.country_code,
-main.prov_code,
-main.city_code,
-main.area_code,
-main.org_adress,
-main.op_user_id,
-main.op_user_name,
-main.update_time,
-main.creator,
-main.creator_name,
-main.create_time,
-main.org_bigarea,
-main.org_area,
-main.root_flag,
-main.pinyin_search,
-main.is_effective,
-main.enable_customer
-FROM
-crm.crm_org_dept AS main
-WHERE org_id IN('<老机构ID>');
+INSERT IGNORE INTO crm.crm_org_dept SELECT '<新机构ID>' AS org_id, '<新机构小区ID>' AS sup_org_id, '<新机构名称>', main.org_type, main.org_charge, main.org_level, main.org_status, main.country_code, main.prov_code, main.city_code, main.area_code, main.org_adress, main.op_user_id, main.op_user_name, main.update_time, main.creator, main.creator_name, main.create_time, main.org_bigarea, main.org_area, main.root_flag, main.pinyin_search, main.is_effective, main.enable_customer FROM crm.crm_org_dept AS main WHERE org_id IN('<老机构ID>');
 DELETE FROM crm.crm_org_dept WHERE org_id IN('<老机构ID>');
 
-update crm.crm_org_dept set sup_org_id = '<新机构ID>' where sup_org_id in('<老机构ID>');
-
-INSERT IGNORE INTO crm.crm_org_dept_hr_rel
-SELECT
-'<新机构ID>' AS org_id,
-'<新机构ID>' AS hr_org_id,
-main.remark,
-main.op_user_id,
-main.update_time,
-main.creator,
-main.create_time
-FROM
-crm.crm_org_dept_hr_rel AS main
-WHERE main.org_id in('<老机构ID>');
-DELETE FROM crm.crm_org_dept_hr_rel WHERE org_id in('<老机构ID>');
 
 
 -- MPP
@@ -626,32 +582,6 @@ update bmsp.bmsp_ticket_arrive_clear set resp_org_id = '<新机构ID>' where res
 
 
 
-
--- BDS
-update bds.bds_backdoc_different set different_org_id = '<新机构ID>' where different_org_id in('<老机构ID>');
-update bds.bds_backdoc_different set above_org_id = '<新机构ID>' where above_org_id in('<老机构ID>');
-update bds.bds_backdoc_different set different_clear_org_id = '<新机构ID>' where different_clear_org_id in('<老机构ID>');
-update bds.bds_backdoc_different_clear set different_clear_org_id = '<新机构ID>' where different_clear_org_id in('<老机构ID>');
-update bds.bds_backdoc_handover set above_org_id = '<新机构ID>' where above_org_id in('<老机构ID>');
-update bds.bds_backdoc_handover set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID>');
-update bds.bds_backdoc_handover_file set upload_org_id = '<新机构ID>' where upload_org_id in('<老机构ID>');
-update bds.bds_backdoc_info set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID>');
-update bds.bds_backdoc_info set backdoc_load_org_id = '<新机构ID>' where backdoc_load_org_id in('<老机构ID>');
-update bds.bds_backdoc_info set backdoc_arrive_org_id = '<新机构ID>' where backdoc_arrive_org_id in('<老机构ID>');
-update bds.bds_backdoc_photo_info set upload_org_id = '<新机构ID>' where upload_org_id in('<老机构ID>');
-update bds.bds_backdoc_print_record set print_org_id = '<新机构ID>' where print_org_id in('<老机构ID>');
-update bds.bds_backdoc_route set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID>');
-update bds.bds_backdoc_route set return_sure_org_id = '<新机构ID>' where return_sure_org_id in('<老机构ID>');
-update bds.bds_backdoc_stock set stock_org_id = '<新机构ID>' where stock_org_id in('<老机构ID>');
-update bds.bds_backdoc_stock set different_org_id = '<新机构ID>' where different_org_id in('<老机构ID>');
-update bds.bds_backdoc_stock set above_org_id = '<新机构ID>' where above_org_id in('<老机构ID>');
-update bds.bds_backdoc_stock set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID>');
-update bds.bds_backdoc_track set above_org_id = '<新机构ID>' where above_org_id in('<老机构ID>');
-update bds.bds_backdoc_track set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID>');
-update bds.bds_backdoc_track set operate_org_id = '<新机构ID>' where operate_org_id in('<老机构ID>');
-
-
-
 -- AUTH
 update auth.auth_account_subject_info set subject_org_id = '<新机构ID>' where subject_org_id in('<老机构ID>');
 update auth.auth_account_subject_session set org_id = '<新机构ID>' where org_id in('<老机构ID>');
@@ -659,51 +589,5 @@ update auth.auth_user_position set org_id = '<新机构ID>' where org_id in('<�
 update auth.auth_user_userinfo set org_id = '<新机构ID>', org_power = '<新机构ID>' where org_id in('<老机构ID>');
 delete from auth.auth_user_org where org_id in('<老机构ID>');
 -- 唯一索引特殊处理
-INSERT IGNORE INTO auth.auth_permission_settings_value
-SELECT
-main.company_id,
-main.name_space_id,
-main.app_id,
-main.item_code,
-main.user_id,
-'<新机构ID>' AS setting_value,
-main.setting_value_remark,
-main.standard,
-main.remark,
-main.op_user_id,
-main.op_user_name,
-main.update_time,
-main.creator,
-main.creator_name,
-main.create_time
-FROM
-auth.auth_permission_settings_value AS main
-WHERE main.setting_value in('<老机构ID>');
+INSERT IGNORE INTO auth.auth_permission_settings_value SELECT main.company_id,main.name_space_id,main.app_id,main.item_code,main.user_id,'<新机构ID>' AS setting_value,main.setting_value_remark,main.standard,main.remark,main.op_user_id,main.op_user_name,main.update_time,main.creator,main.creator_name,main.create_time FROM auth.auth_permission_settings_value AS main WHERE main.setting_value in('<老机构ID>');
 DELETE FROM auth.auth_permission_settings_value WHERE setting_value in('<老机构ID>');
-
--- COSTX
-update costx.costx_trans_route_node_plan set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID>');
-update costx.costx_trans_route_node_plan set send_org_id = '<新机构ID>' where send_org_id in('<老机构ID>');
-update costx.costx_trans_route_node_plan set arr_org_id = '<新机构ID>' where arr_org_id in('<老机构ID>');
-update costx.costx_trans_route_node set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID>');
-update costx.costx_trans_route_node set send_org_id = '<新机构ID>' where send_org_id in('<老机构ID>');
-update costx.costx_trans_route_node set arr_org_id = '<新机构ID>' where arr_org_id in('<老机构ID>');
-update costx.costx_trans_route_line set load_org_id = '<新机构ID>' where load_org_id in('<老机构ID>');
-update costx.costx_trans_route_line set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID>');
-update costx.costx_trans_route_line set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID>');
-update costx.costx_trans_route_line_plan set load_org_id = '<新机构ID>' where load_org_id in('<老机构ID>');
-update costx.costx_trans_route_line_plan set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID>');
-update costx.costx_trans_route_line_plan set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID>');
-update costx.costx_trans_union_org_settle set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-update costx.costx_trans_union_org_settle set send_org_id = '<新机构ID>' where send_org_id in('<老机构ID>');
-update costx.costx_trans_union_org_settle set arr_org_id = '<新机构ID>' where arr_org_id in('<老机构ID>');
-update costx.costxp_in_hand_doc set send_org_id = '<新机构ID>' where send_org_id in('<老机构ID>');
-update costx.costxp_in_hand_doc set arr_org_id = '<新机构ID>' where arr_org_id in('<老机构ID>');
-update costx.costxp_in_hand_doc set arrive_org_id = '<新机构ID>' where arrive_org_id in('<老机构ID>');
-update costx.costxp_in_hand_trans_doc set trans_org_id = '<新机构ID>' where trans_org_id in('<老机构ID>');
-update costx.costxp_in_hand_trans_doc set last_arr_org_id = '<新机构ID>' where last_arr_org_id in('<老机构ID>');
-update costx.costxp_in_order_profile set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID>');
-update costx.costxp_in_order_profile set sign_org_id = '<新机构ID>' where sign_org_id in('<老机构ID>');
-update costx.costxp_in_order_profile set inventory_org_id = '<新机构ID>' where inventory_org_id in('<老机构ID>');
-update costx.costxp_in_order_profile set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID>');
-update costx.costxp_in_order_profile set income_org_name = '<新机构名称>' where income_org_name in('<老机构ID>');

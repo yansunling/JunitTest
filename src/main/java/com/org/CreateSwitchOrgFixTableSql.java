@@ -63,8 +63,9 @@ public class CreateSwitchOrgFixTableSql implements ApplicationContextAware{
 				orgList.add(item.get("org_id")+"");
 				orgNameList.add(item.get("org_name")+"");
 			});
+			String tableSchema="hcm";
 			String schemaSql="select table_schema from information_schema.`TABLES` " +
-					"where table_schema='crm' and  table_schema not in('information_schema'," +
+					"where table_schema='"+tableSchema+"' and  table_schema not in('information_schema'," +
 					"'query','dct','ouyang','portal','biq','das','acs','dctx','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','wac','kjob','crmx','jeewx-boot') " +
 					"  group by table_schema";
 			List<String> schemaList = jdbcTemplate.queryForList(schemaSql, String.class);
