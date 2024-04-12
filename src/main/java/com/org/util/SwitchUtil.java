@@ -33,6 +33,14 @@ public class SwitchUtil {
         System.out.println("333");
     }
 
+    private static Map<String,String> map=new HashMap<>();
+    static {
+        map.put("甬绍大区","25010904");
+        map.put("绍兴网点管理部","2501090403");
+        map.put("云贵线管理部","250109040301");
+        map.put("广西线管理部","250109040302");
+    }
+
 
     @SneakyThrows
     public static List<OrgData> readExcel(String filePath){
@@ -45,12 +53,6 @@ public class SwitchUtil {
         listResult = listResult.subList(1, listResult.size());
 
         List<OrgData> importDataList = CJExcelUtil.initImportExcelDatas(OrgData.titleMap, listResult, OrgData.class);
-
-        Map<String,String> map=new HashMap<>();
-        map.put("甬绍大区","25010904");
-        map.put("绍兴网点管理部","2501090403");
-        map.put("云贵线管理部","250109040301");
-        map.put("广西线管理部","250109040302");
         Map<String,List<OrgData>> mapRef=new HashMap<>();
         for(int i=0;i<importDataList.size();i++){
             OrgData importData=importDataList.get(i);

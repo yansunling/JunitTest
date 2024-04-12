@@ -50,6 +50,7 @@ public class CreateRefInsertSql implements ApplicationContextAware{
 				"depart_org_id","income_org_id","next_org_id","hr_org_id");
 
 		List<String> fileSql=new ArrayList<>();
+        List<String> deleteSql=new ArrayList<>();
 		for(String tableFile:tableFiles){
 
 			String[] split = tableFile.split("\\.");
@@ -73,6 +74,8 @@ public class CreateRefInsertSql implements ApplicationContextAware{
 					newColumns.add(alias+".new_org_id");
 					joinSql.add("inner join tmsp.tmsp_org_new_old_ref "+alias+" on "+alias+".old_org_id=main."+column);
 					num++;
+					deleteSql.add("delete from "+table+" where "+column+" in(select old_org_id from tmsp.tmsp_org_new_old_ref);");
+
 				}else if(StringUtils.equals("serial_no",column)){
 					newColumns.add("uuid_short()");
 				}else{
@@ -85,8 +88,9 @@ public class CreateRefInsertSql implements ApplicationContextAware{
 
 		File outfile=new File("C:/Users/yansunling/Desktop/insertOrg.sql");
 		FileUtils.writeLines(outfile,"utf-8",fileSql);
-		
 
+        File deleteFile=new File("C:/Users/yansunling/Desktop/deleteOrg.sql");
+        FileUtils.writeLines(deleteFile,"utf-8",deleteSql);
 
 
 	}

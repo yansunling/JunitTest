@@ -68,20 +68,22 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
         List<String> notSchema=new ArrayList<>();
         for (OrgData orgData : orgDataList) {
             List<String> newSqlList = new ArrayList<>();
+            String fileName = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
+            String newFileName = fileName.replaceAll("'", "");
             sqlBaseList.forEach(item->{
                 String newItem = SwitchUtil.replaceName(item, orgData);
                 if(StringUtils.isNotBlank(newItem)){
                     newSqlList.add(newItem);
-                    schemaMap.forEach((key,value)->{
-                        if(newItem.indexOf(" "+key+".")>0){
-                            value.add(newItem);
-                        }
-                    });
                     Set<String> keySet = schemaMap.keySet();
                     boolean addFlag=true;
                     for(String key:keySet){
                         if(newItem.indexOf(" "+key+".")>0){
-                            schemaMap.get(key).add(newItem);
+                            List<String> list = schemaMap.get(key);
+                            String title="\n\n-- "+newFileName+"  \n\n";
+                            if(!list.contains(title)){
+                                list.add(title);
+                            }
+                            list.add(newItem);
                             addFlag=false;
                             break;
                         }
@@ -91,9 +93,11 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
                     }
                 }
             });
-            String fileName = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
-            fileName = fileName.replaceAll("'", "");
-            File allFile = new File("C:\\Users\\yansunling\\Desktop\\org\\" + fileName + ".sql");
+
+
+
+
+            File allFile = new File("C:\\Users\\yansunling\\Desktop\\org\\" + newFileName + ".sql");
             sqlTotalList.add("\n\n\n");
             sqlTotalList.addAll(newSqlList);
             FileUtils.writeLines(allFile, "utf-8", newSqlList);
