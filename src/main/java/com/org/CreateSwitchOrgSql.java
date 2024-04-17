@@ -126,7 +126,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
         String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where table_schema='crm' and table_schema not in('tmsp','bds','costx','information_schema'," +
+                "where  table_schema not in('tmsp','bds','costx','information_schema'," +
                 "'query','dct','ouyang','portal','biq','das','acs','dctx','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','wac','kjob','crmx','jeewx-boot') " +
                 "  group by table_schema";
         List<String> schemaList = jdbcTemplate.queryForList(schemaSql, String.class);
