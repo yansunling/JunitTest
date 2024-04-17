@@ -108,10 +108,13 @@ update tmsp.tmsp_hand_doc_alter set create_org_id = '<新机构ID>' where create
 update tmsp.tmsp_hand_doc_alter_info set arr_org_id_before = '<新机构ID>' where arr_org_id_before in('<老机构ID>');
 update tmsp.tmsp_hand_doc_alter_info set arr_org_id_after = '<新机构ID>' where arr_org_id_after in('<老机构ID>');
 update tmsp.tmsp_hand_doc_alter_info set create_org_id = '<新机构ID>' where create_org_id in('<老机构ID>');
+
 update tmsp.tmsp_hand_schedule_car set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID单个>');
 update tmsp.tmsp_hand_schedule_car set end_org_id = '<新机构ID>' where end_org_id in('<老机构ID单个>');
 update tmsp.tmsp_hand_schedule_car set route_way_id = REPLACE(route_way_id,'<替换老机构ID集合>','<新机构ID>') where route_way_id regexp '<老机构ID集合>' ;
 update tmsp.tmsp_hand_schedule_car set route_way=REPLACE(route_way,'<替换老机构名称集合>','<新机构名称>') where route_way_id regexp '<老机构ID集合>' ;
+
+
 update tmsp.tmsp_hand_schedule_car_detail set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update tmsp.tmsp_hand_schedule_carplan set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update tmsp.tmsp_hand_schedule_externalplan set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
@@ -346,7 +349,7 @@ update crm.crm_base_customer_update_apply set creator_org_id = '<新机构ID>' w
 update crm.crm_base_cust_visiting set visit_org_id = '<新机构ID>' where visit_org_id in('<老机构ID>');
 update crm.crm_base_customer set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID>');
 update crm.crm_base_cust_goods_name_limit set org_id = '<新机构ID>',business_region_id = '<新机构大区ID>' where org_id in('<老机构ID单个>');
-update crm.crm_base_customer_spanned_area set business_region_id='<新机构大区ID>' where business_region_id in('<老机构大区ID>');
+update crm.crm_base_customer_spanned_area set business_region_id='<新机构大区ID>' where business_region_id in('<老机构大区ID单个>');
 update crm.crm_peer_competition set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 
 
@@ -622,6 +625,7 @@ update auth.auth_user_userinfo set org_id = '<新机构ID>', org_power = '<新�
 update auth.auth_user_org set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update auth.auth_user_org set parent_org_id = '<新机构ID>' where parent_org_id in('<老机构ID单个>');
 update auth.auth_user_org set org_name = '<新机构名称>' where org_name in('<老机构名称>');
+update auth.auth_permission_settings_rule set settings_value = REPLACE(settings_value,'<替换老机构ID集合>','<新机构ID>') where settings_value regexp '<老机构ID集合>' and settings_value like '25%' ;
 -- 唯一索引特殊处理
 INSERT IGNORE INTO auth.auth_permission_settings_value SELECT main.company_id,main.name_space_id,main.app_id,main.item_code,main.user_id,'<新机构ID>' AS setting_value,main.setting_value_remark,main.standard,main.remark,main.op_user_id,main.op_user_name,main.update_time,main.creator,main.creator_name,main.create_time FROM auth.auth_permission_settings_value AS main WHERE main.setting_value in('<老机构ID>');
 DELETE FROM auth.auth_permission_settings_value WHERE setting_value in('<老机构ID>');

@@ -819,7 +819,11 @@ public class SwitchUtil {
         item=item.replaceAll("'<老机构大区名称>'",orgData.getOldOrgName());
         item=item.replaceAll("'<老机构小区ID>'",orgData.getOldDistrictId());
         item=item.replaceAll("'<老机构小区名称>'",orgData.getOldDistrictName());
-
+        if(item.indexOf("<老机构大区ID单个>")>0){
+            String oldRegionId = orgData.getOldRegionId();
+            String[] oldRegions = oldRegionId.split(",");
+            item=item.replaceAll("'<老机构大区ID单个>'",oldRegions[0]);
+        }
         if(item.indexOf("<替换老机构ID集合>")>0){
             String oldOrg = orgData.getOldOrgId();
             String[] strs = oldOrg.split(",");

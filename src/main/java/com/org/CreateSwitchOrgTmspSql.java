@@ -2,22 +2,17 @@ package com.org;
 
 
 import com.alibaba.fastjson.JSON;
-import com.excel.CJExcelUtil;
-import com.javaBuild.crmx.CreateExcelByReadExcel;
 import com.org.data.OrgData;
 import com.org.util.SwitchUtil;
 import com.yd.utils.common.CollectionUtil;
-import com.yd.utils.common.ExcelReader;
 import com.yd.utils.common.StringUtils;
 import com.yd.utils.datasource.DruidComboPoolDataSource;
 import com.yd.utils.datasource.YDDriverManagerDataSource;
-import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -28,16 +23,14 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.stream.Collectors;
 
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
-public class CreateSwitchOrgSql implements ApplicationContextAware {
+public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
     ApplicationContext ac;
 
     @Override
@@ -55,9 +48,9 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\TL_绍兴机构切换调整明细_20240318.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\TL_TMSP.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\org\\"));
+        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\tmsp\\"));
         jdbcTemplate.setQueryTimeout(500);
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
         dataSource.setMaxActive(100);
@@ -97,36 +90,33 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
 
 
 
-            File allFile = new File("C:\\Users\\yansunling\\Desktop\\org\\" + newFileName + ".sql");
+            File allFile = new File("C:\\Users\\yansunling\\Desktop\\tmsp\\" + newFileName + ".sql");
             sqlTotalList.add("\n\n\n");
             sqlTotalList.addAll(newSqlList);
             FileUtils.writeLines(allFile, "utf-8", newSqlList);
             sqlTotalList.addAll(newSqlList);
         }
-        File allFile = new File("C:\\Users\\yansunling\\Desktop\\org\\allSql.sql");
+        File allFile = new File("C:\\Users\\yansunling\\Desktop\\tmsp\\allSql.sql");
         FileUtils.writeLines(allFile,"utf-8",sqlTotalList);
 
         schemaMap.forEach((key,list)->{
             try {
                 if(CollectionUtil.isNotEmpty(list)){
-                    File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\org\\"+key+".sql");
+                    File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\tmsp\\"+key+".sql");
                     FileUtils.writeLines(schemaFile,"utf-8",list);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\org\\notSchema.sql");
+        File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\tmsp\\notSchema.sql");
         FileUtils.writeLines(notSchemaFile,"utf-8",notSchema);
     }
 
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
-        String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where   table_schema not in('tmsp','bds','costx','information_schema'," +
-                "'query','dct','ouyang','portal','biq','das','acs','dctx','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','wac','kjob','crmx','jeewx-boot') " +
-                "  group by table_schema";
-        List<String> schemaList = jdbcTemplate.queryForList(schemaSql, String.class);
+
+        List<String> schemaList = Arrays.asList("tmsp","bmsp");
         String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
         List<String> orgList = new ArrayList<>();
@@ -189,6 +179,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
                                 columnList.forEach(column -> {
                                     String dataSql = "select `" + column + "` from " + newTable + " where  ifnull(`" + column + "`,'')!=''  limit 1";
                                     List<String> valueList = jdbcTemplate.queryForList(dataSql, String.class);
+                                    log.info("newTable:"+newTable+",columns:"+column+",valueList:"+JSON.toJSONString(valueList));
                                     if (CollectionUtil.isEmpty(valueList)) {
                                         return;
                                     }
@@ -228,6 +219,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
             if (CollectionUtil.isNotEmpty(totalSql)) {
                 allData.add("\n\n  -- " + schema.toUpperCase());
                 allData.addAll(totalSql);
+
             }
         }
         sqlList.addAll(allData);
