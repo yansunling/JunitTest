@@ -58,34 +58,41 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
         newOrgDataList.add(orgDataList.get(0));
         String filePath = getClass().getClassLoader().getResource("").getPath();
         List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/tmsp.tab"), "utf-8");
-        List<String> templateList=new ArrayList<>();
 
-        Map<String,List<String>> defaultSqlMap=new HashMap<>();
-        List<String> list= new ArrayList<>();
-        list.add("update tmsp.tmsp_hand_schedule_car set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID单个>');");
-        list.add("update tmsp.tmsp_hand_schedule_car set end_org_id = '<新机构ID>' where end_org_id in('<老机构ID单个>');");
-        list.add("update tmsp.tmsp_hand_schedule_car set route_way_id = REPLACE(route_way_id,'<替换老机构ID集合>','<新机构ID>') where route_way_id regexp '<老机构ID集合>' ;");
-        list.add("update tmsp.tmsp_hand_schedule_car set route_way=REPLACE(route_way,'<替换老机构名称集合>','<新机构名称>') where route_way_id regexp '<老机构ID集合>' ;");
-        defaultSqlMap.put("tmsp.tmsp_hand_schedule_car",list);
+
+        Map<String,Map<String,String>> defaultSqlMap=new HashMap<>();
+        Map<String,String> map= new HashMap<>();
+        map.put("start_org_id","update tmsp.tmsp_hand_schedule_car set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID单个>');");
+        map.put("end_org_id","update tmsp.tmsp_hand_schedule_car set end_org_id = '<新机构ID>' where end_org_id in('<老机构ID单个>');");
+        map.put("route_way_id","update tmsp.tmsp_hand_schedule_car set route_way_id = REPLACE(route_way_id,'<替换老机构ID集合>','<新机构ID>') where route_way_id regexp '<老机构ID集合>' ;");
+        map.put("route_way","update tmsp.tmsp_hand_schedule_car set route_way=REPLACE(route_way,'<替换老机构名称集合>','<新机构名称>') where route_way_id regexp '<老机构ID集合>' ;");
+        defaultSqlMap.put("tmsp.tmsp_hand_schedule_car",map);
 
 
         for(String table:tableFiles){
-            List<String> columns=new ArrayList<>();
-            List<String> sqlList = defaultSqlMap.get(table);
+            Map<String,String> sqlList = defaultSqlMap.get(table);
             if(CollectionUtil.isEmpty(sqlList)){
-                sqlList = buildBaseSql(table,columns);
+                sqlList = buildBaseSql(table);
             }
-            templateList.addAll(sqlList);
             if(CollectionUtil.isNotEmpty(sqlList)){
                 Set<String> newSqlList=new LinkedHashSet<>();
                 for (OrgData orgData : orgDataList) {
+
                     String title = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
                     newSqlList.add("--   "+title);
                     newSqlList.add("\n\n");
-                    sqlList.forEach(item->{
-                        String newItem = SwitchUtil.replaceName(item, orgData);
-                        if(StringUtils.isNotBlank(newItem)){
-                            newSqlList.add(newItem);
+                    sqlList.forEach((column,item)->{
+                        String sql="select 1 as value from "+table+" where "+column+" in("+orgData.getOldOrgId()+") limit 1";
+                        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
+
+                        sql="select 1 as value from "+table+" where "+column+" in("+orgData.getOldOrgName()+") limit 1";
+                        List<Map<String, Object>> resultName = jdbcTemplate.queryForList(sql);
+
+                        if(CollectionUtil.isNotEmpty(result)||CollectionUtil.isNotEmpty(resultName)){
+                            String newItem = SwitchUtil.replaceName(item, orgData);
+                            if(StringUtils.isNotBlank(newItem)){
+                                newSqlList.add(newItem);
+                            }
                         }
                     });
                     newSqlList.add("\n\n");
@@ -96,13 +103,12 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
             }
         }
 
-        File allFile = new File("C:\\Users\\yansunling\\Desktop\\table\\templateSql.sql");
-        FileUtils.writeLines(allFile, "utf-8", templateList);
+
 
     }
 
     @SneakyThrows
-    public List<String> buildBaseSql(String newTable,List<String> columns) {
+    public Map<String,String> buildBaseSql(String newTable) {
         String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
         List<String> orgList = new ArrayList<>();
@@ -111,7 +117,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
             orgList.add(item.get("org_id") + "");
             orgNameList.add(item.get("org_name") + "");
         });
-        List<String> sqlList = new ArrayList<>();
+        Map<String,String> sqlList = new HashMap();
         String[] tables = newTable.split("\\.");
         String table = tables[1];
         try {
@@ -140,12 +146,12 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
                         column = "`" + column + "`";
                     }
                     if (orgList.contains(newValue)) {
-                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "ID", concat));
+                        sqlList.put(column,SwitchUtil.matchColumn(column, newTable, "ID", concat));
 
                     } else if (orgNameList.contains(newValue)) {
-                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "名称", concat));
+                        sqlList.put(column,SwitchUtil.matchColumn(column, newTable, "名称", concat));
                     }
-                    columns.add(column);
+
                 });
             }
         } catch (Exception e) {
