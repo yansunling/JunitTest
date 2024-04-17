@@ -20,6 +20,29 @@ update hcm.hcm_jx_result set org_id = '<新机构ID>' where org_id in('<老机�
 update hcm.hcm_jx_result set org_id4 = '<新机构ID>' where org_id4 in('<老机构ID>');
 update hcm.hcm_jx_result set org_id8 = '<新机构ID>' where org_id8 in('<老机构ID>');
 
+update hcm.hcm_org_rec set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+update hcm.hcm_org_rec set org_rel_rec = CONCAT(org_rel_rec,',','<新机构ID>') where org_rel_rec like CONCAT('%','<老机构ID单个>','%');
+update hcm.hcm_org_rec set sup_org_id = '<新机构ID>' where sup_org_id in('<老机构ID单个>');
+update hcm.hcm_org_rec set root_org_id = '<新机构ID>' where root_org_id in('<老机构ID单个>');
+update hcm.hcm_org_relation set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+update hcm.hcm_org_relation set org_name = '<新机构名称>' where org_name in('<老机构名称>');
+update hcm.hcm_org_relation set business_region_id = '<新机构大区ID>' where business_region_id in('<老机构大区ID>');
+update hcm.hcm_org_relation set business_district_id = '<新机构小区ID>' where business_district_id in('<老机构小区ID>');
+update hcm.hcm_org_relation set committee_id = '<新机构ID>' where committee_id in('<老机构ID单个>');
+update hcm.hcm_org_rel set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+update hcm.hcm_org_rel set rel_org_id = '<新机构ID>' where rel_org_id in('<老机构ID单个>');
+update hcm.hcm_org_rel set org_name = '<新机构名称>' where org_name in('<老机构名称>');
+update hcm.hcm_org_relation_all set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+update hcm.hcm_org_relation_all set org_name = '<新机构名称>' where org_name in('<老机构名称>');
+update hcm.hcm_org_relation_all set business_region_id = '<新机构大区ID>' where business_region_id in('<老机构大区ID>');
+update hcm.hcm_org_relation_all set business_district_id = '<新机构小区ID>' where business_district_id in('<老机构小区ID>');
+update hcm.hcm_org_relation_all set committee_id = '<新机构ID>' where committee_id in('<老机构ID单个>');
+update hcm.hcm_org_info set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+update hcm.hcm_org_info set org_name = '<新机构名称>' where org_name in('<老机构名称>');
+
+
+
+
 
 -- PMP
 update pmp.pmp_sendout_cross set org_id = '<新机构ID>' where org_id in('<老机构ID>');
@@ -245,19 +268,28 @@ update tmsp.tmsp_net_org set org_status='close' where org_id in('<老机构ID>')
 
 
 -- TMSP insert
-INSERT ignore INTO tmsp.tmsp_net_org_product_line(serial_no, depart_org_id, product_type, last_city, is_area_net, income_org_id, effective_date, expiry_date, activate_status, delivery_gis_flag, share_ratio, version, remark, update_user_id, update_time, create_user_id, create_time)select UUID_SHORT(), '<新机构ID>', product_type, last_city, is_area_net, income_org_id, effective_date, expiry_date, activate_status, delivery_gis_flag, share_ratio, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_product_line where depart_org_id in('<老机构ID>') ;
-INSERT ignore INTO tmsp.tmsp_net_site_depart(serial_no, site_org_id, depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>', tmsp.org_ref(depart_org_id), version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart  where site_org_id in('<老机构ID>');
-INSERT ignore INTO tmsp.tmsp_net_site_depart(serial_no, site_org_id, depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),tmsp.org_ref(site_org_id),'<新机构ID>', version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart  where depart_org_id in('<老机构ID>');
-INSERT ignore INTO tmsp.tmsp_net_updown(serial_no, org_id, next_org_id, hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>',tmsp.org_ref(next_org_id), hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_updown where org_id in('<老机构ID>');
-INSERT ignore INTO tmsp.tmsp_net_updown(serial_no, org_id, next_org_id, hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),tmsp.org_ref(org_id),'<新机构ID>', hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_updown where next_org_id in('<老机构ID>');
-INSERT ignore INTO tmsp.tmsp_net_org(serial_no, org_id, org_code, org_name, org_short_name, org_status, resp_user_id, org_type, net_station_type, country_code, prov_code, city_code, area_code, org_address, longitude, latitude, org_tel, committee_id, business_region_id, business_district_id, shutdown_user_id, shutdown_time, sale_mode, send_hr_org, send_decision, is_self_car, is_local_net, own_site_org_id, enable_order, send_city, send_city_name, enable_trans, enable_stock, enable_last, enable_rail, last_city, enable_aging, version, remark, update_user_id, update_time, create_user_id, create_time)select UUID_SHORT(),'<新机构ID>',org_code, '<新机构名称>', org_short_name, 'run', resp_user_id, org_type, net_station_type, country_code, prov_code, city_code, area_code, org_address, longitude, latitude, org_tel, committee_id, '<新机构大区ID>', '<新机构小区ID>', shutdown_user_id, shutdown_time, sale_mode, send_hr_org, send_decision, is_self_car, is_local_net, own_site_org_id, enable_order, send_city, send_city_name, enable_trans, enable_stock, enable_last, enable_rail, last_city, enable_aging, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org where org_id in('<老机构ID>');
-INSERT ignore INTO tmsp.tmsp_net_org_ext(serial_no, org_id, brand, enable_remote_stock, driver_prefix, sign_radius, is_recode_recive, is_record_stock, recive_price, recive_price_car, recive_price_cube, recive_price_weight, resp_tel, org_name_tl, prov_code_tl, city_code_tl, area_code_tl, org_address_tl, longitude_tl, latitude_tl, org_name_zx, prov_code_zx, city_code_zx, area_code_zx, org_address_zx, longitude_zx, latitude_zx, is_lht, print_brand_name, is_start_print, is_delivery_line, delivery_serial_start, cust_area, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>' , brand, enable_remote_stock, driver_prefix, sign_radius, is_recode_recive, is_record_stock, recive_price, recive_price_car, recive_price_cube, recive_price_weight, resp_tel, org_name_tl, prov_code_tl, city_code_tl, area_code_tl, org_address_tl, longitude_tl, latitude_tl, org_name_zx, prov_code_zx, city_code_zx, area_code_zx, org_address_zx, longitude_zx, latitude_zx, is_lht, print_brand_name, is_start_print, is_delivery_line, delivery_serial_start, cust_area, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_ext where org_id in('<老机构ID>');
-INSERT ignore INTO tmsp.tmsp_net_org_debt_limit(serial_no, depart_org_id, max_limit, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>', max_limit, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_debt_limit where depart_org_id in('<老机构ID>');
-INSERT ignore INTO tmsp.tmsp_net_org_hr(serial_no, org_id, hr_org_id, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>','<新机构ID>',version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_hr where org_id in('<老机构ID>');
-INSERT ignore INTO tmsp.tmsp_net_org_remote_stock(serial_no, ticket_org_id, inventory_org_id, activate_status, effect_time, disabled_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),'<新机构ID>',tmsp.org_ref(inventory_org_id), activate_status, effect_time, disabled_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_remote_stock where ticket_org_id in('<老机构ID>');
-INSERT ignore INTO tmsp.tmsp_net_org_remote_stock(serial_no, ticket_org_id, inventory_org_id, activate_status, effect_time, disabled_time, version, remark, update_user_id, update_time, create_user_id, create_time) select UUID_SHORT(),tmsp.org_ref(ticket_org_id),'<新机构ID>', activate_status, effect_time, disabled_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_remote_stock where inventory_org_id in('<老机构ID>');
-INSERT ignore INTO tmsp.tmsp_net_org_stock(serial_no, stock_pos_id, org_id, stock_pos_name, sup_stock_pos_id, stock_pos_level, stock_position_no, is_sync, sync_org_id, driver_id, vehicle_id, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time)select UUID_SHORT(), stock_pos_id, '<新机构ID>', stock_pos_name, sup_stock_pos_id, stock_pos_level, stock_position_no, is_sync, tmsp.org_ref(sync_org_id), driver_id, vehicle_id, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_stock where org_id in('<老机构ID>') ;
-INSERT ignore INTO tmsp.tmsp_net_org_stock(serial_no, stock_pos_id, org_id, stock_pos_name, sup_stock_pos_id, stock_pos_level, stock_position_no, is_sync, sync_org_id, driver_id, vehicle_id, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time)select UUID_SHORT(), stock_pos_id, tmsp.org_ref(org_id), stock_pos_name, sup_stock_pos_id, stock_pos_level, stock_position_no, is_sync, '<新机构ID>', driver_id, vehicle_id, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_stock where sync_org_id in('<老机构ID>') ;
+update tmsp.tmsp_net_org_hr set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org_hr set hr_org_id = '<新机构ID>' where hr_org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_site_depart set site_org_id = '<新机构ID>' where site_org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_site_depart set depart_org_id = '<新机构ID>' where depart_org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org_debt_limit set depart_org_id = '<新机构ID>' where depart_org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org_remote_stock set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org_remote_stock set inventory_org_id = '<新机构ID>' where inventory_org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org_stock set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org_stock set sync_org_id = '<新机构ID>' where sync_org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_updown set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_updown set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org_product_line set depart_org_id = '<新机构ID>' where depart_org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org_product_line set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org_ext set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org set org_name = '<新机构名称>' where org_name in('<老机构名称>');
+update tmsp.tmsp_net_org set committee_id = '<新机构ID>' where committee_id in('<老机构ID单个>');
+update tmsp.tmsp_net_org set business_region_id = '<新机构大区ID>' where business_region_id in('<老机构大区ID>');
+update tmsp.tmsp_net_org set business_district_id = '<新机构小区ID>' where business_district_id in('<老机构小区ID>');
+update tmsp.tmsp_net_org set send_hr_org = '<新机构ID>' where send_hr_org in('<老机构ID单个>');
+update tmsp.tmsp_net_org set own_site_org_id = '<新机构ID>' where own_site_org_id in('<老机构ID单个>');
+
 
 
 
@@ -309,13 +341,13 @@ update crm.crm_report_resource_log set org_id = '<新机构ID>' where org_id in(
 update crm.crm_report_target set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 update crm.crm_sale_pipeline set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update crm.crm_base_grade set resp_busi_region='<新机构大区ID>' where resp_busi_region in('<老机构大区ID>');
-update crm.crm_base_customer_delivery_config set org_id = '<新机构ID>' where org_id in('<老机构ID>');
+update crm.crm_base_customer_delivery_config set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update crm.crm_base_customer_update_apply set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
 update crm.crm_base_cust_visiting set visit_org_id = '<新机构ID>' where visit_org_id in('<老机构ID>');
 update crm.crm_base_customer set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID>');
-update crm.crm_base_cust_goods_name_limit set org_id = '<新机构ID>',business_region_id = '<新机构大区ID>' where org_id in('<老机构ID>');
-update crm.crm_base_customer_spanned_area set business_region_id='<新机构大区>' where business_region_id in('<老机构大区ID>');
-
+update crm.crm_base_cust_goods_name_limit set org_id = '<新机构ID>',business_region_id = '<新机构大区ID>' where org_id in('<老机构ID单个>');
+update crm.crm_base_customer_spanned_area set business_region_id='<新机构大区ID>' where business_region_id in('<老机构大区ID>');
+update crm.crm_peer_competition set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 
 
 -- 主键特殊处理
@@ -587,7 +619,9 @@ update auth.auth_account_subject_info set subject_org_id = '<新机构ID>' where
 update auth.auth_account_subject_session set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update auth.auth_user_position set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update auth.auth_user_userinfo set org_id = '<新机构ID>', org_power = '<新机构ID>' where org_id in('<老机构ID>');
-delete from auth.auth_user_org where org_id in('<老机构ID>');
+update auth.auth_user_org set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+update auth.auth_user_org set parent_org_id = '<新机构ID>' where parent_org_id in('<老机构ID单个>');
+update auth.auth_user_org set org_name = '<新机构名称>' where org_name in('<老机构名称>');
 -- 唯一索引特殊处理
 INSERT IGNORE INTO auth.auth_permission_settings_value SELECT main.company_id,main.name_space_id,main.app_id,main.item_code,main.user_id,'<新机构ID>' AS setting_value,main.setting_value_remark,main.standard,main.remark,main.op_user_id,main.op_user_name,main.update_time,main.creator,main.creator_name,main.create_time FROM auth.auth_permission_settings_value AS main WHERE main.setting_value in('<老机构ID>');
 DELETE FROM auth.auth_permission_settings_value WHERE setting_value in('<老机构ID>');

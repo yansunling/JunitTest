@@ -54,7 +54,12 @@ public class CreateSwitchOrgFixTableSql implements ApplicationContextAware{
 		dataSource.setMaxActive(100);
 		//排除基础表
 		List<String> sqlTotalList=new ArrayList<>();
-		for(OrgData orgData:orgDataList){
+
+		List<OrgData> newOrgDataList=new ArrayList<>();
+		newOrgDataList.add(orgDataList.get(0));
+
+
+		for(OrgData orgData:newOrgDataList){
 			String orgSql="select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
 			List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
 			List<String> orgList=new ArrayList<>();
@@ -63,7 +68,7 @@ public class CreateSwitchOrgFixTableSql implements ApplicationContextAware{
 				orgList.add(item.get("org_id")+"");
 				orgNameList.add(item.get("org_name")+"");
 			});
-			String tableSchema="hcm";
+			String tableSchema="crm";
 			String schemaSql="select table_schema from information_schema.`TABLES` " +
 					"where table_schema='"+tableSchema+"' and  table_schema not in('information_schema'," +
 					"'query','dct','ouyang','portal','biq','das','acs','dctx','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','wac','kjob','crmx','jeewx-boot') " +
@@ -78,7 +83,7 @@ public class CreateSwitchOrgFixTableSql implements ApplicationContextAware{
 			ExecutorService executorService = Executors.newFixedThreadPool(50);
 			List<String> allData=new ArrayList<>();
 			for(String schema:schemaList){
-				String sql="select table_name from information_schema.`TABLES` where table_schema='"+schema+"'  and table_type!='VIEW' ";
+				String sql="select table_name from information_schema.`TABLES` where table_schema='"+schema+"'  and table_type!='VIEW'  ";
 				List<String> tableList = jdbcTemplate.queryForList(sql, String.class);
 				CountDownLatch countDownLatch = new CountDownLatch(tableList.size());
 				List<String> totalSql=new ArrayList<>();
@@ -93,13 +98,13 @@ public class CreateSwitchOrgFixTableSql implements ApplicationContextAware{
 								if(tableFilesStr.indexOf(newTable+",")<0){
 									return "";
 								}
-								String columnsSql="select column_name from  information_schema.COLUMNS where table_name='"+table+"' and table_schema='"+schema+"' " +
+								String columnsSql="select column_name from  information_schema.COLUMNS where table_name='"+table+"' " +
 										"and column_name not in('serial_no','create_user_id','update_user_id','remark','salesman_id') and data_type not in('decimal','datetime','date','int') ";
 								List<String> columnList = jdbcTemplate.queryForList(columnsSql, String.class);
 								if(CollectionUtil.isNotEmpty(columnList)){
 									List<String> sqlList=new ArrayList<>();
 									columnList.forEach(column->{
-										String dataSql="select `"+column+"` from "+newTable+" where  length(`"+column+"`)>=4  limit 1";
+										String dataSql="select `"+column+"` from "+newTable+" where  length(`"+column+"`)>=4  order by length(`"+column+"`) desc limit 1";
 										List<String> valueList = jdbcTemplate.queryForList(dataSql, String.class);
 										if(CollectionUtil.isEmpty(valueList)){
 											return;
@@ -139,7 +144,7 @@ public class CreateSwitchOrgFixTableSql implements ApplicationContextAware{
 				}
 				countDownLatch.await();
 				if(CollectionUtil.isNotEmpty(totalSql)){
-					List<String> newTotalSql=new ArrayList<>();
+					/*List<String> newTotalSql=new ArrayList<>();
 					totalSql.forEach(item->{
 						String newItem = SwitchUtil.replaceName(item, orgData);
 						if(StringUtils.isNotBlank(newItem)){
@@ -150,7 +155,10 @@ public class CreateSwitchOrgFixTableSql implements ApplicationContextAware{
 					if(CollectionUtil.isNotEmpty(newTotalSql)){
 						allData.add("\n\n  -- "+schema.toUpperCase());
 						allData.addAll(newTotalSql);
-					}
+					}*/
+
+					allData.add("\n\n  -- "+schema.toUpperCase());
+					allData.addAll(totalSql);
 				}
 			}
 			File outfile=new File("C:\\Users\\yansunling\\Desktop\\org\\errorTable.sql");

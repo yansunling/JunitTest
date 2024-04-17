@@ -35,8 +35,8 @@ public class CreateTmspResoruceSql {
         map.put("addData",new ButtonType("icon-add","新增"));
 //        map.put("updateData",new ButtonType("icon-edit","修改"));
 //        map.put("deleteData",new ButtonType("icon-remove","删除"));
-        map.put("enableData",new ButtonType("icon-ok","启用"));
-        map.put("disableData",new ButtonType("icon-cancel","禁用"));
+        map.put("enableData",new ButtonType("icon-ok","启用","updateData"));
+        map.put("disableData",new ButtonType("icon-cancel","禁用","updateData"));
 //        map.put("applyViolation",new ButtonType("icon-add","事故上报"));
 //        map.put("completeData",new ButtonType("icon-ok","事故完结"));
 //        map.put("applyData",new ButtonType("icon-add","借支"));
@@ -55,9 +55,13 @@ public class CreateTmspResoruceSql {
         for(String button:keySet){
             String funId=fun+"_"+button;
             ButtonType buttonType = map.get(button);
+            String url = buttonType.getUrl();
+            if(StringUtils.isBlank(url)){
+                url=button;
+            }
 
                 String sql="INSERT INTO `tmsp`.`foc_plugins_auth_resource`(`resource_id`, `resource_name`, `resource_desc`, `sys_uri`, `resource_type`, `create_time`, `update_time`, `operator`, `icon_id`)" +
-                        " VALUES ('"+funId+"', '"+buttonType.getName()+"', '', '/actions/"+fun+"/"+button+".do', 'B', now(), now(), 'T1113', '"+buttonType.getIcon()+"');";
+                        " VALUES ('"+funId+"', '"+buttonType.getName()+"', '', '/actions/"+fun+"/"+url+".do', 'B', now(), now(), 'T1113', '"+buttonType.getIcon()+"');";
                 System.out.println(sql);
                 sql="INSERT INTO `tmsp`.`foc_plugins_auth_role_2_resource`(`root_node_id`, `res_node_id`, `res_node_sup`, `node_order`, `root_flag`, `res_level`, `leaf_flag`, `create_time`, `update_time`, `operator`) " +
                         "VALUES ('default', '"+funId+"', '"+parentId+"', "+i*10+", 0, 3, 0, now(),now(), 'T1113');\n";

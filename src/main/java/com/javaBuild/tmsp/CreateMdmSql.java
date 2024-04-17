@@ -2,11 +2,11 @@ package com.javaBuild.tmsp;
 
 public class CreateMdmSql {
     public static void main(String[] args) {
-        /*String name="国三，国四，国五，电动";
-        String[] list = name.split("，");
+        String name="事件通知,金额,减免时效罚款,事件通知";
+        String[] list = name.split(",");
         StringBuffer sb=new StringBuffer();
         StringBuffer sql=new StringBuffer();
-        String domainId="emission_standard";
+        String domainId="contact_category";
         for(int i=0;i<list.length;i++){
             Integer key=i;
             String value=list[i].trim();
@@ -18,10 +18,10 @@ public class CreateMdmSql {
 
         }
         System.out.println(sb.toString());
-        System.out.println(sql.toString());*/
+        System.out.println(sql.toString());
 
 
-        String name="南宁 N,玉林 YL,湛江 ZJ,柳州 LZ,桂林 GL,白色 BS,东兴 DX,凭祥 PX";
+        /*String name="南宁 N,玉林 YL,湛江 ZJ,柳州 LZ,桂林 GL,白色 BS,东兴 DX,凭祥 PX";
         String[] names = name.split(",");
         Integer key=29;
         String domainId="cust_name_main_lines";
@@ -45,6 +45,6 @@ public class CreateMdmSql {
         }
         System.out.println(sb.toString());
         System.out.println(sql.toString());
-        System.out.println(html.toString());
+        System.out.println(html.toString());*/
     }
 }
