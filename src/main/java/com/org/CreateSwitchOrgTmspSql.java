@@ -102,8 +102,10 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
         schemaMap.forEach((key,list)->{
             try {
                 if(CollectionUtil.isNotEmpty(list)){
+                    Set<String> set=new LinkedHashSet<>();
+                    set.addAll(list);
                     File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\tmsp\\"+key+".sql");
-                    FileUtils.writeLines(schemaFile,"utf-8",list);
+                    FileUtils.writeLines(schemaFile,"utf-8",set);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

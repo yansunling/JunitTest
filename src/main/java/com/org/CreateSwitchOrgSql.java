@@ -109,8 +109,11 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
         schemaMap.forEach((key,list)->{
             try {
                 if(CollectionUtil.isNotEmpty(list)){
+
+                    Set<String> set=new LinkedHashSet<>();
+                    set.addAll(list);
                     File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\org\\"+key+".sql");
-                    FileUtils.writeLines(schemaFile,"utf-8",list);
+                    FileUtils.writeLines(schemaFile,"utf-8",set);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -123,7 +126,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
         String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where   table_schema not in('tmsp','bds','costx','information_schema'," +
+                "where table_schema='crm' and table_schema not in('tmsp','bds','costx','information_schema'," +
                 "'query','dct','ouyang','portal','biq','das','acs','dctx','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','wac','kjob','crmx','jeewx-boot') " +
                 "  group by table_schema";
         List<String> schemaList = jdbcTemplate.queryForList(schemaSql, String.class);
@@ -143,7 +146,14 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
         List<String> odlSqlList = FileUtils.readLines(new File(filePath + "java/table/tmsp_org_adjust_template_new.sql"), "utf-8");
         odlSqlList.forEach(item -> {
             boolean addFlag = true;
+            if(item.indexOf("crm.crm_peer_competition")>0){
+                System.out.println(item);
+            }
+
             for (String table : tableFiles) {
+                if(StringUtils.isBlank(table)){
+                    continue;
+                }
                 if (item.indexOf(" " + table + " ") >= 0) {
                     addFlag = false;
                     break;

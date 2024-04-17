@@ -77,7 +77,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
             }
             templateList.addAll(sqlList);
             if(CollectionUtil.isNotEmpty(sqlList)){
-                List<String> newSqlList=new ArrayList<>();
+                Set<String> newSqlList=new LinkedHashSet<>();
                 for (OrgData orgData : orgDataList) {
                     String title = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
                     newSqlList.add("--   "+title);

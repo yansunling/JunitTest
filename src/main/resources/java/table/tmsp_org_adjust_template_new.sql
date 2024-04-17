@@ -349,8 +349,9 @@ update crm.crm_base_customer_update_apply set creator_org_id = '<新机构ID>' w
 update crm.crm_base_cust_visiting set visit_org_id = '<新机构ID>' where visit_org_id in('<老机构ID>');
 update crm.crm_base_customer set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID>');
 update crm.crm_base_cust_goods_name_limit set org_id = '<新机构ID>',business_region_id = '<新机构大区ID>' where org_id in('<老机构ID单个>');
-update crm.crm_base_customer_spanned_area set business_region_id='<新机构大区ID>' where business_region_id in('<老机构大区ID单个>');
-update crm.crm_peer_competition set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
+replace into  crm.crm_base_customer_spanned_area select serial_no, '<新机构大区ID>', prov_code, city_code, area_code, creator, create_time, op_user_id, update_time from crm.crm_base_customer_spanned_area  where business_region_id in('<老机构大区ID>');
+replace INTO crm.crm_peer_competition  select serial_no, '<新机构ID>', company_name, scale, compete_relation, end_station_num, remark, creator, create_time, op_user_id, update_time from crm.crm_peer_competition where org_id in('<老机构ID>');
+
 
 
 -- 主键特殊处理
