@@ -28,6 +28,7 @@ tmsp.tmsp_send_trans_cust_fee_log
 tmsp.tmsp_send_app_doc
 tmsp.tmsp_pda_out_stock_detail
 tmsp.tmsp_send_trans_cust_fee
+tmsp.tmsp_alter_order_report
 bmsp.bmsp_report_outorder_customer_cust
 bmsp.bmsp_should_inorder
 bmsp.bmsp_should_inorder_clear
@@ -43,3 +44,4 @@ bmsp.bmsp_should_outorder_clear
 bmsp.bmsp_should_outcost
 bmsp.bmsp_should_outcost_clear
 bmsp.bmsp_balance_outcost_detail
+tmm.tmm_report_trans_time

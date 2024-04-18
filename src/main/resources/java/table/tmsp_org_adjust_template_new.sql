@@ -29,9 +29,11 @@ update hcm.hcm_org_relation set org_name = '<新机构名称>' where org_name in
 update hcm.hcm_org_relation set business_region_id = '<新机构大区ID>' where business_region_id in('<老机构大区ID>');
 update hcm.hcm_org_relation set business_district_id = '<新机构小区ID>' where business_district_id in('<老机构小区ID>');
 update hcm.hcm_org_relation set committee_id = '<新机构ID>' where committee_id in('<老机构ID单个>');
-update hcm.hcm_org_rel set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
-update hcm.hcm_org_rel set rel_org_id = '<新机构ID>' where rel_org_id in('<老机构ID单个>');
-update hcm.hcm_org_rel set org_name = '<新机构名称>' where org_name in('<老机构名称>');
+
+replace INTO hcm.hcm_org_rel select '<新机构ID>', rel_org_id, start_date, end_date, org_name, org_rel_type, create_date, creater, operator, op_time, send_status, remark, update_user_id, update_time, create_user_id, create_time from hcm.hcm_org_rel where org_id in('<老机构ID>');
+replace INTO hcm.hcm_org_rel select org_id, '<新机构ID>', start_date, end_date, org_name, org_rel_type, create_date, creater, operator, op_time, send_status, remark, update_user_id, update_time, create_user_id, create_time   from hcm.hcm_org_rel where rel_org_id in('<老机构ID>');
+replace INTO hcm.hcm_org_rel select org_id, rel_org_id, start_date, end_date, '<新机构名称>', org_rel_type, create_date, creater, operator, op_time, send_status, remark, update_user_id, update_time, create_user_id, create_time  from hcm.hcm_org_rel where org_name in('<老机构名称>');
+
 update hcm.hcm_org_relation_all set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update hcm.hcm_org_relation_all set org_name = '<新机构名称>' where org_name in('<老机构名称>');
 update hcm.hcm_org_relation_all set business_region_id = '<新机构大区ID>' where business_region_id in('<老机构大区ID>');

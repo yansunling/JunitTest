@@ -177,4 +177,6 @@ tmsp.tmsp_send_trans_cust_fee_log
 tmsp.tmsp_send_app_doc
 tmsp.tmsp_pda_out_stock_detail
 tmsp.tmsp_send_trans_cust_fee
+tmsp.tmsp_alter_order_report
+tmm.tmm_report_trans_time
 
