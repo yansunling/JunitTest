@@ -630,3 +630,30 @@ update auth.auth_permission_settings_rule set settings_value = REPLACE(settings_
 -- 唯一索引特殊处理
 INSERT IGNORE INTO auth.auth_permission_settings_value SELECT main.company_id,main.name_space_id,main.app_id,main.item_code,main.user_id,'<新机构ID>' AS setting_value,main.setting_value_remark,main.standard,main.remark,main.op_user_id,main.op_user_name,main.update_time,main.creator,main.creator_name,main.create_time FROM auth.auth_permission_settings_value AS main WHERE main.setting_value in('<老机构ID>');
 DELETE FROM auth.auth_permission_settings_value WHERE setting_value in('<老机构ID>');
+
+
+
+-- BDS
+update bds.bds_backdoc_different set different_org_id = '<新机构ID>' where different_org_id in('<老机构ID>');
+update bds.bds_backdoc_different set above_org_id = '<新机构ID>' where above_org_id in('<老机构ID>');
+update bds.bds_backdoc_different set different_clear_org_id = '<新机构ID>' where different_clear_org_id in('<老机构ID>');
+update bds.bds_backdoc_different_clear set different_clear_org_id = '<新机构ID>' where different_clear_org_id in('<老机构ID>');
+update bds.bds_backdoc_handover set above_org_id = '<新机构ID>' where above_org_id in('<老机构ID>');
+update bds.bds_backdoc_handover set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID>');
+update bds.bds_backdoc_handover_file set upload_org_id = '<新机构ID>' where upload_org_id in('<老机构ID>');
+update bds.bds_backdoc_info set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID>');
+update bds.bds_backdoc_info set backdoc_load_org_id = '<新机构ID>' where backdoc_load_org_id in('<老机构ID>');
+update bds.bds_backdoc_info set backdoc_arrive_org_id = '<新机构ID>' where backdoc_arrive_org_id in('<老机构ID>');
+update bds.bds_backdoc_photo_info set upload_org_id = '<新机构ID>' where upload_org_id in('<老机构ID>');
+update bds.bds_backdoc_print_record set print_org_id = '<新机构ID>' where print_org_id in('<老机构ID>');
+update bds.bds_backdoc_route set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID>');
+update bds.bds_backdoc_route set return_sure_org_id = '<新机构ID>' where return_sure_org_id in('<老机构ID>');
+update bds.bds_backdoc_stock set stock_org_id = '<新机构ID>' where stock_org_id in('<老机构ID>');
+update bds.bds_backdoc_stock set different_org_id = '<新机构ID>' where different_org_id in('<老机构ID>');
+update bds.bds_backdoc_stock set above_org_id = '<新机构ID>' where above_org_id in('<老机构ID>');
+update bds.bds_backdoc_stock set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID>');
+update bds.bds_backdoc_track set above_org_id = '<新机构ID>' where above_org_id in('<老机构ID>');
+update bds.bds_backdoc_track set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID>');
+update bds.bds_backdoc_track set operate_org_id = '<新机构ID>' where operate_org_id in('<老机构ID>');
+
+

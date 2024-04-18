@@ -50,7 +50,7 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
     public void test() throws Exception {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\TL_TMSP.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\tmsp\\"));
+        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp\\"));
         jdbcTemplate.setQueryTimeout(500);
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
         dataSource.setMaxActive(100);
@@ -90,13 +90,13 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
 
 
 
-            File allFile = new File("C:\\Users\\yansunling\\Desktop\\tmsp\\" + newFileName + ".sql");
+            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp\\" + newFileName + ".sql");
             sqlTotalList.add("\n\n\n");
             sqlTotalList.addAll(newSqlList);
             FileUtils.writeLines(allFile, "utf-8", newSqlList);
             sqlTotalList.addAll(newSqlList);
         }
-        File allFile = new File("C:\\Users\\yansunling\\Desktop\\tmsp\\allSql.sql");
+        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp\\allSql.sql");
         FileUtils.writeLines(allFile,"utf-8",sqlTotalList);
 
         schemaMap.forEach((key,list)->{
@@ -104,14 +104,14 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
                 if(CollectionUtil.isNotEmpty(list)){
                     Set<String> set=new LinkedHashSet<>();
                     set.addAll(list);
-                    File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\tmsp\\"+key+".sql");
+                    File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp\\"+key+".sql");
                     FileUtils.writeLines(schemaFile,"utf-8",set);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\tmsp\\notSchema.sql");
+        File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp\\notSchema.sql");
         FileUtils.writeLines(notSchemaFile,"utf-8",notSchema);
     }
 

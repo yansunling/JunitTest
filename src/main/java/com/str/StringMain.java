@@ -13,12 +13,9 @@ import java.util.regex.Pattern;
 public class StringMain {
     public static void main(String[] args) {
         String inputString="org";
-        String regex = "big_area|region_id";
-        Pattern pattern = Pattern.compile(regex);
-        // 创建Matcher对象
-        Matcher matcher = pattern.matcher(inputString);
+        String regex = "'big_area','region_id'";
 
-        System.out.println(matcher.find());
+        System.out.println(regex.replaceAll("','","|"));
 
 
     }

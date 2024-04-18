@@ -30,7 +30,7 @@ import java.util.concurrent.*;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:applicationContext.xml"})
-public class CreateSwitchOrgFixTableSql implements ApplicationContextAware{
+public class CreateTemplateSwitchOrgSql implements ApplicationContextAware{
 	ApplicationContext ac;
 	@Override
 	public void setApplicationContext(ApplicationContext applicationContext)
@@ -48,7 +48,7 @@ public class CreateSwitchOrgFixTableSql implements ApplicationContextAware{
 	public  void test() throws Exception {
 		String excelFilePath="C:\\Users\\yansunling\\Desktop\\TL_绍兴机构切换调整明细_20240318.xlsx";
 		List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-		SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\org\\"));
+		SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"));
 		jdbcTemplate.setQueryTimeout(500);
 		DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource)ydDriverManagerDataSource.getObject();
 		dataSource.setMaxActive(100);
@@ -161,11 +161,11 @@ public class CreateSwitchOrgFixTableSql implements ApplicationContextAware{
 					allData.addAll(totalSql);
 				}
 			}
-			File outfile=new File("C:\\Users\\yansunling\\Desktop\\org\\errorTable.sql");
+			File outfile=new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\errorTable.sql");
 			FileUtils.writeLines(outfile,"utf-8",errorTable,true);
 			String fileName=orgData.getNewOrgName()+"["+orgData.getNewOrgId()+"]切为"+orgData.getOldOrgName()+"["+orgData.getOldOrgId()+"]";
 			fileName=fileName.replaceAll("'","");
-			File allFile=new File("C:\\Users\\yansunling\\Desktop\\org\\"+fileName+".sql");
+			File allFile=new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"+fileName+".sql");
 			if(CollectionUtil.isNotEmpty(allData)){
 				sqlList.add("\n\n\n");
 				sqlList.addAll(allData);
@@ -175,7 +175,7 @@ public class CreateSwitchOrgFixTableSql implements ApplicationContextAware{
 
 		}
 		if(CollectionUtil.isNotEmpty(sqlTotalList)){
-			File allFile=new File("C:\\Users\\yansunling\\Desktop\\org\\allSql.sql");
+			File allFile=new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\allSql.sql");
 			FileUtils.writeLines(allFile,"utf-8",sqlTotalList);
 		}
 	}

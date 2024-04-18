@@ -4,7 +4,6 @@ tmsp.tmsp_stock_all_user_rel
 tmsp.tmsp_stock_cargo
 tmsp.tmsp_stock_io_items_detail
 tmsp.tmsp_stock_io_items
-tmsp.tmsp_order_route_org_detail
 tmsp.tmsp_send_order_cust
 tmsp.tmsp_share_file
 tmsp.tmsp_hand_schedule_car
@@ -29,4 +28,18 @@ tmsp.tmsp_send_trans_cust_fee_log
 tmsp.tmsp_send_app_doc
 tmsp.tmsp_pda_out_stock_detail
 tmsp.tmsp_send_trans_cust_fee
-mdm.mdm_crm_base_customer_union
+bmsp.bmsp_report_outorder_customer_cust
+bmsp.bmsp_should_inorder
+bmsp.bmsp_should_inorder_clear
+bmsp.bmsp_report_income_day
+bmsp.bmsp_ticket_arrive
+bmsp.bmsp_oa_payment_detail
+bmsp.bmsp_should_busi_cash_detail
+bmsp.bmsp_report_trans_load_log
+bmsp.bmsp_bank_payment_detail
+bmsp.bmsp_balance_outorder_detail
+bmsp.bmsp_should_outorder
+bmsp.bmsp_should_outorder_clear
+bmsp.bmsp_should_outcost
+bmsp.bmsp_should_outcost_clear
+bmsp.bmsp_balance_outcost_detail

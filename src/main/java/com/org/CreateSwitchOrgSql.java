@@ -112,21 +112,21 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
 
                     Set<String> set=new LinkedHashSet<>();
                     set.addAll(list);
-                    File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\org\\"+key+".sql");
+                    File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"+key+".sql");
                     FileUtils.writeLines(schemaFile,"utf-8",set);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\org\\notSchema.sql");
+        File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\notSchema.sql");
         FileUtils.writeLines(notSchemaFile,"utf-8",notSchema);
     }
 
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
         String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where  table_schema not in('tmsp','bds','costx','information_schema'," +
+                "where  table_schema not in('tmsp','bmsp','costx','information_schema'," +
                 "'query','dct','ouyang','portal','biq','das','acs','dctx','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','wac','kjob','crmx','jeewx-boot') " +
                 "  group by table_schema";
         List<String> schemaList = jdbcTemplate.queryForList(schemaSql, String.class);
