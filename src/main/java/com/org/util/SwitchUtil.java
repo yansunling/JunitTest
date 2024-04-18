@@ -739,7 +739,7 @@ public class SwitchUtil {
     }
     public static String matchColumn(String column,String newTable,String type,boolean concat){
         if(concat){
-            return "update "+newTable+" set "+column+" = CONCAT("+column+",',','<新机构"+type+">') where "+column+" like REGEXP '<老机构"+type+"集合>';";
+            return "update "+newTable+" set "+column+" = CONCAT("+column+",',','<新机构"+type+">') where "+column+"  REGEXP '<老机构"+type+"集合>';";
         }
         String areaRegex = "big_area|region";
         Pattern pattern = Pattern.compile(areaRegex);
