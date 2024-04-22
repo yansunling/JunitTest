@@ -33,9 +33,9 @@ public class SwitchUtil {
         System.out.println("333");
     }
 
-    private static Map<String,String> oldMap=new HashMap<>();
+    public static Map<String,String> oldMap=new HashMap<>();
 
-    private static Map<String,String> newMap=new HashMap<>();
+    public static Map<String,String> newMap=new HashMap<>();
 
     static {
         oldMap.put("总裁","2501");
