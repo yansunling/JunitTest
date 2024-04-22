@@ -776,7 +776,7 @@ public class SwitchUtil {
         if(concat){
             return "update "+newTable+" set "+column+" = CONCAT("+column+",',','<新机构"+type+">') where "+column+"  REGEXP '<老机构"+type+"集合>';";
         }
-        String areaRegex = "big_area|region";
+        String areaRegex = "big_area|region|大区";
         Pattern pattern = Pattern.compile(areaRegex);
         // 创建Matcher对象
         String sql="update "+newTable+" set "+column+" = '<新机构"+type+">' where "+column+" in('<老机构"+type+">');";
@@ -784,7 +784,7 @@ public class SwitchUtil {
         if(matcher.find()){
             sql="update "+newTable+" set "+column+" = '<新机构大区"+type+">' where "+column+" in('<老机构大区"+type+">');";
         }
-        String smallRegex = "small_area|district_id";
+        String smallRegex = "small_area|district_id|小区";
         Pattern smallPattern = Pattern.compile(smallRegex);
         Matcher smallMatcher = smallPattern.matcher(column);
         if(smallMatcher.find()){
@@ -851,7 +851,7 @@ public class SwitchUtil {
         item=item.replaceAll("'<新机构小区ID>'",orgData.getNewDistrictId());
         item=item.replaceAll("'<新机构大区ID>'",orgData.getNewRegionId());
         item=item.replaceAll("'<老机构大区ID>'",orgData.getOldRegionId());
-        item=item.replaceAll("'<老机构大区名称>'",orgData.getOldOrgName());
+        item=item.replaceAll("'<老机构大区名称>'",orgData.getOldRegionName());
         item=item.replaceAll("'<老机构小区ID>'",orgData.getOldDistrictId());
         item=item.replaceAll("'<老机构小区名称>'",orgData.getOldDistrictName());
         if(item.indexOf("<老机构大区ID单个>")>0){

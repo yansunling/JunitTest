@@ -2,11 +2,11 @@ package com.javaBuild.tmsp;
 
 public class CreateMdmSql {
     public static void main(String[] args) {
-        String name="事件通知,金额,减免时效罚款,事件通知";
-        String[] list = name.split(",");
+        String name="提付-现付、提付-临欠、现付、临欠";
+        String[] list = name.split("、");
         StringBuffer sb=new StringBuffer();
         StringBuffer sql=new StringBuffer();
-        String domainId="contact_category";
+        String domainId="receivable_payment_method";
         for(int i=0;i<list.length;i++){
             Integer key=i;
             String value=list[i].trim();

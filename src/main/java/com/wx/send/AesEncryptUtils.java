@@ -145,7 +145,7 @@ public class AesEncryptUtils {
 		System.out.println(denc);*/
 
 
-        String decrypt = decrypt("254D52A774A2D1201B86FAAA2AD961F678F6A01AF781AC9D8A5814103FD0B9C31310A198997C79C6C7B7E9FAF361BA2F");
+        String decrypt = decrypt("8E2CBA21737659CBCE795A7E86CE06CCB90EB11CFFDE61622D750C048D3E2507D41604C9159180F39E4D1D81B4324491");
         System.out.println(decrypt);
 
         System.out.println(ExchangeEnum.DIRECT.name());
