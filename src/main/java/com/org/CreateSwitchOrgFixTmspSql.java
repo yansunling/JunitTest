@@ -48,9 +48,23 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\TL_TMSP.xlsx";
-        List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\table\\"));
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
+        List<OrgData> excelOrgDataList = SwitchUtil.readExcel(excelFilePath);
+
+        String sql="select org_id from tmsp.tmsp_net_org where org_status='run' and org_id not in('25010301') ";
+        List<String> oldOrgList = jdbcTemplate.queryForList(sql, String.class);
+        List<OrgData> orgDataList=new ArrayList<>();
+        for(OrgData orgData:excelOrgDataList){
+            String orgDataSource = orgData.getOldOrgId().replaceAll("'", "");
+            String[] split = orgDataSource.split(",");
+            for(String str:split){
+                if(oldOrgList.contains(str)){
+                    orgDataList.add(orgData);
+                    break;
+                }
+            }
+        }
+//        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\table\\"));
         jdbcTemplate.setQueryTimeout(500);
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
         dataSource.setMaxActive(100);

@@ -139,10 +139,6 @@ update tmsp.tmsp_net_org_barcode set org_id = '<新机构ID>' where org_id in('<
 
 
 
-
-
-
-
 update tmsp.tmsp_net_org_switch_log set org_id_before = '<新机构ID>' where org_id_before in('<老机构ID>');
 update tmsp.tmsp_net_org_switch_log set org_id_after = '<新机构ID>' where org_id_after in('<老机构ID>');
 update tmsp.tmsp_net_org_unload_resp set org_id = '<新机构ID>' where org_id in('<老机构ID>');
@@ -269,31 +265,26 @@ update tmsp.tmsp_turn_transfer_fee set site_org_name = '<新机构名称>' where
 update tmsp.tmsp_net_rail_group set arrive_org_id = '<新机构ID>' where arrive_org_id in('<老机构ID>');
 update tmsp.tmsp_net_rail_group_item set load_org_id = '<新机构ID>' where load_org_id in('<老机构ID>');
 update tmsp.tmsp_net_rail_group_item set arrive_org_id = '<新机构ID>' where arrive_org_id in('<老机构ID>');
-update tmsp.tmsp_net_org set org_status='close' where org_id in('<老机构ID>');
+
 
 
 -- TMSP insert
 update tmsp.tmsp_net_org_hr set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update tmsp.tmsp_net_org_hr set hr_org_id = '<新机构ID>' where hr_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_site_depart set site_org_id = '<新机构ID>' where site_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_site_depart set depart_org_id = '<新机构ID>' where depart_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_debt_limit set depart_org_id = '<新机构ID>' where depart_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_remote_stock set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_remote_stock set inventory_org_id = '<新机构ID>' where inventory_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_stock set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_stock set sync_org_id = '<新机构ID>' where sync_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_updown set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_updown set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_product_line set depart_org_id = '<新机构ID>' where depart_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_product_line set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org_ext set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org set org_name = '<新机构名称>' where org_name in('<老机构名称>');
-update tmsp.tmsp_net_org set committee_id = '<新机构ID>' where committee_id in('<老机构ID单个>');
-update tmsp.tmsp_net_org set business_region_id = '<新机构大区ID>' where business_region_id in('<老机构大区ID>');
-update tmsp.tmsp_net_org set business_district_id = '<新机构小区ID>' where business_district_id in('<老机构小区ID>');
-update tmsp.tmsp_net_org set send_hr_org = '<新机构ID>' where send_hr_org in('<老机构ID单个>');
-update tmsp.tmsp_net_org set own_site_org_id = '<新机构ID>' where own_site_org_id in('<老机构ID单个>');
+replace INTO tmsp.tmsp_net_site_depart select serial_no, '<新机构ID>', depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart where site_org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_site_depart select serial_no, site_org_id,'<新机构ID>', version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart where depart_org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_org_debt_limit select serial_no, '<新机构ID>', max_limit, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_debt_limit  where depart_org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_org_remote_stock select serial_no, '<新机构ID>', inventory_org_id, activate_status, effect_time, disabled_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_remote_stock where ticket_org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_org_remote_stock select serial_no, ticket_org_id,'<新机构ID>', activate_status, effect_time, disabled_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_remote_stock where inventory_org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_org_stock select serial_no, stock_pos_id, '<新机构ID>', stock_pos_name, sup_stock_pos_id, stock_pos_level, stock_position_no, is_sync, sync_org_id, driver_id, vehicle_id, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_stock where org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_org_stock select serial_no, stock_pos_id, org_id, stock_pos_name, sup_stock_pos_id, stock_pos_level, stock_position_no, is_sync,  '<新机构ID>', driver_id, vehicle_id, activate_status, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_stock where sync_org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_updown select serial_no, '<新机构ID>', next_org_id, hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_updown  where org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_updown select serial_no,  org_id,  '<新机构ID>', hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_updown  where next_org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_org_product_line select serial_no, '<新机构ID>', product_type, last_city, is_area_net, income_org_id, effective_date, expiry_date, activate_status, delivery_gis_flag, share_ratio, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_product_line where depart_org_id in('<老机构ID>');
+update tmsp.tmsp_net_org_product_line set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_org_ext select serial_no, '<新机构ID>', brand, enable_remote_stock, driver_prefix, sign_radius, is_recode_recive, recive_price, recive_price_car, recive_price_cube, recive_price_weight, is_record_stock, resp_tel, org_name_tl, prov_code_tl, city_code_tl, area_code_tl, org_address_tl, longitude_tl, latitude_tl, org_name_zx, prov_code_zx, city_code_zx, area_code_zx, org_address_zx, longitude_zx, latitude_zx, is_lht, is_start_print, is_delivery_line, delivery_serial_start, cust_area, print_brand_name, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_ext where org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_org select serial_no, '<新机构ID>', org_code, '<新机构名称>', org_short_name, org_status, resp_user_id, org_type, net_station_type, country_code, prov_code, city_code, area_code, org_address, longitude, latitude, org_tel, '', '<新机构大区ID>', '<新机构小区ID>', shutdown_user_id, shutdown_time, sale_mode, '<新机构ID>', send_decision, is_self_car, is_local_net, own_site_org_id, enable_order, send_city, send_city_name, enable_trans, enable_stock, enable_last, enable_rail, last_city, enable_aging, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org where org_id in('<老机构ID>');
+update tmsp.tmsp_net_org set own_site_org_id = '<新机构ID>' where own_site_org_id in('<老机构ID>');
 
 
 
@@ -658,4 +649,7 @@ update bds.bds_backdoc_track set above_org_id = '<新机构ID>' where above_org_
 update bds.bds_backdoc_track set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID>');
 update bds.bds_backdoc_track set operate_org_id = '<新机构ID>' where operate_org_id in('<老机构ID>');
 
-
+-- DCTX
+replace INTO dctx.tmsp_settle_hand_org_ratio select 发车年, 发车月, '<新机构ID>', 到达部门, 运输方式_修正, 火车计费方式, 费用承担部门, 总重量, 总体积, 部门泡重比, 数据导入批次号, 数据导入时间, 数据更新时间 from dctx.tmsp_settle_hand_org_ratio where  装车部门 in('<老机构ID>');
+replace INTO dctx.tmsp_settle_hand_org_ratio select 发车年, 发车月, 装车部门 , 到达部门, 运输方式_修正, 火车计费方式, '<新机构ID>', 总重量, 总体积, 部门泡重比, 数据导入批次号, 数据导入时间, 数据更新时间 from dctx.tmsp_settle_hand_org_ratio where  费用承担部门 in('<老机构ID>');
+replace INTO dctx.tmsp_settle_hand_org_ratio select 发车年, 发车月,  装车部门,'<新机构ID>', 运输方式_修正, 火车计费方式, 费用承担部门, 总重量, 总体积, 部门泡重比, 数据导入批次号, 数据导入时间, 数据更新时间 from dctx.tmsp_settle_hand_org_ratio where 到达部门 in('<老机构ID>');

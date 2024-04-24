@@ -12,6 +12,7 @@ import com.javaBuild.crmx.controller.MarketingBaseCustomerController;
 import com.javaBuild.tmsp.api.controller.TmspQualityErrorInfoController;
 import com.junit.po.ParamBean;
 import com.word.createWord.CopyWordParagraph;
+import com.word.dataSource.controller.TmspDzmController;
 import com.word.doc.GeneralTemplateTool;
 import com.word.doc.POIMergeDocUtil;
 import com.yd.utils.common.CollectionUtil;
@@ -34,7 +35,7 @@ public class WordCreateCrmxByClass {
 
         closeWps();
 
-        Class<?> clazz = MarketingBaseCustomerController.class;
+        Class<?> clazz = TmspDzmController.class;
 
         String path = WordCreateCrmxByClass.class.getClassLoader().getResource("").getPath();
         String filePath=path+"api";
@@ -49,7 +50,7 @@ public class WordCreateCrmxByClass {
 
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
-        String rootPath="https://tlwl.uat.tuolong56.com/marketing-api"+annotation.value()[0];
+        String rootPath="https://tlwl.uat.tuolong56.com/tmsp-api"+annotation.value()[0];
         //走网关
 //        rootPath="https://tlwl.uat.tuolong56.com/esb-api/api/d/";
 

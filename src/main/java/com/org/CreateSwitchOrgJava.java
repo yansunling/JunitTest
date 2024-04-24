@@ -51,7 +51,7 @@ public class CreateSwitchOrgJava implements ApplicationContextAware {
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\TL_绍兴机构切换调整明细_20240318.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = readExcel(excelFilePath);
         String filePath = getClass().getClassLoader().getResource("").getPath();
         List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/TMSPSettingConstant.java"), "utf-8");

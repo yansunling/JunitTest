@@ -5,8 +5,8 @@ das.das_base_db
 auth.auth_account_subject_company
 auth.auth_log_subject_pwd
 auth.auth_resource_company
-auth.auth_push_position
 auth.auth_account_subject_session
+auth.auth_user_org
 bds.cip_admin_use
 bds.foc_plugins_auth_user
 bds.cip_admin_user
@@ -15,7 +15,13 @@ costx.costxp_in_order_profile
 hcm.hcm_user_info_3566_0801
 hcmp.hcmp_wages_info_copy1
 hcmp.hcmp_wages_info_copy2
+hcm.hcm_org_info
+hcm.hcm_org_rel
+hcm.hcm_org_relation
+hcm.hcm_org_relation_all
+hcm.hcm_org_rec
 hcm.test
+hcm.z1
 mpp2.mpp2_apply_approve_oa_rel_old
 mpp2.mpp2_apply_approve_oa_rel
 mpp2.mpp2_apply_approve_oa_rel_copy1

@@ -48,8 +48,22 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\TL_TMSP.xlsx";
-        List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
+        List<OrgData> excelOrgDataList = SwitchUtil.readExcel(excelFilePath);
+
+        String sql="select org_id from tmsp.tmsp_net_org where org_status='run' and org_id not in('25010301') ";
+        List<String> oldOrgList = jdbcTemplate.queryForList(sql, String.class);
+        List<OrgData> orgDataList=new ArrayList<>();
+        for(OrgData orgData:excelOrgDataList){
+            String orgDataSource = orgData.getOldOrgId().replaceAll("'", "");
+            String[] split = orgDataSource.split(",");
+            for(String str:split){
+                if(oldOrgList.contains(str)){
+                    orgDataList.add(orgData);
+                    break;
+                }
+            }
+        }
         SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp\\"));
         jdbcTemplate.setQueryTimeout(500);
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
@@ -136,6 +150,10 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
         odlSqlList.forEach(item -> {
             boolean addFlag = true;
             for (String table : tableFiles) {
+                if(table.indexOf("tmsp_net_org_debt_limit")>=0){
+                    System.out.println(table);
+                }
+
                 if (item.indexOf(" " + table + " ") >= 0) {
                     addFlag = false;
                     break;
@@ -152,7 +170,7 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
             //设置初始值
             schemaMap.put(schema,new ArrayList<>());
 
-            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW' ";
+            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW' and table_name ='tmsp_net_org_debt_limit'";
             List<String> tableList = jdbcTemplate.queryForList(sql, String.class);
             CountDownLatch countDownLatch = new CountDownLatch(tableList.size());
             List<String> totalSql = new ArrayList<>();
