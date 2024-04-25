@@ -920,6 +920,9 @@ public class SwitchUtil {
 
 
 
+
+
+
     public static boolean deleteFolder(File folder) {
         if (folder == null) {
             return false;

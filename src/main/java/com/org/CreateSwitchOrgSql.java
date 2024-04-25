@@ -126,8 +126,8 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
         String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where    table_schema not in('tmsp','bmsp','costx','information_schema'," +
-                "'query','dct','ouyang','portal','biq','das','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','wac','kjob','crmx','jeewx-boot') " +
+                "where table_schema in('dctx','wac') and    table_schema not in('tmsp','bmsp','costx','information_schema'," +
+                "'query','dct','ouyang','portal','biq','das','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','kjob','crmx','jeewx-boot') " +
                 "  group by table_schema";
         List<String> schemaList = jdbcTemplate.queryForList(schemaSql, String.class);
         String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
@@ -146,10 +146,6 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
         List<String> odlSqlList = FileUtils.readLines(new File(filePath + "java/table/tmsp_org_adjust_template_new.sql"), "utf-8");
         odlSqlList.forEach(item -> {
             boolean addFlag = true;
-            if(item.indexOf("crm.crm_peer_competition")>0){
-                System.out.println(item);
-            }
-
             for (String table : tableFiles) {
                 if(StringUtils.isBlank(table)){
                     continue;

@@ -150,10 +150,9 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
         odlSqlList.forEach(item -> {
             boolean addFlag = true;
             for (String table : tableFiles) {
-                if(table.indexOf("tmsp_net_org_debt_limit")>=0){
-                    System.out.println(table);
+                if(StringUtils.isBlank(table)){
+                    continue;
                 }
-
                 if (item.indexOf(" " + table + " ") >= 0) {
                     addFlag = false;
                     break;
@@ -170,7 +169,7 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
             //设置初始值
             schemaMap.put(schema,new ArrayList<>());
 
-            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW' and table_name ='tmsp_net_org_debt_limit'";
+            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW' ";
             List<String> tableList = jdbcTemplate.queryForList(sql, String.class);
             CountDownLatch countDownLatch = new CountDownLatch(tableList.size());
             List<String> totalSql = new ArrayList<>();

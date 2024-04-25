@@ -650,6 +650,19 @@ update bds.bds_backdoc_track set next_org_id = '<新机构ID>' where next_org_id
 update bds.bds_backdoc_track set operate_org_id = '<新机构ID>' where operate_org_id in('<老机构ID>');
 
 -- DCTX
-replace INTO dctx.tmsp_settle_hand_org_ratio select 发车年, 发车月, '<新机构ID>', 到达部门, 运输方式_修正, 火车计费方式, 费用承担部门, 总重量, 总体积, 部门泡重比, 数据导入批次号, 数据导入时间, 数据更新时间 from dctx.tmsp_settle_hand_org_ratio where  装车部门 in('<老机构ID>');
-replace INTO dctx.tmsp_settle_hand_org_ratio select 发车年, 发车月, 装车部门 , 到达部门, 运输方式_修正, 火车计费方式, '<新机构ID>', 总重量, 总体积, 部门泡重比, 数据导入批次号, 数据导入时间, 数据更新时间 from dctx.tmsp_settle_hand_org_ratio where  费用承担部门 in('<老机构ID>');
-replace INTO dctx.tmsp_settle_hand_org_ratio select 发车年, 发车月,  装车部门,'<新机构ID>', 运输方式_修正, 火车计费方式, 费用承担部门, 总重量, 总体积, 部门泡重比, 数据导入批次号, 数据导入时间, 数据更新时间 from dctx.tmsp_settle_hand_org_ratio where 到达部门 in('<老机构ID>');
+replace into  dctx.tmsp_settle_send_collect select `发车年`,`发车月`,'<新机构大区ID>',`开单部门`,`目的城市`,`结算吨`,`结算方`,`纯送货费`,`送货延伸费`,`昆明1元钱`,`义乌卸货费`,`送货成本合计`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_send_collect where `开单大区` in('<老机构大区ID>');
+replace into  dctx.tmsp_settle_send_collect select `发车年`,`发车月`,`开单大区`,'<新机构ID>',`目的城市`,`结算吨`,`结算方`,`纯送货费`,`送货延伸费`,`昆明1元钱`,`义乌卸货费`,`送货成本合计`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_send_collect where `开单部门` in('<老机构ID>');
+replace into  dctx.tmsp_settle_all_collect select '<新机构大区名称>',`费用承担部门`,`收入_大区`,`收入_收取部门`,`运输线路`,`结算年月`,`交接件数`,`交接重量_吨`,`交接体积_方`,`操作货量`,`操作吨单价`,`操作成本`,`场地货量`,`场地吨单价`,`场地成本`,`火车干线成本`,`汽车干线成本`,`送货吨`,`送货方`,`送货成本`,`中转吨`,`中转方`,`中转成本`,`营销成本`,`回单成本`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_all_collect where `费用部门_大区` in('<老机构大区名称>');
+replace into  dctx.tmsp_settle_all_collect select `费用部门_大区`,`费用承担部门`,'<新机构大区名称>',`收入_收取部门`,`运输线路`,`结算年月`,`交接件数`,`交接重量_吨`,`交接体积_方`,`操作货量`,`操作吨单价`,`操作成本`,`场地货量`,`场地吨单价`,`场地成本`,`火车干线成本`,`汽车干线成本`,`送货吨`,`送货方`,`送货成本`,`中转吨`,`中转方`,`中转成本`,`营销成本`,`回单成本`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_all_collect where `收入_大区` in('<老机构大区名称>');
+replace into  dctx.tmsp_settle_hand_org_ratio select `发车年`,`发车月`,'<新机构ID>',`到达部门`,`运输方式_修正`,`火车计费方式`,`费用承担部门`,`总重量`,`总体积`,`部门泡重比`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_hand_org_ratio where `装车部门` in('<老机构ID>');
+replace into  dctx.tmsp_settle_hand_org_ratio select `发车年`,`发车月`,`装车部门`,'<新机构ID>',`运输方式_修正`,`火车计费方式`,`费用承担部门`,`总重量`,`总体积`,`部门泡重比`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_hand_org_ratio where `到达部门` in('<老机构ID>');
+replace into  dctx.tmsp_settle_hand_org_ratio select `发车年`,`发车月`,`装车部门`,`到达部门`,`运输方式_修正`,`火车计费方式`,'<新机构ID>',`总重量`,`总体积`,`部门泡重比`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_hand_org_ratio where `费用承担部门` in('<老机构ID>');
+replace into  dctx.tmsp_settle_hand_region_ratio select `发车年`,`发车月`,'<新机构ID>',`到达部门`,`运输方式_修正`,`火车计费方式`,`费用部门_大区`,`总重量`,`总体积`,`大区泡重比`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_hand_region_ratio where `装车部门` in('<老机构ID>');
+replace into  dctx.tmsp_settle_hand_region_ratio select `发车年`,`发车月`,`装车部门`,'<新机构ID>',`运输方式_修正`,`火车计费方式`,`费用部门_大区`,`总重量`,`总体积`,`大区泡重比`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_hand_region_ratio where `到达部门` in('<老机构ID>');
+replace into  dctx.tmsp_settle_hand_region_ratio select `发车年`,`发车月`,`装车部门`,`到达部门`,`运输方式_修正`,`火车计费方式`,'<新机构大区ID>',`总重量`,`总体积`,`大区泡重比`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_hand_region_ratio where `费用部门_大区` in('<老机构大区ID>');
+replace into  dctx.tmsp_settle_wlmq_ldf_fix select '<新机构大区ID>',`费用承担部门`,`收入_大区`,`收入_收取部门`,`对账单位`,`调账年份`,`调账月份`,`调账日期`,`落地费收入`,`中转费收入`,`营销费收入`,`回单费收入`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_wlmq_ldf_fix where `费用部门_大区` in('<老机构大区ID>');
+replace into  dctx.tmsp_settle_wlmq_ldf_fix select `费用部门_大区`,'<新机构ID>',`收入_大区`,`收入_收取部门`,`对账单位`,`调账年份`,`调账月份`,`调账日期`,`落地费收入`,`中转费收入`,`营销费收入`,`回单费收入`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_wlmq_ldf_fix where `费用承担部门` in('<老机构ID>');
+replace into  dctx.tmsp_settle_wlmq_ldf_fix select `费用部门_大区`,`费用承担部门`,'<新机构大区ID>',`收入_收取部门`,`对账单位`,`调账年份`,`调账月份`,`调账日期`,`落地费收入`,`中转费收入`,`营销费收入`,`回单费收入`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_wlmq_ldf_fix where `收入_大区` in('<老机构大区ID>');
+replace into  dctx.tmsp_settle_wlmq_ldf_fix select `费用部门_大区`,`费用承担部门`,`收入_大区`,'<新机构ID>',`对账单位`,`调账年份`,`调账月份`,`调账日期`,`落地费收入`,`中转费收入`,`营销费收入`,`回单费收入`,`数据导入批次号`,`数据导入时间`,`数据更新时间` from dctx.tmsp_settle_wlmq_ldf_fix where `收入_收取部门` in('<老机构ID>');
+
+
