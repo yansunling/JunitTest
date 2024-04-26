@@ -4,7 +4,6 @@
 
 -- HCM
 update hcm.hcm_user_info set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-update hcm.hcm_emp_ent set dept = '<新机构ID>' where dept in('<老机构ID>');
 update hcm.hcm_emp_ent set org_power = '<新机构ID>' where org_power in('<老机构ID>');
 update hcm.hcm_org_position set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update hcm.hcm_checkin_logs set org_id = '<新机构ID>' where org_id in('<老机构ID>');
@@ -41,6 +40,7 @@ update hcm.hcm_org_relation_all set business_district_id = '<新机构小区ID>'
 update hcm.hcm_org_relation_all set committee_id = '<新机构ID>' where committee_id in('<老机构ID单个>');
 update hcm.hcm_org_info set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update hcm.hcm_org_info set org_name = '<新机构名称>' where org_name in('<老机构名称>');
+
 
 
 

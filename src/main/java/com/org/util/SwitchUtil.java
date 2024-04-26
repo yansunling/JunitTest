@@ -397,133 +397,6 @@ public class SwitchUtil {
         oldMap.put("董事长","990000001");
 
 
-        newMap.put("35010107","苏中大区");
-        newMap.put("3501010701","南通线路管理一组");
-        newMap.put("3501010702","南通线路管理二组");
-        newMap.put("3501010703","南通线路管理三组");
-        newMap.put("3501010704","苏州常熟营业部");
-        newMap.put("3501010705","苏州常熟营业二部");
-        newMap.put("3501010706","南通通州转运场");
-        newMap.put("3501010707","南通叠石桥转运场");
-        newMap.put("3501010708","苏中客服组");
-        newMap.put("35010108","杭绍甬大区");
-        newMap.put("3501010801","杭绍甬大区办公室");
-        newMap.put("3501010802","杭州营销中心");
-        newMap.put("350101080201","杭州营销一组");
-        newMap.put("350101080202","杭州营销二组");
-        newMap.put("350101080203","杭州营销三组");
-        newMap.put("350101080204","杭州营销四组");
-        newMap.put("350101080205","杭州营销五组");
-        newMap.put("350101080206","杭州营销六组");
-        newMap.put("3501010803","杭州营运中心");
-        newMap.put("350101080301","杭州北转运场");
-        newMap.put("35010108030101","杭州铁路昆贵作业组");
-        newMap.put("35010108030102","杭州铁路乌兰作业组");
-        newMap.put("3501010804","绍兴市场网点管理部");
-        newMap.put("350101080401","柯东收货点");
-        newMap.put("350101080402","东升路收货点");
-        newMap.put("350101080403","南区收货点");
-        newMap.put("350101080404","北二区收货点");
-        newMap.put("350101080405","北五区收货点");
-        newMap.put("350101080406","北八区收货点");
-        newMap.put("350101080407","建材市场收货点");
-        newMap.put("3501010805","绍兴线路管理部");
-        newMap.put("350101080501","绍兴线路管理一组");
-        newMap.put("350101080502","绍兴线路管理二组");
-        newMap.put("350101080503","绍兴线路管理三组");
-        newMap.put("350101080504","绍兴线路管理四组");
-        newMap.put("350101080505","绍兴线路管理五组");
-        newMap.put("35010108050501","重庆卸货点");
-        newMap.put("35010108050502","四川成都卸货点");
-        newMap.put("35010108050503","四川南充卸货点");
-        newMap.put("35010108050504","四川宜宾卸货点");
-        newMap.put("35010108050505","四川泸州卸货点");
-        newMap.put("35010108050101","广西南宁卸货点");
-        newMap.put("35010108050102","广西柳州卸货点");
-        newMap.put("35010108050103","广西桂林卸货点");
-        newMap.put("35010108050104","广西宾阳卸货点");
-        newMap.put("35010108050105","广西凭祥卸货点");
-        newMap.put("35010108050106","广西东兴卸货点");
-        newMap.put("35010108050107","广西玉林卸货点");
-        newMap.put("35010108050108","广西爱店卸货点");
-        newMap.put("35010108050109","广西垌中卸货点");
-        newMap.put("35010108050110","广西西贡卸货点");
-        newMap.put("35010108050401","甘肃兰州卸货点");
-        newMap.put("35010108050402","甘肃临夏卸货点");
-        newMap.put("35010108050403","宁夏银川卸货点");
-        newMap.put("35010108050404","青海西宁卸货点");
-        newMap.put("3501010806","绍兴营销中心");
-        newMap.put("350101080601","绍兴嵊州营业部");
-        newMap.put("350101080602","绍兴袍江营业部");
-        newMap.put("350101080603","萧山党山营业部");
-        newMap.put("350101080604","绍兴营销一组");
-        newMap.put("350101080605","绍兴营销二组");
-        newMap.put("3501010807","绍兴营运中心");
-        newMap.put("350101080701","钱清转运场");
-        newMap.put("350101080702","绍兴运输组");
-        newMap.put("35010108070101","绍兴铁路昆贵作业组");
-        newMap.put("35010108070102","绍兴铁路乌市作业组");
-        newMap.put("350101080703","柯东汽运转运场");
-        newMap.put("350101080704","柯西汽运转运场");
-        newMap.put("350101080705","柯南汽运转运场");
-        newMap.put("3501010808","宁波线路管理部");
-        newMap.put("3501010809","宁波营销中心");
-        newMap.put("3501010810","宁波营运中心");
-        newMap.put("350101080801","宁波线路管理一组");
-        newMap.put("350101080802","宁波线路管理二组");
-        newMap.put("350101080803","宁波线路管理三组");
-        newMap.put("350101080804","宁波线路管理四组");
-        newMap.put("350101080805","宁波线路管理五组");
-        newMap.put("350101080806","余姚线路管理一组");
-        newMap.put("350101080901","慈溪胜山营业部");
-        newMap.put("350101080902","慈溪匡堰营业部");
-        newMap.put("350101080903","慈溪白沙营业部");
-        newMap.put("350101080904","慈溪营销组");
-        newMap.put("350101080905","宁波营销组");
-        newMap.put("350101080906","余姚营销组");
-        newMap.put("350101081001","宁波北转运场");
-        newMap.put("35010108100101","宁波铁路昆贵作业组");
-        newMap.put("35010108100102","宁波铁路乌市作业组");
-        newMap.put("350101081002","余姚西转运场");
-        newMap.put("350101081003","宁波汽运转运场");
-        newMap.put("35010109","总裁办公室");
-        newMap.put("3501010901","人才发展部");
-        newMap.put("35010110","采购工程部");
-        newMap.put("35010111","外联部");
-        newMap.put("35010112","人力行政本部");
-        newMap.put("3501011201","薪酬绩效管理部");
-        newMap.put("3501011202","招聘管理部");
-        newMap.put("3501011203","培训管理部");
-        newMap.put("3501011204","行政后勤管理部");
-        newMap.put("35010113","IT信息本部");
-        newMap.put("3501011301","产品部");
-        newMap.put("3501011302","基础研发部");
-        newMap.put("3501011303","业务研发部");
-        newMap.put("3501011304","实施部");
-        newMap.put("3501011305","运维部");
-        newMap.put("35010114","财务本部");
-        newMap.put("3501011401","财务管理部");
-        newMap.put("3501011402","税务管理部");
-        newMap.put("3501011403","核算部");
-        newMap.put("3501011404","资金部");
-        newMap.put("350101140101","绍兴财务组");
-        newMap.put("350101140102","新疆财务组");
-        newMap.put("350101140103","云南财务组");
-        newMap.put("350101140104","贵州财务组");
-        newMap.put("3501011405","数据中心");
-        newMap.put("350101140501","效益分析组");
-        newMap.put("350101140502","成本分析组");
-        newMap.put("35010115","营运中心");
-        newMap.put("3501011501","运输管理组");
-        newMap.put("3501011502","市场拓展组");
-        newMap.put("3501011503","客户管理组");
-        newMap.put("3501011504","场站管理组");
-        newMap.put("3501011505","网络规划组");
-        newMap.put("3501011506","客户服务组");
-        newMap.put("3501011507","品质管理组");
-        newMap.put("3501011508","营销管理组");
-        newMap.put("3501011509","产品价格组");
-        newMap.put("3501011510","网点管理组");
         newMap.put("总裁","350101");
         newMap.put("湖嘉大区","35010101");
         newMap.put("湖嘉大区办公室","3501010101");
@@ -792,20 +665,15 @@ public class SwitchUtil {
         newMap.put("新疆财务组","350101140102");
         newMap.put("云南财务组","350101140103");
         newMap.put("贵州财务组","350101140104");
-        newMap.put("数据中心","3501011405");
-        newMap.put("效益分析组","350101140501");
-        newMap.put("成本分析组","350101140502");
-        newMap.put("营运中心","35010115");
-        newMap.put("运输管理组","3501011501");
-        newMap.put("市场拓展组","3501011502");
-        newMap.put("客户管理组","3501011503");
-        newMap.put("场站管理组","3501011504");
-        newMap.put("网络规划组","3501011505");
-        newMap.put("客户服务组","3501011506");
-        newMap.put("品质管理组","3501011507");
-        newMap.put("营销管理组","3501011508");
-        newMap.put("产品价格组","3501011509");
-        newMap.put("网点管理组","3501011510");
+        newMap.put("业务本部","35010115");
+        newMap.put("数据分析部","3501011501");
+        newMap.put("市场管理部","3501011502");
+        newMap.put("网点管理部","3501011503");
+        newMap.put("运输管理部","3501011504");
+        newMap.put("场站管理部","3501011505");
+        newMap.put("品质管理部","3501011506");
+        newMap.put("客户服务部","3501011507");
+
 
 
 
@@ -1012,7 +880,41 @@ public class SwitchUtil {
 
 
 
+    public static String replaceSql(String column, String newTable, String type) {
 
+        String[] split = newTable.split("\\.");
+        String columnsSql = "select column_name from  information_schema.COLUMNS where table_name='" + split[1] + "' and  table_schema='" + split[0] + "';";
+
+        List<String> columnList = jdbcTemplate.queryForList(columnsSql, String.class);
+        if(column.indexOf("`")<0){
+            column="`"+column+"`";
+        }
+
+        String join ="`"+StringUtils.join("`,`", columnList.toArray())+"`";
+        String newJoin = join.replace(column, "'<新机构" + type + ">'");
+        String sql = "replace into  " + newTable + " select " + newJoin + " from "+newTable+" where " + column + " in('<老机构" + type + ">');";
+
+
+
+
+        String areaRegex = "big_area|region|大区";
+        Pattern pattern = Pattern.compile(areaRegex);
+        // 创建Matcher对象
+
+        Matcher matcher = pattern.matcher(column);
+        if (matcher.find()) {
+            String regionJoin = join.replaceAll(column, "'<新机构大区" + type + ">'");
+            sql = "replace into  " + newTable + " select " + regionJoin + " from "+newTable+" where " + column + " in('<老机构大区" + type + ">');";
+        }
+        String smallRegex = "small_area|district_id|小区";
+        Pattern smallPattern = Pattern.compile(smallRegex);
+        Matcher smallMatcher = smallPattern.matcher(column);
+        if (smallMatcher.find()) {
+            String regionJoin = join.replaceAll(column, "'<新机构小区" + type + ">'");
+            sql = "replace into  " + newTable + " select " + regionJoin + " from "+newTable+" where " + column + " in('<老机构小区" + type + ">');";
+        }
+        return sql;
+    }
 
 
 
