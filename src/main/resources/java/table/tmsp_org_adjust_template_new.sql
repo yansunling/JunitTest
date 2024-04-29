@@ -218,10 +218,10 @@ update tmsp.tmsp_base_box set own_org_id = '<新机构ID>' where own_org_id in('
 update tmsp.tmsp_base_box set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update tmsp.tmsp_base_box set latest_org_id = '<新机构ID>' where latest_org_id in('<老机构ID>');
 update tmsp.tmsp_send_order_cust_record set end_site_id = '<新机构ID>' where end_site_id in('<老机构ID>');
-update tmsp.tmsp_send_order_cust_record set end_site_name = '<新机构名称>' where end_site_name in('<老机构ID>');
+update tmsp.tmsp_send_order_cust_record set end_site_name = '<新机构名称>' where end_site_name in('<老机构名称>');
 update tmsp.tmsp_base_depart_msg set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update tmsp.tmsp_base_turn_transfer_fee set site_org_id = '<新机构ID>' where site_org_id in('<老机构ID>');
-update tmsp.tmsp_base_turn_transfer_fee set site_org_name = '<新机构名称>' where site_org_name in('<老机构ID>');
+update tmsp.tmsp_base_turn_transfer_fee set site_org_name = '<新机构名称>' where site_org_name in('<老机构名称>');
 update tmsp.tmsp_claims_hand_doc_detail set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 update tmsp.tmsp_net_car_stopload_his set load_org_id = '<新机构ID>' where load_org_id in('<老机构ID>');
 update tmsp.tmsp_net_car_stopload_his set arrive_org_id = '<新机构ID>' where arrive_org_id in('<老机构ID>');
@@ -261,7 +261,7 @@ update tmsp.tmsp_order_route_org_detail set after_send_org3_name = '<新机构�
 update tmsp.tmsp_order_route_org_detail set after_arr_org3 = '<新机构ID>' where after_arr_org3 in('<老机构ID>');
 update tmsp.tmsp_order_route_org_detail set after_arr_org3_name = '<新机构名称>' where after_arr_org3_name in('<老机构名称>');
 update tmsp.tmsp_turn_transfer_fee set site_org_id = '<新机构ID>' where site_org_id in('<老机构ID>');
-update tmsp.tmsp_turn_transfer_fee set site_org_name = '<新机构名称>' where site_org_name in('<老机构ID>');
+update tmsp.tmsp_turn_transfer_fee set site_org_name = '<新机构名称>' where site_org_name in('<老机构名称>');
 update tmsp.tmsp_net_rail_group set arrive_org_id = '<新机构ID>' where arrive_org_id in('<老机构ID>');
 update tmsp.tmsp_net_rail_group_item set load_org_id = '<新机构ID>' where load_org_id in('<老机构ID>');
 update tmsp.tmsp_net_rail_group_item set arrive_org_id = '<新机构ID>' where arrive_org_id in('<老机构ID>');
@@ -285,7 +285,7 @@ update tmsp.tmsp_net_org_product_line set income_org_id = '<新机构ID>' where 
 replace INTO tmsp.tmsp_net_org_ext select serial_no, '<新机构ID>', brand, enable_remote_stock, driver_prefix, sign_radius, is_recode_recive, recive_price, recive_price_car, recive_price_cube, recive_price_weight, is_record_stock, resp_tel, org_name_tl, prov_code_tl, city_code_tl, area_code_tl, org_address_tl, longitude_tl, latitude_tl, org_name_zx, prov_code_zx, city_code_zx, area_code_zx, org_address_zx, longitude_zx, latitude_zx, is_lht, is_start_print, is_delivery_line, delivery_serial_start, cust_area, print_brand_name, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_ext where org_id in('<老机构ID>');
 replace INTO tmsp.tmsp_net_org select serial_no, '<新机构ID>', org_code, '<新机构名称>', org_short_name, org_status, resp_user_id, org_type, net_station_type, country_code, prov_code, city_code, area_code, org_address, longitude, latitude, org_tel, '', '<新机构大区ID>', '<新机构小区ID>', shutdown_user_id, shutdown_time, sale_mode, '<新机构ID>', send_decision, is_self_car, is_local_net, own_site_org_id, enable_order, send_city, send_city_name, enable_trans, enable_stock, enable_last, enable_rail, last_city, enable_aging, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org where org_id in('<老机构ID>');
 update tmsp.tmsp_net_org set own_site_org_id = '<新机构ID>' where own_site_org_id in('<老机构ID>');
-
+replace into  tmsp.tmsp_own_driver_salary select serial_no,salary_month,'<新机构ID>',driver_salary,loader_salary,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_own_driver_salary where org_id in('<老机构ID>');
 
 
 

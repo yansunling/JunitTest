@@ -15,6 +15,8 @@ public class OrgData {
     private String newRegionId;
     private String newDistrictId;
     private String oldOrgList;
+    private String oldOrgNameList;
+
     private String oldSingleOrg;
     private String oldDistrictName;
     private String oldRegionName;

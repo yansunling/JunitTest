@@ -735,6 +735,7 @@ public class SwitchUtil {
             orgData.setOldOrgList("'"+StringUtils.join("|",oldOrgIds.toArray())+"'");
             orgData.setOldSingleOrg("'"+oldOrgIds.get(0)+"'");
             orgData.setOldOrgName("'"+StringUtils.join("','",oldOrgNames.toArray())+"'");
+            orgData.setOldOrgNameList("'"+StringUtils.join("|",oldOrgNames.toArray())+"'");
             orgData.setNewOrgId("'"+orgData.getNewOrgId()+"'");
             orgData.setNewOrgName("'"+orgData.getNewOrgName()+"'");
             orgData.setNewRegionId("'"+orgData.getNewRegionId()+"'");
@@ -840,6 +841,7 @@ public class SwitchUtil {
         item=item.replaceAll("'<老机构ID>'",orgData.getOldOrgId());
         item=item.replaceAll("'<老机构ID单个>'",orgData.getOldSingleOrg());
         item=item.replaceAll("'<老机构ID集合>'",orgData.getOldOrgList());
+        item=item.replaceAll("'<老机构名称集合>'",orgData.getOldOrgNameList());
         item=item.replaceAll("'<新机构名称>'",orgData.getNewOrgName());
         item=item.replaceAll("'<老机构名称>'",orgData.getOldOrgName());
         item=item.replaceAll("'<新机构大区名称>'",orgData.getNewRegionName());

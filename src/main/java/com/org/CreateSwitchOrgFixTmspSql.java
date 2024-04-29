@@ -49,9 +49,9 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
     @Test
     public void test() throws Exception {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
-        List<OrgData> excelOrgDataList = SwitchUtil.readExcel(excelFilePath);
+        List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
 
-        String sql="select org_id from tmsp.tmsp_net_org where org_status='run' and org_id not in('25010301') ";
+       /* String sql="select org_id from tmsp.tmsp_net_org where org_status='run' and org_id not in('25010301') ";
         List<String> oldOrgList = jdbcTemplate.queryForList(sql, String.class);
         List<OrgData> orgDataList=new ArrayList<>();
         for(OrgData orgData:excelOrgDataList){
@@ -63,7 +63,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
                     break;
                 }
             }
-        }
+        }*/
 //        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\table\\"));
         jdbcTemplate.setQueryTimeout(500);
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
@@ -75,11 +75,11 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
 
 
         Map<String,Map<String,String>> defaultSqlMap=new HashMap<>();
-        Map<String,String> map= new HashMap<>();
-        map.put("start_org_id","update tmsp.tmsp_hand_schedule_car set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID单个>');");
-        map.put("end_org_id","update tmsp.tmsp_hand_schedule_car set end_org_id = '<新机构ID>' where end_org_id in('<老机构ID单个>');");
+        Map<String,String> map= new LinkedHashMap<>();
+        map.put("start_org_id","replace into  tmsp.tmsp_hand_schedule_car select serial_no,schedule_no,vehicle_id,driver_id,'<新机构ID>',start_date,end_date,route_way,route_way_id,end_org_id,line_orgs,version,remark,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_hand_schedule_car where start_org_id in('<老机构ID>');");
+        map.put("end_org_id","replace into  tmsp.tmsp_hand_schedule_car select serial_no,schedule_no,vehicle_id,driver_id,start_org_id,start_date,end_date,route_way,route_way_id,'<新机构ID>',line_orgs,version,remark,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_hand_schedule_car where end_org_id in('<老机构ID>');");
         map.put("route_way_id","update tmsp.tmsp_hand_schedule_car set route_way_id = REPLACE(route_way_id,'<替换老机构ID集合>','<新机构ID>') where route_way_id regexp '<老机构ID集合>' ;");
-        map.put("route_way","update tmsp.tmsp_hand_schedule_car set route_way=REPLACE(route_way,'<替换老机构名称集合>','<新机构名称>') where route_way_id regexp '<老机构ID集合>' ;");
+        map.put("route_way","update tmsp.tmsp_hand_schedule_car set route_way=REPLACE(route_way,'<替换老机构名称集合>','<新机构名称>') where route_way regexp '<老机构名称集合>' ;");
         defaultSqlMap.put("tmsp.tmsp_hand_schedule_car",map);
 
         ExecutorService executorService = Executors.newFixedThreadPool(50);
@@ -88,7 +88,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
             if(CollectionUtil.isEmpty(sqlListTemp)){
                 sqlListTemp = buildBaseSql(table);
             }
-            Map<String,String> sqlList=new HashMap<>();
+            Map<String,String> sqlList=new LinkedHashMap<>();
             sqlList.putAll(sqlListTemp);
             if(CollectionUtil.isNotEmpty(sqlList)){
                 Set<String> totalSet=new LinkedHashSet<>();
@@ -103,13 +103,16 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
 
 
                                 sqlList.forEach((column,item)->{
-                                    String sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgId().replaceAll("','","|")+" limit 1";
+                                    String sql="select 1 as value from "+table+" where "+column+" in( "+orgData.getOldOrgId()+" ) limit 1";
+                                    if(StringUtils.equals("route_way_id",column)){
+                                        sql="select 1 as value from "+table+" where "+column+" regexp  "+orgData.getOldOrgId().replaceAll("','","|")+"  limit 1";
+                                    }
                                     List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
-
-                                    sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgName().replaceAll("','","|")+" limit 1";
-                                    List<Map<String, Object>> resultName = jdbcTemplate.queryForList(sql);
-
-                                    if(CollectionUtil.isNotEmpty(result)||CollectionUtil.isNotEmpty(resultName)){
+                                    if(CollectionUtil.isEmpty(result)){
+                                        sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgName().replaceAll("','","|")+" limit 1";
+                                        result = jdbcTemplate.queryForList(sql);
+                                    }
+                                    if(CollectionUtil.isNotEmpty(result)){
                                         String newItem = SwitchUtil.replaceName(item, orgData);
                                         if(StringUtils.isNotBlank(newItem)){
                                             newSqlList.add(newItem);
@@ -189,6 +192,11 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
                                 boolean concat = false;
                                 if (newValue.indexOf(",") > 0) {
                                     String[] split = newValue.split(",");
+                                    newValue = split[0];
+                                    concat = true;
+                                }
+                                if(newValue.indexOf(">")>0){
+                                    String[] split = newValue.split(">");
                                     newValue = split[0];
                                     concat = true;
                                 }

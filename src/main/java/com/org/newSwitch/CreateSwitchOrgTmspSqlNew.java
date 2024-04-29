@@ -1,4 +1,4 @@
-package com.org;
+package com.org.newSwitch;
 
 
 import com.alibaba.fastjson.JSON;
@@ -30,7 +30,7 @@ import java.util.concurrent.*;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
-public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
+public class CreateSwitchOrgTmspSqlNew implements ApplicationContextAware {
     ApplicationContext ac;
 
     @Override
@@ -50,69 +50,100 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
     public void test() throws Exception {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-
-        /*String sql="select org_id from tmsp.tmsp_net_org where org_status='run' and org_id not in('25010301') ";
-        List<String> oldOrgList = jdbcTemplate.queryForList(sql, String.class);
-        List<OrgData> orgDataList=new ArrayList<>();
-        for(OrgData orgData:excelOrgDataList){
-            String orgDataSource = orgData.getOldOrgId().replaceAll("'", "");
-            String[] split = orgDataSource.split(",");
-            for(String str:split){
-                if(oldOrgList.contains(str)){
-                    orgDataList.add(orgData);
-                    break;
-                }
-            }
-        }*/
         SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp\\"));
         jdbcTemplate.setQueryTimeout(500);
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
         dataSource.setMaxActive(100);
         //排除基础表
-        List<String> sqlTotalList = new ArrayList<>();
         Map<String, List<String>> schemaMap = new HashMap<>();
-        List<String> sqlBaseList = buildBaseSql(schemaMap);
+        Map<String,List<String>> tableColumns=new HashMap<>();
+        List<String> sqlBaseList = buildBaseSql(schemaMap,tableColumns);
         List<String> notSchema=new ArrayList<>();
+        ExecutorService executorService = Executors.newFixedThreadPool(50);
+        CountDownLatch countDownLatch = new CountDownLatch(orgDataList.size());
         for (OrgData orgData : orgDataList) {
-            List<String> newSqlList = new ArrayList<>();
-            String fileName = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
-            String newFileName = fileName.replaceAll("'", "");
-            sqlBaseList.forEach(item->{
-                String newItem = SwitchUtil.replaceName(item, orgData);
-                if(StringUtils.isNotBlank(newItem)){
-                    newSqlList.add(newItem);
-                    Set<String> keySet = schemaMap.keySet();
-                    boolean addFlag=true;
-                    for(String key:keySet){
-                        if(newItem.indexOf(" "+key+".")>0){
-                            List<String> list = schemaMap.get(key);
-                            String title="\n\n-- "+newFileName+"  \n\n";
-                            if(!list.contains(title)){
-                                list.add(title);
+            executorService.submit(new FutureTask<String>(new Callable<String>() {
+                @Override
+                public String call() throws Exception {
+                    try {
+                        List<String> newSqlList = new ArrayList<>();
+                        String fileName = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
+                        String newFileName = fileName.replaceAll("'", "");
+                        Map<String, List<String>> tempSchemaMap=new HashMap<>();
+                        schemaMap.forEach((key,value)->{
+                            tempSchemaMap.put(key,new ArrayList<>());
+                        });
+
+                        sqlBaseList.forEach(item->{
+                            String newItem = SwitchUtil.replaceName(item, orgData);
+                            if(StringUtils.isNotBlank(newItem)){
+                                Set<String> tables = tableColumns.keySet();
+                                boolean clearFlag=true;
+                                for(String table:tables){
+                                    if(newItem.indexOf(" "+table+" ")>0){
+                                        List<String> columns = tableColumns.get(table);
+                                        for(String column:columns){
+                                            String sql="select 1 as value from "+table+" where "+column+" in( "+orgData.getOldOrgId()+") limit 1";
+                                            if(table.equalsIgnoreCase("tmsp.tmsp_base_vehicle_type")){
+                                                sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgId().replaceAll("','","|")+" limit 1";
+                                            }
+                                            List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
+
+                                            if(CollectionUtil.isEmpty(result)){
+                                                sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgName().replaceAll("','","|")+" limit 1";
+                                                result = jdbcTemplate.queryForList(sql);
+                                            }
+                                            if(CollectionUtil.isNotEmpty(result)){
+                                                clearFlag=false;
+                                                break;
+                                            }
+                                        }
+                                        break;
+                                    }
+                                }
+                                if(clearFlag){
+                                    return;
+                                }
+                                newSqlList.add(newItem);
+                                Set<String> keySet = tempSchemaMap.keySet();
+                                boolean addFlag=true;
+                                for(String key:keySet){
+                                    if(newItem.indexOf(" "+key+".")>0){
+                                        List<String> list = tempSchemaMap.get(key);
+                                        String title="\n\n-- "+newFileName+"  \n\n";
+                                        if(!list.contains(title)){
+                                            list.add(title);
+                                        }
+                                        list.add(newItem);
+                                        addFlag=false;
+                                        break;
+                                    }
+                                }
+                                if(addFlag){
+                                    notSchema.add(newItem);
+                                }
                             }
-                            list.add(newItem);
-                            addFlag=false;
-                            break;
+                        });
+                        if(CollectionUtil.isNotEmpty(newSqlList)){
+                            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp\\" + newFileName + ".sql");
+                            FileUtils.writeLines(allFile, "utf-8", newSqlList);
+                            //sql汇总
+                            tempSchemaMap.forEach((key,value)->{
+                                List<String> allList = schemaMap.get(key);
+                                allList.addAll(value);
+                            });
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+
+                    }finally {
+                        countDownLatch.countDown();
                     }
-                    if(addFlag){
-                        notSchema.add(newItem);
-                    }
+                    return "";
                 }
-            });
-
-
-
-
-            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp\\" + newFileName + ".sql");
-            sqlTotalList.add("\n\n\n");
-            sqlTotalList.addAll(newSqlList);
-            FileUtils.writeLines(allFile, "utf-8", newSqlList);
-            sqlTotalList.addAll(newSqlList);
+            }));
         }
-        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp\\allSql.sql");
-        FileUtils.writeLines(allFile,"utf-8",sqlTotalList);
-
+        countDownLatch.await();
         schemaMap.forEach((key,list)->{
             try {
                 if(CollectionUtil.isNotEmpty(list)){
@@ -130,9 +161,9 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
     }
 
     @SneakyThrows
-    public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
+    public List<String> buildBaseSql(Map<String, List<String>> schemaMap,Map<String,List<String>> tableColumns) {
 
-        List<String> schemaList = Arrays.asList("tmsp");
+        List<String> schemaList = Arrays.asList("bmsp");
         String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
         List<String> orgList = new ArrayList<>();
@@ -144,6 +175,9 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
         String filePath = getClass().getClassLoader().getResource("").getPath();
         List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/errorTable.txt"), "utf-8");
         String tableFilesStr = StringUtils.join(",", tableFiles.toArray()) + ",";
+
+
+
         //排除基础表
         List<String> sqlList = new ArrayList<>();
         List<String> odlSqlList = FileUtils.readLines(new File(filePath + "java/table/tmsp_org_adjust_template_new.sql"), "utf-8");
@@ -179,11 +213,9 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
                     @Override
                     public String call() throws Exception {
                         try {
-                            //已存在配置
-                            if (existSql.indexOf(" " + newTable + " ") > 0) {
-                                return "";
-                            }
 
+
+                            //跳过字段
                             if (tableFilesStr.indexOf(newTable + ",") > 0) {
                                 return "";
                             }
@@ -195,6 +227,8 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
                             List<String> columnList = jdbcTemplate.queryForList(columnsSql, String.class);
                             if (CollectionUtil.isNotEmpty(columnList)) {
                                 List<String> sqlList = new ArrayList<>();
+                                Map<String,List<String>> tableColumn=new HashMap<>();
+
                                 columnList.forEach(column -> {
                                     String dataSql = "select `" + column + "` from " + newTable + " where  ifnull(`" + column + "`,'')!=''  limit 1";
                                     List<String> valueList = jdbcTemplate.queryForList(dataSql, String.class);
@@ -206,6 +240,8 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
                                     if (StringUtils.isBlank(newValue)) {
                                         return;
                                     }
+
+
                                     boolean concat = false;
                                     if (newValue.indexOf(",") > 0) {
                                         String[] split = newValue.split(",");
@@ -215,15 +251,37 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
                                     if (SwitchUtil.containsChinese(column)) {
                                         column = "`" + column + "`";
                                     }
-
-                                    if (orgList.contains(newValue)) {
-                                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "ID", concat));
+                                    boolean addFlag=false;
+                                    if (orgList.contains(newValue)||(newValue.startsWith("25")&&newValue.indexOf(".")<0)) {
+                                        //已存在配置
+                                        if (existSql.indexOf(" " + newTable + " ") <0 ) {
+                                            sqlList.add(SwitchUtil.matchColumn(column, newTable, "ID", concat));
+                                        }
+                                        addFlag=true;
                                     } else if (orgNameList.contains(newValue)) {
-                                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "名称", concat));
+
+                                        if (existSql.indexOf(" " + newTable + " ") <0 ) {
+                                            sqlList.add(SwitchUtil.matchColumn(column, newTable, "名称", concat));
+                                        }
+                                        addFlag=true;
+                                    }
+                                    if(addFlag){
+                                        List<String> columns = tableColumn.get(newTable);
+                                        if(CollectionUtil.isEmpty(columns)){
+                                            columns=new ArrayList<>();
+                                        }
+                                        columns.add(column);
+                                        tableColumn.put(newTable,columns);
                                     }
                                 });
                                 totalSql.addAll(sqlList);
+                                tableColumns.putAll(tableColumn);
                             }
+
+
+
+
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         } finally {

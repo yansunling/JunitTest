@@ -22,6 +22,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
@@ -60,7 +61,10 @@ public class CreateTemplateSwitchOrgSql implements ApplicationContextAware {
         });
         List<String> errorTable = new ArrayList<>();
         String filePath = getClass().getClassLoader().getResource("").getPath();
-        List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/fixTable.tab"), "utf-8");
+//        List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/fixTable.tab"), "utf-8");
+
+        List<String> tableFiles= Arrays.asList("tmsp.tmsp_hand_schedule_car");
+
         String tableFilesStr = StringUtils.join(",", tableFiles.toArray()) + ",";
         //排除基础表
         ExecutorService executorService = Executors.newFixedThreadPool(50);
