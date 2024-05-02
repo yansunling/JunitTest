@@ -57,8 +57,6 @@ public class CreateSwitchOrgPositionSql implements ApplicationContextAware {
         excelReader.openFile();//打开文件
         List<Object[]> listResult = excelReader.getAllRow();//读取Excel的数据
 
-        listResult = listResult.subList(1, listResult.size());
-
         List<PositionData> importDataList = CJExcelUtil.initImportExcelDatas(PositionData.titleMap, listResult, PositionData.class);
 
         String sql="select id_name as position_name,job_category from hcm.hcm_org_position where pos_status='1'";
@@ -68,7 +66,7 @@ public class CreateSwitchOrgPositionSql implements ApplicationContextAware {
         oldPosition.forEach(item->{
             categoryMap.put(item.getPosition_name(),item.getJob_category());
         });
-
+        categoryMap.put("到达负责人","3");
 
 
         Map<String,String> rank=new HashMap<>();
@@ -82,8 +80,8 @@ public class CreateSwitchOrgPositionSql implements ApplicationContextAware {
         rank.put("副总裁","7");
         rank.put("总裁","8");
         rank.put("董事长","9");
-        Map<String,List<PositionData>> orgRel=new HashMap<>();
-        Map<String,PositionData> positionRel=new HashMap<>();
+        Map<String,List<PositionData>> orgRel=new LinkedHashMap<>();
+        Map<String,PositionData> positionRel=new LinkedHashMap<>();
         Map<String, String> newMap = SwitchUtil.newMap;
 
 
@@ -119,21 +117,20 @@ public class CreateSwitchOrgPositionSql implements ApplicationContextAware {
             }
             orgRel.put(item.getOrg_id(),orgPosition);
         }
-
-
-
         Map<String,Integer> idMap=new HashMap<>();
-        Integer start=1000000;
         Set<String> keySet = positionRel.keySet();
-
         List<String> fileList=new ArrayList<>();
 
+        List<String> positionList=new ArrayList<>();
+
+        Map<String, String> positionId = getPositionId();
         for(String key:keySet){
-            idMap.put(key,start);
+            String id = positionId.get(key);
             PositionData positionData = positionRel.get(key);
-            positionData.setPosition_id(start+"");
-            fileList.add("INSERT ignore  INTO hcm.hcm_org_position_rule(serial_no, position_id, position_name, staffing_num, entry_num, position_status, job_category, rank, position_nature, source, is_delete, remark, version, update_user_id, update_time, create_user_id, create_time) VALUES ('"+start+"', '"+start+"', '"+positionData.getPosition_name()+"', 0,0, '1', '"+positionData.getJob_category()+"','"+positionData.getRank()+"', '', '', '0', '', 0, 'T1113', now(), 'T1113', now());");
-            start++;
+            positionData.setPosition_id(id);
+            fileList.add("INSERT ignore  INTO hcm.hcm_org_position_rule(serial_no, position_id, position_name, staffing_num, entry_num, position_status, job_category, rank, position_nature, source, is_delete, remark, version, update_user_id, update_time, create_user_id, create_time) VALUES ('"+id+"', '"+id+"', '"+positionData.getPosition_name()+"', 0,0, '1', '"+positionData.getJob_category()+"','"+positionData.getRank()+"', '', '', '0', '', 0, 'T1113', now(), 'T1113', now());");
+            positionList.add("INSERT ignore INTO hcm.hcm_org_position(position_id, id_name, org_id, staffing_num, entry_num, pos_status, operator, op_time, send_status, job_category, rank, nature, remark, update_user_id, update_time, create_user_id, create_time) VALUES ('"+id+"', '"+positionData.getPosition_name()+"', '', 0, 0, '1', 'T1113', now(), 0, '"+positionData.getJob_category()+"', '"+positionData.getRank()+"', '', '', 'T1113', now(), 'T1113', now());");
+
         }
         fileList.add("\n\n\n");
         Map<String, String> orgMap = getOrg();
@@ -144,15 +141,144 @@ public class CreateSwitchOrgPositionSql implements ApplicationContextAware {
                 }
 
                 fileList.add("INSERT ignore INTO hcm.hcm_org_position_rel_rule(serial_no, position_id, position_name, org_id, org_name, rank, nature, staffing_num, entry_num, remark, update_user_id, update_time, create_user_id, create_time) VALUES (UUID_SHORT(), '"+idMap.get(item.getPosition_name())+"','"+item.getPosition_name()+"', '"+orgId+"', '"+orgMap.get(orgId)+"', '"+item.getRank()+"', '', 0, 0, '', 'T1113', now(), 'T1113', now());");
+
+
+
             });
 
 
         });
 
+
+        fileList.add("\n\n\n");
+        fileList.addAll(positionList);
+
         File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\hcm_org_position_rule.sql");
         FileUtils.writeLines(allFile,"utf-8",fileList);
 
 
+    }
+
+    private Map<String,String> getPositionId(){
+        Map<String,String> position=new LinkedHashMap<>();
+        position.put("总裁","1000000");
+        position.put("副总裁","1000001");
+        position.put("总裁办公室主任","1000002");
+        position.put("大区总经理","1000003");
+        position.put("营销高级总监","1000004");
+        position.put("财务本部高级总监","1000005");
+        position.put("营运中心高级总监","1000006");
+        position.put("线路部总监","1000007");
+        position.put("总裁办公室副主任","1000008");
+        position.put("采购工程部总监","1000009");
+        position.put("线路组总监","1000010");
+        position.put("转运场总监","1000011");
+        position.put("营销总监","1000012");
+        position.put("大区副总经理","1000013");
+        position.put("储备总监","1000014");
+        position.put("营运中心总监","1000015");
+        position.put("营业区总监","1000016");
+        position.put("线路部高级经理","1000017");
+        position.put("线路组高级经理","1000018");
+        position.put("储备高级经理","1000019");
+        position.put("营运中心高级经理","1000020");
+        position.put("网点组高级经理","1000021");
+        position.put("大区办公室主任","1000022");
+        position.put("运输管理组高级经理","1000023");
+        position.put("转运场高级经理","1000024");
+        position.put("财务组高级经理","1000025");
+        position.put("财务管理部高级经理","1000026");
+        position.put("核算部高级经理","1000027");
+        position.put("营销高级经理","1000028");
+        position.put("营业部高级经理","1000029");
+        position.put("招聘管理部高级经理","1000030");
+        position.put("数据分析部高级经理","1000031");
+        position.put("总裁办公室高级经理","1000032");
+        position.put("分拨场高级经理","1000033");
+        position.put("运作组高级经理","1000034");
+        position.put("产品部高级经理","1000035");
+        position.put("业务研发部高级经理","1000036");
+        position.put("运维部高级经理","1000037");
+        position.put("实施部高级经理","1000038");
+        position.put("基础研发部高级经理","1000039");
+        position.put("营销经理","1000040");
+        position.put("市场管理部经理","1000041");
+        position.put("品质管理部经理","1000042");
+        position.put("场站管理部经理","1000043");
+        position.put("转运场经理","1000044");
+        position.put("税务管理部经理","1000045");
+        position.put("财务组经理","1000046");
+        position.put("数据分析部经理","1000047");
+        position.put("运作组经理","1000048");
+        position.put("客户服务部经理","1000049");
+        position.put("运输组经理","1000050");
+        position.put("作业组经理","1000051");
+        position.put("配送组经理","1000052");
+        position.put("营业部经理","1000053");
+        position.put("客服组经理","1000054");
+        position.put("分拨点经理","1000055");
+        position.put("中转组经理","1000056");
+        position.put("线路部经理","1000057");
+        position.put("储备经理","1000058");
+        position.put("网点部经理","1000059");
+        position.put("线路组经理","1000060");
+        position.put("分拨场经理","1000061");
+        position.put("营运中心经理","1000062");
+        position.put("网点组经理","1000063");
+        position.put("采购工程部经理","1000064");
+        position.put("网点管理部经理","1000065");
+        position.put("薪酬绩效管理部经理","1000066");
+        position.put("产品部经理","1000067");
+        position.put("培训管理部经理","1000068");
+        position.put("行政后勤管理部经理","1000069");
+        position.put("作业组主管","1000070");
+        position.put("采购专员","1000071");
+        position.put("营业员","1000072");
+        position.put("核算会计","1000073");
+        position.put("营销助理","1000074");
+        position.put("项目客服","1000075");
+        position.put("财务会计","1000076");
+        position.put("配载员","1000077");
+        position.put("收货员","1000078");
+        position.put("需求分析师","1000079");
+        position.put("场站管理专员","1000080");
+        position.put("操作工","1000081");
+        position.put("统计员","1000082");
+        position.put("驾驶员","1000083");
+        position.put("装卸工","1000084");
+        position.put("客服专员","1000085");
+        position.put("货区管理员","1000086");
+        position.put("调度专员","1000087");
+        position.put("收款员","1000088");
+        position.put("值班员","1000089");
+        position.put("营销专员","1000090");
+        position.put("出纳","1000091");
+        position.put("叉车司机","1000092");
+        position.put("到达负责人","1000093");
+        position.put("线路助理","1000094");
+        position.put("项目专员","1000095");
+        position.put("总裁办助理","1000096");
+        position.put("行政专员","1000097");
+        position.put("实施工程师","1000098");
+        position.put("运维工程师","1000099");
+        position.put("研发工程师","1000100");
+        position.put("行政司机","1000101");
+        position.put("税务会计","1000102");
+        position.put("品质管理员","1000103");
+        position.put("线路专员","1000104");
+        position.put("数据分析专员","1000105");
+        position.put("法务专员","1000106");
+        position.put("市场管理专员","1000107");
+        position.put("叉车修理工","1000108");
+        position.put("培训专员","1000109");
+        position.put("客户服务专员","1000110");
+        position.put("薪酬专员","1000111");
+        position.put("网点管理专员","1000112");
+        position.put("运输管理专员","1000113");
+        position.put("保洁员","1000114");
+        position.put("招聘专员","1000115");
+        position.put("品质管理专员","1000116");
+        return position;
     }
 
 
