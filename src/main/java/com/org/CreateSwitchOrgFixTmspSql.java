@@ -50,21 +50,6 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
     public void test() throws Exception {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-
-       /* String sql="select org_id from tmsp.tmsp_net_org where org_status='run' and org_id not in('25010301') ";
-        List<String> oldOrgList = jdbcTemplate.queryForList(sql, String.class);
-        List<OrgData> orgDataList=new ArrayList<>();
-        for(OrgData orgData:excelOrgDataList){
-            String orgDataSource = orgData.getOldOrgId().replaceAll("'", "");
-            String[] split = orgDataSource.split(",");
-            for(String str:split){
-                if(oldOrgList.contains(str)){
-                    orgDataList.add(orgData);
-                    break;
-                }
-            }
-        }*/
-//        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\table\\"));
         jdbcTemplate.setQueryTimeout(500);
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
         dataSource.setMaxActive(100);
@@ -203,7 +188,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
                                 if (SwitchUtil.containsChinese(column)) {
                                     column = "`" + column + "`";
                                 }
-                                if (orgList.contains(newValue)) {
+                                if (orgList.contains(newValue)||(newValue.startsWith("25")&&newValue.indexOf(".")<0)) {
                                     sqlList.put(column,SwitchUtil.matchColumn(column, newTable, "ID", concat));
 
                                 } else if (orgNameList.contains(newValue)) {

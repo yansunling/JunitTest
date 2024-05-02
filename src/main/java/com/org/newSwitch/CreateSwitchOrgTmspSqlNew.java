@@ -163,7 +163,7 @@ public class CreateSwitchOrgTmspSqlNew implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap,Map<String,List<String>> tableColumns) {
 
-        List<String> schemaList = Arrays.asList("bmsp");
+        List<String> schemaList = Arrays.asList("tmsp");
         String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
         List<String> orgList = new ArrayList<>();
@@ -230,7 +230,7 @@ public class CreateSwitchOrgTmspSqlNew implements ApplicationContextAware {
                                 Map<String,List<String>> tableColumn=new HashMap<>();
 
                                 columnList.forEach(column -> {
-                                    String dataSql = "select `" + column + "` from " + newTable + " where  ifnull(`" + column + "`,'')!=''  limit 1";
+                                    String dataSql = "select `" + column + "` from " + newTable + " where  length(`" + column + "`)>4  limit 1";
                                     List<String> valueList = jdbcTemplate.queryForList(dataSql, String.class);
                                     log.info("newTable:"+newTable+",columns:"+column+",valueList:"+JSON.toJSONString(valueList));
                                     if (CollectionUtil.isEmpty(valueList)) {
