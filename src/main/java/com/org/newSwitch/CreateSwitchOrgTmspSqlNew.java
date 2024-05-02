@@ -163,7 +163,7 @@ public class CreateSwitchOrgTmspSqlNew implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap,Map<String,List<String>> tableColumns) {
 
-        List<String> schemaList = Arrays.asList("tmsp");
+        List<String> schemaList = Arrays.asList("tmsp","bmsp");
         String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
         List<String> orgList = new ArrayList<>();
