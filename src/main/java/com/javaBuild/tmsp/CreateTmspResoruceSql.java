@@ -10,11 +10,11 @@ import java.util.Set;
 public class CreateTmspResoruceSql {
     public static void main(String[] args) {
 
-        String fun="tmsp_contact_form_approval_config";
+        String fun="tmsp_contact_form_approval";
         String parentId=fun+"_list";
 
         String supParent="contact";
-        String parentName="联络单审批人设置";
+        String parentName="联络单审";
         String model="contact";
         int num=1430;
 
@@ -32,11 +32,11 @@ public class CreateTmspResoruceSql {
 //          map.put("addData",new ButtonType("icon-add","申请"));
 //          map.put("updateData",new ButtonType("icon-cancel","作废"));
 //          map.put("getData",new ButtonType("icon-get","查看"));
-        map.put("addData",new ButtonType("icon-add","新增"));
+//        map.put("addData",new ButtonType("icon-add","新增"));
 //        map.put("updateData",new ButtonType("icon-edit","修改"));
 //        map.put("deleteData",new ButtonType("icon-remove","删除"));
-        map.put("enableData",new ButtonType("icon-ok","启用","updateData"));
-        map.put("disableData",new ButtonType("icon-cancel","禁用","updateData"));
+//        map.put("enableData",new ButtonType("icon-ok","启用","updateData"));
+//        map.put("disableData",new ButtonType("icon-cancel","禁用","updateData"));
 //        map.put("applyViolation",new ButtonType("icon-add","事故上报"));
 //        map.put("completeData",new ButtonType("icon-ok","事故完结"));
 //        map.put("applyData",new ButtonType("icon-add","借支"));
@@ -44,8 +44,8 @@ public class CreateTmspResoruceSql {
 //        map.put("payData",new ButtonType("icon-edit","申请付款"));
 //        map.put("importData",new ButtonType("icon-upload","导入"));
 
-//        map.put("passData",new ButtonType("icon-ok","批准"));
-//        map.put("rejectData",new ButtonType("icon-cancel","退回"));
+        map.put("passData",new ButtonType("icon-ok","批准"));
+        map.put("rejectData",new ButtonType("icon-cancel","退回"));
 
         map.put("exportData",new ButtonType("icon-download","导出"));
 //        map.put("scrapData",new ButtonType("icon-cut","报废"));
