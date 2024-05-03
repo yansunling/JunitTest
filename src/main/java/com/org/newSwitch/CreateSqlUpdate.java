@@ -29,7 +29,7 @@ import java.util.concurrent.*;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
-public class CreateSwitchOrgFixTmspSqlNew implements ApplicationContextAware {
+public class CreateSqlUpdate implements ApplicationContextAware {
     ApplicationContext ac;
 
     @Override
