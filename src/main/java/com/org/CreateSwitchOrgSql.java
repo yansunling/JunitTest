@@ -57,7 +57,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
     public void test() throws Exception {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"));
+//        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"));
         jdbcTemplate.setQueryTimeout(500);
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
         dataSource.setMaxActive(100);
@@ -126,7 +126,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
         String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where table_schema in('auth','hcm') and    table_schema not in('tmsp','bmsp','costx','information_schema'," +
+                "where table_schema in('mpp2') and    table_schema not in('tmsp','bmsp','costx','information_schema'," +
                 "'query','dct','ouyang','portal','biq','das','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','kjob','crmx','jeewx-boot') " +
                 "  group by table_schema";
         List<String> schemaList = jdbcTemplate.queryForList(schemaSql, String.class);
@@ -193,7 +193,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
                             if (CollectionUtil.isNotEmpty(columnList)) {
                                 List<String> sqlList = new ArrayList<>();
                                 columnList.forEach(column -> {
-                                    String dataSql = "select `" + column + "` from " + newTable + " where  ifnull(`" + column + "`,'')!=''  limit 1";
+                                    String dataSql = "select `" + column + "` from " + newTable + " where  length(`" + column + "`)>4  limit 1";
                                     List<String> valueList = jdbcTemplate.queryForList(dataSql, String.class);
                                     if (CollectionUtil.isEmpty(valueList)) {
                                         return;
@@ -212,7 +212,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
                                         column = "`" + column + "`";
                                     }
 
-                                    if (orgList.contains(newValue)) {
+                                    if (orgList.contains(newValue)||(newValue.startsWith("25")&&newValue.indexOf(".")<0)) {
                                         sqlList.add(SwitchUtil.matchColumn(column, newTable, "ID", concat));
                                     } else if (orgNameList.contains(newValue)) {
                                         sqlList.add(SwitchUtil.matchColumn(column, newTable, "名称", concat));
