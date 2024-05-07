@@ -27,7 +27,7 @@ import java.util.concurrent.*;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
-public class CreateSqlReplace implements ApplicationContextAware {
+public class CreateSqlCheck implements ApplicationContextAware {
     ApplicationContext ac;
 
     @Override
@@ -47,77 +47,62 @@ public class CreateSqlReplace implements ApplicationContextAware {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(500);
-        List<String> tableFiles = Arrays.asList("tmsp.tmsp_hand_schedule_externalplan");
-        Map<String,Map<String,String>> defaultSqlMap=new HashMap<>();
-        Map<String,String> map= new LinkedHashMap<>();
-        map.put("start_org_id","replace into  tmsp.tmsp_hand_schedule_car select serial_no,schedule_no,vehicle_id,driver_id,'<新机构ID>',start_date,end_date,route_way,route_way_id,end_org_id,line_orgs,version,remark,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_hand_schedule_car where start_org_id in('<老机构ID>');");
-        map.put("end_org_id","replace into  tmsp.tmsp_hand_schedule_car select serial_no,schedule_no,vehicle_id,driver_id,start_org_id,start_date,end_date,route_way,route_way_id,'<新机构ID>',line_orgs,version,remark,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_hand_schedule_car where end_org_id in('<老机构ID>');");
-        map.put("route_way_id","update tmsp.tmsp_hand_schedule_car set route_way_id = REPLACE(route_way_id,'<替换老机构ID集合>','<新机构ID>') where route_way_id regexp '<老机构ID集合>' ;");
-        map.put("route_way","update tmsp.tmsp_hand_schedule_car set route_way=REPLACE(route_way,'<替换老机构名称集合>','<新机构名称>') where route_way regexp '<老机构名称集合>' ;");
-        defaultSqlMap.put("tmsp.tmsp_hand_schedule_car",map);
+
+        List<String> schemaList = Arrays.asList("tmsp");
 
         ExecutorService executorService = Executors.newFixedThreadPool(50);
-        for(String table:tableFiles){
-            Map<String,String> sqlListTemp = defaultSqlMap.get(table);
-            if(CollectionUtil.isEmpty(sqlListTemp)){
-                sqlListTemp = buildBaseSql(table);
-            }
-            Map<String,String> sqlList=new LinkedHashMap<>();
-            sqlList.putAll(sqlListTemp);
-            if(CollectionUtil.isNotEmpty(sqlList)){
-                Set<String> totalSet=new LinkedHashSet<>();
-                CountDownLatch countDownLatch = new CountDownLatch(orgDataList.size());
-                for (OrgData orgData : orgDataList) {
-                    executorService.submit(new FutureTask<String>(new Callable<String>() {
-                        @Override
-                        public String call() throws Exception {
-                            try {
-                                String title = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
-                                Set<String> newSqlList=new LinkedHashSet<>();
-
-
-                                sqlList.forEach((column,item)->{
-                                    String sql="select 1 as value from "+table+" where "+column+" in( "+orgData.getOldOrgId()+" ) limit 1";
-                                    if(StringUtils.equals("route_way_id",column)){
-                                        sql="select 1 as value from "+table+" where "+column+" regexp  "+orgData.getOldOrgId().replaceAll("','","|")+"  limit 1";
-                                    }
-                                    List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
-                                    if(CollectionUtil.isEmpty(result)){
-                                        sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgName().replaceAll("','","|")+" limit 1";
-                                        result = jdbcTemplate.queryForList(sql);
-                                    }
-                                    if(CollectionUtil.isNotEmpty(result)){
-                                        String newItem = SwitchUtil.replaceName(item, orgData);
-                                        if(StringUtils.isNotBlank(newItem)){
-                                            newSqlList.add(newItem);
+        Set<String> newSqlList=new LinkedHashSet<>();
+        for(String schema:schemaList){
+            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW' and table_name not like 'foc%'" +
+                    " and table_name not in('tmsp_alter_order_report','tmsp_depart_ontime_rate_report_item','tmsp_msg_result_sms' ) ";
+            List<String> tableFiles = jdbcTemplate.queryForList(sql, String.class);
+            for(String table:tableFiles){
+                String newTable = schema + "." + table;
+                Map<String, String> sqlList = buildBaseSql(newTable);
+                if(CollectionUtil.isNotEmpty(sqlList)){
+                    CountDownLatch countDownLatch = new CountDownLatch(orgDataList.size());
+                    for (OrgData orgData : orgDataList) {
+                        executorService.submit(new FutureTask<String>(new Callable<String>() {
+                            @Override
+                            public String call() throws Exception {
+                                try {
+                                    sqlList.forEach((column,item)->{
+                                        String sql="select 1 as value from "+newTable+" where "+column+" in( "+orgData.getOldOrgId()+" ) limit 1";
+                                        List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
+                                        if(CollectionUtil.isNotEmpty(result)){
+                                          newSqlList.add(newTable+":"+column);
                                         }
-                                    }
-                                });
-                                if(CollectionUtil.isNotEmpty(newSqlList)){
-                                    List<String> titleList=new ArrayList<>();
-                                    titleList.add("\n\n--   "+title+"\n\n");
-                                    titleList.addAll(newSqlList);
-                                    totalSet.addAll(titleList);
+                                    });
+                                } catch (Exception e) {
+                                    e.printStackTrace();
 
+                                }finally {
+                                    countDownLatch.countDown();
                                 }
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-
-                            }finally {
-                                countDownLatch.countDown();
+                                return "";
                             }
-                            return "";
-                        }
-                    }));
+                        }));
+                    }
+                    countDownLatch.await();
+
                 }
-                countDownLatch.await();
-                String[] tables = table.split("\\.");
-                File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\table\\" +  tables[1] + ".sql");
-                FileUtils.writeLines(allFile, "utf-8", totalSet);
             }
+            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\notSwitch"+schemaList.get(0)+".sql");
+            FileUtils.writeLines(allFile, "utf-8", newSqlList,true);
+
+
+
+
+
         }
+
+
+
+
+
+
+
+
 
 
     }
@@ -136,7 +121,7 @@ public class CreateSqlReplace implements ApplicationContextAware {
         String[] tables = newTable.split("\\.");
         String table = tables[1];
         try {
-            String columnsSql = "select column_name from  information_schema.COLUMNS where table_name='" + table + "' " +
+            String columnsSql = "select column_name from  information_schema.COLUMNS where table_name='" + table + "' and table_schema='"+tables[0]+"' " +
                     "and column_name not in('serial_no','create_user_id','update_user_id','remark','salesman_id','price_remark','product_type') and data_type not in('decimal','datetime','date','int') ";
             List<String> columnList = jdbcTemplate.queryForList(columnsSql, String.class);
             if (CollectionUtil.isNotEmpty(columnList)) {

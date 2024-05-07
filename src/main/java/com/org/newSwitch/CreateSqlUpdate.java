@@ -49,7 +49,7 @@ public class CreateSqlUpdate implements ApplicationContextAware {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(500);
-        List<String> tableFiles = Arrays.asList("tmsp.tmsp_net_end_org");
+        List<String> tableFiles = Arrays.asList("tmsp.tmsp_net_trans_evaluate_schedule");
         Map<String,Map<String,String>> defaultSqlMap=new HashMap<>();
         Map<String,String> map= new LinkedHashMap<>();
         map.put("start_org_id","replace into  tmsp.tmsp_hand_schedule_car select serial_no,schedule_no,vehicle_id,driver_id,'<新机构ID>',start_date,end_date,route_way,route_way_id,end_org_id,line_orgs,version,remark,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_hand_schedule_car where start_org_id in('<老机构ID>');");
@@ -57,6 +57,19 @@ public class CreateSqlUpdate implements ApplicationContextAware {
         map.put("route_way_id","update tmsp.tmsp_hand_schedule_car set route_way_id = REPLACE(route_way_id,'<替换老机构ID集合>','<新机构ID>') where route_way_id regexp '<老机构ID集合>' ;");
         map.put("route_way","update tmsp.tmsp_hand_schedule_car set route_way=REPLACE(route_way,'<替换老机构名称集合>','<新机构名称>') where route_way regexp '<老机构名称集合>' ;");
         defaultSqlMap.put("tmsp.tmsp_hand_schedule_car",map);
+
+
+
+
+        defaultSqlMap.put("mpp.mpp_prise_cust_disc", Collections.singletonMap("depart_org", "update mpp.mpp_prise_cust_disc set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');"));
+        defaultSqlMap.put("mpp.mpp_prise_cust_version", Collections.singletonMap("depart_org", "update mpp.mpp_prise_cust_version set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');"));
+
+
+
+
+
+
+
 
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         for(String table:tableFiles){
@@ -84,10 +97,10 @@ public class CreateSqlUpdate implements ApplicationContextAware {
                                         sql="select 1 as value from "+table+" where "+column+" regexp  "+orgData.getOldOrgId().replaceAll("','","|")+"  limit 1";
                                     }
                                     List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
-                                    if(CollectionUtil.isEmpty(result)){
+                                    /*if(CollectionUtil.isEmpty(result)){
                                         sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgName().replaceAll("','","|")+" limit 1";
                                         result = jdbcTemplate.queryForList(sql);
-                                    }
+                                    }*/
                                     if(CollectionUtil.isNotEmpty(result)){
                                         String newItem = SwitchUtil.replaceName(item, orgData);
                                         if(StringUtils.isNotBlank(newItem)){

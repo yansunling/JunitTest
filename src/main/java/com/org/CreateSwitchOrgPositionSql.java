@@ -117,7 +117,6 @@ public class CreateSwitchOrgPositionSql implements ApplicationContextAware {
             }
             orgRel.put(item.getOrg_id(),orgPosition);
         }
-        Map<String,Integer> idMap=new HashMap<>();
         Set<String> keySet = positionRel.keySet();
         List<String> fileList=new ArrayList<>();
 
@@ -140,7 +139,7 @@ public class CreateSwitchOrgPositionSql implements ApplicationContextAware {
                     System.out.println(orgId+";"+list.get(0).getOrg_name());
                 }
 
-                fileList.add("INSERT ignore INTO hcm.hcm_org_position_rel_rule(serial_no, position_id, position_name, org_id, org_name, rank, nature, staffing_num, entry_num, remark, update_user_id, update_time, create_user_id, create_time) VALUES (UUID_SHORT(), '"+idMap.get(item.getPosition_name())+"','"+item.getPosition_name()+"', '"+orgId+"', '"+orgMap.get(orgId)+"', '"+item.getRank()+"', '', 0, 0, '', 'T1113', now(), 'T1113', now());");
+                fileList.add("INSERT ignore INTO hcm.hcm_org_position_rel_rule(serial_no, position_id, position_name, org_id, org_name, rank, nature, staffing_num, entry_num, remark, update_user_id, update_time, create_user_id, create_time) VALUES (UUID_SHORT(), '"+positionId.get(item.getPosition_name())+"','"+item.getPosition_name()+"', '"+orgId+"', '"+orgMap.get(orgId)+"', '"+item.getRank()+"', '', 0, 0, '', 'T1113', now(), 'T1113', now());");
 
 
 
