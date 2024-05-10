@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yd.bmsp.report.mapper.BMSP_report_daily_staff_detailMapper">
+     <!--    算金额     -->
+    <select id="insert_pay" resultType="com.yd.bmsp.report.po.BMSP_report_daily_staff_detailPO">
+        INSERT INTO bmsp.bmsp_report_daily_staff_detail SELECT
+        MD5(uuid()) AS serial_no,
+        main.serial_no as daily_info_id,
+        main.daily_no,
+        main.daily_dept,
+        main.order_id,
+        main.reach_amt,
+        main.cod_amt,
+        main.send_amt,
+        main.storage_amt,
+        main.handbag_over_fee,
+        main.forklift_over_fee,
+        main.transfer_over_fee,
+        main.total_amt,
+        main.daily_type,
+        main.daily_pay_pattern,
+        main.cashier_id,
+        main.cashier_name,
+        main.print_time,
+        main.arrive_no,
+        main.is_bill,
+        main.version,
+        main.remark,
+        main.update_user_id,
+        main.update_time,
+        main.create_user_id,
+        main.create_time
+        FROM `bmsp`.bmsp_report_daily_staff main
+        <where>
+            <!-- todo org rebuild  -->
+            main.create_time BETWEEN #{insert_pay.time_bg} and #{insert_pay.time_ed} and main.cashier_id = #{insert_pay.user_id}  and main.daily_type = #{insert_pay.daily_type}
+            <if test="insert_pay.orgId == '530100'"> AND main.daily_dept IN ( '250110010301','250110020601','250110010302')</if>
+            <if test="insert_pay.orgId == '520100'"> AND main.daily_dept IN ( '52010001','52010002','250110030301','52010004','250110040601','250108010204')</if>
+            <if test="insert_pay.orgId == '650100'"> AND main.daily_dept IN ( '25011101010201','25011101020401','65010003','65010004','25011101020403')</if>
+        </where>
+    </select>
+</mapper>

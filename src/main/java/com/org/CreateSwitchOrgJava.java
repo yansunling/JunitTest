@@ -54,8 +54,8 @@ public class CreateSwitchOrgJava implements ApplicationContextAware {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = readExcel(excelFilePath);
         String filePath = getClass().getClassLoader().getResource("").getPath();
-        String fileName="TMSPSettingConstantForBmsp";
-        List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/"+fileName+".java"), "utf-8");
+        String fileName="BMSP_report_daily_staff_detailMapper.xml";
+        List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/file/"+fileName), "utf-8");
         List<String> newJava = new ArrayList<>();
         for (String line : tableFiles) {
             for (OrgData item : orgDataList) {
@@ -69,13 +69,14 @@ public class CreateSwitchOrgJava implements ApplicationContextAware {
                 line = line.replaceAll("_" + item.getOldOrgId()+"\\(", "_"  + item.getNewOrgId()+"\\(");
                 line = line.replaceAll("_" + item.getOldOrgId()+"=", "_"  + item.getNewOrgId()+"=");
                 line = line.replaceAll("_" + item.getOldOrgId()+",", "_"  + item.getNewOrgId()+",");
+                line = line.replaceAll("'" + item.getOldOrgId()+"'", "'"  + item.getNewOrgId()+"'");
 
                 System.out.println(line);
             }
             newJava.add(line);
         }
 
-        File javaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\java\\"+fileName+".java");
+        File javaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\java\\"+fileName);
         FileUtils.writeLines(javaFile,"utf-8",newJava);
 
     }

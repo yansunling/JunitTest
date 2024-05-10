@@ -49,7 +49,7 @@ public class CreateSqlUpdate implements ApplicationContextAware {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(500);
-        List<String> tableFiles = Arrays.asList("tmsp.tmsp_hand_schedule_externalplan");
+        List<String> tableFiles = Arrays.asList("tmsp.tmsp_claims_oa_record");
         Map<String,Map<String,String>> defaultSqlMap=new HashMap<>();
         Map<String,String> map= new LinkedHashMap<>();
         map.put("start_org_id","replace into  tmsp.tmsp_hand_schedule_car select serial_no,schedule_no,vehicle_id,driver_id,'<新机构ID>',start_date,end_date,route_way,route_way_id,end_org_id,line_orgs,version,remark,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_hand_schedule_car where start_org_id in('<老机构ID>');");
@@ -65,6 +65,9 @@ public class CreateSqlUpdate implements ApplicationContextAware {
         defaultSqlMap.put("mpp.mpp_prise_cust_version", Collections.singletonMap("depart_org", "update mpp.mpp_prise_cust_version set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');"));
 
         defaultSqlMap.put("mpp2.mpp2_offer_external", Collections.singletonMap("big_area", "update mpp2.mpp2_offer_external set big_area='<新机构大区ID>' where depart_org is null and big_area='<老机构大区ID单个>';"));
+
+        defaultSqlMap.put("auth.auth_permission_settings_rule_item",Collections.singletonMap("rule_value", "update auth.auth_permission_settings_rule_item set rule_value=REPLACE(rule_value,'<替换老机构名称集合>','<新机构名称>') where  rule_value regexp '<老机构名称集合>' ;"));
+
 
         //默认条件
         Map<String,String> defaultWhere=new HashMap<>();
@@ -96,7 +99,12 @@ public class CreateSqlUpdate implements ApplicationContextAware {
                                     String sql="select 1 as value from "+table+" where "+column+" in( "+orgData.getOldOrgId()+" ) limit 1";
                                     if(StringUtils.equals("route_way_id",column)){
                                         sql="select 1 as value from "+table+" where "+column+" regexp  "+orgData.getOldOrgId().replaceAll("','","|")+"  limit 1";
+                                    }else if(StringUtils.equals("auth.auth_permission_settings_rule_item",table)){
+                                        sql="select 1 as value from "+table+" where "+column+" regexp  "+orgData.getOldOrgName().replaceAll("','","|")+"  limit 1";
                                     }
+
+
+
                                     if(item.indexOf("单个")>0){
                                         String whereStr = defaultWhere.get(table);
                                         if(StringUtils.isNotBlank(whereStr)){
@@ -175,7 +183,7 @@ public class CreateSqlUpdate implements ApplicationContextAware {
 
                                 String column=tempColumn;
 
-                                String dataSql = "select `" + column + "` from " + newTable + " where  length(`" + column + "`)>=4   limit 1";
+                                String dataSql = "select `" + column + "` from " + newTable + " where  length(`" + column + "`)>=4  limit 1";
                                 List<String> valueList = jdbcTemplate.queryForList(dataSql, String.class);
                                 if (CollectionUtil.isEmpty(valueList)) {
                                     return "";
