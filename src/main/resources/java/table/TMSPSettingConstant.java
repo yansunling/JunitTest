@@ -161,6 +161,16 @@ public class TMSPSettingConstant {
         }
     };
 
+   public final static   String brand_spec_250108040904 = "250108040904";
+    public final static   String brand_spec_25010804090401 = "25010804090401";
+    public final static HashMap<String,LAST_CITY> BRAND_LAST_CITY_HASH_MAP = new HashMap<String,LAST_CITY>(){
+        {
+            put("230100",LAST_CITY.LAST_CITY_230100);
+            put("210100",LAST_CITY.LAST_CITY_210100);
+        }
+
+    };
+
 
 
     /**
@@ -664,29 +674,6 @@ public class TMSPSettingConstant {
     public static Map<String,Set<String>> orgTransferMap = new HashMap<>();//
 
     static {
-
-//        transOrgMap.put("532901","250110020401");//大理下关营业部
-//        transOrgMap.put("530300","250110020501");//曲靖麒麟营业部
-//        transOrgMap.put("53290101","250110020401");//大理下关营业部
-//        transOrgMap.put("520200","25011007010201");//贵阳转六盘水
-//        transOrgMap.put("522301","25011007010203");//贵阳转兴义
-//        transOrgMap.put("520500","25011007010202");//贵阳转毕节
-//
-//        transOrgMap.put("520300","25011007010204");//遵义国际商贸城营业部
-//        transOrgMap.put("520400","25011007010206");//安顺大关口营业部
-//
-//        transferDirect.put(LAST_CITY.LAST_CITY_530100, transOrgMap);
-//        transferDirect.put(LAST_CITY.LAST_CITY_520100, transOrgMap);
-
-//        orgTransferMap.put("250110020401", Sets.newHashSet("532901", "53290101"));
-//        orgTransferMap.put("250110020501", Sets.newHashSet("530300"));
-//        orgTransferMap.put("25011007010201", Sets.newHashSet("520200"));
-//        orgTransferMap.put("25011007010203", Sets.newHashSet("522301"));
-//        orgTransferMap.put("25011007010202", Sets.newHashSet("520500"));
-//        orgTransferMap.put("25011007010204", Sets.newHashSet("520300"));
-//        orgTransferMap.put("25011007010206", Sets.newHashSet("520400"));
-//end
-
         endLastCitys.add(LAST_CITY.LAST_CITY_530300);//曲靖
         endLastCitys.add(LAST_CITY.LAST_CITY_532901);//大理
         endLastCitys.add(LAST_CITY.LAST_CITY_520200);//六盘水

@@ -1,6 +1,7 @@
 package com.org.newSwitch;
 
 
+import com.alibaba.fastjson.JSON;
 import com.excel.CJExcelUtil;
 import com.org.data.BossData;
 import com.org.data.PositionData;
@@ -60,6 +61,8 @@ public class CreateSwitchBossSql implements ApplicationContextAware {
         Set<String> newSqlList=new LinkedHashSet<>();
         Map<String,String> bossMap=new HashMap<>();
 
+        Set<String> bossSet=new HashSet<>();
+
         for(BossData item:importDataList){
             if(StringUtils.isBlank(item.getOrg_name())){
                 continue;
@@ -74,17 +77,22 @@ public class CreateSwitchBossSql implements ApplicationContextAware {
                 newSqlList.add("update hcm.hcm_emp_ent set boss_id='"+item.getBoss_id()+"' where emp_id in('"+StringUtils.join("','",userIds.toArray())+"');");
             }
             bossMap.put(item.getOrg_id(),item.getBoss_id());
+
+            bossSet.add(item.getBoss_id());
         }
 
-        for(BossData item:importDataList){
-            String orgId = item.getOrg_id();
-            String parentOrgId = orgId.substring(0, orgId.length() - 2);
-            String bossId = bossMap.get(parentOrgId);
-            if(StringUtils.isNotBlank(bossId)){
-                newSqlList.add("update hcm.hcm_emp_ent set boss_id='"+bossId+"' where emp_id in('"+item.getBoss_id()+"');");
+        for(String empId:bossSet){
+            String sql="select dept from hcm.hcm_emp_ent where emp_id='"+empId+"'";
+            List<String> orgIds = jdbcTemplate.queryForList(sql, String.class);
+            if(CollectionUtil.isNotEmpty(orgIds)){
+                String orgId = orgIds.get(0);
+                String parentOrgId = orgId.substring(0, orgId.length() - 2);
+                String bossId = bossMap.get(parentOrgId);
+                if(StringUtils.isNotBlank(bossId)){
+                    newSqlList.add("update hcm.hcm_emp_ent set boss_id='"+bossId+"' where emp_id in('"+empId+"');");
+                }
             }
         }
-
         File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\hcm_boss.sql");
         FileUtils.writeLines(allFile,"utf-8",newSqlList);
 

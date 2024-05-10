@@ -4,6 +4,7 @@ package com.org.newSwitch;
 import com.org.data.OrgData;
 import com.org.util.SwitchUtil;
 import com.yd.utils.common.CollectionUtil;
+import com.yd.utils.common.DateUtils;
 import com.yd.utils.common.StringUtils;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -87,7 +88,7 @@ public class CreateSqlCheck implements ApplicationContextAware {
 
                 }
             }
-            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\notSwitch"+schemaList.get(0)+".sql");
+            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\notSwitch"+ DateUtils.format(new Date()) +".sql");
             FileUtils.writeLines(allFile, "utf-8", newSqlList,true);
 
 

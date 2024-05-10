@@ -49,7 +49,7 @@ public class CreateSqlUpdate implements ApplicationContextAware {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(500);
-        List<String> tableFiles = Arrays.asList("tmsp.tmsp_net_trans_evaluate_schedule");
+        List<String> tableFiles = Arrays.asList("tmsp.tmsp_hand_schedule_externalplan");
         Map<String,Map<String,String>> defaultSqlMap=new HashMap<>();
         Map<String,String> map= new LinkedHashMap<>();
         map.put("start_org_id","replace into  tmsp.tmsp_hand_schedule_car select serial_no,schedule_no,vehicle_id,driver_id,'<新机构ID>',start_date,end_date,route_way,route_way_id,end_org_id,line_orgs,version,remark,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_hand_schedule_car where start_org_id in('<老机构ID>');");
@@ -64,10 +64,11 @@ public class CreateSqlUpdate implements ApplicationContextAware {
         defaultSqlMap.put("mpp.mpp_prise_cust_disc", Collections.singletonMap("depart_org", "update mpp.mpp_prise_cust_disc set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');"));
         defaultSqlMap.put("mpp.mpp_prise_cust_version", Collections.singletonMap("depart_org", "update mpp.mpp_prise_cust_version set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');"));
 
+        defaultSqlMap.put("mpp2.mpp2_offer_external", Collections.singletonMap("big_area", "update mpp2.mpp2_offer_external set big_area='<新机构大区ID>' where depart_org is null and big_area='<老机构大区ID单个>';"));
 
-
-
-
+        //默认条件
+        Map<String,String> defaultWhere=new HashMap<>();
+        defaultWhere.put("mpp2.mpp2_offer_external","depart_org is null");
 
 
 
@@ -96,12 +97,18 @@ public class CreateSqlUpdate implements ApplicationContextAware {
                                     if(StringUtils.equals("route_way_id",column)){
                                         sql="select 1 as value from "+table+" where "+column+" regexp  "+orgData.getOldOrgId().replaceAll("','","|")+"  limit 1";
                                     }
+                                    if(item.indexOf("单个")>0){
+                                        String whereStr = defaultWhere.get(table);
+                                        if(StringUtils.isNotBlank(whereStr)){
+                                            whereStr=" and "+whereStr;
+                                        }
+                                        sql="select "+column+" as value from "+table+" where "+column+" in( "+orgData.getOldOrgId()+" ) "+whereStr+" group by "+column+" order by count(*) desc";
+                                    }
                                     List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
-                                    /*if(CollectionUtil.isEmpty(result)){
-                                        sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgName().replaceAll("','","|")+" limit 1";
-                                        result = jdbcTemplate.queryForList(sql);
-                                    }*/
                                     if(CollectionUtil.isNotEmpty(result)){
+                                        if(item.indexOf("单个")>0){
+                                            orgData.setOldRegionId("'"+result.get(0).get("value")+"'");
+                                        }
                                         String newItem = SwitchUtil.replaceName(item, orgData);
                                         if(StringUtils.isNotBlank(newItem)){
                                             newSqlList.add(newItem);

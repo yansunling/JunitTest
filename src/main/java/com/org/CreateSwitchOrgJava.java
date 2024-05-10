@@ -54,23 +54,28 @@ public class CreateSwitchOrgJava implements ApplicationContextAware {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = readExcel(excelFilePath);
         String filePath = getClass().getClassLoader().getResource("").getPath();
-        List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/TMSPSettingConstant.java"), "utf-8");
+        String fileName="TMSPSettingConstantForBmsp";
+        List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/"+fileName+".java"), "utf-8");
         List<String> newJava = new ArrayList<>();
         for (String line : tableFiles) {
             for (OrgData item : orgDataList) {
                 System.out.println(line);
-                line = line.replaceAll("\"" + item.getOldOrgId(), "\"" + item.getNewOrgId());
-                line = line.replaceAll("\"" + item.getOldOrgName(), "\"" + item.getNewOrgName());
-                line = line.replaceAll("\"" + item.getOldRegionId(), "\"" + item.getNewRegionId());
-                line = line.replaceAll("\"" + item.getOldRegionName(), "\"" + item.getNewRegionName());
-                line = line.replaceAll("\"" + item.getOldDistrictId(), "\"" + item.getNewDistrictId());
-                line = line.replaceAll("\"" + item.getOldDistrictName(), "\"" + item.getNewDistrictName());
+                line = line.replaceAll("\"" + item.getOldOrgId()+"\"", "\"" + item.getNewOrgId()+"\"");
+                line = line.replaceAll(item.getOldOrgName(), item.getNewOrgName());
+//                line = line.replaceAll("\"" + item.getOldRegionId(), "\"" + item.getNewRegionId());
+//                line = line.replaceAll("\"" + item.getOldRegionName(), "\"" + item.getNewRegionName());
+//                line = line.replaceAll("\"" + item.getOldDistrictId(), "\"" + item.getNewDistrictId());
+//                line = line.replaceAll("\"" + item.getOldDistrictName(), "\"" + item.getNewDistrictName());
+                line = line.replaceAll("_" + item.getOldOrgId()+"\\(", "_"  + item.getNewOrgId()+"\\(");
+                line = line.replaceAll("_" + item.getOldOrgId()+"=", "_"  + item.getNewOrgId()+"=");
+                line = line.replaceAll("_" + item.getOldOrgId()+",", "_"  + item.getNewOrgId()+",");
+
                 System.out.println(line);
             }
             newJava.add(line);
         }
 
-        File javaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\java\\TMSPSettingConstant.java");
+        File javaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\java\\"+fileName+".java");
         FileUtils.writeLines(javaFile,"utf-8",newJava);
 
     }
