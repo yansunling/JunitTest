@@ -47,7 +47,7 @@ public class CreateSqlCheck implements ApplicationContextAware {
     public void test() throws Exception {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-        jdbcTemplate.setQueryTimeout(500);
+        jdbcTemplate.setQueryTimeout(6000);
 
         List<String> schemaList = Arrays.asList("bmsp");
 
