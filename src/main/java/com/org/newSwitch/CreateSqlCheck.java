@@ -47,15 +47,15 @@ public class CreateSqlCheck implements ApplicationContextAware {
     public void test() throws Exception {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-        jdbcTemplate.setQueryTimeout(6000);
+        jdbcTemplate.setQueryTimeout(600);
 
-        List<String> schemaList = Arrays.asList("bmsp");
+        List<String> schemaList = Arrays.asList("mpp2");
 
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         Set<String> newSqlList=new LinkedHashSet<>();
         for(String schema:schemaList){
             String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW' and table_name not like 'foc%'" +
-                    " and table_name not in('tmsp_alter_order_report','tmsp_depart_ontime_rate_report_item','tmsp_msg_result_sms' )  ";
+                    " and table_name not in('tmsp_msg_send_sms','bmsp_report_outorder_order_cust','bmsp_report_inorder_putfee_order_cust','bmsp_report_inorder_putfee_customer_cust','tmsp_alter_order_report','bmsp_report_inorder_customer_cust','tmsp_depart_ontime_rate_report_item','tmsp_msg_result_sms','bmsp_report_inorder_order_cust' )  ";
             List<String> tableFiles = jdbcTemplate.queryForList(sql, String.class);
             for(String table:tableFiles){
                 String newTable = schema + "." + table;
@@ -88,7 +88,7 @@ public class CreateSqlCheck implements ApplicationContextAware {
 
                 }
             }
-            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\notSwitch"+ DateUtils.format(new Date()) +".sql");
+            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\notSwitch"+ DateUtils.format(new Date(),"yyyyMMddHHmm") +".sql");
             FileUtils.writeLines(allFile, "utf-8", newSqlList,true);
 
 

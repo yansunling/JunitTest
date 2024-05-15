@@ -776,13 +776,13 @@ public class SwitchUtil {
         String sql="update "+newTable+" set "+column+" = '<新机构"+type+">' where "+column+" in('<老机构"+type+">');";
         Matcher matcher = pattern.matcher(column);
         if(matcher.find()){
-            sql="update "+newTable+" set "+column+" = '<新机构大区"+type+">' where "+column+" in('<老机构"+type+">');";
+            sql="update "+newTable+" set "+column+" = '<新机构大区"+type+">' where "+column+" in('<老机构大区"+type+">');";
         }
         String smallRegex = "small_area|district_id|小区";
         Pattern smallPattern = Pattern.compile(smallRegex);
         Matcher smallMatcher = smallPattern.matcher(column);
         if(smallMatcher.find()){
-            sql="update "+newTable+" set "+column+" = '<新机构小区"+type+">' where "+column+" in('<老机构"+type+">');";
+            sql="update "+newTable+" set "+column+" = '<新机构小区"+type+">' where "+column+" in('<老机构小区"+type+">');";
         }
         return sql;
     }

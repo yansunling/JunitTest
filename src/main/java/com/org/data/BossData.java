@@ -8,22 +8,21 @@ import java.util.Map;
 @Data
 public class BossData {
 
-    private String boss_id;
+    private String emp_id;
 
-    private String org_name;
+    private String old_boss_name;
 
-    private String boss_name;
+    private String new_boss_name;
 
-    private String org_id;
 
 
 
     public static Map<String,String> titleMap=new LinkedHashMap<String,String>();
 
     static {
-        titleMap.put("org_name","机构名称");
-        titleMap.put("boss_name","上级名称");
-        titleMap.put("boss_id","上级Id");
+        titleMap.put("emp_id","机构名称");
+        titleMap.put("old_boss_name","上级名称");
+        titleMap.put("new_boss_name","上级Id");
 
     }
 

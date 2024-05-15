@@ -1,6 +1,7 @@
 package com.org;
 
 
+import com.alibaba.fastjson.JSON;
 import com.org.util.SwitchUtil;
 import com.yd.utils.common.ExcelReader;
 import com.yd.utils.common.StringUtils;
@@ -54,25 +55,32 @@ public class CreateSwitchOrgUserPositionSql implements ApplicationContextAware {
         List<Object[]> listResult = excelReader.getAllRow();//读取Excel的数据
         List<String> sqlList=new ArrayList<>();
         Map<String, String> newMap = SwitchUtil.newMap;
+        Map<String,String> rank=new HashMap<>();
+        rank.put("员工","1");
+        rank.put("主管","2");
+        rank.put("经理","3");
+        rank.put("高级经理","4");
+        rank.put("总监","5");
+        rank.put("高级总监","6");
+        rank.put("副总","7");
+        rank.put("总裁","8");
+        rank.put("董事长","9");
 
         for(Object[] obj:listResult){
-            if(obj[1]==null){
+            if(obj[0]==null){
                 continue;
             }
-
-            sqlList.add("update hcm.hcm_emp_ent set position_id='"+position.get(obj[1])+"' where emp_id='"+obj[0]+"';");
-            sqlList.add("update hcm.hcm_emp_ent set position='"+position.get(obj[1])+"' where emp_id='"+obj[0]+"';");
-            String userId=obj[0]+"";
+            String positionId = position.get(obj[1]);
             String orgId=newMap.get(obj[2]+"");
-            sqlList.add("update hcm.hcm_emp_ent set dept='"+orgId+"' where emp_id='"+userId+"';");
-            sqlList.add("update hcm.hcm_user_info set org_id='"+orgId+"' where user_id='"+userId+"';");
-            sqlList.add("update auth.auth_user_userinfo set org_id='"+orgId+"' where user_id='"+userId+"';");
-
+            String userId=obj[0]+"";
+            String rankId = rank.get(obj[3]);
+            if(StringUtils.isBlank(positionId)||StringUtils.isBlank(orgId)||StringUtils.isBlank(rankId)){
+                throw new RuntimeException("机构错误obj:"+ JSON.toJSONString(obj));
+            }
+            sqlList.add("update hcm.hcm_emp_ent set position_id='"+positionId+"',position='"+positionId+"',dept='"+orgId+"',rank='"+rankId+"'  where emp_id='"+userId+"';");
         }
         File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\hcm_org_positon.sql");
         FileUtils.writeLines(allFile, "utf-8", sqlList);
-
-
 
 
     }

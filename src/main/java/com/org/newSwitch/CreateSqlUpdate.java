@@ -49,7 +49,23 @@ public class CreateSqlUpdate implements ApplicationContextAware {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(500);
-        List<String> tableFiles = Arrays.asList("tmsp.tmsp_claims_oa_record");
+       /* List<String> tableFiles = Arrays.asList("bmsp.bmsp_archives_purchase_contract","bmsp.bmsp_balance_outcost","bmsp.bmsp_bank_claim_detail",
+                "bmsp.bmsp_bank_detail","bmsp.bmsp_borrow_out_statement_info","bmsp.bmsp_borrow_repay_oa_item","bmsp.bmsp_invoice_apply",
+                "bmsp.bmsp_invoice_balance","bmsp.bmsp_oa_payment","bmsp.bmsp_process_invoice"
+                ,"bmsp.bmsp_should_outcost_clear",
+                "bmsp.bmsp_should_outorder","bmsp.bmsp_should_outorder_clear","bmsp.bmsp_ticket_arrive_cancel","bmsp.bmsp_ticket_arrive_clear");*/
+        String path="C:/Users/yansunling/Desktop/switchOrg/notSwitch202405151511.sql";
+        List<String> fileList = FileUtils.readLines(new File(path), "utf-8");
+        Set<String> tempTables=new LinkedHashSet<>();
+        List<String> tableFiles=new ArrayList<>();
+        for(String file:fileList){
+            if(StringUtils.isNotBlank(file)){
+                String[] split = file.split(":");
+                tempTables.add(split[0]);
+            }
+        }
+        tableFiles.addAll(tempTables);
+
         Map<String,Map<String,String>> defaultSqlMap=new HashMap<>();
         Map<String,String> map= new LinkedHashMap<>();
         map.put("start_org_id","replace into  tmsp.tmsp_hand_schedule_car select serial_no,schedule_no,vehicle_id,driver_id,'<新机构ID>',start_date,end_date,route_way,route_way_id,end_org_id,line_orgs,version,remark,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_hand_schedule_car where start_org_id in('<老机构ID>');");
@@ -74,7 +90,7 @@ public class CreateSqlUpdate implements ApplicationContextAware {
         defaultWhere.put("mpp2.mpp2_offer_external","depart_org is null");
 
 
-
+        List<String> allTotalSet=new ArrayList<>();
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         for(String table:tableFiles){
             Map<String,String> sqlListTemp = defaultSqlMap.get(table);
@@ -91,7 +107,7 @@ public class CreateSqlUpdate implements ApplicationContextAware {
                         @Override
                         public String call() throws Exception {
                             try {
-                                String title = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
+                                String title = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
                                 Set<String> newSqlList=new LinkedHashSet<>();
 
 
@@ -146,8 +162,14 @@ public class CreateSqlUpdate implements ApplicationContextAware {
                 String[] tables = table.split("\\.");
                 File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\table\\" +  tables[1] + ".sql");
                 FileUtils.writeLines(allFile, "utf-8", totalSet);
+                allTotalSet.addAll(totalSet);
             }
         }
+
+        String[] split = tableFiles.get(0).split("\\.");
+        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\" +  split[0] + "_next_update_temp.sql");
+        FileUtils.writeLines(allFile, "utf-8", allTotalSet);
+
 
 
     }
