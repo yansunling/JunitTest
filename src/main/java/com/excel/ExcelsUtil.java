@@ -384,6 +384,7 @@ public class ExcelsUtil {
         //正常单元格
         CellStyle cellStyle = workbook.createCellStyle();
         cellStyle.setFont(font);
+        cellStyle.setWrapText(true);
         cellStyle.setAlignment(HorizontalAlignment.CENTER);
         for(int rowNum=0;rowNum<listData.size();rowNum++){
             Map<String, Object> resultPO = listData.get(rowNum);

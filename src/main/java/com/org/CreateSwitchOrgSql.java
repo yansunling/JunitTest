@@ -46,19 +46,19 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
         ac = applicationContext;
 
     }
-
+    @Qualifier("jdbcTemplateYL")
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplateYL;
     @Qualifier("dataSource")
     @Autowired
     private YDDriverManagerDataSource ydDriverManagerDataSource;
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\2.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
 //        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"));
-        jdbcTemplate.setQueryTimeout(500);
+        jdbcTemplateYL.setQueryTimeout(500);
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
         dataSource.setMaxActive(100);
         //排除基础表
@@ -68,7 +68,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
         List<String> notSchema=new ArrayList<>();
         for (OrgData orgData : orgDataList) {
             List<String> newSqlList = new ArrayList<>();
-            String fileName = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
+            String fileName = "新组织:"+orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]旧组织:" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
             String newFileName = fileName.replaceAll("'", "");
             sqlBaseList.forEach(item->{
                 String newItem = SwitchUtil.replaceName(item, orgData);
@@ -97,14 +97,13 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
 
 
 
-            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\" + newFileName + ".sql");
-            sqlTotalList.add("\n\n\n");
-            sqlTotalList.addAll(newSqlList);
-            FileUtils.writeLines(allFile, "utf-8", newSqlList);
-            sqlTotalList.addAll(newSqlList);
+//            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\" + newFileName + ".sql");
+//            sqlTotalList.add("\n\n\n");
+//            sqlTotalList.addAll(newSqlList);
+//            FileUtils.writeLines(allFile, "utf-8", newSqlList);
+//            sqlTotalList.addAll(newSqlList);
         }
-        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\allSql.sql");
-        FileUtils.writeLines(allFile,"utf-8",sqlTotalList);
+
 
         schemaMap.forEach((key,list)->{
             try {
@@ -114,11 +113,18 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
                     set.addAll(list);
                     File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"+key+".sql");
                     FileUtils.writeLines(schemaFile,"utf-8",set);
+
+                    sqlTotalList.addAll(set);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+
+        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\allSql.sql");
+        FileUtils.writeLines(allFile,"utf-8",sqlTotalList);
+
+
         File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\notSchema.sql");
         FileUtils.writeLines(notSchemaFile,"utf-8",notSchema);
     }
@@ -126,12 +132,12 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
         String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where table_schema in('mpp2') and    table_schema not in('tmsp','bmsp','costx','information_schema'," +
-                "'query','dct','ouyang','portal','biq','das','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','kjob','crmx','jeewx-boot') " +
+                "where table_schema='hcm' and  table_schema not in('marketing','dctx','wac','acs','als','costx','information_schema'," +
+                "'query','dct','ouyang','performance_schema','portal','biq','das','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','kjob','crmx','jeewx-boot') " +
                 "  group by table_schema";
-        List<String> schemaList = jdbcTemplate.queryForList(schemaSql, String.class);
+        List<String> schemaList = jdbcTemplateYL.queryForList(schemaSql, String.class);
         String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
-        List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
+        List<Map<String, Object>> maps = jdbcTemplateYL.queryForList(orgSql);
         List<String> orgList = new ArrayList<>();
         List<String> orgNameList = new ArrayList<>();
         maps.forEach(item -> {
@@ -166,8 +172,8 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
             //设置初始值
             schemaMap.put(schema,new ArrayList<>());
 
-            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW' ";
-            List<String> tableList = jdbcTemplate.queryForList(sql, String.class);
+            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW'  ";
+            List<String> tableList = jdbcTemplateYL.queryForList(sql, String.class);
             CountDownLatch countDownLatch = new CountDownLatch(tableList.size());
             List<String> totalSql = new ArrayList<>();
             for (String table : tableList) {
@@ -189,12 +195,12 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
                             }
                             String columnsSql = "select column_name from  information_schema.COLUMNS where table_name='" + table + "' and table_schema='" + schema + "' " +
                                     "and column_name not in('serial_no','create_user_id','update_user_id','remark','salesman_id') and data_type not in('decimal','datetime','date','int') ";
-                            List<String> columnList = jdbcTemplate.queryForList(columnsSql, String.class);
+                            List<String> columnList = jdbcTemplateYL.queryForList(columnsSql, String.class);
                             if (CollectionUtil.isNotEmpty(columnList)) {
                                 List<String> sqlList = new ArrayList<>();
                                 columnList.forEach(column -> {
                                     String dataSql = "select `" + column + "` from " + newTable + " where  length(`" + column + "`)>4  limit 1";
-                                    List<String> valueList = jdbcTemplate.queryForList(dataSql, String.class);
+                                    List<String> valueList = jdbcTemplateYL.queryForList(dataSql, String.class);
                                     if (CollectionUtil.isEmpty(valueList)) {
                                         return;
                                     }
@@ -212,7 +218,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
                                         column = "`" + column + "`";
                                     }
 
-                                    if (orgList.contains(newValue)||(newValue.startsWith("25")&&newValue.indexOf(".")<0)) {
+                                    if (orgList.contains(newValue)||(newValue.startsWith("3501")&&newValue.indexOf(".")<0||(newValue.startsWith("2501")&&newValue.indexOf(".")<0))) {
                                         sqlList.add(SwitchUtil.matchColumn(column, newTable, "ID", concat));
                                     } else if (orgNameList.contains(newValue)) {
                                         sqlList.add(SwitchUtil.matchColumn(column, newTable, "名称", concat));

@@ -40,6 +40,7 @@ public class CreateSwitchOrgTmspSqlNew implements ApplicationContextAware {
 
     }
 
+    @Qualifier("jdbcTemplateYL")
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Qualifier("dataSource")
@@ -48,7 +49,7 @@ public class CreateSwitchOrgTmspSqlNew implements ApplicationContextAware {
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1 - 副本.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp\\"));
         jdbcTemplate.setQueryTimeout(500);
@@ -163,7 +164,7 @@ public class CreateSwitchOrgTmspSqlNew implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap,Map<String,List<String>> tableColumns) {
 
-        List<String> schemaList = Arrays.asList("hcm");
+        List<String> schemaList = Arrays.asList("bmsp","tmsp");
         String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
         List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
         List<String> orgList = new ArrayList<>();

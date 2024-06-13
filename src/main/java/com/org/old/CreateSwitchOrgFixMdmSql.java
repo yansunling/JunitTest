@@ -1,4 +1,4 @@
-package com.org;
+package com.org.old;
 
 
 import com.org.data.OrgData;
@@ -29,7 +29,7 @@ import java.util.concurrent.*;
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
-public class CreateSwitchOrgFixHcmSql implements ApplicationContextAware {
+public class CreateSwitchOrgFixMdmSql implements ApplicationContextAware {
     ApplicationContext ac;
 
     @Override
@@ -49,26 +49,84 @@ public class CreateSwitchOrgFixHcmSql implements ApplicationContextAware {
     public void test() throws Exception {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-//        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\hcm\\"));
+        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\mdm\\"));
         jdbcTemplate.setQueryTimeout(500);
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
         dataSource.setMaxActive(100);
         List<OrgData> newOrgDataList = new ArrayList<>();
         newOrgDataList.add(orgDataList.get(0));
         String filePath = getClass().getClassLoader().getResource("").getPath();
-        List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/hcm/hcm.sql"), "utf-8");
-        Set<String> newSqlList=new LinkedHashSet<>();
+        List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/mdm.tab"), "utf-8");
 
-        for(OrgData orgData:orgDataList){
-            for(String item:tableFiles){
-                String newItem = SwitchUtil.replaceName(item, orgData);
-                if(StringUtils.isNotBlank(newItem)){
-                    newSqlList.add(newItem);
+
+        Map<String,Map<String,String>> defaultSqlMap=new HashMap<>();
+        Map<String,String> map= new HashMap<>();
+        map.put("start_org_id","update tmsp.tmsp_hand_schedule_car set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID单个>');");
+        map.put("end_org_id","update tmsp.tmsp_hand_schedule_car set end_org_id = '<新机构ID>' where end_org_id in('<老机构ID单个>');");
+        map.put("route_way_id","update tmsp.tmsp_hand_schedule_car set route_way_id = REPLACE(route_way_id,'<替换老机构ID集合>','<新机构ID>') where route_way_id regexp '<老机构ID集合>' ;");
+        map.put("route_way","update tmsp.tmsp_hand_schedule_car set route_way=REPLACE(route_way,'<替换老机构名称集合>','<新机构名称>') where route_way_id regexp '<老机构ID集合>' ;");
+        defaultSqlMap.put("tmsp.tmsp_hand_schedule_car",map);
+
+        ExecutorService executorService = Executors.newFixedThreadPool(50);
+        for(String table:tableFiles){
+            Map<String,String> sqlListTemp = defaultSqlMap.get(table);
+            if(CollectionUtil.isEmpty(sqlListTemp)){
+                sqlListTemp = buildBaseSql(table);
+            }
+            Map<String,String> sqlList=new HashMap<>();
+            sqlList.putAll(sqlListTemp);
+            if(CollectionUtil.isNotEmpty(sqlList)){
+                Set<String> totalSet=new LinkedHashSet<>();
+                CountDownLatch countDownLatch = new CountDownLatch(orgDataList.size());
+                for (OrgData orgData : orgDataList) {
+                    executorService.submit(new FutureTask<String>(new Callable<String>() {
+                        @Override
+                        public String call() throws Exception {
+                            try {
+                                String title = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
+                                Set<String> newSqlList=new LinkedHashSet<>();
+
+
+                                sqlList.forEach((column,item)->{
+                                    String sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgId().replaceAll("','","|")+" limit 1";
+                                    List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
+
+                                    sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgName().replaceAll("','","|")+" limit 1";
+                                    List<Map<String, Object>> resultName = jdbcTemplate.queryForList(sql);
+
+                                    if(CollectionUtil.isNotEmpty(result)||CollectionUtil.isNotEmpty(resultName)){
+                                        String newItem = SwitchUtil.replaceName(item, orgData);
+                                        if(StringUtils.isNotBlank(newItem)){
+                                            newSqlList.add(newItem);
+                                        }
+                                    }
+                                });
+                                if(CollectionUtil.isNotEmpty(newSqlList)){
+                                    List<String> titleList=new ArrayList<>();
+                                    titleList.add("\n\n--   "+title+"\n\n");
+                                    titleList.addAll(newSqlList);
+                                    totalSet.addAll(titleList);
+
+                                }
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+
+                            }finally {
+                                countDownLatch.countDown();
+                            }
+                            return "";
+                        }
+                    }));
                 }
+                countDownLatch.await();
+                String[] tables = table.split("\\.");
+                File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\mdm\\" +  tables[1] + ".sql");
+                FileUtils.writeLines(allFile, "utf-8", totalSet);
             }
         }
-        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\hcm\\hcm_org_info.sql");
-        FileUtils.writeLines(allFile, "utf-8", newSqlList);
+
 
 
     }

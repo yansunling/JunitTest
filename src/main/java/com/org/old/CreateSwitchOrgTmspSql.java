@@ -1,4 +1,4 @@
-package com.org;
+package com.org.old;
 
 
 import com.alibaba.fastjson.JSON;
@@ -48,7 +48,7 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1 - 副本.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
 
         /*String sql="select org_id from tmsp.tmsp_net_org where org_status='run' and org_id not in('25010301') ";
@@ -132,14 +132,14 @@ public class CreateSwitchOrgTmspSql implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
 
-        List<String> schemaList = Arrays.asList("tmsp");
-        String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
-        List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
+        List<String> schemaList = Arrays.asList("tmsp","bmsp");
+//        String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
+        Map<String, String> map = SwitchUtil.newMap;
         List<String> orgList = new ArrayList<>();
         List<String> orgNameList = new ArrayList<>();
-        maps.forEach(item -> {
-            orgList.add(item.get("org_id") + "");
-            orgNameList.add(item.get("org_name") + "");
+        map.forEach((key,value) -> {
+            orgList.add(key);
+            orgNameList.add(value);
         });
         String filePath = getClass().getClassLoader().getResource("").getPath();
         List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/errorTable.txt"), "utf-8");

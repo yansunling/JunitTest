@@ -54,7 +54,7 @@ public class CreateSqlUpdate implements ApplicationContextAware {
                 "bmsp.bmsp_invoice_balance","bmsp.bmsp_oa_payment","bmsp.bmsp_process_invoice"
                 ,"bmsp.bmsp_should_outcost_clear",
                 "bmsp.bmsp_should_outorder","bmsp.bmsp_should_outorder_clear","bmsp.bmsp_ticket_arrive_cancel","bmsp.bmsp_ticket_arrive_clear");*/
-        String path="C:/Users/yansunling/Desktop/switchOrg/notSwitch202405151511.sql";
+       /* String path="C:/Users/yansunling/Desktop/switchOrg/notSwitchhcm.sql";
         List<String> fileList = FileUtils.readLines(new File(path), "utf-8");
         Set<String> tempTables=new LinkedHashSet<>();
         List<String> tableFiles=new ArrayList<>();
@@ -64,7 +64,10 @@ public class CreateSqlUpdate implements ApplicationContextAware {
                 tempTables.add(split[0]);
             }
         }
-        tableFiles.addAll(tempTables);
+        tableFiles.addAll(tempTables);*/
+
+        List<String> tableFiles= Arrays.asList("crm.crm_base_cust_goods_name_limit");
+
 
         Map<String,Map<String,String>> defaultSqlMap=new HashMap<>();
         Map<String,String> map= new LinkedHashMap<>();
@@ -176,10 +179,10 @@ public class CreateSqlUpdate implements ApplicationContextAware {
 
     @SneakyThrows
     public Map<String,String> buildBaseSql(String newTable) {
-        String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
-        List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
         List<String> orgList = new ArrayList<>();
         List<String> orgNameList = new ArrayList<>();
+        String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
         maps.forEach(item -> {
             orgList.add(item.get("org_id") + "");
             orgNameList.add(item.get("org_name") + "");

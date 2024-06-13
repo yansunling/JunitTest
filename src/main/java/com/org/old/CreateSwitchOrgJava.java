@@ -1,4 +1,4 @@
-package com.org;
+package com.org.old;
 
 
 import com.excel.CJExcelUtil;
@@ -110,8 +110,8 @@ public class CreateSwitchOrgJava implements ApplicationContextAware {
                 importData.setNewRegionId(SwitchUtil.newMap.get(importData.getNewRegionName()));
                 importData.setNewDistrictId(SwitchUtil.newMap.get(importData.getNewDistrictName()));
                 //设置旧大小区ID
-                importData.setOldRegionId(SwitchUtil.oldMap.get(importData.getOldRegionName()));
-                importData.setOldDistrictId(SwitchUtil.oldMap.get(importData.getOldDistrictName()));
+                importData.setOldRegionId(SwitchUtil.newMap.get(importData.getOldRegionName()));
+                importData.setOldDistrictId(SwitchUtil.newMap.get(importData.getOldDistrictName()));
 
             }
             orgDataList.add(importData);

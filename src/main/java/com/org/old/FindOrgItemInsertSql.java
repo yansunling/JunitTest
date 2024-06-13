@@ -1,4 +1,4 @@
-package com.org;
+package com.org.old;
 
 
 import com.yd.utils.common.CollectionUtil;
@@ -7,7 +7,6 @@ import com.yd.utils.datasource.DruidComboPoolDataSource;
 import com.yd.utils.datasource.YDDriverManagerDataSource;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.map.LinkedMap;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,13 +21,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.util.*;
-import java.util.concurrent.*;
 
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
-public class FindOrgInsertSql implements ApplicationContextAware {
+public class FindOrgItemInsertSql implements ApplicationContextAware {
     ApplicationContext ac;
 
     @Override
@@ -59,7 +57,7 @@ public class FindOrgInsertSql implements ApplicationContextAware {
         });
         List<String> skipColumns=Arrays.asList("big_area","small_area");
         String filePath = getClass().getClassLoader().getResource("").getPath();
-        List<String> tableList = FileUtils.readLines(new File(filePath + "java/table/mpp.txt"), "utf-8");
+        List<String> tableList = FileUtils.readLines(new File(filePath + "java/table/mpp_his.txt"), "utf-8");
         List<String> sqlList = new ArrayList<>();
         for (String table : tableList) {
             String newTable = "mpp." + table;
@@ -114,19 +112,23 @@ public class FindOrgInsertSql implements ApplicationContextAware {
                 sqlList.add(newSql);
             }
 
+
+
+            String simpleItemTable=table.replaceAll("_his","_item_his");
             String itemTableSql="SELECT COUNT(*) " +
                     "FROM information_schema.tables " +
                     "WHERE table_schema = 'mpp' " +
-                    "AND table_name = '"+table+"_item';";
+                    "AND table_name = '"+simpleItemTable+"';";
             Integer num = jdbcTemplate.queryForObject(itemTableSql, Integer.class);
             if(num>0){
-                String itemDataSql = "select * from  " + newTable + "_item  limit 1";
+                String hisTable=newTable.replaceAll("_his","_item_his");
+                String itemDataSql = "select * from  " + hisTable + "  limit 1";
                 valueList = jdbcTemplate.queryForList(itemDataSql);
                 if (CollectionUtil.isEmpty(valueList)) {
                     continue;
                 }
-                String itemTable=newTable+"_item";
-                String simpleItemTable=table+"_item";
+
+
                 Map<String,Object> itemValue = valueList.get(0);
                 String itemPrimarySql="SELECT COLUMN_NAME  " +
                         "FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE " +
@@ -136,7 +138,7 @@ public class FindOrgInsertSql implements ApplicationContextAware {
 
                 Set<String> itemKey = itemValue.keySet();
                 StringBuffer itemSb=new StringBuffer();
-                itemSb.append("insert ignore into ").append(itemTable);
+                itemSb.append("insert ignore into ").append(hisTable);
 
                 String itemJoin = StringUtils.join(",", itemKey.toArray());
                 itemSb.append("(").append(itemJoin).append(")select ");
@@ -145,14 +147,16 @@ public class FindOrgInsertSql implements ApplicationContextAware {
 
                 List<String> itemPrimaryKeys = jdbcTemplate.queryForList(itemPrimarySql, String.class);
                 itemPrimaryKeys.addAll(primaryKeys);
+
                 Set<String> hashSet=new HashSet<>();
                 hashSet.addAll(itemPrimaryKeys);
                 hashSet.addAll(primaryKeys);
+
                 for(String primaryKey:hashSet){
                     itemJoin=itemJoin.replaceAll(primaryKey,"concat(9,"+primaryKey+")");
                 }
 
-                itemSb.append(itemJoin).append(" from ").append(itemTable).append(" where ").append(primaryKeys.get(0)).append(" in(");
+                itemSb.append(itemJoin).append(" from ").append(hisTable).append(" where ").append(primaryKeys.get(0)).append(" in(");
                 itemSb.append("select "+primaryKeys.get(0)+" from "+newTable+" where ");
                 for(String column:columns){
                     itemSb.append(column+" in('<老机构ID>'));");
@@ -164,7 +168,7 @@ public class FindOrgInsertSql implements ApplicationContextAware {
 
 
         }
-        File outfile=new File("C:\\Users\\yansunling\\Desktop\\mpp.sql");
+        File outfile=new File("C:\\Users\\yansunling\\Desktop\\mpp_his.sql");
         FileUtils.writeLines(outfile,"utf-8",sqlList);
 
 
@@ -212,6 +216,7 @@ public class FindOrgInsertSql implements ApplicationContextAware {
         }
         return false;
     }
+
 
 
 

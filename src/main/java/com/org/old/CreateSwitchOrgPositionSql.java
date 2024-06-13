@@ -1,12 +1,14 @@
-package com.org;
+package com.org.old;
 
 
 import com.excel.CJExcelUtil;
+import com.org.data.OrgData;
 import com.org.data.PositionData;
 import com.org.util.SwitchUtil;
 import com.yd.utils.common.ExcelReader;
 import com.yd.utils.common.StringUtils;
 import com.yd.utils.datasource.YDDriverManagerDataSource;
+import io.swagger.models.auth.In;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -23,12 +25,14 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
-public class CreateSwitchDepartNatureSql implements ApplicationContextAware {
+public class CreateSwitchOrgPositionSql implements ApplicationContextAware {
     ApplicationContext ac;
 
     @Override
@@ -38,36 +42,117 @@ public class CreateSwitchDepartNatureSql implements ApplicationContextAware {
 
     }
 
+    @Autowired
+    private JdbcTemplate jdbcTemplate;
+    @Qualifier("dataSource")
+    @Autowired
+    private YDDriverManagerDataSource ydDriverManagerDataSource;
 
     @Test
     public void test() throws Exception {
-        String filePath = "C:/Users/yansunling/Desktop/depart_nature.xlsx";
+        String filePath = "C:/Users/yansunling/Desktop/position.xlsx";
         File file=new File(filePath);
 
         ExcelReader excelReader = new ExcelReader(file);
         excelReader.openFile();//打开文件
         List<Object[]> listResult = excelReader.getAllRow();//读取Excel的数据
 
-        Set<String> fileList=new LinkedHashSet<>();
+        List<PositionData> importDataList = CJExcelUtil.initImportExcelDatas(PositionData.titleMap, listResult, PositionData.class);
 
-        Map<String,String> map=new HashMap<>();
-        map.put("职能","1");
-        map.put("出发","2");
-        map.put("出发所辖职能","3");
-        map.put("到达","4");
-        map.put("到达所辖职能","5");
-        map.put("综合","6");
+        String sql="select id_name as position_name,job_category from hcm.hcm_org_position where pos_status='1'";
 
+        List<PositionData> oldPosition = jdbcTemplate.query(sql, BeanPropertyRowMapper.newInstance(PositionData.class));
+        Map<String,String> categoryMap=new HashMap<>();
+        oldPosition.forEach(item->{
+            categoryMap.put(item.getPosition_name(),item.getJob_category());
+        });
+        categoryMap.put("到达负责人","3");
+
+
+        Map<String,String> rank=new HashMap<>();
+        rank.put("员工","1");
+        rank.put("主管","2");
+        rank.put("经理","3");
+        rank.put("高级经理","4");
+        rank.put("总监","5");
+        rank.put("高级总监","6");
+        rank.put("副总","7");
+        rank.put("副总裁","7");
+        rank.put("总裁","8");
+        rank.put("董事长","9");
+        Map<String,List<PositionData>> orgRel=new LinkedHashMap<>();
+        Map<String,PositionData> positionRel=new LinkedHashMap<>();
         Map<String, String> newMap = SwitchUtil.newMap;
-        for(Object[] objects:listResult){
-            if(objects[0]!=null){
-                String departNature=map.get(objects[1]);
-                String orgId=newMap.get(objects[0]);
-                fileList.add("update hcm.hcm_org_info set depart_nature='"+departNature+"' where org_id='"+orgId+"';");
-            }
-        }
 
-        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\hcm_depart_nature.sql");
+
+
+        for(PositionData item:importDataList){
+            if(StringUtils.isBlank(item.getOrg_name())){
+                continue;
+            }
+            item.setOrg_id(newMap.get(item.getOrg_name()));
+            item.setRank(rank.get(item.getRank_name()));
+            String category = categoryMap.get(item.getPosition_name());
+            if(StringUtils.isBlank(category)){
+                if(item.getPosition_name().indexOf("经理")>=0
+                        ||item.getPosition_name().indexOf("总监")>=0
+                        ||item.getPosition_name().indexOf("主任")>=0){
+                    category="3";
+                }else{
+                    category="1";
+                }
+
+            }
+            item.setJob_category(category);
+            PositionData positionData = positionRel.get(item.getPosition_name());
+            if(positionData==null){
+                positionRel.put(item.getPosition_name(),item);
+            }
+            List<PositionData> orgPosition = orgRel.get(item.getOrg_id());
+            if(orgPosition==null){
+                orgPosition=new ArrayList<>();
+            }
+            if(!orgPosition.contains(item)){
+                orgPosition.add(item);
+            }
+            orgRel.put(item.getOrg_id(),orgPosition);
+        }
+        Set<String> keySet = positionRel.keySet();
+        List<String> fileList=new ArrayList<>();
+
+        List<String> positionList=new ArrayList<>();
+
+        Map<String, String> positionId = getPositionId();
+        for(String key:keySet){
+            String id = positionId.get(key);
+            PositionData positionData = positionRel.get(key);
+            positionData.setPosition_id(id);
+            fileList.add("INSERT ignore  INTO hcm.hcm_org_position_rule(serial_no, position_id, position_name, staffing_num, entry_num, position_status, job_category, rank, position_nature, source, is_delete, remark, version, update_user_id, update_time, create_user_id, create_time) VALUES ('"+id+"', '"+id+"', '"+positionData.getPosition_name()+"', 0,0, '1', '"+positionData.getJob_category()+"','"+positionData.getRank()+"', '', '', '0', '', 0, 'T1113', now(), 'T1113', now());");
+            positionList.add("INSERT ignore INTO hcm.hcm_org_position(position_id, id_name, org_id, staffing_num, entry_num, pos_status, operator, op_time, send_status, job_category, rank, nature, remark, update_user_id, update_time, create_user_id, create_time) VALUES ('"+id+"', '"+positionData.getPosition_name()+"', '', 0, 0, '1', 'T1113', now(), 0, '"+positionData.getJob_category()+"', '"+positionData.getRank()+"', '', '', 'T1113', now(), 'T1113', now());");
+
+        }
+        fileList.add("\n\n\n");
+        Map<String, String> orgMap = getOrg();
+        orgRel.forEach((orgId,list)->{
+            list.forEach(item->{
+                if(StringUtils.isBlank(orgId)){
+                    System.out.println(orgId+";"+list.get(0).getOrg_name());
+                }
+
+                fileList.add("INSERT ignore INTO hcm.hcm_org_position_rel_rule(serial_no, position_id, position_name, org_id, org_name, rank, nature, staffing_num, entry_num, remark, update_user_id, update_time, create_user_id, create_time) VALUES (UUID_SHORT(), '"+positionId.get(item.getPosition_name())+"','"+item.getPosition_name()+"', '"+orgId+"', '"+orgMap.get(orgId)+"', '"+item.getRank()+"', '', 0, 0, '', 'T1113', now(), 'T1113', now());");
+
+
+
+            });
+
+
+        });
+
+
+        fileList.add("\n\n\n");
+        fileList.addAll(positionList);
+
+        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\hcm_org_position_rule.sql");
         FileUtils.writeLines(allFile,"utf-8",fileList);
 
 

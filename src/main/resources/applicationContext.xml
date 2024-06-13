@@ -53,16 +53,31 @@
 	</bean>
 
 
-	<bean id="dataSourceYL" class="com.alibaba.druid.pool.DruidDataSource">
-		<!-- 数据库连接配置 -->
+	<!--<bean id="dataSourceYL" class="com.alibaba.druid.pool.DruidDataSource">
+		&lt;!&ndash; 数据库连接配置 &ndash;&gt;
 		<property name="url" value="jdbc:mysql://192.168.18.29:3308/tmsp?characterEncoding=utf8&amp;allowMultiQueries=true&amp;serverTimezone=Asia/Shanghai&amp;useSSL=false" />
 		<property name="username" value="root" />
 		<property name="password" value="YanLian@123" />
+		&lt;!&ndash; Druid的其他配置 &ndash;&gt;
+		<property name="initialSize" value="50" />
+		<property name="maxActive" value="100" />
+		&lt;!&ndash; 更多配置... &ndash;&gt;
+	</bean>-->
+
+
+	<bean id="dataSourceYL" class="com.alibaba.druid.pool.DruidDataSource">
+		<!-- 数据库连接配置 -->
+		<property name="url" value="jdbc:mysql://192.168.18.44:3306/tmsp?characterEncoding=utf8&amp;allowMultiQueries=true&amp;serverTimezone=Asia/Shanghai&amp;useSSL=false" />
+		<property name="username" value="read" />
+		<property name="password" value="XzJjy6pe3SRk" />
 		<!-- Druid的其他配置 -->
 		<property name="initialSize" value="50" />
 		<property name="maxActive" value="100" />
 		<!-- 更多配置... -->
 	</bean>
+
+
+
 
 
 	<!-- SPRING JDBC -->

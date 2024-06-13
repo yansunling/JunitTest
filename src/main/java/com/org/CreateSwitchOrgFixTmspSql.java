@@ -40,8 +40,9 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
 
     }
 
+    @Qualifier("jdbcTemplateYL")
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private JdbcTemplate jdbcTemplateYL;
     @Qualifier("dataSource")
     @Autowired
     private YDDriverManagerDataSource ydDriverManagerDataSource;
@@ -50,7 +51,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
     public void test() throws Exception {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-        jdbcTemplate.setQueryTimeout(500);
+        jdbcTemplateYL.setQueryTimeout(500);
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
         dataSource.setMaxActive(100);
         List<OrgData> newOrgDataList = new ArrayList<>();
@@ -68,6 +69,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
         defaultSqlMap.put("tmsp.tmsp_hand_schedule_car",map);
 
         ExecutorService executorService = Executors.newFixedThreadPool(50);
+        Set<String> allSet=new LinkedHashSet<>();
         for(String table:tableFiles){
             Map<String,String> sqlListTemp = defaultSqlMap.get(table);
             if(CollectionUtil.isEmpty(sqlListTemp)){
@@ -75,6 +77,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
             }
             Map<String,String> sqlList=new LinkedHashMap<>();
             sqlList.putAll(sqlListTemp);
+
             if(CollectionUtil.isNotEmpty(sqlList)){
                 Set<String> totalSet=new LinkedHashSet<>();
                 CountDownLatch countDownLatch = new CountDownLatch(orgDataList.size());
@@ -92,10 +95,10 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
                                     if(StringUtils.equals("route_way_id",column)){
                                         sql="select 1 as value from "+table+" where "+column+" regexp  "+orgData.getOldOrgId().replaceAll("','","|")+"  limit 1";
                                     }
-                                    List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
+                                    List<Map<String, Object>> result = jdbcTemplateYL.queryForList(sql);
                                     if(CollectionUtil.isEmpty(result)){
                                         sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgName().replaceAll("','","|")+" limit 1";
-                                        result = jdbcTemplate.queryForList(sql);
+                                        result = jdbcTemplateYL.queryForList(sql);
                                     }
                                     if(CollectionUtil.isNotEmpty(result)){
                                         String newItem = SwitchUtil.replaceName(item, orgData);
@@ -127,17 +130,20 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
                 String[] tables = table.split("\\.");
                 File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\table\\" +  tables[1] + ".sql");
                 FileUtils.writeLines(allFile, "utf-8", totalSet);
+
+                allSet.addAll(totalSet);
             }
         }
 
-
+        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\table\\allSet.sql");
+        FileUtils.writeLines(allFile, "utf-8", allSet);
 
     }
 
     @SneakyThrows
     public Map<String,String> buildBaseSql(String newTable) {
         String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
-        List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
+        List<Map<String, Object>> maps = jdbcTemplateYL.queryForList(orgSql);
         List<String> orgList = new ArrayList<>();
         List<String> orgNameList = new ArrayList<>();
         maps.forEach(item -> {
@@ -150,7 +156,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
         try {
             String columnsSql = "select column_name from  information_schema.COLUMNS where table_name='" + table + "' " +
                     "and column_name not in('serial_no','create_user_id','update_user_id','remark','salesman_id','price_remark','product_type') and data_type not in('decimal','datetime','date','int') ";
-            List<String> columnList = jdbcTemplate.queryForList(columnsSql, String.class);
+            List<String> columnList = jdbcTemplateYL.queryForList(columnsSql, String.class);
             if (CollectionUtil.isNotEmpty(columnList)) {
 
                 ExecutorService executorService = Executors.newFixedThreadPool(50);
@@ -166,7 +172,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
                                 String column=tempColumn;
 
                                 String dataSql = "select `" + column + "` from " + newTable + " where  length(`" + column + "`)>=4   limit 1";
-                                List<String> valueList = jdbcTemplate.queryForList(dataSql, String.class);
+                                List<String> valueList = jdbcTemplateYL.queryForList(dataSql, String.class);
                                 if (CollectionUtil.isEmpty(valueList)) {
                                     return "";
                                 }
@@ -188,7 +194,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
                                 if (SwitchUtil.containsChinese(column)) {
                                     column = "`" + column + "`";
                                 }
-                                if (orgList.contains(newValue)||(newValue.startsWith("25")&&newValue.indexOf(".")<0)) {
+                                if (orgList.contains(newValue)||(newValue.startsWith("2501")&&newValue.indexOf(".")<0)) {
                                     sqlList.put(column,SwitchUtil.matchColumn(column, newTable, "ID", concat));
 
                                 } else if (orgNameList.contains(newValue)) {

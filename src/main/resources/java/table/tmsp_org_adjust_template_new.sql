@@ -5,7 +5,8 @@
 -- HCM
 update hcm.hcm_user_info set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update hcm.hcm_emp_ent set org_power = '<新机构ID>' where org_power in('<老机构ID>');
-update hcm.hcm_org_position set org_id = '<新机构ID>' where org_id in('<老机构ID>');
+update hcm.hcm_emp_ent set dept = '<新机构ID>' where dept in('<老机构ID>');
+replace INTO hcm.hcm_org_position_rel_rule(serial_no, position_id, position_name, org_id, org_name, job_category, rank, nature, staffing_num, entry_num, remark, is_delete, version, update_user_id, update_time, create_user_id, create_time) select serial_no, position_id, position_name, '<新机构ID>', '<新机构名称>', job_category, rank, nature, staffing_num, entry_num, remark, is_delete, version, update_user_id, update_time, create_user_id, create_time from hcm.hcm_org_position_rel_rule where org_id in('<老机构ID>');
 update hcm.hcm_checkin_logs set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update hcm.hcm_checkin_report set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update hcm.hcm_checkin_report_month set org_id = '<新机构ID>' where org_id in('<老机构ID>');
@@ -160,6 +161,10 @@ update tmsp.tmsp_order_detail set stock_org_ids = '<新机构ID>' where stock_or
 update tmsp.tmsp_order_detail set send_org_id = '<新机构ID>' where send_org_id in('<老机构ID>');
 update tmsp.tmsp_order_pre set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 update tmsp.tmsp_order_pre set last_org_id = '<新机构ID>' where last_org_id in('<老机构ID>');
+update tmsp.tmsp_order_pre set recv_fail_org  = '<新机构ID>' where recv_fail_org  in('<老机构ID>');
+update tmsp.tmsp_order_pre set recv_succ_org  = '<新机构ID>' where recv_succ_org  in('<老机构ID>');
+
+
 update tmsp.tmsp_claims_oa_bear set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 update tmsp.tmsp_claims_oa_expense_record set apply_org_id = '<新机构ID>' where apply_org_id in('<老机构ID>');
 update tmsp.tmsp_claims_oa_record set apply_org_id = '<新机构ID>' where apply_org_id in('<老机构ID>');
@@ -231,6 +236,8 @@ update tmsp.tmsp_net_trans_evaluate_schedule set passing_two_org_id = '<新机�
 update tmsp.tmsp_net_trans_evaluate_schedule set passing_three_org_id = '<新机构ID>' where passing_three_org_id in('<老机构ID>');
 update tmsp.tmsp_net_trans_evaluate_schedule set passing_four_org_id = '<新机构ID>' where passing_four_org_id in('<老机构ID>');
 update tmsp.tmsp_net_trans_evaluate_schedule set end_org_id = '<新机构ID>' where end_org_id in('<老机构ID>');
+update tmsp.tmsp_net_trans_evaluate_schedule set evaluate_line_end  = '<新机构ID>' where evaluate_line_end  in('<老机构ID>');
+update tmsp.tmsp_net_trans_evaluate_schedule set evaluate_line_start  = '<新机构ID>' where evaluate_line_start  in('<老机构ID>');
 update tmsp.tmsp_net_trans_time_item_schedule set load_org_id = '<新机构ID>' where load_org_id in('<老机构ID>');
 update tmsp.tmsp_net_trans_time_item_schedule set arrive_org_id = '<新机构ID>' where arrive_org_id in('<老机构ID>');
 update tmsp.tmsp_net_trans_time_schedule set org_id = '<新机构ID>' where org_id in('<老机构ID>');
@@ -282,7 +289,7 @@ replace INTO tmsp.tmsp_net_updown select serial_no, '<新机构ID>', next_org_id
 replace INTO tmsp.tmsp_net_updown select serial_no,  org_id,  '<新机构ID>', hand_type, product_type, last_city, transfer_city, trans_way, schedule, order_cashing_time, last_cashing_arrive_time, last_send_time, transit_hour, arrive_time, route_nature, validity_start_time, validity_end_time, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_updown  where next_org_id in('<老机构ID>');
 replace INTO tmsp.tmsp_net_org_product_line select serial_no, '<新机构ID>', product_type, last_city, is_area_net, income_org_id, effective_date, expiry_date, activate_status, delivery_gis_flag, share_ratio, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_product_line where depart_org_id in('<老机构ID>');
 update tmsp.tmsp_net_org_product_line set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID>');
-replace INTO tmsp.tmsp_net_org_ext select serial_no, '<新机构ID>', brand, enable_remote_stock, driver_prefix, sign_radius, is_recode_recive, recive_price, recive_price_car, recive_price_cube, recive_price_weight, is_record_stock, resp_tel, org_name_tl, prov_code_tl, city_code_tl, area_code_tl, org_address_tl, longitude_tl, latitude_tl, org_name_zx, prov_code_zx, city_code_zx, area_code_zx, org_address_zx, longitude_zx, latitude_zx, is_lht, is_start_print, is_delivery_line, delivery_serial_start, cust_area, print_brand_name, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_ext where org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_org_ext(serial_no, org_id, brand, enable_remote_stock, driver_prefix, sign_radius, is_recode_recive, recive_price, recive_price_car, recive_price_cube, recive_price_weight, is_record_stock, resp_tel, org_name_tl, prov_code_tl, city_code_tl, area_code_tl, org_address_tl, longitude_tl, latitude_tl, org_name_zx, prov_code_zx, city_code_zx, area_code_zx, org_address_zx, longitude_zx, latitude_zx, is_lht, is_start_print, is_delivery_line, delivery_serial_start, cust_area, is_show_manufacturer, print_brand_name, version, remark, update_user_id, update_time, create_user_id, create_time)  select serial_no, '<新机构ID>', brand, enable_remote_stock, driver_prefix, sign_radius, is_recode_recive, recive_price, recive_price_car, recive_price_cube, recive_price_weight, is_record_stock, resp_tel, org_name_tl, prov_code_tl, city_code_tl, area_code_tl, org_address_tl, longitude_tl, latitude_tl, org_name_zx, prov_code_zx, city_code_zx, area_code_zx, org_address_zx, longitude_zx, latitude_zx, is_lht, is_start_print, is_delivery_line, delivery_serial_start, cust_area,is_show_manufacturer, print_brand_name, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org_ext where org_id in('<老机构ID>');
 replace INTO tmsp.tmsp_net_org select serial_no, '<新机构ID>', org_code, '<新机构名称>', org_short_name, org_status, resp_user_id, org_type, net_station_type, country_code, prov_code, city_code, area_code, org_address, longitude, latitude, org_tel, '', '<新机构大区ID>', '<新机构小区ID>', shutdown_user_id, shutdown_time, sale_mode, '<新机构ID>', send_decision, is_self_car, is_local_net, own_site_org_id, enable_order, send_city, send_city_name, enable_trans, enable_stock, enable_last, enable_rail, last_city, enable_aging, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org where org_id in('<老机构ID>');
 update tmsp.tmsp_net_org set own_site_org_id = '<新机构ID>' where own_site_org_id in('<老机构ID>');
 replace into  tmsp.tmsp_own_driver_salary select serial_no,salary_month,'<新机构ID>',driver_salary,loader_salary,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_own_driver_salary where org_id in('<老机构ID>');
@@ -581,6 +588,7 @@ update bmsp.bmsp_balance_outcost set org_id = '<新机构ID>' where org_id in('<
 update bmsp.bmsp_balance_outcost set fee_bear_orgid = '<新机构ID>' where fee_bear_orgid in('<老机构ID>');
 update bmsp.bmsp_balance_outcost_clear set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update bmsp.bmsp_balance_outorder set org_id = '<新机构ID>' where org_id in('<老机构ID>');
+update bmsp.bmsp_balance_outorder set fee_bear_orgid  = '<新机构ID>' where fee_bear_orgid  in('<老机构ID>');
 update bmsp.bmsp_balance_outorder_clear set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update bmsp.bmsp_bank_claim_detail set belong_orgid = '<新机构ID>' where belong_orgid in('<老机构ID>');
 update bmsp.bmsp_bank_claim_detail set claim_org_id = '<新机构ID>' where claim_org_id in('<老机构ID>');
@@ -590,6 +598,8 @@ update bmsp.bmsp_invoice_apply set invoice_org_name = '<新机构名称>' where 
 update bmsp.bmsp_invoice_balance set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update bmsp.bmsp_oa_payment set charges_org_id = '<新机构ID>' where charges_org_id in('<老机构ID>');
 update bmsp.bmsp_oa_payment set apply_org_id = '<新机构ID>' where apply_org_id in('<老机构ID>');
+update bmsp.bmsp_oa_payment set depart_id = '<新机构ID>' where depart_id in('<老机构ID>');
+
 update bmsp.bmsp_oa_payment_item set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 update bmsp.bmsp_pre_doc set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update bmsp.bmsp_pre_doc set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID>');
@@ -604,6 +614,7 @@ update bmsp.bmsp_should_inorder set org_id = '<新机构ID>' where org_id in('<�
 update bmsp.bmsp_should_inorder set income_org_id = '<新机构ID>' where income_org_id in('<老机构ID>');
 update bmsp.bmsp_should_inorder_clear set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update bmsp.bmsp_should_outcost set org_id = '<新机构ID>' where org_id in('<老机构ID>');
+update bmsp.bmsp_should_outcost set fee_bear_orgid = '<新机构ID>' where fee_bear_orgid in('<老机构ID>');
 update bmsp.bmsp_should_outcost set outpay_org_id = '<新机构ID>' where outpay_org_id in('<老机构ID>');
 update bmsp.bmsp_should_outcost_clear set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update bmsp.bmsp_should_outcost_mixload set org_id = '<新机构ID>' where org_id in('<老机构ID>');

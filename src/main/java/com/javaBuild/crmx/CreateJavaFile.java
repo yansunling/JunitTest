@@ -43,9 +43,9 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_cargo_logistics_limit");
-		String prexName="Crmx";
-		String dataBase="crm";
+        List<String> tableNames = Arrays.asList("hcm_org_position_rel_rule");
+		String prexName="Hcm";
+		String dataBase="hcm";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
@@ -53,17 +53,17 @@ public class CreateJavaFile implements ApplicationContextAware{
 		dir.mkdirs();
 		String filePath = getClass().getClassLoader().getResource("").getPath();
 		for(String tableName:tableNames){
-			String content = FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplatePO.java"));
-			String mapperContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateMapper.java"));
-			String mapperXml=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateMapper.xml"));
-			String serviceContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateService.java"));
-			String implContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateServiceImpl.java"));
-			String controllerContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateController.java"));
-			String htmlContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateList.html"));
-			String jsContent=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateJavaScript.js"));
+			String content = FileUtil.readAsString(new File(filePath+ "java/crm/TemplatePO.java"));
+			String mapperContent=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateMapper.java"));
+			String mapperXml=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateMapper.xml"));
+			String serviceContent=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateService.java"));
+			String implContent=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateServiceImpl.java"));
+			String controllerContent=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateController.java"));
+			String htmlContent=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateList.html"));
+			String jsContent=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateJavaScript.js"));
 
-            String formHtml=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateForm.html"));
-            String formJs=FileUtil.readAsString(new File(filePath+ "java/"+dataBase+"/TemplateForm.js"));
+            String formHtml=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateForm.html"));
+            String formJs=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateForm.js"));
             List<ColumnData> columnDataList=new ArrayList<>();
             List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time",
                     "version","op_user_id","creator","serial_no","oa_flag","oa_apply_user_id","oa_apply_time","loan_process_number","repayment_process_number",

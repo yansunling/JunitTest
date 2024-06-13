@@ -45,20 +45,29 @@ public class CreateSqlCheck implements ApplicationContextAware {
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\2.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(600);
 
-        List<String> schemaList = Arrays.asList("mpp2");
+        List<String> schemaList = Arrays.asList("bmsp");
 
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         Set<String> newSqlList=new LinkedHashSet<>();
         for(String schema:schemaList){
-            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW' and table_name not like 'foc%'" +
-                    " and table_name not in('tmsp_msg_send_sms','bmsp_report_outorder_order_cust','bmsp_report_inorder_putfee_order_cust','bmsp_report_inorder_putfee_customer_cust','tmsp_alter_order_report','bmsp_report_inorder_customer_cust','tmsp_depart_ontime_rate_report_item','tmsp_msg_result_sms','bmsp_report_inorder_order_cust' )  ";
+            String sql = "select table_name from information_schema.`TABLES` where " +
+                    "table_schema='" + schema + "' and table_type!='VIEW' and table_name not like 'foc%' and table_name not like 'cip%'" +
+                    " and table_name not in('tmsp_send_order_cust_edit_log','tmsp_order_route_org_detail_bak','tmsp_order_route_org_detail','tmsp_net_org','tmsp','tmsp_msg_send_sms','bmsp_report_outorder_order_cust','bmsp_report_inorder_putfee_order_cust','bmsp_report_inorder_putfee_customer_cust','tmsp_alter_order_report','bmsp_report_inorder_customer_cust','tmsp_depart_ontime_rate_report_item','tmsp_msg_result_sms','bmsp_report_inorder_order_cust' )  "
+                    ;
             List<String> tableFiles = jdbcTemplate.queryForList(sql, String.class);
+            String filePath = getClass().getClassLoader().getResource("").getPath();
+            List<String> errorTable = FileUtils.readLines(new File(filePath + "java/table/errorTable.txt"), "utf-8");
+
             for(String table:tableFiles){
                 String newTable = schema + "." + table;
+                if(errorTable.contains(newTable)){
+                    continue;
+                }
+
                 Map<String, String> sqlList = buildBaseSql(newTable);
                 if(CollectionUtil.isNotEmpty(sqlList)){
                     CountDownLatch countDownLatch = new CountDownLatch(orgDataList.size());
@@ -88,7 +97,7 @@ public class CreateSqlCheck implements ApplicationContextAware {
 
                 }
             }
-            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\notSwitch"+ DateUtils.format(new Date(),"yyyyMMddHHmm") +".sql");
+            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\notSwitch"+ schemaList.get(0) +".sql");
             FileUtils.writeLines(allFile, "utf-8", newSqlList,true);
 
 
