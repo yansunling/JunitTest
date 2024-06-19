@@ -9,6 +9,7 @@ import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
 import com.junit.po.ParamBean;
 import com.word.constansts.Cacheable;
 import com.word.dataSource.controller.CrmxSaleApplicationController;
+import com.word.dataSource.controller.TmspContactFormApprovalController;
 import com.word.dataSource.controller.TmspDzmController;
 import com.word.doc.GeneralTemplateTool;
 import com.yd.utils.common.CollectionUtil;
@@ -38,10 +39,10 @@ public class WordCreateByClass {
         String templatePath=filePath+"/template.docx";
         //doc文档生成工具
         GeneralTemplateTool gtt = new GeneralTemplateTool();
-        Class<?> clazz = TmspDzmController.class;
+        Class<?> clazz = TmspContactFormApprovalController.class;
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
-        String rootPath="https://tlwl.uat.tuolong56.com/tmsp-api"+annotation.value()[0];
+        String rootPath="https://tlwl.uat.tuolong56.com/tmsp"+annotation.value()[0];
         //获得所有方法
         Method[] methods = clazz.getMethods();
 

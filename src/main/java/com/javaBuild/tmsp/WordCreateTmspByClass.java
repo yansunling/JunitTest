@@ -7,9 +7,11 @@ import com.annotation.MyNotNull;
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
 import com.javaBuild.tmsp.api.controller.TmspQualityErrorInfoController;
+import com.javaBuild.tmsp.api.controller.TmspUnloadDriverPlanApiController;
 import com.junit.po.ParamBean;
 import com.word.createWord.CopyWordParagraph;
 import com.word.dataSource.controller.CrmxSaleApplicationController;
+import com.word.dataSource.controller.TmspContactFormApprovalController;
 import com.word.doc.GeneralTemplateTool;
 import com.word.doc.POIMergeDocUtil;
 import com.yd.utils.common.CollectionUtil;
@@ -33,7 +35,8 @@ public class WordCreateTmspByClass {
 
         closeWps();
 
-        Class<?> clazz = TmspQualityErrorInfoController.class;
+        Class<?> clazz = TmspUnloadDriverPlanApiController.class;
+        String fileName="卸车app";
 
         String path = WordCreateTmspByClass.class.getClassLoader().getResource("").getPath();
         String filePath=path+"api";
@@ -46,7 +49,7 @@ public class WordCreateTmspByClass {
         File dirFile = new File(dir);
         FileUtils.deleteDirectory(dirFile);
 
-
+        boolean esbFlag=true;
 
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
@@ -60,12 +63,18 @@ public class WordCreateTmspByClass {
             RequestMapping declaredAnnotation = item.getDeclaredAnnotation(RequestMapping.class);
             if(declaredAnnotation!=null){
                 String url = rootPath+declaredAnnotation.value()[0]+".do";
+
                 //获得描述
                 String desc = declaredAnnotation.name();
                 CJ_jcjs_esbMethodInfo methodInfo = item.getAnnotation(CJ_jcjs_esbMethodInfo.class);
                 if(methodInfo!=null){
                     desc = methodInfo.desc();
                 }
+                if(esbFlag){
+                    url = "/esb-api/api/d/"+methodInfo.alias();
+                }
+
+
                 if(item.getParameterTypes().length>0){
                     Class<?> parameterType = item.getParameterTypes()[0];
                     System.out.println(parameterType.getName());
@@ -143,7 +152,7 @@ public class WordCreateTmspByClass {
 
 
         String[] file =fileList.toArray(new String[0]);
-        String  apiDoc="C:/Users/yansunling/Desktop/api/品质差错.docx";
+        String  apiDoc="C:/Users/yansunling/Desktop/api/"+fileName+".docx";
         POIMergeDocUtil.mergeDoc(file,apiDoc);
 
         openWps(Arrays.asList(apiDoc));
@@ -162,6 +171,8 @@ public class WordCreateTmspByClass {
             if(StringUtils.equals("Y",bean.getListType())){
                 if(StringUtils.isNotBlank(bean.getClazz())){
                     listChildren.add(bean);
+                }else{
+                    stringObjectMap.put(paramName,Arrays.asList(bean.getDescription().replaceAll("\\(集合\\)","")));//设置对象属性
                 }
             }else if(StringUtils.isNotBlank(bean.getClazz())){
                 listChildren.add(bean);
@@ -203,7 +214,6 @@ public class WordCreateTmspByClass {
         Field[] declaredFields = clazz.getDeclaredFields();
 
         for (Field declaredField : declaredFields) {
-            System.out.println(declaredField.getName());
             CJ_column cjColumn = declaredField.getAnnotation(CJ_column.class);
             if(cjColumn!=null){
                 ParamBean bean=new ParamBean(declaredField.getName(),cjColumn.name());
@@ -226,7 +236,17 @@ public class WordCreateTmspByClass {
                         ParameterizedType pt = (ParameterizedType) genericType;
                         //得到泛型里的class类型对象
                         Class<?> genericClazz = (Class<?>)pt.getActualTypeArguments()[0];
-                        bean.setClazz(genericClazz.getName());
+                        boolean primitive = genericClazz.isPrimitive();
+                        if(!primitive){
+                            String simpleName = genericClazz.getSimpleName();
+                            if(!simpleName.equals("String")&&!simpleName.equals("Object")&&!simpleName.equals("Boolean")
+                                    &&!simpleName.equals("Double")&&!simpleName.equals("Integer")&&!simpleName.equals("Money")&&!simpleName.equals("Timestamp")){
+                                if(genericClazz.isEnum()){
+                                    bean.setEnumFlag("Y");
+                                }
+                                bean.setClazz(genericClazz.getName());
+                            }
+                        }
                     }
                     bean.setListType("Y");
                     String description = bean.getDescription();

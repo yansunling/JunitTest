@@ -41,7 +41,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("tmsp_dzm_sign_error");
+        List<String> tableNames = Arrays.asList("tmsp_unload_task");
         String sysId="tmsp";
 		String htmlGroup="";
 

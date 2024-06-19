@@ -55,7 +55,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\2.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
 //        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"));
         jdbcTemplateYL.setQueryTimeout(500);
@@ -132,7 +132,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
         String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where table_schema='hcm' and  table_schema not in('marketing','dctx','wac','acs','als','costx','information_schema'," +
+                "where  table_schema not in('marketing','bml','dctx','wac','acs','als','costx','information_schema'," +
                 "'query','dct','ouyang','performance_schema','portal','biq','das','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','kjob','crmx','jeewx-boot') " +
                 "  group by table_schema";
         List<String> schemaList = jdbcTemplateYL.queryForList(schemaSql, String.class);
