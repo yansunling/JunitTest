@@ -1,4 +1,4 @@
-package com.str.enums;
+package com.sqlFile.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.dy.components.annotations.CJ_domain;
@@ -12,10 +12,10 @@ import java.util.Map;
 
 
 @CJ_domain(name = "")
-public enum TMSP_PARKING_TYPE implements Cacheable<TMSP_PARKING_TYPE> {
+public enum TMSP_PARKING_WAY implements Cacheable<TMSP_PARKING_WAY> {
     DEFAULT("",""),
-    PARKING_TYPE_0("0","停车"),
-    PARKING_TYPE_1("1","路桥"),
+    PARKING_WAY_0("0","ETC"),
+    PARKING_WAY_1("1","现金"),
 
   ;
 
@@ -25,28 +25,28 @@ public enum TMSP_PARKING_TYPE implements Cacheable<TMSP_PARKING_TYPE> {
     @EnumValue
     private String code_type;
     private String code_name;
-    TMSP_PARKING_TYPE(String code_type, String code_name){
+    TMSP_PARKING_WAY(String code_type, String code_name){
         this.code_type = code_type;
         this.code_name = code_name;
     }
 
-    public static Map<String, TMSP_PARKING_TYPE> toMap(){
-        Map<String, TMSP_PARKING_TYPE> toReturn = new HashMap<>();
-        TMSP_PARKING_TYPE[] values = TMSP_PARKING_TYPE.values();
-        for(TMSP_PARKING_TYPE val:values){
+    public static Map<String, TMSP_PARKING_WAY> toMap(){
+        Map<String, TMSP_PARKING_WAY> toReturn = new HashMap<>();
+        TMSP_PARKING_WAY[] values = TMSP_PARKING_WAY.values();
+        for(TMSP_PARKING_WAY val:values){
             toReturn.put(val.code_type, val);
         }
         return toReturn;
 
     }
     @JsonCreator
-    public static TMSP_PARKING_TYPE ofValue(String value){
+    public static TMSP_PARKING_WAY ofValue(String value){
         return toMap().get(value);
     }
 	
-	public  TMSP_PARKING_TYPE nameToEnum(String name){
-        TMSP_PARKING_TYPE[] values = TMSP_PARKING_TYPE.values();
-        for(TMSP_PARKING_TYPE val:values){
+	public  TMSP_PARKING_WAY nameToEnum(String name){
+        TMSP_PARKING_WAY[] values = TMSP_PARKING_WAY.values();
+        for(TMSP_PARKING_WAY val:values){
             if(StringUtils.equals(name,val.code_name)){
                 return val;
             }

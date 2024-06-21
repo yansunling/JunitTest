@@ -1,4 +1,4 @@
-package com.str.enums;
+package com.sqlFile.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.dy.components.annotations.CJ_domain;

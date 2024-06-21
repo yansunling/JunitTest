@@ -1,4 +1,4 @@
-package com.str;
+package com.sqlFile;
 
 import cn.hutool.core.lang.ClassScanner;
 import com.alibaba.fastjson.JSON;
@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.*;
 
-public class JsonToSql {
+public class JsonToSqlEnum {
     public static void main(String[] args) throws Exception{
         String json="{\"apply_amount\":{\"mode\":\"Y\",\"val\":43.7},\"insurer\":\"\",\"oa_flag\":\"IS_NOT_0\",\"oa_status\":\"OA_STATUS_ALL_INIT\",\"org_id\":\"2501020301\",\"parking_date\":1691241422000,\"parking_type\":\"PARKING_TYPE_1\",\"parking_way\":\"PARKING_WAY_0\",\"remark\":\"\",\"serial_no\":\"CLLQ202311170246\",\"vehicle_law_id\":\"浙A3M121\"}";
 
@@ -25,7 +25,7 @@ public class JsonToSql {
         List<String> columns=new ArrayList<>();
         List<Object> values=new ArrayList<>();
 
-        Set<Class<?>> classSet = ClassScanner.scanPackageBySuper("com.str.enums",Cacheable.class);
+        Set<Class<?>> classSet = ClassScanner.scanPackageBySuper("com.sqlFile.enums",Cacheable.class);
         Map<String,String> enumsMap=new HashMap<>();
         classSet.forEach(clazz->{
             if(clazz.isEnum()){
