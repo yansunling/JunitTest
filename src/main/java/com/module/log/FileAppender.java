@@ -1,6 +1,6 @@
 package com.module.log;
 
-import com.javaBase.thread.JobThreadExecutor;
+import com.other.thread.JobThreadExecutor;
 import com.yd.utils.common.StringUtils;
 import org.apache.logging.log4j.core.Filter;
 import org.apache.logging.log4j.core.Layout;

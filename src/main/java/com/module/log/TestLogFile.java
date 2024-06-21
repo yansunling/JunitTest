@@ -1,6 +1,6 @@
 package com.module.log;
 
-import com.javaBase.thread.JobThreadExecutor;
+import com.other.thread.JobThreadExecutor;
 import org.slf4j.Logger;
 
 public class TestLogFile {
