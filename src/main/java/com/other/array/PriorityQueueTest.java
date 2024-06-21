@@ -1,11 +1,14 @@
-package com.array;
+package com.other.array;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
 public class PriorityQueueTest {
 
-
+    /**
+     * 找中位数，总数不是奇数，取中间两个数的平均值
+     * @param args
+     */
     public static void main(String[] args) {
 
         MedianFinder finder=new MedianFinder();

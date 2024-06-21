@@ -1,6 +1,6 @@
 package com.javaBuild.tmsp.api.data;
 
-import com.annotation.MyNotEmpty;
+import com.other.annotation.MyNotEmpty;
 import com.dy.components.annotations.CJ_column;
 
 import lombok.Data;

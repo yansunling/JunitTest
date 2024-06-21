@@ -1,4 +1,4 @@
-package com.redis;
+package com.other.redis;
 
 import com.yd.utils.common.StringUtils;
 

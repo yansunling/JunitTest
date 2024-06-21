@@ -224,7 +224,7 @@ function doAction(buttonId){
 	}
 };
 
-var downUrl = "/../fsm/api/fsm_api/download.do?file_app_id=tmsp&file_serial_no=";
+
 function queryData() {
 	query.init(metaData.queryId, metaData.listTemplate, gridMenuId,true);
 	//初始化日志

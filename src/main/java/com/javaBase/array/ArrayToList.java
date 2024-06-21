@@ -1,6 +1,6 @@
 package com.javaBase.array;
 
-import com.redis.MyRedisUtil;
+import com.other.redis.MyRedisUtil;
 
 import java.util.Arrays;
 import java.util.List;

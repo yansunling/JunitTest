@@ -1,4 +1,4 @@
-package com.redis;
+package com.other.redis;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;

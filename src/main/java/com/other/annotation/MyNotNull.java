@@ -1,4 +1,4 @@
-package com.annotation;
+package com.other.annotation;
 
 import javax.validation.Payload;
 import java.lang.annotation.*;

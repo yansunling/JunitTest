@@ -1,17 +1,12 @@
 package com.javaBuild.tmsp.api.data;
 
-import com.annotation.MyNotEmpty;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.other.annotation.MyNotEmpty;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_table;
 
 import lombok.Data;
-
-import java.sql.Timestamp;
 
 @Data
 @CJ_table(name = "司机预约")

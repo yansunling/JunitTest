@@ -1,7 +1,7 @@
 package com.module.mq;
 
 
-import com.redis.MyRedisUtil;
+import com.other.redis.MyRedisUtil;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;

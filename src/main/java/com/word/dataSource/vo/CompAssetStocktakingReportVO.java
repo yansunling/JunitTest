@@ -1,7 +1,7 @@
 package com.word.dataSource.vo;
 
 
-import com.annotation.MyNotEmpty;
+import com.other.annotation.MyNotEmpty;
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_table;
 import lombok.Data;

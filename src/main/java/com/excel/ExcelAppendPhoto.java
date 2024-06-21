@@ -1,6 +1,6 @@
 package com.excel;
 
-import com.cmd.CmdUtil;
+import com.other.cmd.CmdUtil;
 import com.http.DownFsmFileUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
@@ -16,9 +16,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RunWith(SpringJUnit4ClassRunner.class)

@@ -1,4 +1,4 @@
-package com.cmd;
+package com.other.cmd;
 
 import java.io.BufferedReader;
 import java.io.InputStream;

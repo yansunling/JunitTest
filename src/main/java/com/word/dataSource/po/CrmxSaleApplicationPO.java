@@ -1,6 +1,6 @@
 package com.word.dataSource.po;
 
-import com.annotation.MyNotEmpty;
+import com.other.annotation.MyNotEmpty;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;

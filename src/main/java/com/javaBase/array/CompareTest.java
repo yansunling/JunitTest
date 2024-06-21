@@ -1,7 +1,7 @@
 package com.javaBase.array;
 
 import com.alibaba.fastjson.JSONObject;
-import com.annotation.User;
+import com.other.annotation.User;
 
 import java.util.*;
 

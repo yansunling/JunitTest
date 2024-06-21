@@ -1,10 +1,7 @@
-package com.redis;
+package com.other.redis;
 
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
-import com.dy.components.ucms.utils.ConfigurationManager;
-import com.yd.common.cache.CIPRedisUtils;
-import com.yd.common.runtime.CIPRuntimeConfigure;
 import com.yd.common.utils.RedisUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
@@ -16,9 +13,7 @@ import redis.clients.jedis.JedisPool;
 import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
-import javax.annotation.concurrent.NotThreadSafe;
 import java.io.*;
-import java.util.Collections;
 import java.util.Date;
 import java.util.Properties;
 import java.util.Set;

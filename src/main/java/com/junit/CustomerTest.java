@@ -1,7 +1,7 @@
 package com.junit;
 
 
-import com.redis.CRMXSerialNoUtils;
+import com.other.redis.CRMXSerialNoUtils;
 import com.yd.common.busi.builder.BusiNoUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;

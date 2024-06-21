@@ -221,7 +221,7 @@
  	<context:component-scan base-package="com.yd.query.util" />
  	<context:component-scan base-package="com.http" />
  	<context:component-scan base-package="com.factory" />
- 	<context:component-scan base-package="com.aop" />
+ 	<context:component-scan base-package="com.other.aop" />
 	<context:component-scan base-package="com.cookie" />
 	<context:component-scan base-package="com.squirrel" />
 	<context:component-scan base-package="com.org" />

@@ -2,14 +2,10 @@ package com.javaBuild.crmx;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.annotation.MyNotEmpty;
-import com.annotation.MyNotNull;
+import com.other.annotation.MyNotEmpty;
+import com.other.annotation.MyNotNull;
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
-import com.javaBuild.crmx.controller.CrmxStoreCustVisitingAppController;
-import com.javaBuild.crmx.controller.CrmxStoreCustomerAppController;
-import com.javaBuild.crmx.controller.MarketingBaseCustomerController;
-import com.javaBuild.tmsp.api.controller.TmspQualityErrorInfoController;
 import com.junit.po.ParamBean;
 import com.word.createWord.CopyWordParagraph;
 import com.word.dataSource.controller.TmspDzmController;

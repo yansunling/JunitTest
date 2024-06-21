@@ -1,4 +1,4 @@
-package com.aop;
+package com.other.aop;
 
 import com.alibaba.fastjson.JSONObject;
 import org.aspectj.lang.JoinPoint;

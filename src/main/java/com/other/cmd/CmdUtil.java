@@ -1,4 +1,4 @@
-package com.cmd;
+package com.other.cmd;
 
 public class CmdUtil {
     public static void closeWps() throws Exception{

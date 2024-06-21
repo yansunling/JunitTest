@@ -1,17 +1,12 @@
 package com.javaBuild.tmsp.api.data;
 
-import com.annotation.MyNotNull;
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
+import com.other.annotation.MyNotNull;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_table;
 import com.yd.common.exttype.Money;
 import lombok.Data;
-
-import java.sql.Timestamp;
 
 @Data
 @CJ_table(name = "品质差错奖惩表")

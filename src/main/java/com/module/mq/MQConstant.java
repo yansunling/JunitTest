@@ -1,6 +1,6 @@
 package com.module.mq;
 
-import com.redis.MyRedisUtil;
+import com.other.redis.MyRedisUtil;
 
 public class MQConstant {
 
