@@ -3,9 +3,7 @@ package com.javaBuild.tmsp.api.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
-import com.javaBuild.tmsp.api.data.TmspUnloadDriverPlanPO;
-import com.javaBuild.tmsp.api.data.TmspUnloadTaskVO;
-import com.javaBuild.tmsp.api.data.TmspUnloadVO;
+import com.javaBuild.tmsp.api.data.*;
 import com.word.util.OilCardUtil;
 import com.yd.common.data.CIPResponseMsg;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +28,7 @@ public class TmspUnloadDriverPlanApiController {
 
     @CJ_jcjs_esbMethodInfo(desc = "到车排班", author = "T1113", alias = "tmsp_unload_task_addTask")
     @RequestMapping(value="/addTask")
-    public CIPResponseMsg addTask(@RequestBody TmspUnloadTaskVO param){
+    public CIPResponseMsg addTask(@RequestBody TmspUnloadTaskAddVO param){
         log.info("addTask param:"+ JSON.toJSONString(param));
         return OilCardUtil.success();
     }
@@ -46,6 +44,13 @@ public class TmspUnloadDriverPlanApiController {
     @RequestMapping(value="/endUnload")
     public CIPResponseMsg endUnload(@RequestBody TmspUnloadVO param){
         log.info("endUnload param:"+ JSON.toJSONString(param));
+        return OilCardUtil.success();
+    }
+
+    @CJ_jcjs_esbMethodInfo(desc = "库位更新", author = "T1113", alias = "tmsp_unload_task_taskStock")
+    @RequestMapping(value="/taskStock")
+    public CIPResponseMsg endUnload(@RequestBody TmspUnloadTaskStockVO param){
+        log.info("taskStock param:"+ JSON.toJSONString(param));
         return OilCardUtil.success();
     }
 
