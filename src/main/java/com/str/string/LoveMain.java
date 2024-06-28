@@ -3,14 +3,9 @@ package com.str.string;
 public class LoveMain {
     public static void main(String[] args) throws Exception{
 
-     //   System.out.println(new Timestamp(1692247783000L));
 
-
-        /*Double str = 400000.0;
-        str=str*100;
-        System.out.println(str.intValue() );*/
         int count=0;
-        float x,y,a;
+        float x=0,y=0,a=0;
         for(y=2.5f;y>-2.0f;y-=0.12f){
             for(x=-2.3f;x<2.3f;x+=0.041f){
                 a=x*x+y*y-4f;
