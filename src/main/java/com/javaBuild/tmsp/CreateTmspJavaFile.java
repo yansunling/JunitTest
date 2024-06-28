@@ -69,6 +69,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 			String jsContent=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateJavaScript.js"));
 			String formHtml=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateForm.html"));
 			String formJs=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateForm.js"));
+			String mapperXml=FileUtil.readAsString(new File(filePath+ "java/tmsp/TemplateMapper.xml"));
 			List<ColumnData> columnDataList=new ArrayList<>();
 			List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time",
                     "version","op_user_id","creator","serial_no","oa_flag","oa_apply_user_id","oa_apply_time","loan_process_number","repayment_process_number",
@@ -171,6 +172,14 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 			String classMapper=prexName+"Mapper";
 			mapperContent=mapperContent.replaceAll("\\{class_name\\}",className).replaceAll("\\{class_mapper\\}",classMapper);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +classMapper+ ".java"),mapperContent);
+			//生成xml
+			String[] splits = tableName.split("_");
+			String packageName=splits[1];
+			mapperXml=mapperXml.replaceAll("\\{class_mapper\\}",classMapper);
+			mapperXml=mapperXml.replaceAll("\\{packageName\\}",packageName);
+			FileUtil.writeAsString(new File(path+tableName+"\\" +classMapper+ ".xml"),mapperXml);
+
+
 			//生成service
 			String classService=prexName+"Service";
 			serviceContent=serviceContent.replaceAll("\\{class_name\\}",className).replaceAll("\\{class_service\\}",classService);

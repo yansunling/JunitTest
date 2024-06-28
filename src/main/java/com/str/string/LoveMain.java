@@ -1,4 +1,4 @@
-package com.javaBuild.tmsp;
+package com.str.string;
 
 public class LoveMain {
     public static void main(String[] args) throws Exception{
