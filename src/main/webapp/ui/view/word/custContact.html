@@ -6,22 +6,47 @@
     <link rel="stylesheet" type="text/css" href="../../js/jquery-easyui/themes/gray/easyui.css"/>
     <link rel="stylesheet" type="text/css" href="../../js/jquery-easyui/themes/icon.css"/>
     <script type="text/javascript" src="../../js/jquery-easyui/jquery.min.js"></script>
-    <script type="text/javascript" src="../../js/jquery-easyui/jquery.min.js"></script>
     <script type="text/javascript" src="../../js/jquery-easyui/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="../../js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="../../js/jquery.jqprint-0.3.js"></script>
-
+    <script type="text/javascript" src="../../js/cip-page1.0.js"></script>
     <script type="text/javascript">
         $(function(){
             $('#btn_save').bind('click', function() {
 
                 window.print();
             });
+
+
+            $('#btn_cancel').bind('click', function() {
+
+                let html=$("#contact_div").html();
+
+
+                var jsonData = $$.serializeToJson("#form_crmx_data");
+
+                console.log(jsonData);
+
+                $.ajax({
+                    url: "/test/addPrint.do",
+                    type: 'post',
+
+                    data : {content_html: html,content_value:JSON.stringify(jsonData)},
+                    success: function (data) {
+                        let url="/test/ui/view/word/getContact.html?serial_no="+data.data;
+                        window.open(url, '_blank');
+                    }
+                });
+            });
+
+
+
         });
     </script>
 </head>
 <body>
-<div style="height: 95vh; overflow: auto; border: 1px solid #ccc; ">
+<form id="form_crmx_data" class="form">
+<div style="height: 95vh; overflow: auto; border: 1px solid #ccc; " id="contact_div">
     <div id="container" class="container print-section"><!--docxjs library predefined styles-->
         <style>
 
@@ -327,27 +352,16 @@
 
 
                 <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;">
-                    <span id="product_g_check" style="font-size: 15px"><input type="checkbox"
-                                                                              id="product_g"></span><span
-                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">精准高快G </span>
-                    <span id="product_t_check" style="font-size: 15px"><input type="checkbox"
-                                                                              id="product_t"></span><span
-                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">精准特快T </span>
-                    <span id="product_k_check" style="font-size: 15px"><input type="checkbox"
-                                                                              id="product_k"></span><span
-                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">特惠快运K </span>
-                    <span id="product_p_check" style="font-size: 15px"><input type="checkbox"
-                                                                              id="product_p"></span><span
-                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">普惠班列P </span>
-                    <span id="product_other_check" style="font-size: 15px"><input type="checkbox"
-                                                                                  id="product_other"></span><span
-                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">其他<input id='product_value'
-                                                                                             name='product_value'
-                                                                                             class='input_line'
-                                                                                             style="width: 70pt"
-                                                                                             data-options='required:false'/></span>
-
-
+                    <span id="product_g_check" style="font-size: 15px"><input type="checkbox" id="product_g" name="product_type" value="G"></span>
+                    <span style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">精准高快G</span>
+                    <span id="product_t_check" style="font-size: 15px"><input type="checkbox" id="product_t" name="product_type" value="T"></span>
+                    <span style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">精准特快T</span>
+                    <span id="product_k_check" style="font-size: 15px"><input type="checkbox" id="product_k" name="product_type" value="K"></span>
+                    <span style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">特惠快运K</span>
+                    <span id="product_p_check" style="font-size: 15px"><input type="checkbox" id="product_p" name="product_type" value="P"></span>
+                    <span style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">普惠班列P</span>
+                    <span id="product_other_check" style="font-size: 15px"><input type="checkbox" id="product_other" name="product_type"></span>
+                    <span style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">其他<input id='product_value' name='product_value' class='input_line' style="width: 70pt" data-options='required:false'/></span>
                 </p>
                 <p style="min-height: 26pt; line-height: 26pt;"><span
                         style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">2、服务要求</span></p>
@@ -361,17 +375,14 @@
                 </p>
                 <p style="min-height: 26pt; line-height: 26pt;"><span
                         style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">2</span><span
-                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">、甲、乙双方结算运输费用的方式为下列第<input
-                        class='input_line' style="width: 26pt" data-options='required:false'/>种方式：</span></p>
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">、甲、乙双方结算运输费用的方式为下列第<input class='input_line' style="width: 26pt" data-options='required:false'  id="debt_type" name="debt_type"/>种方式：</span></p>
                 <p style="min-height: 26pt; line-height: 26pt; text-indent: 28pt;"><span
                         style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">A、回单付款：即凭收货人签收的回单，见回单付款；</span></p>
-                <p style="min-height: 26pt; line-height: 26pt; text-indent: 28pt;"><span
-                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">B、欠款：双方约定按照<input class='input_line'
-                                                                                                      style="width: 26pt"
+                <p style="min-height: 26pt; line-height: 26pt; text-indent: 28pt;">
+                    <span style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">B、欠款：双方约定按照<input class='input_line' id="debt_day" name="debt_day" style="width: 26pt"
                                                                                                       data-options='required:false'/>天结算壹次，最高欠款金额</span>
-                    <input class='input_line' style="width: 50pt"/>
-                    <span
-                            style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">元；甲方同意，当达到最高欠款金额时，无论是否达到约定天数，甲方均一次性结清前期费用。</span>
+                    <input class='input_line' style="width: 50pt" id="debt_amount" name="debt_amount"/>
+                    <span style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">元；甲方同意，当达到最高欠款金额时，无论是否达到约定天数，甲方均一次性结清前期费用。</span>
                 </p>
                 <p style="min-height: 26pt; line-height: 26pt; text-indent: 28pt;"><span
                         style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">C、现付或提付，即甲方发货时或乙方交付货物时，即付款；</span>
@@ -390,14 +401,13 @@
                         style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">乙方收款账户信息：</span></p>
                 <p style="min-height: 26pt; line-height: 26pt;"><span
                         style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">账户名称：</span>
-                    <input class='input_line' style="width: 170pt"/>
+                    <input class='input_line' style="width: 170pt" id="account_name" name="account_name"/>
                 </p>
                 <p style="min-height: 26pt; line-height: 26pt;"><span
                         style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">银行账号：</span><input
-                        class='input_line' style="width: 170pt"/></p>
+                        class='input_line' style="width: 170pt" id="bank_account" name="bank_account"/></p>
                 <p style="min-height: 26pt; line-height: 26pt;"><span
-                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">开户行：</span><input class='input_line'
-                                                                                                      style="width: 185pt"/>
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">开户行：</span><input class='input_line' id="bank_name" name="bank_name" style="width: 185pt"/>
                 </p>
                 <p class="docx-num-1-0" style="min-height: 26pt; line-height: 26pt;"><span
                         style="font-family: 宋体; min-height: 14pt; font-size: 15pt;"> 若双方合作期间乙方账户有所变动，以乙方书面通知的最新账户为准。</span>
@@ -456,22 +466,22 @@
                         style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">五、合同生效与终止</span></p>
                 <p style="min-height: 26pt; line-height: 26pt;"><span
                         style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">1.本合同及附件有效期壹年，即:</span>
-                    <input class='input_line' style="width: 30pt"/>
+                    <input class='input_line' style="width: 30pt" id="start_year" name="start_year"/>
                     <span
                             style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">年</span>
-                    <input class='input_line' style="width: 16pt"/>
+                    <input class='input_line' style="width: 16pt"  id="start_month" name="start_month"/>
                     <span
                             style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">月</span>
-                    <input class='input_line' style="width: 16pt"/>
+                    <input class='input_line' style="width: 16pt"   id="start_day" name="start_day"/>
                     <span
                             style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">日至</span><input
-                            class='input_line' style="width: 30pt"/>
+                            class='input_line' style="width: 30pt" id="end_year" name="end_year"/>
                     <span
                             style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">年</span>
-                    <input class='input_line' style="width: 16pt"/>
+                    <input class='input_line' style="width: 16pt" id="end_month" name="end_month"/>
                     <span
                             style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">月</span>
-                    <input class='input_line' style="width: 16pt"/><span
+                    <input class='input_line' style="width: 16pt" id="end_day" name="end_day"/><span
                             style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">日。合同期满后，本合同自动失效，若因合作需要，双方需重新签订合同。</span>
                 </p>
                 <p style="min-height: 26pt; line-height: 26pt;"><span
@@ -692,10 +702,10 @@
         </section>
     </div>
 </div>
-
+</form>
 <div class="button-section" align='center' id="button_div" style="margin-bottom: 20px">
     <a id="btn_save" iconCls="icon-print" class="easyui-linkbutton" >打印</a>
-    <a id="btn_cancel" iconCls="icon-cancel" class="easyui-linkbutton" >取消</a>
+    <a id="btn_cancel" iconCls="icon-cancel" class="easyui-linkbutton" >保存</a>
 </div>
 
 </body>
