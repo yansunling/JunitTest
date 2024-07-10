@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <link rel="stylesheet" type="text/css" href="../../js/jquery-easyui/themes/gray/easyui.css"/>
+    <link rel="stylesheet" type="text/css" href="../../js/jquery-easyui/themes/icon.css"/>
+    <script type="text/javascript" src="../../js/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="../../js/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="../../js/jquery.jqprint-0.3.js"></script>
+
+    <script type="text/javascript">
+        $(function(){
+            $('#btn_save').bind('click', function() {
+
+                window.print();
+            });
+        });
+    </script>
+</head>
+<body>
+<div style="height: 95vh; overflow: auto; border: 1px solid #ccc; ">
+    <div id="container" class="container print-section"><!--docxjs library predefined styles-->
+        <style>
+
+            @media print {
+                body * {
+                    visibility: hidden;
+                }
+                .print-section, .print-section * {
+                    visibility: visible;
+                }
+                .print-section {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                }
+            }
+
+            .docx-wrapper {
+                background: gray;
+                padding: 30px;
+                padding-bottom: 0px;
+                display: flex;
+                flex-flow: column;
+                align-items: center;
+            }
+
+            .docx-wrapper > section.docx {
+                background: white;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+                margin-bottom: 30px;
+            }
+
+            .docx {
+                color: black;
+            }
+
+            section.docx {
+                box-sizing: border-box;
+                display: flex;
+                flex-flow: column nowrap;
+                position: relative;
+                overflow: hidden;
+            }
+
+            section.docx > article {
+                margin-bottom: auto;
+            }
+
+            .docx table {
+                border-collapse: collapse;
+            }
+
+            .docx table td, .docx table th {
+                vertical-align: top;
+            }
+
+            .docx p {
+                margin: 0pt;
+                min-height: 1em;
+            }
+
+            .docx span {
+                white-space: pre-wrap;
+                overflow-wrap: break-word;
+            }
+
+            .docx a {
+                color: inherit;
+                text-decoration: inherit;
+            }
+        </style><!--docxjs document theme values-->
+        <style>.docx {
+            --docx-majorHAnsi-font: Calibri Light;
+            --docx-minorHAnsi-font: Calibri;
+            --docx-dk1-color: #000000;
+            --docx-lt1-color: #FFFFFF;
+            --docx-dk2-color: #44546A;
+            --docx-lt2-color: #E7E6E6;
+            --docx-accent1-color: #4874CB;
+            --docx-accent2-color: #EE822F;
+            --docx-accent3-color: #F2BA02;
+            --docx-accent4-color: #75BD42;
+            --docx-accent5-color: #30C0B4;
+            --docx-accent6-color: #E54C5E;
+            --docx-hlink-color: #0026E5;
+            --docx-folHlink-color: #7E1FAD;
+        }
+        </style><!--docxjs document styles-->
+        <style>.docx span {
+            font-family: var(--docx-minorHAnsi-font);
+        }
+
+        .docx p, p.docx_1 {
+            text-align: justify;
+        }
+
+        .docx p, p.docx_1 span {
+            font-family: Times New Roman;
+            min-height: 10.50pt;
+            font-size: 10.50pt;
+        }
+
+        .docx table, table.docx_2 td {
+            padding-top: 0.00pt;
+            padding-left: 5.40pt;
+            padding-bottom: 0.00pt;
+            padding-right: 5.40pt;
+        }
+        </style><!--docxjs document numbering styles-->
+        <style>p.docx-num-1-0:before {
+            content: "" counter(docx-num-1-0, decimalEnclosedCircle) "\9";
+            counter-increment: docx-num-1-0;
+        }
+
+        p.docx-num-1-0 {
+            display: list-item;
+            list-style-position: inside;
+            list-style-type: none;
+            text-indent: -18.00pt;
+            margin-left: 18.00pt;
+        }
+
+        p.docx-num-1-0 {
+            counter-reset: docx-num-1-1;
+        }
+
+        p.docx-num-1-1:before {
+            content: "" counter(docx-num-1-1, lower-alpha) ")\9";
+            counter-increment: docx-num-1-1;
+        }
+
+        p.docx-num-1-1 {
+            display: list-item;
+            list-style-position: inside;
+            list-style-type: none;
+            text-indent: -21.00pt;
+            margin-left: 42.00pt;
+        }
+
+        p.docx-num-1-1 {
+            counter-reset: docx-num-1-2;
+        }
+
+        p.docx-num-1-2:before {
+            content: "" counter(docx-num-1-2, lower-roman) ".\9";
+            counter-increment: docx-num-1-2;
+        }
+
+        p.docx-num-1-2 {
+            display: list-item;
+            list-style-position: inside;
+            list-style-type: none;
+            text-indent: -21.00pt;
+            margin-left: 63.00pt;
+        }
+
+        p.docx-num-1-2 {
+            counter-reset: docx-num-1-3;
+        }
+
+        p.docx-num-1-3:before {
+            content: "" counter(docx-num-1-3, decimal) ".\9";
+            counter-increment: docx-num-1-3;
+        }
+
+        p.docx-num-1-3 {
+            display: list-item;
+            list-style-position: inside;
+            list-style-type: none;
+            text-indent: -21.00pt;
+            margin-left: 84.00pt;
+        }
+
+        p.docx-num-1-3 {
+            counter-reset: docx-num-1-4;
+        }
+
+        p.docx-num-1-4:before {
+            content: "" counter(docx-num-1-4, lower-alpha) ")\9";
+            counter-increment: docx-num-1-4;
+        }
+
+        p.docx-num-1-4 {
+            display: list-item;
+            list-style-position: inside;
+            list-style-type: none;
+            text-indent: -21.00pt;
+            margin-left: 105.00pt;
+        }
+
+        p.docx-num-1-4 {
+            counter-reset: docx-num-1-5;
+        }
+
+        p.docx-num-1-5:before {
+            content: "" counter(docx-num-1-5, lower-roman) ".\9";
+            counter-increment: docx-num-1-5;
+        }
+
+        p.docx-num-1-5 {
+            display: list-item;
+            list-style-position: inside;
+            list-style-type: none;
+            text-indent: -21.00pt;
+            margin-left: 126.00pt;
+        }
+
+        p.docx-num-1-5 {
+            counter-reset: docx-num-1-6;
+        }
+
+        p.docx-num-1-6:before {
+            content: "" counter(docx-num-1-6, decimal) ".\9";
+            counter-increment: docx-num-1-6;
+        }
+
+        p.docx-num-1-6 {
+            display: list-item;
+            list-style-position: inside;
+            list-style-type: none;
+            text-indent: -21.00pt;
+            margin-left: 147.00pt;
+        }
+
+        p.docx-num-1-6 {
+            counter-reset: docx-num-1-7;
+        }
+
+        p.docx-num-1-7:before {
+            content: "" counter(docx-num-1-7, lower-alpha) ")\9";
+            counter-increment: docx-num-1-7;
+        }
+
+        p.docx-num-1-7 {
+            display: list-item;
+            list-style-position: inside;
+            list-style-type: none;
+            text-indent: -21.00pt;
+            margin-left: 168.00pt;
+        }
+
+        p.docx-num-1-7 {
+            counter-reset: docx-num-1-8;
+        }
+
+        p.docx-num-1-8:before {
+            content: "" counter(docx-num-1-8, lower-roman) ".\9";
+            counter-increment: docx-num-1-8;
+        }
+
+        p.docx-num-1-8 {
+            display: list-item;
+            list-style-position: inside;
+            list-style-type: none;
+            text-indent: -21.00pt;
+            margin-left: 189.00pt;
+        }
+
+        :root {
+            counter-reset: docx-num-1-0;
+        }
+
+        .input_line {
+            border: 0;
+            border-bottom: 1px solid black;
+            outline: 0;
+            text-align: center;
+            min-height: 14pt;
+            font-size: 15pt;
+            width: 295px;
+            font-family: 宋体;
+            height:14pt
+        }
+
+
+        </style>
+        <section class="docx" style="padding: 60pt 30pt 72pt 30pt; column-count: 1; column-gap: 36pt;">
+            <article><p style="text-align: center;"><span style="font-weight: bold; min-height: 18pt; font-size: 18pt;">物流运输服务合同</span>
+            </p><p></p>
+                <p style="text-align: center;">
+                <p style="min-height: 35pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">甲方：<input id='party_a'
+                                                                                              name='party_a'
+                                                                                              class='input_line'
+                                                                                              data-options='required:false'/></span>
+                </p>
+                <p style="min-height: 35pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">乙方：<input id='party_b'
+                                                                                              name='party_b'
+                                                                                              class='input_line'
+                                                                                              data-options='required:false'/></span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt; text-indent: 28pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">依据相关法律法规，甲乙双方本着自愿、平等、公平之原则，经充分协商签订本合同。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">一、服务范围及要求</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">1、服务内容</span></p>
+                <p style="min-height: 26pt; line-height: 26pt; text-indent: 28pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">乙方接受甲方委托，为甲方提供物流服务，包括收派件、装卸、货物运输代理、仓储等及代收货款等。有以下服务产品供选择：</span>
+                </p>
+
+
+                <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;">
+                    <span id="product_g_check" style="font-size: 15px"><input type="checkbox"
+                                                                              id="product_g"></span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">精准高快G </span>
+                    <span id="product_t_check" style="font-size: 15px"><input type="checkbox"
+                                                                              id="product_t"></span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">精准特快T </span>
+                    <span id="product_k_check" style="font-size: 15px"><input type="checkbox"
+                                                                              id="product_k"></span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">特惠快运K </span>
+                    <span id="product_p_check" style="font-size: 15px"><input type="checkbox"
+                                                                              id="product_p"></span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">普惠班列P </span>
+                    <span id="product_other_check" style="font-size: 15px"><input type="checkbox"
+                                                                                  id="product_other"></span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">其他<input id='product_value'
+                                                                                             name='product_value'
+                                                                                             class='input_line'
+                                                                                             style="width: 70pt"
+                                                                                             data-options='required:false'/></span>
+
+
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">2、服务要求</span></p>
+                <p style="min-height: 26pt; line-height: 26pt; text-indent: 28pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">乙方保证货物从接收货物到客户签收过程中的安全运输，并按照运单信息将货物运输到目的地。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">二、服务费用及结算</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">1、乙方就本合同所提供的服务按照运费价格表的费用标准进行收费；</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">2</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">、甲、乙双方结算运输费用的方式为下列第<input
+                        class='input_line' style="width: 26pt" data-options='required:false'/>种方式：</span></p>
+                <p style="min-height: 26pt; line-height: 26pt; text-indent: 28pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">A、回单付款：即凭收货人签收的回单，见回单付款；</span></p>
+                <p style="min-height: 26pt; line-height: 26pt; text-indent: 28pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">B、欠款：双方约定按照<input class='input_line'
+                                                                                                      style="width: 26pt"
+                                                                                                      data-options='required:false'/>天结算壹次，最高欠款金额</span>
+                    <input class='input_line' style="width: 50pt"/>
+                    <span
+                            style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">元；甲方同意，当达到最高欠款金额时，无论是否达到约定天数，甲方均一次性结清前期费用。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt; text-indent: 28pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">C、现付或提付，即甲方发货时或乙方交付货物时，即付款；</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt; text-indent: 28pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">D、甲方同意，双方业务终止时一次性结清服务费用；</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">3</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">、甲乙双方同意，任何一方要求纸质结算账单上盖章确认并反馈的，对方均应予以配合。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">4</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">、本合同所涉及的费用均以人民币现金或者银行转账的方式支付。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">乙方收款账户信息：</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">账户名称：</span>
+                    <input class='input_line' style="width: 170pt"/>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">银行账号：</span><input
+                        class='input_line' style="width: 170pt"/></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">开户行：</span><input class='input_line'
+                                                                                                      style="width: 185pt"/>
+                </p>
+                <p class="docx-num-1-0" style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;"> 若双方合作期间乙方账户有所变动，以乙方书面通知的最新账户为准。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">② 甲方选择现金支付的，应当取得乙方工作人员签字确认的收款凭据。甲方声明已付款但无</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">付款凭证</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">或</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">收据</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">，乙方有权拒绝承认，甲方应按时支付费用。</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">三、权利和义务</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">1、甲方向乙方提供的货物品名、规格、数量、体积、收货人信息以托运单信息为准；</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">2、甲方有义务在约定的期限内支付运输费用，</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">如逾期支付，</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">则</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">每日按应支付</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">服务</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">费用总额的0.5</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">%</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">向乙方支付违约金</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">。</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">在上述情况下</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">，</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">乙方</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">保留货物及相关单证的留置权；</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">3、乙方有义务提供货物运输信息及货物在交付客户前的安全；</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">四、赔偿及违约责任</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">1、在运输过程中因乙方过错导致货物发生毁损、灭失的，乙方承担赔偿责任。具体赔偿标准为：</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;"> </span></p>
+                <p style="min-height: 26pt; line-height: 26pt; text-indent: 21.75pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">（1）甲方未保价的，货物丢损后，乙方按照实际损失在丢损货物所对应</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">运输</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">费用的3倍以内赔偿。</span></p>
+                <p style="min-height: 26pt; line-height: 26pt; text-indent: 21.75pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">（2）甲方保价的，声明价值一般以运单上托运人申报的金额为准，但若甲方声明价值超过实际价值时，以实际价值为准。货物全部毁损或灭失，乙方按照声明价值予以赔偿；若货物部分毁损或内件短少，则按照声明价值和损失比例予以赔偿。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">2、乙方的赔偿范围仅限于货物本身的损失，乙方</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">对</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">于甲方（或收</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">货人）遭受或者可能遭受的</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">其他损失和间接损失不予赔偿</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">；</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">3、由于甲方匿报货物品名或者提供的其他信息有误导致的一切损失由甲方负责；</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">五、合同生效与终止</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">1.本合同及附件有效期壹年，即:</span>
+                    <input class='input_line' style="width: 30pt"/>
+                    <span
+                            style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">年</span>
+                    <input class='input_line' style="width: 16pt"/>
+                    <span
+                            style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">月</span>
+                    <input class='input_line' style="width: 16pt"/>
+                    <span
+                            style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">日至</span><input
+                            class='input_line' style="width: 30pt"/>
+                    <span
+                            style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">年</span>
+                    <input class='input_line' style="width: 16pt"/>
+                    <span
+                            style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">月</span>
+                    <input class='input_line' style="width: 16pt"/><span
+                            style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">日。合同期满后，本合同自动失效，若因合作需要，双方需重新签订合同。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">2.合同任何一方违背本合同之条款，另一方有权立即通知解除本合同。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">3</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">.本合同终止后，保密条款以及任何自然延伸的责任和义务继续有效。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">六、其他</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">1</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">.本合同一式两份，双方各执一份，具有同等法律效力；本合同未尽事宜由双方协商确定。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">2.与本合同有关的争议，应当先行协商解决。协商不成的，双方同意由乙方总部所在地人民法院管辖。</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt; text-align: center;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">（以下无正文，为双方签署内容）</span></p>
+                <p style="min-height: 26pt; line-height: 26pt; text-align: center;"></p>
+                <p style="min-height: 26pt; line-height: 26pt; text-align: center;"></p>
+                <p style="min-height: 26pt; line-height: 26pt;"></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">甲方签字（盖章）                              乙方签字（盖章）</span>
+                </p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">经办人：</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;"><span>&emsp;</span></span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">                                    </span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">经办人：</span></p>
+                <p style="min-height: 26pt; line-height: 26pt;"><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">日期： </span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">                                       </span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">日期：</span><span
+                        style="font-family: 宋体; min-height: 14pt; font-size: 15pt;">   </span></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="min-height: 24pt; line-height: 24pt;"></p>
+                <p style="text-align: center;"><span
+                        style="font-family: 宋体; font-weight: bold; min-height: 14pt; font-size: 15pt;">以下为合同附加材料信息并加盖印章</span>
+                </p>
+                <p style="text-align: center;"></p>
+                <p><span style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">一、</span><span
+                        style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">代表条款</span></p>
+                <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt; text-indent: 24.2pt;">
+                    <span style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">甲方指派以下人员到乙方办理货物交接、验收、结算等各个环节的综合服务事宜。</span>
+                </p>
+                <table class="docx_2" style="width: 494.85pt; table-layout: auto;">
+                    <colgroup>
+                        <col style="width: 44pt;">
+                        <col style="width: 70.85pt;">
+                        <col style="width: 99.25pt;">
+                        <col style="width: 205.5pt;">
+                        <col style="width: 75.25pt;">
+                    </colgroup>
+                    <tr style="height: 14.5pt;">
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt; text-align: center;">
+                                <span style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">序号</span>
+                            </p></td>
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt; text-align: center;">
+                                <span style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">姓名</span>
+                            </p></td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt; text-align: center;">
+                                <span style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">联系方式</span>
+                            </p></td>
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt; text-align: center;">
+                                <span style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">身份证件名称及号码</span>
+                            </p></td>
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt; text-align: center;">
+                                <span style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">备注</span>
+                            </p></td>
+                    </tr>
+                    <tr style="height: 17.65pt;">
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt; text-align: center;">
+                                <span style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">1</span>
+                            </p></td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                    </tr>
+                    <tr style="height: 15.7pt;">
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt; text-align: center;">
+                                <span style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">2</span>
+                            </p></td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                    </tr>
+                    <tr style="height: 13.8pt;">
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt; text-align: center;">
+                                <span style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">3</span>
+                            </p></td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                        <td style="vertical-align: top; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="margin-top: 4.65pt; margin-bottom: 4.65pt; min-height: 20pt; line-height: 20pt;"></p>
+                        </td>
+                    </tr>
+                </table>
+                <p></p>
+                <p><span style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">二、价格条款</span>
+                </p>
+                <p></p>
+                <p></p>
+                <p><span style="font-family: 宋体; min-height: 12pt; font-size: 12pt;"> </span><span
+                        style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">    </span><span
+                        style="font-family: 宋体; color: rgb(255, 0, 0); min-height: 12pt; font-size: 12pt;">根据双方约定自行设计表格</span>
+                </p>
+                <p></p>
+                <p></p>
+                <p><span style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">三、甲方营业执照/甲方个人身份证复印件 </span>
+                </p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p></p>
+                <p><span style="font-family: 宋体; font-weight: bold; min-height: 12pt; font-size: 12pt;">四、公司发票受理信息（甲方为公司时提供）</span>
+                </p>
+                <p><span style="font-family: 宋体; min-height: 12pt; font-size: 12pt;"> </span><span
+                        style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">  </span></p>
+                <table class="docx_2" style="width: auto; table-layout: auto;">
+                    <colgroup>
+                        <col style="width: 143.95pt;">
+                        <col style="width: 251.9pt;">
+                    </colgroup>
+                    <tr style="height: 22.85pt;">
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"><span
+                                    style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">公司名称</span></p></td>
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"></p></td>
+                    </tr>
+                    <tr style="height: 22.85pt;">
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"><span
+                                    style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">纳税人识别号</span></p></td>
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"></p></td>
+                    </tr>
+                    <tr style="height: 22.85pt;">
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"><span
+                                    style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">地址</span></p></td>
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"></p></td>
+                    </tr>
+                    <tr style="height: 22.85pt;">
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"><span
+                                    style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">电话</span></p></td>
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"></p></td>
+                    </tr>
+                    <tr style="height: 22.85pt;">
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"><span
+                                    style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">开户行</span></p></td>
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"></p></td>
+                    </tr>
+                    <tr style="height: 22.45pt;">
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"><span
+                                    style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">银行账号</span></p></td>
+                        <td style="vertical-align: middle; border-width: 0.5pt; border-style: solid; border-color: black; padding: 0pt 5.4pt;">
+                            <p style="text-align: center;"></p></td>
+                    </tr>
+                </table>
+                <p><span style="font-family: 宋体; min-height: 12pt; font-size: 12pt;"> </span><span
+                        style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">   </span><span
+                        style="font-family: 宋体; min-height: 12pt; font-size: 12pt;">注：开具增值税专用发票的，需要提供一般纳税人资质证明</span>
+                </p>
+                <p><span id="_GoBack"></span></p></article>
+        </section>
+    </div>
+</div>
+
+<div class="button-section" align='center' id="button_div" style="margin-bottom: 20px">
+    <a id="btn_save" iconCls="icon-print" class="easyui-linkbutton" >打印</a>
+    <a id="btn_cancel" iconCls="icon-cancel" class="easyui-linkbutton" >取消</a>
+</div>
+
+</body>
+</html>
+
