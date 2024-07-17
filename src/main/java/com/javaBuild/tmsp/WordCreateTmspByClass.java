@@ -2,6 +2,7 @@ package com.javaBuild.tmsp;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.javaBuild.tmsp.api.controller.TmspArriveAppExceptController;
 import com.other.annotation.MyNotEmpty;
 import com.other.annotation.MyNotNull;
 import com.dy.components.annotations.CJ_column;
@@ -31,8 +32,8 @@ public class WordCreateTmspByClass {
 
         closeWps();
 
-        Class<?> clazz = TmspUnloadDriverPlanApiController.class;
-        String fileName="卸车app";
+        Class<?> clazz = TmspArriveAppExceptController.class;
+        String fileName="异常核销";
 
         String path = WordCreateTmspByClass.class.getClassLoader().getResource("").getPath();
         String filePath=path+"api";

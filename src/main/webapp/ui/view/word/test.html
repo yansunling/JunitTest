@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nested Table Example</title>
+    <style>
+        /* 设置外层表格的基本样式 */
+        .outer-table {
+            width: 100%;
+            border-collapse: collapse; /* 使表格边框合并为一个单一的边框 */
+        }
+
+        /* 设置嵌套表格的基本样式 */
+        .nested-table {
+            width: 100%; /* 嵌套表格宽度自动适应 */
+            border: 1px solid #000; /* 为嵌套表格添加边框 */
+        }
+
+        /* 其他样式可以根据需要添加 */
+    </style>
+</head>
+<body>
+
+<table class="outer-table">
+    <tr>
+        <td>
+            官方的说法广泛的
+        </td>
+        <td>
+            官方的说法
+        </td>
+        <td>
+            dhf
+        </td>
+      <tr>
+        <td>
+            官方的说法广泛的
+        </td>
+        <td>
+            官方的说法
+        </td>
+        <td>
+            <!-- 在这里嵌套另一个表格 -->
+            <table >
+                <tr>
+                    <th>嵌套表格标题1</th>
+                    <th>嵌套表格标题2</th>
+                </tr>
+                <tr>
+                    <td>嵌套表格内容1</td>
+                    <td>嵌套表格内容2</td>
+                </tr>
+                <tr>
+                    <td>嵌套表格内容1</td>
+                    <td>嵌套表格内容2</td>
+                </tr>
+                <tr>
+                    <td>嵌套表格内容1</td>
+                    <td>嵌套表格内容2</td>
+                </tr>
+                <tr>
+                    <td>嵌套表格内容1</td>
+                    <td>嵌套表格内容2</td>
+                </tr>
+                <!-- 更多嵌套表格的行和列 -->
+            </table>
+        </td>
+    </tr>
+    <!-- 更多外层表格的行和列 -->
+</table>
+
+</body>
+</html>
