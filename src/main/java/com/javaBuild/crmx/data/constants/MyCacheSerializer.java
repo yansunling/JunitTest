@@ -4,6 +4,7 @@ import com.dy.components.annotations.CJ_column;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.other.redis.MyRedisUtil;
 import com.yd.common.utils.RedisUtils;
 import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
@@ -39,7 +40,7 @@ public class MyCacheSerializer extends JsonSerializer<String> {
         if(StringUtils.isBlank(obj)){
             return "";
         }
-        String result = RedisUtils.getSingleMapValue(CRMXConstant.QUERY_CACHE_REDIS_PREX +code, obj, String.class);
+        String result =MyRedisUtil.getSingleMapValue(CRMXConstant.QUERY_CACHE_REDIS_PREX +code, obj, String.class);
         if(StringUtils.isNotBlank(result)){
             return result;
         }

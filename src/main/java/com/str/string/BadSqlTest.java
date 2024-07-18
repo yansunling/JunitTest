@@ -4,8 +4,16 @@ public class BadSqlTest {
 
 
     public static void main(String[] args) {
-        boolean or = sqlValidate("test orage");
-        System.out.println(or);
+      /*  boolean or = sqlValidate("test orage");
+        System.out.println(or);*/
+
+
+        String users="T0048,T0591,T1740";
+        String user="T0048";
+        if(users.indexOf(user)<0){
+            System.out.println("0------000");
+        }
+
     }
 
 

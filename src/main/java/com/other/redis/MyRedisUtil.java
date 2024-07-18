@@ -29,6 +29,20 @@ public class MyRedisUtil {
     public MyRedisUtil() {
     }
 
+    public static <T> T getSingleMapValue(String key, String mapkey, Class<T> clazz){
+        Jedis jedis = null;
+        try {
+            jedis = creatDataSource();
+            String value = jedis.hget(key, mapkey);
+            return com.yd.utils.common.StringUtils.isNotEmpty(value) ? JSON.parseObject(value, clazz) : null;
+        } catch (Exception t) {
+            t.printStackTrace();
+        }finally {
+            jedisPool.returnBrokenResource(jedis);
+        }
+        return null;
+    }
+
 
     public static boolean putWithStringKey(String key, Object value, int expireTime) {
         boolean flag = true;
@@ -205,7 +219,7 @@ public class MyRedisUtil {
             Jedis resource = jedisPool.getResource();
             return resource;
         }
-        String rootConfigFilePath = "/conf/config.properties";
+        String rootConfigFilePath = "/config.properties";
         Resource res = new ClassPathResource(rootConfigFilePath);
         File file = res.getFile();
         Properties prop = new Properties();
