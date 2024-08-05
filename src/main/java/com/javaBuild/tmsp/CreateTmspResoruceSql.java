@@ -10,7 +10,7 @@ import java.util.Set;
 public class CreateTmspResoruceSql {
     public static void main(String[] args) {
 
-        String fun="tmsp_unload_group_plan";
+        String fun="tmsp_sign_arrive_config";
         String parentId=fun+"_list";
 
         String supParent="baseinfo";

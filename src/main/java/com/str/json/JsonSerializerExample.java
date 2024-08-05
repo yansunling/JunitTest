@@ -1,6 +1,8 @@
-package com.other.json;
+package com.str.json;
 
 import com.alibaba.fastjson.JSONObject;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.javaBuild.crmx.data.CrmxStoreCustomerAppVO;
@@ -14,7 +16,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations={"classpath:applicationContext.xml"})
-public class JsonSerializerTest implements ApplicationContextAware {
+public class JsonSerializerExample implements ApplicationContextAware {
 
     ApplicationContext ac;
     @Override
@@ -30,6 +32,8 @@ public class JsonSerializerTest implements ApplicationContextAware {
         appVO.setOrg_id("350101");
         ObjectMapper objectMapper=new ObjectMapper();
         objectMapper.enable(SerializationFeature.INDENT_OUTPUT);
+        //去掉空值
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
         String json = objectMapper.writeValueAsString(appVO);
         System.out.println(json);
     }

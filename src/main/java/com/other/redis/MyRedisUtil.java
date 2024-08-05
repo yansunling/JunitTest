@@ -2,6 +2,10 @@ package com.other.redis;
 
 import cn.hutool.core.date.DateUtil;
 import com.alibaba.fastjson.JSON;
+import com.dy.components.logs.api.logerror.GlobalErrorInfoException;
+import com.dy.components.logs.error.spring.GlobalErrorInfoDynamic;
+import com.yd.common.cache.CIPRedisUtils;
+import com.yd.common.exception.GlobalErrorInfoEnum;
 import com.yd.common.utils.RedisUtils;
 import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
@@ -14,9 +18,7 @@ import redis.clients.jedis.JedisPoolConfig;
 import redis.clients.jedis.exceptions.JedisConnectionException;
 
 import java.io.*;
-import java.util.Date;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 public class MyRedisUtil {
     private static Logger log = Logger.getLogger(RedisUtils.class);
@@ -42,6 +44,45 @@ public class MyRedisUtil {
         }
         return null;
     }
+
+
+    public static <T> List<T> getMapValue(String key, Class<T> clazz, String... mapkeys) {
+        boolean isJedisConnectExceptionOccured = false;
+        List<String> values = null;
+        Jedis jedis = null;
+
+        label72: {
+            Object var7;
+            try {
+                jedis = creatDataSource();
+                values = jedis.hmget(key, mapkeys);
+                break label72;
+            } catch (JedisConnectionException var12) {
+                log.error(var12.getMessage(), new GlobalErrorInfoException(var12, new GlobalErrorInfoDynamic("16102277", String.format(GlobalErrorInfoEnum.FOUNDATION_FOUNDATION_16101207.getMessage(), var12.getMessage()))));
+                isJedisConnectExceptionOccured = true;
+                var7 = null;
+                return (List)var7;
+            } catch (Exception var13) {
+                log.error(var13.getMessage(), new GlobalErrorInfoException(var13, new GlobalErrorInfoDynamic("16102278", String.format(GlobalErrorInfoEnum.FOUNDATION_FOUNDATION_16101207.getMessage(), var13.getMessage()))));
+                var13.printStackTrace();
+                var7 = null;
+            } finally {
+                CIPRedisUtils.returnJedisResource(jedis, isJedisConnectExceptionOccured);
+            }
+
+            return (List)var7;
+        }
+
+        ArrayList toReturn = new ArrayList();
+
+        for(int i = 0; i < values.size(); ++i) {
+            T t = JSON.parseObject((String)values.get(i), clazz);
+            toReturn.add(t);
+        }
+
+        return toReturn;
+    }
+
 
 
     public static boolean putWithStringKey(String key, Object value, int expireTime) {

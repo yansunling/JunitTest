@@ -7,13 +7,13 @@ import java.lang.reflect.Method;
 public class CreateSqlByEnum {
     public static void main(String[] args) throws Exception{
 
-       String[] clazzList={"CRMX_DENSITY_TYPE"};
+       String[] clazzList={"CRMX_AUDIT_STATUS"};
        /*for(String clazzName:clazzList){
            String sql = buildSql(clazzName,null);
            System.out.println(sql);
        }*/
         String domainId=clazzList[0].replaceAll("CRMX_","").toLowerCase();
-        domainId="bubble_type";
+        domainId="audit_status";
         String sql = buildSql(clazzList[0],domainId);
         System.out.println(sql);
 

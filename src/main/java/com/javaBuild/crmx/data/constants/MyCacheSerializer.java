@@ -1,10 +1,12 @@
 package com.javaBuild.crmx.data.constants;
 
 import com.dy.components.annotations.CJ_column;
+import com.dy.components.ucms.utils.ConfigurationManager;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.other.redis.MyRedisUtil;
+import com.yd.common.runtime.CIPRuntimeConfigure;
 import com.yd.common.utils.RedisUtils;
 import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
@@ -40,6 +42,7 @@ public class MyCacheSerializer extends JsonSerializer<String> {
         if(StringUtils.isBlank(obj)){
             return "";
         }
+
         String result =MyRedisUtil.getSingleMapValue(CRMXConstant.QUERY_CACHE_REDIS_PREX +code, obj, String.class);
         if(StringUtils.isNotBlank(result)){
             return result;
@@ -47,7 +50,7 @@ public class MyCacheSerializer extends JsonSerializer<String> {
         String keyName=code+obj;
         //取query上数据库缓存
         String redisKey="dy:query:public:cache:cip_admin_code_crm";
-        List<String> mapValue = RedisUtils.getMapValue(redisKey, String.class, keyName);
+        List<String> mapValue = MyRedisUtil.getMapValue(redisKey, String.class, keyName);
         if(CollectionUtil.isNotEmpty(mapValue)){
             String value = mapValue.get(0);
             if(StringUtils.isNotBlank(value)){
