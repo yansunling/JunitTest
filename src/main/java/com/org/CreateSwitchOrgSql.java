@@ -97,11 +97,11 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
 
 
 
-//            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\" + newFileName + ".sql");
-//            sqlTotalList.add("\n\n\n");
-//            sqlTotalList.addAll(newSqlList);
-//            FileUtils.writeLines(allFile, "utf-8", newSqlList);
-//            sqlTotalList.addAll(newSqlList);
+            File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\" + newFileName.replaceAll(":","") + ".sql");
+            sqlTotalList.add("\n\n\n");
+            sqlTotalList.addAll(newSqlList);
+            FileUtils.writeLines(allFile, "utf-8", newSqlList);
+            sqlTotalList.addAll(newSqlList);
         }
 
 
@@ -132,7 +132,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
         String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where  table_schema not in('marketing','bml','dctx','wac','acs','als','costx','information_schema'," +
+                "where  table_schema not in('dctx','report','marketing','bml','dctx','wac','acs','als','costx','information_schema'," +
                 "'query','dct','ouyang','performance_schema','portal','biq','das','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','kjob','crmx','jeewx-boot') " +
                 "  group by table_schema";
         List<String> schemaList = jdbcTemplateYL.queryForList(schemaSql, String.class);
