@@ -13,14 +13,27 @@ import org.apache.http.HttpEntity;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.net.URLDecoder;
+import java.util.Map;
 
 
 @Slf4j
@@ -49,8 +62,8 @@ public class ImageDownUtil {
 //       downImg();
 
 
-        String cookie = getCookie("T1113");
-        System.out.println(cookie);
+        String cookie = getCookie("T1105","0610");
+        System.out.println("cookie:"+cookie);
 //        String username="T1113";
 //        String aCase = MD5Util.md5(username + "gcCK9o9kCy51L1Jy").toUpperCase();
 //        System.out.println(aCase);
@@ -108,10 +121,15 @@ public class ImageDownUtil {
 
 
 
+
+
+
+
     public static String getCookie(String username , String password){
         //String loginUrl = OATask.conf.getProperty("client.url")+"login/VerifyLogin.jsp";  //登陆 Url
-        String loginUrl = "https://oa.uat.tuolong56.com/login/VerifyLogin.jsp";  //登陆 Url
+        String loginUrl = "http://oa.uat.tuolong56.com/login/VerifyLogin.jsp";  //登陆 Url
         String tmpcookies= "";  //存储cookie值
+        HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
         //初始cookie值
         HttpClient httpClient = new HttpClient();
         PostMethod loginMethod = new PostMethod(loginUrl);
@@ -159,9 +177,11 @@ public class ImageDownUtil {
 
     public static String getCookie(String username){
         //String loginUrl = OATask.conf.getProperty("client.url")+"login/VerifyLogin.jsp";  //登陆 Url
-        String loginUrl = "https://oa.uat.tuolong56.com/login/VerifyLogin.jsp";  //登陆 Url
+        String loginUrl = "http://oa.uat.tuolong56.com/login/VerifyLogin.jsp";  //登陆 Url
         String tmpcookies= "";  //存储cookie值
         //初始cookie值
+        HttpsURLConnection.setDefaultHostnameVerifier((hostname, session) -> true);
+
         HttpClient httpClient = new HttpClient();
         PostMethod loginMethod = new PostMethod(loginUrl);
         //设置登陆时要求的信息
@@ -202,6 +222,25 @@ public class ImageDownUtil {
         return tmpcookies;
     }
 
+
+
+
+    private static HttpComponentsClientHttpRequestFactory generateHttpRequestFactory(){
+        try {
+            TrustStrategy acceptingTrustStrategy = (x509Certificates, authType) -> true;
+            SSLContext sslContext = SSLContexts.custom().loadTrustMaterial(null, acceptingTrustStrategy).build();
+            SSLConnectionSocketFactory connectionSocketFactory = new SSLConnectionSocketFactory(sslContext, new NoopHostnameVerifier());
+            HttpClientBuilder httpClientBuilder = HttpClients.custom();
+            httpClientBuilder.setSSLSocketFactory(connectionSocketFactory);
+            CloseableHttpClient httpClient = httpClientBuilder.build();
+            HttpComponentsClientHttpRequestFactory factory = new HttpComponentsClientHttpRequestFactory();
+            factory.setHttpClient(httpClient);
+            return factory;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 

@@ -1,6 +1,6 @@
-package com.javaBuild.tmsp;
+package com.sqlFile;
 
-public class CreateMdmSql {
+public class CreateDictSql {
     public static void main(String[] args) {
         String name="本站、经营、总部";
         String[] list = name.split("、");
