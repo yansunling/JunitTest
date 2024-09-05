@@ -31,11 +31,15 @@ public class CreateMainLineSql implements ApplicationContextAware {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    /**
+     * 新增线路
+     * @throws Exception
+     */
     @Test
     public  void createLineSql() throws Exception {
-        String mainLine="38";
-        String mainLineName="曲靖";
-        String mainLineCode="QJ";
+        String mainLine="41";
+        String mainLineName="株洲";
+        String mainLineCode="ZZ";
         String crmSql="INSERT INTO crm.cip_admin_codes(domain_id, code_type, code_name, create_time, update_time, operator) " +
                 "VALUES ('main_lines', '"+mainLine+"', '"+mainLineName+"', now(), now(), 'T1113');";
 
