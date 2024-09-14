@@ -8,70 +8,85 @@
 
 
     <style>
-        .text-container {
-            width: 300px; /* 根据需要调整容器宽度 */
-            position: relative; /* 设置相对定位 */
-            cursor: pointer;
-        }
+        .wrapper {
+            display: flex;
+            margin: 50px auto;
+            width: 800px;
+            overflow: hidden;
+            border-radius: 8px;
+            padding: 15px ;
 
+        }
         .text {
-            line-height: 1.5; /* 根据需要调整行高 */
-            max-height: 4.5em; /* 3行文本的最大高度 */
+            font-size: 20px;
             overflow: hidden;
             text-overflow: ellipsis;
-            display: block; /* 使文本块包含子元素 */
-            position: relative; /* 设置相对定位 */
-            transition: max-height 0.3s ease; /* 平滑过渡效果 */
+            text-align: justify;
+            /* display: flex; */
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            position: relative;
         }
-
-        .toggle-text {
+        .text::before {
+            content: '';
+            height: calc(100% - 24px);
+            float: right;
+        }
+        .text::after {
+            content: '';
+            width: 999vw;
+            height: 999vw;
+            position: absolute;
+            box-shadow: inset calc(100px - 999vw) calc(30px - 999vw) 0 0 #fff;
+            margin-left: -100px;
+        }
+        .btn{
+            float: right;
+            clear: both;
+            margin-left: 10px;
+            font-size: 16px;
+            padding: 0 8px;
+            background: #3F51B5;
+            line-height: 24px;
+            border-radius: 4px;
+            color:  #fff;
             cursor: pointer;
-            color: blue;
-            text-decoration: underline;
-            display: none; /* 默认不显示 */
+            /* margin-top: -30px; */
+        }
+        .btn::before{
+            content:'展开'
+        }
+        .exp{
+            display: none;
+        }
+        .exp:checked+.text{
+            -webkit-line-clamp: 999;
+        }
+        .exp:checked+.text::after{
+            visibility: hidden;
+        }
+        .exp:checked+.text .btn::before{
+            content:'收起'
         }
     </style>
 
     <script type="text/javascript">
-        function toggleText() {
-            var text = document.getElementById('text');
-            var toggleText = document.getElementById('toggleText');
 
-            if (text.style.maxHeight === "none") {
-                text.style.maxHeight = "4.5em"; // 恢复到三行文本的最大高度
-                toggleText.textContent = "[展开]";
-            } else {
-                text.style.maxHeight = "none"; // 设置为 none 以显示所有文本
-                toggleText.textContent = "[收起]";
-            }
-        }
-
-        // 初始化时检查文本高度并决定是否显示展开链接
-        window.onload = function() {
-            var text = document.getElementById('text');
-            var toggleText = document.getElementById('toggleText');
-
-            // 检查文本是否超出了三行
-            if (text.scrollHeight > text.clientHeight) {
-                toggleText.style.display = "inline"; // 如果超出，则显示展开链接
-            }
-        };
     </script>
 </head>
 
 
 
 <body>
-
-<div id="contentContainer">
-
-    <div class="text-container">
-        <p class="text" id="text">这是一段很长的文本，需要在超出三行时显示省略号，并在点击时展开显示所有文本。这是一段很长的文本，需要在超出三行时显示省略号，并在点击时展开显示所有文本。</p>
-        <span class="toggle-text" id="toggleText" onclick="toggleText()">[展开]</span>
+<div class="wrapper">
+    <input id="exp1" class="exp"  type="checkbox">
+    <div class="text">
+        <label class="btn" for="exp1"></label>
+        浮动元素是如何定位的
+        正如我们前面提到的那样，当一个元素浮动之后，它会被移出正常的文档流，然后向左或者向右平移，一直平移直到碰到了所处的容器的边框，或者碰到另外一个浮动的元素。
+        在下面的图片中，有三个红色的正方形。其中有两个向左浮动，一个向右浮动。要注意到第二个向左浮动的正方形被放在第一个向左浮动的正方形的右边。如果还有更多的正方形这样浮动，它们会继续向右堆放，直到填满容器一整行，之后换行至下一行。
     </div>
-
-
-
 </div>
 
 
