@@ -1,0 +1,81 @@
+<!Doctype html>
+
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+
+
+    <style>
+        .text-container {
+            width: 300px; /* 根据需要调整容器宽度 */
+            position: relative; /* 设置相对定位 */
+            cursor: pointer;
+        }
+
+        .text {
+            line-height: 1.5; /* 根据需要调整行高 */
+            max-height: 4.5em; /* 3行文本的最大高度 */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block; /* 使文本块包含子元素 */
+            position: relative; /* 设置相对定位 */
+            transition: max-height 0.3s ease; /* 平滑过渡效果 */
+        }
+
+        .toggle-text {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+            display: none; /* 默认不显示 */
+        }
+    </style>
+
+    <script type="text/javascript">
+        function toggleText() {
+            var text = document.getElementById('text');
+            var toggleText = document.getElementById('toggleText');
+
+            if (text.style.maxHeight === "none") {
+                text.style.maxHeight = "4.5em"; // 恢复到三行文本的最大高度
+                toggleText.textContent = "[展开]";
+            } else {
+                text.style.maxHeight = "none"; // 设置为 none 以显示所有文本
+                toggleText.textContent = "[收起]";
+            }
+        }
+
+        // 初始化时检查文本高度并决定是否显示展开链接
+        window.onload = function() {
+            var text = document.getElementById('text');
+            var toggleText = document.getElementById('toggleText');
+
+            // 检查文本是否超出了三行
+            if (text.scrollHeight > text.clientHeight) {
+                toggleText.style.display = "inline"; // 如果超出，则显示展开链接
+            }
+        };
+    </script>
+</head>
+
+
+
+<body>
+
+<div id="contentContainer">
+
+    <div class="text-container">
+        <p class="text" id="text">这是一段很长的文本，需要在超出三行时显示省略号，并在点击时展开显示所有文本。这是一段很长的文本，需要在超出三行时显示省略号，并在点击时展开显示所有文本。</p>
+        <span class="toggle-text" id="toggleText" onclick="toggleText()">[展开]</span>
+    </div>
+
+
+
+</div>
+
+
+
+</body>
+
+</html>
