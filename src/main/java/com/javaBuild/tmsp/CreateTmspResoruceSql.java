@@ -10,12 +10,12 @@ import java.util.Set;
 public class CreateTmspResoruceSql {
     public static void main(String[] args) {
 
-        String fun="tmsp_sign_arrive_config";
+        String fun="tmsp_except_wx_config";
         String parentId=fun+"_list";
 
-        String supParent="baseinfo";
-        String parentName=" 作业组信息维护";
-        String model="unload";
+        String supParent="excep";
+        String parentName=" 异常实时推送维护";
+        String model="excep";
         int num=1430;
 
         String listSql="INSERT INTO `tmsp`.`foc_plugins_auth_resource`(`resource_id`, `resource_name`, `resource_desc`, `sys_uri`, `resource_type`, `create_time`, `update_time`, `operator`, `icon_id`)" +
@@ -34,9 +34,10 @@ public class CreateTmspResoruceSql {
 //          map.put("getData",new ButtonType("icon-get","查看"));
         map.put("addData",new ButtonType("icon-add","新增"));
         map.put("updateData",new ButtonType("icon-edit","修改"));
+
+        map.put("enableData",new ButtonType("icon-ok","启用","updateData"));
+        map.put("disableData",new ButtonType("icon-cancel","禁用","updateData"));
         map.put("deleteData",new ButtonType("icon-remove","删除"));
-//        map.put("enableData",new ButtonType("icon-ok","启用","updateData"));
-//        map.put("disableData",new ButtonType("icon-cancel","禁用","updateData"));
 //        map.put("applyViolation",new ButtonType("icon-add","事故上报"));
 //        map.put("completeData",new ButtonType("icon-ok","事故完结"));
 //        map.put("applyData",new ButtonType("icon-add","借支"));

@@ -40,7 +40,7 @@ public class CreateTmspEnumBySource implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> domainList = Arrays.asList("loss_resp_type");
+        List<String> domainList = Arrays.asList("error_subtype");
         String path="C:\\Users\\yansunling\\Desktop\\enum\\";
 		File dir=new File(path);
 
@@ -53,7 +53,7 @@ public class CreateTmspEnumBySource implements ApplicationContextAware{
 		String content = FileUtil.readAsString(file);
 
 		for(String item:domainList){
-            String sql="select code_type,code_name from mdm.mdm_ddic_ddic_codes where sys_id='tmsp' and  domain_id in('"+item+"') order by code_order";
+            String sql="select code_type,code_name from mdm.mdm_ddic_ddic_codes where sys_id='tmsp' and  domain_id in('"+item+"')  order by code_value,code_order";
             List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
 			StringBuffer sb=new StringBuffer();
 

@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class StringToJSon {
     public static void main(String[] args) {
-        String str="(customer_name=刘萍1, send_recv_flag=1, prov_code=530000, city_code=532500, area_code=532501, address=个旧, org_id=250108041001, contactor=刘萍, cust_mobile=13529475962, other_contact=, goods_name=四件套, transfer_city=532501, order_id=600899355, send_org_name=苏都) ";
+        String str="(customer_name=韩世忠转帕尔哈提, send_recv_flag=1, prov_code=650000, city_code=654000, area_code=654004, address=, org_id=350101030902, contactor=韩世忠转帕尔哈提, cust_mobile=18599354143, other_contact=, goods_name=衣服, transfer_city=654004, order_id=701402530, send_org_name=俄罗斯物流)";
         str = str.replace("{", "").replace("}", "").replace("(", "").replace(")", "");
         String[] split = str.split(",");
         Map<String,String> map=new HashMap<>();

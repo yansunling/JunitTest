@@ -157,3 +157,4 @@ hcm.hcm_org_position
 tmsp.tmsp_order_route_org_detail_bak
 tmsp.tmsp_order_items
 tmsp.tmsp_stock_io_items_detail
+hcm.hcm_org_info_bk

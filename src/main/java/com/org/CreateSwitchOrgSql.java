@@ -112,7 +112,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
                     Set<String> set=new LinkedHashSet<>();
                     set.addAll(list);
                     File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"+key+".sql");
-                    FileUtils.writeLines(schemaFile,"utf-8",set);
+//                    FileUtils.writeLines(schemaFile,"utf-8",set);
 
                     sqlTotalList.addAll(set);
                 }
