@@ -1,4 +1,4 @@
-package com.org.newSwitch;
+package com.org;
 
 
 import com.org.data.OrgData;
@@ -46,10 +46,16 @@ public class CreateSqlUpdateFoc implements ApplicationContextAware {
     public void test() throws Exception {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
-        jdbcTemplate.setQueryTimeout(500);
+        jdbcTemplate.setQueryTimeout(5000);
 
 
-        List<String> tableFiles= Arrays.asList("crm.crm_base_cust_goods_name_limit");
+        List<String> tableFiles= Arrays.asList("tmsp.foc_plugins_review_report","tmsp.foc_plugins_review_log");
+
+        Map<String,String> mapSql=new HashMap<>();
+
+        mapSql.put("tmsp.foc_plugins_review_report","report_org_id");
+        mapSql.put("tmsp.foc_plugins_review_log","review_org_id");
+
         List<String> allTotalSet=new ArrayList<>();
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         for(String table:tableFiles){
@@ -60,11 +66,15 @@ public class CreateSqlUpdateFoc implements ApplicationContextAware {
                         @Override
                         public String call() throws Exception {
                             try {
-                                String sql="select serial_no from "+table+" where review_org_id in("+orgData.getOldOrgId()+")";
+                                String column = mapSql.get(table);
+                                if(StringUtils.isBlank(column)){
+                                    return null;
+                                }
+                                String sql="select serial_no from "+table+" where "+column+" in("+orgData.getOldOrgId()+")";
                                 List<String> result = jdbcTemplate.queryForList(sql, String.class);
                                 if(CollectionUtil.isNotEmpty(result)){
                                     String title = "-- "+orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]\n\n\n";
-                                    String updateSql="update "+table+" set review_org_id="+orgData.getNewOrgId()+" where serial_no in('"+StringUtils.join("','",result.toArray())+"');";
+                                    String updateSql="update "+table+" set "+column+"="+orgData.getNewOrgId()+" where serial_no in('"+StringUtils.join("','",result.toArray())+"');";
                                     totalSet.add(title);
                                     totalSet.add(updateSql+"\n\n");
                                 }
