@@ -2,12 +2,12 @@ package com.word.createWord;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
-import com.other.annotation.MyNotEmpty;
-import com.other.annotation.MyNotNull;
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
 import com.junit.po.ParamBean;
-import com.word.dataSource.controller.TmspContactFormApprovalController;
+import com.other.annotation.MyNotEmpty;
+import com.other.annotation.MyNotNull;
+import com.word.dataSource.controller.CrmxSatisfactionSurveyController;
 import com.word.doc.GeneralTemplateTool;
 import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
@@ -19,16 +19,14 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class WordCreateByClass {
 
 
     public static void main(String[] args) throws Exception{
 
+        Class<?> clazz = CrmxSatisfactionSurveyController.class;
         closeWps();
         String path = WordCreateByClass.class.getClassLoader().getResource("").getPath();
         String filePath=path+"api";
@@ -36,13 +34,13 @@ public class WordCreateByClass {
         String templatePath=filePath+"/template.docx";
         //doc文档生成工具
         GeneralTemplateTool gtt = new GeneralTemplateTool();
-        Class<?> clazz = TmspContactFormApprovalController.class;
+
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
         String rootPath="https://tlwl.uat.tuolong56.com/tmsp"+annotation.value()[0];
         //获得所有方法
         Method[] methods = clazz.getMethods();
-
+        boolean esbFlag=true;
         List<String> fileList=new ArrayList<>();
 
         for (Method item : methods) {
@@ -55,6 +53,10 @@ public class WordCreateByClass {
                 if(methodInfo!=null){
                     desc = methodInfo.desc();
                 }
+                if(esbFlag){
+                    url = "/esb-api/api/d/"+methodInfo.alias();
+                }
+
                 if(item.getParameterTypes().length>0){
                     Class<?> parameterType = item.getParameterTypes()[0];
                     System.out.println(parameterType.getName());
@@ -149,6 +151,8 @@ public class WordCreateByClass {
             if(StringUtils.equals("Y",bean.getListType())){
                 if(StringUtils.isNotBlank(bean.getClazz())){
                     listChildren.add(bean);
+                }else{
+                    stringObjectMap.put(paramName, Arrays.asList(bean.getDescription().replaceAll("\\(集合\\)","")));//设置对象属性
                 }
             }else if(StringUtils.isNotBlank(bean.getClazz())){
                 listChildren.add(bean);
@@ -190,7 +194,6 @@ public class WordCreateByClass {
         Field[] declaredFields = clazz.getDeclaredFields();
 
         for (Field declaredField : declaredFields) {
-            System.out.println(declaredField.getName());
             CJ_column cjColumn = declaredField.getAnnotation(CJ_column.class);
             if(cjColumn!=null){
                 ParamBean bean=new ParamBean(declaredField.getName(),cjColumn.name());
@@ -204,7 +207,7 @@ public class WordCreateByClass {
                 if(notEmpty!=null){
                     bean.setType("是");
                 }
-                if(declaredField.getType() == java.util.List.class){
+                if(declaredField.getType() == List.class){
                     // 如果是List类型，得到其Generic的类型
                     Type genericType = declaredField.getGenericType();
                     if(genericType == null) continue;
@@ -213,7 +216,17 @@ public class WordCreateByClass {
                         ParameterizedType pt = (ParameterizedType) genericType;
                         //得到泛型里的class类型对象
                         Class<?> genericClazz = (Class<?>)pt.getActualTypeArguments()[0];
-                        bean.setClazz(genericClazz.getName());
+                        boolean primitive = genericClazz.isPrimitive();
+                        if(!primitive){
+                            String simpleName = genericClazz.getSimpleName();
+                            if(!simpleName.equals("String")&&!simpleName.equals("Object")&&!simpleName.equals("Boolean")
+                                    &&!simpleName.equals("Double")&&!simpleName.equals("Integer")&&!simpleName.equals("Money")&&!simpleName.equals("Timestamp")){
+                                if(genericClazz.isEnum()){
+                                    bean.setEnumFlag("Y");
+                                }
+                                bean.setClazz(genericClazz.getName());
+                            }
+                        }
                     }
                     bean.setListType("Y");
                     String description = bean.getDescription();
