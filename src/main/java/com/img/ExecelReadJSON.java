@@ -36,7 +36,7 @@ public class ExecelReadJSON {
                 String type = img.split("\\.")[1];
 
                 String picPath=dir+"/"+item.getEmp_name()+item.getEmp_id()+"_"+i+"."+type;
-                GetDownFileUtil.downFile(picPath,img);
+                GetDownFileUtil.downFileNew(picPath,img);
 
 
 //                objectMap.put("mediaids",new File(picPath));
