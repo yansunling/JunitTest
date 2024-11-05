@@ -1,5 +1,12 @@
 package com.str.string;
 
+import cn.hutool.core.util.URLUtil;
+import cn.hutool.json.JSONUtil;
+import com.google.common.collect.Maps;
+
+import java.sql.Timestamp;
+import java.util.Map;
+
 public class BadSqlTest {
 
 
@@ -8,12 +15,12 @@ public class BadSqlTest {
         System.out.println(or);*/
 
 
-        String users="T0048,T0591,T1740";
-        String user="T0048";
-        if(users.indexOf(user)<0){
-            System.out.println("0------000");
-        }
+        Map<String,String> head = Maps.newHashMap();
+        head.put("user_id","T1113");
 
+        head.put("user_name","颜孙令");
+
+        System.out.println(URLUtil.encode(JSONUtil.toJsonStr(head)));
     }
 
 

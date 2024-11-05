@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <title>输入提示</title>
+    <link rel="stylesheet" href="https://a.amap.com/jsapi_demos/static/demo-center/css/demo-center.css" />
+    <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+    <style>
+        body, html, #container{width: 100%;height: 100%;overflow: hidden;font-family:"微软雅黑";}
+
+    </style>
+</head>
+
+<script type="text/javascript">
+    window._AMapSecurityConfig = {
+        securityJsCode: "a6a7aff22ae5ddb92e0dd9d5d4b40963",
+    };
+</script>
+
+<body>
+<div id="container"></div>
+
+<div class="info" >
+
+        <input id='tipinput' type="text">
+
+</div>
+
+
+
+
+
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=2.0&key=d51b941afcf7d34335a3c261f339f65c"></script>
+<script type="text/javascript">
+
+    var map = new AMap.Map("container", {
+        zoom:14,//级别
+        center: [116.397428, 39.90923],//中心点坐标
+        doubleClickZoom : false,//禁用双击放大
+        resizeEnable: true,
+    });
+
+    //2.2 添加搜索控件
+    AMap.plugin(['AMap.AutoComplete'], function(){
+        var autoComplete = new AMap.AutoComplete({
+            input: "tipinput",
+        });
+        //注册监听，当选中某条记录时会触发
+        autoComplete.on("select", function(e){
+            map.clearMap();
+            var lnglat = e.poi.location;
+            lng = lnglat.getLng();
+            lat = lnglat.getLat();
+            var marker = new AMap.Marker({position: [lng, lat]});
+            map.setZoomAndCenter(16, [lng, lat]);
+            map.add(marker);
+        });
+    });
+</script>
+</body>
+</html>

@@ -50,7 +50,7 @@ public class ExcelAppendPhoto implements ApplicationContextAware {
 
         String serialNo="crm_f930f0b1-5da2-4e7f-a01a-dca4cd3ff286_1";
         String host="http://localhost";
-        File templateFile = DownFsmFileUtil.downFile(host, serialNo);
+        File templateFile = DownFsmFileUtil.downFile(host, serialNo,"");
 
 //        ExcelAppendUtil.appendExcelData(templateFile,listData,columns,2);
 

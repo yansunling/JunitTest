@@ -27,7 +27,7 @@ public class BaseHexUtil {
         System.out.println(toBase64String);
 
 
-        String md5Str="klFmgCFruQg9xym9genTEA==";
+        String md5Str="mgw5WYdutuWqE/WZZ4ksmw==";
 
         byte[] decode1 = Base64.decode(md5Str);
 

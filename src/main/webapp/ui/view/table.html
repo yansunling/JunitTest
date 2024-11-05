@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Table Row Drag and Drop</title>
+    <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="../js/sortable.min.js"></script>
+</head>
+<body>
+
+<table id="sortable-table" border="1">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Name</th>
+        <th>Age</th>
+    </tr>
+    </thead>
+    <tbody id="td_body">
+    <tr>
+        <td>1</td>
+        <td>John Doe</td>
+        <td>30</td>
+    </tr>
+    <tr>
+        <td>2</td>
+        <td>Jane Smith</td>
+        <td>25</td>
+    </tr>
+    <!-- 更多行... -->
+    </tbody>
+</table>
+
+<script>
+    $(function() {
+//获取对象
+        var el = document.getElementById('td_body');
+        //设置配置
+        var ops = {
+            animation: 1000,
+            //拖动结束
+            onEnd: function (evt) {
+
+            },};
+        //初始化
+        var sortable = Sortable.create(el, ops);
+
+
+
+
+    });
+</script>
+
+</body>
+</html>

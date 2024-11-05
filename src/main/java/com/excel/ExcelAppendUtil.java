@@ -51,7 +51,7 @@ public class ExcelAppendUtil {
     public static void main(String[] args) {
         String serialNo="portal_tms_85340605-d4c1-4de2-80ff-e3c6f51c5433_2";
         String host="http://localhost";
-        File templateFile = DownFsmFileUtil.downFile(host, serialNo);
+        File templateFile = DownFsmFileUtil.downFile(host, serialNo,"");
 
 
 

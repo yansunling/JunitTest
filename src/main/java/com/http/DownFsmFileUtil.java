@@ -1,5 +1,6 @@
 package com.http;
 
+import com.yd.utils.common.StringUtils;
 import lombok.SneakyThrows;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
@@ -18,14 +19,21 @@ import java.net.URLDecoder;
 public class DownFsmFileUtil {
 
     public static void main(String[] args) {
-        String serialNo="portal_tms_85340605-d4c1-4de2-80ff-e3c6f51c5433_2";
-        String host="http://localhost";
-        downFile(host,serialNo);
+        String serialNo="crm_227ab454-a861-4292-a043-d05d7e5b8871_1";
+
+        String[] split = serialNo.split(",");
+        String host="https://kp.tuolong56.com";
+
+        for(String str:split){
+            downFile(host,str,"");
+        }
+
+
     }
 
 
     @SneakyThrows
-    public static File downFile(String host,String serialNo) {
+    public static File downFile(String host,String serialNo,String fileName) {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         HttpPost httppost = new HttpPost(host+"/fsm/api/fsm_api/download.do?file_app_id=crm&file_serial_no="+serialNo);
         RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(200000).setSocketTimeout(200000).build();
@@ -33,14 +41,26 @@ public class DownFsmFileUtil {
         CloseableHttpResponse response = httpclient.execute(httppost);
         File file=null;
         try {
+
+            File dir=new File("C:/Users/yansunling/Desktop/fsm/");
+            if (!dir.exists()) {
+                dir.mkdirs();
+            }
             System.out.println(response.getStatusLine());
             Header firstHeader = response.getFirstHeader("Content-Disposition");
-            String fileName = firstHeader.getValue().replace("attachment;filename=","");
-            fileName=URLDecoder.decode(fileName, "utf-8");
+            if(StringUtils.isNotBlank(fileName)){
+                fileName=fileName+".png";
+            }else{
+                fileName = firstHeader.getValue().replace("attachment;filename=","");
+                fileName=URLDecoder.decode(fileName, "utf-8");
+            }
+
+
+
             HttpEntity resEntity = response.getEntity();
             if (resEntity != null) {
                 InputStream is = resEntity.getContent();
-                file = new File("C:/Users/yansunling/Desktop/"+fileName);
+                file = new File(dir.getPath()+"/"+fileName);
                 FileOutputStream fos = new FileOutputStream(file);
                 byte[] buffer = new byte[4096];
                 int len = -1;
