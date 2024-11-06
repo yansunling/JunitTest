@@ -62,7 +62,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
         dataSource.setMaxActive(100);
         //排除基础表
-        List<String> sqlTotalList = new ArrayList<>();
+        Set<String> sqlTotalList = new HashSet<>();
         Map<String, List<String>> schemaMap = new HashMap<>();
         List<String> sqlBaseList = buildBaseSql(schemaMap);
         List<String> notSchema=new ArrayList<>();
@@ -132,7 +132,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap) {
         String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where table_name not like 's20%' and table_schema not in('dctx','report','marketing','bml','dctx','wac','acs','als','costx','information_schema'," +
+                "where  table_schema not in('dctx','report','marketing','bml','dctx','wac','acs','als','costx','information_schema'," +
                 "'query','dct','ouyang','performance_schema','portal','biq','das','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','kjob','crmx','jeewx-boot') " +
                 "  group by table_schema";
         List<String> schemaList = jdbcTemplateYL.queryForList(schemaSql, String.class);
@@ -172,7 +172,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
             //设置初始值
             schemaMap.put(schema,new ArrayList<>());
 
-            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW'  ";
+            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW' and table_name not like 's2024%'  ";
             List<String> tableList = jdbcTemplateYL.queryForList(sql, String.class);
             CountDownLatch countDownLatch = new CountDownLatch(tableList.size());
             List<String> totalSql = new ArrayList<>();
