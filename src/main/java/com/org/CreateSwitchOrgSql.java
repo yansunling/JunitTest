@@ -62,7 +62,7 @@ public class CreateSwitchOrgSql implements ApplicationContextAware {
         DruidComboPoolDataSource dataSource = (DruidComboPoolDataSource) ydDriverManagerDataSource.getObject();
         dataSource.setMaxActive(100);
         //排除基础表
-        Set<String> sqlTotalList = new HashSet<>();
+        Set<String> sqlTotalList = new LinkedHashSet<>();
         Map<String, List<String>> schemaMap = new HashMap<>();
         List<String> sqlBaseList = buildBaseSql(schemaMap);
         List<String> notSchema=new ArrayList<>();

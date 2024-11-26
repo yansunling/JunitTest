@@ -1,0 +1,18 @@
+package com.encryption;
+
+import com.alibaba.fastjson.JSON;
+import com.yd.common.busi.builder.base.BusiNo;
+import com.yd.utils.common.BeanConvertUtils;
+
+import java.util.Base64;
+
+public class OrderIdDecode {
+    public static void main(String[] args) {
+
+        String code="rO0ABXNyACZjb20ueWQuY29tbW9uLmJ1c2kuYnVpbGRlci5iYXNlLkJ1c2lOb5M4JIeCnO4fAgAFSQAFaW5kZXhMAAlidXNpQXV0b3N0ABBMamF2YS91dGlsL0xpc3Q7TAAKYnVzaVBhcmFtc3EAfgABTAAGY29kZUlkdAASTGphdmEvbGFuZy9TdHJpbmc7TAAFZml4ZWRxAH4AAnhwAAAAAHNyABNqYXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAABdwQAAAABc3IAKGNvbS55ZC5jb21tb24uYnVzaS5idWlsZGVyLmJhc2UuQnVzaUF1dG8ztuEZ0gUnFwIACEwAEWFzc2VydF92YWx1ZV90eXBlcQB+AAJMAAthdXRvQnVpbGRlcnQALUxjb20veWQvY29tbW9uL2J1c2kvYnVpbGRlci9iYXNlL0F1dG9CdWlsZGVyO0wACWJhc2VfdHlwZXEAfgACTAAKYmFzZV92YWx1ZXEAfgACTAAKYnVpbGRfYWxnb3EAfgACTAADcmVmdAAPTGphdmEvdXRpbC9NYXA7TAAJc3RlcF90eXBlcQB+AAJMAApzdGVwX3ZhbHVlcQB+AAJ4cgAoY29tLnlkLmNvbW1vbi5idXNpLmJ1aWxkZXIuYmFzZS5CdXNpQmFzZdJ5ZR1kK/hSAgAHSQAGbGVuZ3RoTAANZGVmYXVsdF92YWx1ZXEAfgACTAAJZmlsbF90ZXh0cQB+AAJMAAlmaWxsX3R5cGVxAH4AAkwACW1heF92YWx1ZXEAfgACTAAJbWluX3ZhbHVlcQB+AAJMAApyZXNldF90eXBlcQB+AAJ4cAAAAAlwdAABMHBwcHBwc3IAMGNvbS55ZC5jb21tb24uYnVzaS5idWlsZGVyLmltcGwuQXV0b1JlZGlzQnVpbGRlcpSSQnd2z8aTAgAAeHBwdAAJNzAxNTAzNDQzdAABMXNyABFqYXZhLnV0aWwuSGFzaE1hcAUH2sHDFmDRAwACRgAKbG9hZEZhY3RvckkACXRocmVzaG9sZHhwP0AAAAAAAAF3CAAAAAIAAAABdAAJcmVkaXNfa2V5dAAxdGx3bDp0bXNwOnNlcmlhbDpyZWRpc19hdXRvOm9yZGVyX2lkX3Byb19vcmRlcl9pZHhwdAABMXhzcQB+AAQAAAAAdwQAAAAAeHQACG9yZGVyX2lkdAAA";
+
+        byte[] valueb = Base64.getDecoder().decode(code);
+        BusiNo toreturn = (BusiNo)BeanConvertUtils.toObject(valueb);
+        System.out.println(JSON.toJSONString(toreturn));
+    }
+}
