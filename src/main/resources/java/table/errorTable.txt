@@ -137,9 +137,7 @@ tmsp.tmsp_stock_io_log
 tmsp.tmsp_net_org_debt_limit_copy1
 tmsp.tmsp_org_new_old_ref
 tmsp.tmsp_stock_io_log
-tmsp.tmsp_stock_all_user_rel
 tmsp.tmsp_share_file
-tmsp.tmsp_hand_schedule_car
 tmsp.tmsp_send_order_cust_edit_log
 tmsp.tmsp_take_order_log
 tmsp.tmsp_order_statistics
@@ -156,5 +154,6 @@ hcm.b5
 hcm.hcm_org_position
 tmsp.tmsp_order_route_org_detail_bak
 tmsp.tmsp_order_items
-tmsp.tmsp_stock_io_items_detail
 hcm.hcm_org_info_bk
+tmsp.tmsp_stock_all_user_rel
+tmsp.tmsp_stock_io_items_detail
