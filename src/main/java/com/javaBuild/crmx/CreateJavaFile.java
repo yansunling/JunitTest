@@ -43,7 +43,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_satisfaction_survey");
+        List<String> tableNames = Arrays.asList("crm_contract_invoice_info");
 		String prexName="Crmx";
 		String dataBase="crm";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
@@ -217,7 +217,9 @@ public class CreateJavaFile implements ApplicationContextAware{
             formTable.append(remarkTd);
 
             //生成html页面
-            String tableName1=tableName.replace("crm_","crmx_");
+            //String tableName1=tableName.replace("crm_","crmx_");
+			String tableName1=tableName;
+
             String formName=(tableName+"_form").replace("crm_","crmx_");
             formHtml=formHtml.replaceAll("\\{html_group\\}",htmlGroup)
                     .replaceAll("\\{html_name\\}",formName)

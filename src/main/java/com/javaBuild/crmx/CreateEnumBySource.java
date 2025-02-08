@@ -38,7 +38,7 @@ public class CreateEnumBySource implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> domainList = Arrays.asList("print_rule");
+        List<String> domainList = Arrays.asList("invoice_type");
         String path="C:\\Users\\yansunling\\Desktop\\enum\\";
 		File dir=new File(path);
 

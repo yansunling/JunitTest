@@ -477,7 +477,70 @@ public class ExcelsUtil {
     }
 
 
+    @SneakyThrows
+    public  static void createExcel(String file, List<Map<String, Object>> listData, Map<String,String> titleMap,List<String> numColumns){
+        int startRow=1;
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("sheet1");
+        //设置字体大小
+        Font font = workbook.createFont();
+        font.setFontName("微软雅黑");
+        font.setFontHeightInPoints((short)10);
+        //正常单元格
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setFont(font);
+        cellStyle.setAlignment(HorizontalAlignment.CENTER);
 
+
+
+        //创建行
+        Row titleRow = sheet.createRow(0);
+        List<String> columns=new ArrayList<>();
+        titleMap.forEach((column,title)->{
+            columns.add(column);
+            //创建单元格
+            Cell cell = titleRow.createCell(columns.size()-1);
+            cell.setCellValue(title);
+        });
+
+
+        for(int rowNum=0;rowNum<listData.size();rowNum++){
+            Map<String, Object> resultPO = listData.get(rowNum);
+            //创建行
+            Row row = sheet.createRow(rowNum+startRow);
+            for(int cellNum=0;cellNum<columns.size();cellNum++){
+                //通过反射获得值
+                String column=columns.get(cellNum);
+                Object obj = resultPO.get(column);
+                if(obj instanceof File){
+                    XSSFDrawing drawingPatriarch = sheet.createDrawingPatriarch(); // 插入图片
+                    row.setHeight((short)(100*20));
+                    sheet.setColumnWidth(cellNum,6000);
+                    File pic =(File) obj;
+                    ExcelsUtil.insertExcelPic(workbook,drawingPatriarch,rowNum+startRow,cellNum,pic.getPath());
+                }else{
+                    String value = resultPO.get(column)+"";
+                    if(com.yd.utils.common.StringUtils.equalsIgnoreCase("null",value)){
+                        value="";
+                    }
+                    //创建单元格
+                    Cell cell = row.createCell(cellNum);
+                    if(numColumns.contains(column)){
+                        cell.setCellValue(Double.parseDouble(value));
+                    }else{
+                        cell.setCellValue(value);
+                    }
+
+
+
+                }
+            }
+        }
+        FileOutputStream out = new FileOutputStream(file);
+        workbook.write(out);
+        out.close();
+        workbook.close();
+    }
 
 
 

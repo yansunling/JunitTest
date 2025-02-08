@@ -3,35 +3,34 @@ package com.str;
 public class StringMain {
     public static void main(String[] args) {
 
-        String column="serial_no, rank_month, customer_id, customer_type, send_recv_flag, business_region_id, last_city_name, product_type, this_month_ton_price, this_month_bubble, this_month_line_amount, this_month_goods_cube, this_month_goods_weight,region_type,create_time,this_month_ticket_num";
-        String column2="uuid_short(),rank_month, customer_id, customer_type, send_recv_flag, business_region_id, last_city_name, product_type, ton_price, bubble, line_amount, goods_cube, goods_weight, #{param.region_type},now(),ticket_num";
-        column=column.replaceAll("\n","");
-        column2=column2.replaceAll(", 2 ","(temp)");
-        column2=column2.replaceAll(",null,","(null)");
-        column2=column2.replaceAll("\n","");
-
-        String[] columns = column.split(",");
-        String[] column2s = column2.split(",");
-
-
-
-        StringBuffer sb=new StringBuffer();
-
-        for(int i=0;i<columns.length;i++){
-            column2s[i]=column2s[i].replaceAll("\\(temp\\)",", 2 ");
-            column2s[i]=column2s[i].replaceAll("\\(null\\)",",null,");
-            String temp="";
-            if(column2s[i].indexOf(" as ")<0){
-                temp=column2s[i].trim()+" as "+columns[i].trim()+",\n";
-            }else{
-                temp=column2s[i].trim()+",\n";
-            }
-            sb.append(temp.trim()).append("\n");
-
-        }
-
-        String substring = sb.substring(0, sb.length() - 2);
-        System.out.println(substring);
+        StringBuffer sql = new StringBuffer("SELECT\n" +
+                "\tmain.*,\n" +
+                "\tsu.name_space_id AS name_space_id,\n" +
+                "\tsu.app_id AS app_id,\n" +
+                "\tsu.user_id AS user_id,\n" +
+                "\tui.user_name AS user_name,\n" +
+                "\tui.org_id AS org_id,\n" +
+                "\torg.org_name AS org_name,\n" +
+                "\tui.is_master_user AS is_master_user,\n" +
+                "\tapp.authorize_group_id AS authorize_group_id,\n" +
+                //认证信息这里做一下行列转换，不然多一种认证信息数据量就会增加一倍
+                "\tGROUP_CONCAT( IF ( au.authorize_type = 'PASSWORD', au.authorize_info, NULL ) ) AS PASSWORD,\n" +
+                "\tGROUP_CONCAT( IF ( au.authorize_type = 'JWT', au.authorize_info, NULL ) ) AS jwt,\n" +
+                "\tGROUP_CONCAT( IF ( au.authorize_type = 'SMS', au.authorize_info, NULL ) ) AS sms,\n" +
+                "\tGROUP_CONCAT( IF ( au.authorize_type = 'WECHART', au.authorize_info, NULL ) ) AS wechat \n" +
+                "FROM\n" +
+                "\t`auth_account_subject_info` main\n" +
+                "\tLEFT JOIN auth_account_subject_user_info su ON main.company_id = su.company_id \n" +
+                "\tAND main.subject_id = su.subject_id\n" +
+                "\tINNER JOIN auth_user_userinfo ui ON su.company_id = ui.company_id \n" +
+                "\tAND su.name_space_id = ui.name_space_id \n" +
+                "\tAND su.user_id = ui.user_id AND ui.user_status = '0'\n" +
+                "\tLEFT JOIN auth_user_org org ON ui.company_id = org.company_id AND ui.name_space_id = org.name_space_id AND ui.org_id = org.org_id\n" +
+                "\tLEFT JOIN auth_authorize_app_info app ON su.app_id = app.app_id \n" +
+                "\tAND app.company_id = ui.company_id \n" +
+                "\tAND app.name_space_id = ui.name_space_id\n" +
+                "\tLEFT JOIN auth_authorize_subject_info au ON main.subject_id = au.subject_id ");
+        System.out.println(sql.toString());
 
 
     }

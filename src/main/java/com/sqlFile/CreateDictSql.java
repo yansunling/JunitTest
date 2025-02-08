@@ -1,12 +1,24 @@
 package com.sqlFile;
 
+import com.alibaba.fastjson.JSON;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class CreateDictSql {
     public static void main(String[] args) {
-        String name="本站、经营、总部";
+        String name="直达车类、运费类、中转类、配送类、送货费类、卸货费类、转货类、返货类、坏账类";
         String[] list = name.split("、");
         StringBuffer sb=new StringBuffer();
         StringBuffer sql=new StringBuffer();
-        String domainId="loss_resp_type";
+        String domainId="contact_class";
+
+        List<Map<String,String>> codes=new ArrayList<>();
+
+
+
         for(int i=0;i<list.length;i++){
             Integer key=i;
             String value=list[i].trim();
@@ -15,11 +27,15 @@ public class CreateDictSql {
 
             sql.append("INSERT INTO mdm.mdm_ddic_ddic_codes(sys_id,domain_id, code_type, code_name,code_value,code_order,remark, create_time, update_time, op_user_id,creator) VALUES" +
                     " ('tmsp','"+domainId+"', '"+key+"', '"+value+"','"+key+"',"+i+",'', now(), now(), 'T1113','T1113');\n");
-
+            Map<String,String> code=new HashMap<>();
+            code.put("code",key+"");
+            code.put("name",value);
+            codes.add(code);
         }
         System.out.println(sb.toString());
         System.out.println(sql.toString());
 
+        System.out.println(JSON.toJSONString(codes));
 
         /*String name="南宁 N,玉林 YL,湛江 ZJ,柳州 LZ,桂林 GL,白色 BS,东兴 DX,凭祥 PX";
         String[] names = name.split(",");
