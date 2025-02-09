@@ -2,6 +2,7 @@ package com.javaBuild.crmx;
 
 
 import com.google.common.collect.Lists;
+import com.javaBuild.po.BuildConfig;
 import com.javaBuild.tmsp.ColumnData;
 import com.yd.utils.common.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -19,10 +20,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 
 @Slf4j
@@ -43,7 +43,13 @@ public class CreateJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("crm_contract_invoice_info");
+
+        Map<String,BuildConfig> tables=new HashMap<>();
+		tables.put("crm_base_customer_delivery_config1",new BuildConfig("","Y"));
+
+		Set<String> tableNames = tables.keySet();
+
+
 		String prexName="Crmx";
 		String dataBase="crm";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
@@ -61,8 +67,31 @@ public class CreateJavaFile implements ApplicationContextAware{
 			String controllerContent=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateController.java"));
 			String htmlContent=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateList.html"));
 			String jsContent=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateJavaScript.js"));
+			BuildConfig buildConfig=tables.get(tableName);
+			String statusColumn="";
+			if(buildConfig!=null){
+				statusColumn=buildConfig.getStatusColumn();
+			}
+			//去除状态
+			if(buildConfig!=null&&StringUtils.isBlank(buildConfig.getStatusColumn())){
+				jsContent=removeStatus(jsContent);
+				controllerContent=removeStatus(controllerContent);
+				serviceContent=removeStatus(serviceContent);
+				implContent=removeStatus(implContent);
+			}
 
-            String formHtml=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateForm.html"));
+			//导入
+			if(buildConfig!=null&&!StringUtils.equals(buildConfig.getImportColumn(),"Y")){
+				jsContent=removeImport(jsContent);
+				controllerContent=removeImport(controllerContent);
+				serviceContent=removeImport(serviceContent);
+				implContent=removeImport(implContent);
+			}
+
+
+
+
+			String formHtml=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateForm.html"));
             String formJs=FileUtil.readAsString(new File(filePath+ "java/crm/TemplateForm.js"));
             List<ColumnData> columnDataList=new ArrayList<>();
             List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time",
@@ -87,9 +116,10 @@ public class CreateJavaFile implements ApplicationContextAware{
 					"and tb.table_name in( '"+tableName+"');";
             List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
 			StringBuffer sb=new StringBuffer();
+			StringBuffer excelTitle=new StringBuffer();
 			mapList.forEach(map->{
 				sb.append(map.get("filed")+"\n\n\n");
-
+				excelTitle.append("        titleMap.put(\""+map.get("column_name")+"\", \""+map.get("column_comment")+"\");\n");
                 String columnId=map.get("column_name")+"";
                 if(StringUtils.equalsIgnoreCase("remark",columnId)){
                     remarkTd.append("\t\t\t<tr>\n" +
@@ -119,6 +149,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 			//生成PO
 			String className=prexName+"PO";
 			String newContent=content.replaceAll("\\{content\\}",sb.toString())
+					.replaceAll("\\{excel_title\\}",excelTitle.toString())
 					.replaceAll("\\{table_comment\\}",tableComment)
 					.replaceAll("\\{table_name\\}",tableName)
 					.replaceAll("\\{class_name\\}",className);
@@ -174,6 +205,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 			jsContent=jsContent.replaceAll("\\{html_group\\}",htmlGroup)
 					.replaceAll("\\{js_name\\}",jsName)
 					.replaceAll("\\{table_name\\}",tableName)
+					.replaceAll("\\{status_column\\}",statusColumn)
 					.replaceAll("\\{table_comment\\}",tableComment);
 			FileUtil.writeAsString(new File(path+tableName+"\\" +htmlName+ ".js"),jsContent);
 
@@ -240,5 +272,28 @@ public class CreateJavaFile implements ApplicationContextAware{
 
         }
     }
+
+    private String removeStatus(String content){
+		List<String> newContentList=new ArrayList<>();
+		String[] contentList = content.split("\r\n\r\n");
+		for(String str:contentList){
+			if(str.indexOf("{status_column}")<0&&str.indexOf("updateStatus")<0){
+				newContentList.add(str);
+			}
+		}
+		return StringUtils.join("\r\n\r\n",newContentList.toArray());
+	}
+
+	private String removeImport(String content){
+		List<String> newContentList=new ArrayList<>();
+		String[] contentList = content.split("\r\n\r\n");
+		for(String str:contentList){
+			if(str.indexOf("importData")<0){
+				newContentList.add(str);
+			}
+		}
+		return StringUtils.join("\r\n\r\n",newContentList.toArray());
+	}
+
 
 }

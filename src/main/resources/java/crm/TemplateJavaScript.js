@@ -115,20 +115,20 @@ var bda_data_str_field = {
 			}
 		});
 	},
+
+
 	{js_name}_enableData: function (buttonId,actionUrl){
 		let selectRows = $(listTemplate).datagrid('getChecked');
 		if(selectRows.length==0){
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
 			return;
 		}
-		let usageStatusName = selectRows[0].common_status;
-		if(usageStatusName!='禁用'){
-			$$.showJcdfMessager('提示消息',  "当前状态不为禁用，无法进行启用操作！", 'info');
-			return;
-		}
 		let title = "确认";
 		let msg = "确定启用所选记录?";
-
+		let params=[];
+		selectRows.forEach(item=>{
+			params.push({"serial_no:":item.serial_no,{status_column}:"ENABLE"})
+		});
 		$.messager.confirm(title, msg, function (r) {
 			if (r) {
 				$$.openProcessingDialog();
@@ -136,7 +136,7 @@ var bda_data_str_field = {
 					type: "POST",
 					url: actionUrl + "?actionId=" + buttonId,
 					dataType: "json",
-					data: JSON.stringify({"serial_no":selectRows[0].serial_no,"common_status":"ENABLE"}),
+					data: JSON.stringify(params),
 					contentType: "application/json",
 					success: function (data) {
 						$$.closeProcessingDialog();
@@ -152,17 +152,18 @@ var bda_data_str_field = {
 			}
 		});
 	},
+
+
 	{js_name}_disableData: function (buttonId,actionUrl){
 		let selectRows = $(listTemplate).datagrid('getChecked');
 		if(selectRows.length==0){
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
 			return;
 		}
-		let usageStatusName = selectRows[0].common_status;
-		if(usageStatusName!='启用'){
-			$$.showJcdfMessager('提示消息',  "当前状态不为启用，无法进行禁用操作！", 'info');
-			return;
-		}
+		let params=[];
+		selectRows.forEach(item=>{
+			params.push({"serial_no:":item.serial_no,{status_column}:"ENABLE"})
+		});
 		let title = "确认";
 		let msg = "确定禁用所选记录?";
 		$.messager.confirm(title, msg, function (r) {
@@ -172,7 +173,7 @@ var bda_data_str_field = {
 					type: "POST",
 					url: actionUrl + "?actionId=" + buttonId,
 					dataType: "json",
-					data: JSON.stringify({"serial_no":selectRows[0].serial_no,"common_status":"DISABLE"}),
+					data: JSON.stringify(params),
 					contentType: "application/json",
 					success: function (data) {
 						$$.closeProcessingDialog();
@@ -188,11 +189,12 @@ var bda_data_str_field = {
 			}
 		});
 	},
+
+
 	{js_name}_importData : function (buttonId,actionUrl){
 		var form = {};
 		form.formId = "cip_import_form";
 		form.formUrl = "ui/view/public/cip_import_form.html?actionId=cip_import_form";
-
 		var techParam = {
 			appId:appId,
 			srcPageId:metaData.objectId,
@@ -205,8 +207,8 @@ var bda_data_str_field = {
 		techParam.refActionId = buttonId;
 		var callUrl = $$.buildPageUrl(form.formUrl,techParam,null);
 		$$.openJcdfDialog(callUrl, '导入'+metaData.objectName, 250, 600);
-
 	},
+
 
 };
 
@@ -253,13 +255,17 @@ function queryData() {
 
 		queryLog.queryResult();
 	});
-	query.getColumnOption("common_status").formatter=function (value) {
+
+
+	query.getColumnOption("{status_column}").formatter=function (value) {
 		if(value=='禁用'){
 			return '<span style="color: red">'+value+'</span>';
 		}else{
 			return value;
 		}
 	}
+
+
 }
 
 

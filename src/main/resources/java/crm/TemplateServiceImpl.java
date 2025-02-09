@@ -1,16 +1,18 @@
 package com.javaBuild.po;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONObject;
 import com.dy.components.logs.api.logerror.GlobalErrorInfoException;
 import com.error.auto.GlobalErrorInfoEnum;
-import com.local.crmx.customer.vo.CRMX_base_customer_market_importData;
 import com.yd.common.runtime.CIPRuntimeOperator;
 import com.yd.crmx.common.service.CrmxCommonService;
 import com.yd.crmx.share.data.CRMX_share_data_logConfig;
 import com.yd.crmx.share.service.CRMX_share_data_logService;
 import com.yd.crmx.util.CJExcelUtil;
+import com.yd.crmx.util.CrmxCommonUtil;
 import com.yd.crmx.validate.MyValidationUtil;
+import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.ExcelReader;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
@@ -71,6 +73,26 @@ public class {class_impl} implements {class_service} {
 
     }
 
+
+    @Transactional
+    public void updateStatus(List<{class_name}> paramList) {
+        if(CollectionUtil.isEmpty(paramList)){
+            throw  new GlobalErrorInfoException(GlobalErrorInfoEnum.CRMX_UI_400102);
+        }
+        paramList.forEach(item->{
+            {class_name} before = dataMapper.selectById(item.getSerial_no());
+            {class_name} after=new {class_name}();
+            BeanUtil.copyProperties(before,after);
+            //更新复制后数据
+            BeanUtils.copyProperties(item, after, CrmxCommonUtil.getNullPropertyNames(item));
+            //记录变更日志
+            CRMX_share_data_logConfig config = CRMX_share_data_logConfig.build();
+            logService.addChangeLog(before,after,config);
+            dataMapper.updateById(after);
+        });
+    }
+
+
     @Transactional
     public void deleteData(List<{class_name}> params) {
         for({class_name} param:params){
@@ -88,6 +110,8 @@ public class {class_impl} implements {class_service} {
             logService.addLog(config);
         }
     }
+
+
     @Override
     @Transactional
     public void importData(File file, CIPRuntimeOperator operator) {
@@ -130,7 +154,7 @@ public class {class_impl} implements {class_service} {
             try {
                 excelReader.closeFile();//关闭文件(一定要确保文件的关闭，否则出错，在文件删除前)
             } catch (Exception e) {
-
+                 log.info("importData closeFile error", e);
             }
             boolean b = file.delete();//最后上传的文件要删除
             if (!b) {
@@ -138,7 +162,6 @@ public class {class_impl} implements {class_service} {
             }
         }
     }
-
 
 
 }

@@ -10,6 +10,12 @@ public interface {class_service} {
     void addData({class_name} param);
     void updateData({class_name} param);
     void deleteData(List<{class_name}> param);
-    void updateStatus(List<String> param);
+
+
+    void updateStatus(List<{class_name}> param);
+
+
     void importData(File file, CIPRuntimeOperator operator);
+
+
 }

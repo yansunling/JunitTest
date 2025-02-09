@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @Data
 @CJ_table(name = "{table_comment}")
@@ -20,6 +22,10 @@ public class {class_name} {
 
 
 
-
+    public static Map<String, String> getExcelTitle() {
+        Map<String, String> titleMap = new LinkedHashMap<>();
+{excel_title}
+        return titleMap;
+    }
 
 }

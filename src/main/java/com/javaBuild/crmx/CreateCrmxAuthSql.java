@@ -56,8 +56,12 @@ public class CreateCrmxAuthSql {
         for(String button:keySet){
             String childFunId=fun+"_"+button;
             ButtonType buttonType = map.get(button);
+            String action="/actions/"+fun+"/"+button+".do";
+            if(StringUtils.equals("enableData",button)||StringUtils.equals("enableData",button)){
+                action="/actions/"+fun+"/updateStatus.do";
+            }
             String sql="INSERT INTO `auth`.`auth_resource_fun_info`(`company_id`, `name_space_id`, `app_id`, `fun_id`, `fun_name`, `fun_desc`, `fun_type`, `fun_url`, `icon_id`, `target_type`, `remark`, `creator`, `create_time`, `op_user_id`, `update_time`, `creator_name`, `op_user_name`)" +
-                    " VALUES ('tlwl', '"+env+"', '"+sysId+"', '"+childFunId+"', '"+buttonType.getName()+"', '"+buttonType.getName()+"', 'B', '/actions/"+fun+"/"+button+".do', '"+buttonType.getIcon()+"', '', '', 'T1113', now(), 'T1113', now(), '', '');";
+                    " VALUES ('tlwl', '"+env+"', '"+sysId+"', '"+childFunId+"', '"+buttonType.getName()+"', '"+buttonType.getName()+"', 'B', '"+action+"', '"+buttonType.getIcon()+"', '', '', 'T1113', now(), 'T1113', now(), '', '');";
             System.out.println(sql);
             sql="INSERT INTO `auth`.`auth_resource_role2fun`(`root_fun_id`, `company_id`, `name_space_id`, `app_id`, `fun_id`, `sup_fun_id`, `fun_order`, `fun_level`, `remark`, `creator`, `create_time`, `op_user_id`, `update_time`, `creator_name`, `op_user_name`) " +
                     "VALUES ('default', 'tlwl', '"+env+"', '"+sysId+"', '"+childFunId+"', '"+funId+"', "+i+", 2,'', '', now(), '', now(), '', '');";

@@ -3,12 +3,26 @@ package com.javaBuild.po;
 
 import com.alibaba.fastjson.JSON;
 import com.yd.common.data.CIPResponseMsg;
+import com.yd.common.exception.CIPRuntimeException;
+import com.yd.common.runtime.CIPErrorCode;
+import com.yd.common.runtime.CIPRuntime;
+import com.yd.common.utils.CIPUtil;
 import com.yd.crmx.util.CrmxCommonUtil;
+import com.yd.utils.common.ExcelSheetParser;
+import com.yd.utils.common.StringUtils;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.File;
+import java.io.OutputStream;
+import java.net.URLDecoder;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -30,12 +44,23 @@ public class {class_controller} {
         dataService.updateData(param);
         return CrmxCommonUtil.success();
     }
+
+    @RequestMapping(value="/updateStatus")
+    public CIPResponseMsg updateStatus(@RequestBody List<{class_name}> param){
+        log.info("{table_name} updateStatus param:"+ JSON.toJSONString(param));
+        dataService.updateStatus(param);
+        return CrmxCommonUtil.success();
+    }
+
+
     @RequestMapping(value="/deleteData")
     public CIPResponseMsg deleteData(@RequestBody List<{class_name}> param){
         log.info("{table_name} deleteData param:"+ JSON.toJSONString(param));
         dataService.deleteData(param);
         return CrmxCommonUtil.success();
     }
+
+
     @RequestMapping(value="/importData")
     public CIPResponseMsg importData(HttpServletRequest request, HttpServletResponse response){
         CIPResponseMsg msg = new CIPResponseMsg();
@@ -63,5 +88,7 @@ public class {class_controller} {
             }
             return msg;
        }
+
+
 
 }
