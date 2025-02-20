@@ -5,12 +5,9 @@ import com.alibaba.druid.util.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.dy.components.foundation.comm.facade.exception.CIPErrorCode;
 import com.dy.components.foundation.comm.facade.exception.CIPRuntimeException;
-import com.dy.tmsp.ownCar.service.TmspOwnVehicleRepairService;
 import com.yd.common.data.CIPResponseMsg;
-import com.yd.tmsp.ownCar.util.OilCardUtil;
 import com.yd.common.utils.CIPUtil;
-import com.yd.tmsp.ownCar.oa.TmspOwnOaCommonData;
-import com.yd.tmsp.ownCar.po.TmspOwnVehicleRepairPO;
+import com.yd.tmsp.ownCar.util.OilCardUtil;
 import com.yd.utils.common.ExcelSheetParser;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
@@ -18,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -52,6 +48,7 @@ public class {class_controller} {
         dataService.deleteData(param);
         return OilCardUtil.success();
     }
+
     @RequestMapping(value = "/importData")
     public CIPResponseMsg importData(HttpServletRequest request,HttpServletResponse response){
         String templateName=request.getParameter("templateName");//下载模板的名字
@@ -78,4 +75,5 @@ public class {class_controller} {
         }
         return OilCardUtil.success();
     }
+
 }

@@ -4,33 +4,12 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.poi.excel.ExcelReader;
 import cn.hutool.poi.excel.ExcelUtil;
 import com.alibaba.fastjson.JSON;
-import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.dy.components.logs.api.logerror.GlobalErrorInfoException;
-import com.dy.tmsp.oaClaims.oaData.WorkFlowDtsResponseData;
-import com.dy.tmsp.oaClaims.util.WorkFlowUtil;
 import com.dy.tmsp.ownCar.log.TmspShareDataLogService;
 import com.dy.tmsp.ownCar.log.config.TmspShareDataLogConfig;
-import com.dy.tmsp.ownCar.service.TmspOaService;
-import com.dy.tmsp.ownCar.service.TmspOwnVehicleRepairService;
-import com.yd.tmsp.ownCar.util.OilCardUtil;
 import com.error.auto.GlobalErrorInfoEnum;
-import com.yd.bmsp.constants.FEE_ITEM;
-import com.yd.common.runtime.CIPRuntime;
-import com.yd.common.runtime.CIPRuntimeOperator;
-import com.yd.tmsp.TMSPConstant;
-import com.yd.tmsp.constants.IS_NOT;
-import com.yd.tmsp.constants.OA_TYPE;
-import com.yd.tmsp.constants.TMSP_OA_INSURANCE_STATUS;
-import com.yd.tmsp.ownCar.data.TmspEmpEntData;
-import com.yd.tmsp.ownCar.mapper.TmspOwnOaRecordMapper;
-import com.yd.tmsp.ownCar.mapper.TmspOwnVehicleRepairMapper;
-import com.yd.tmsp.ownCar.oa.*;
-import com.yd.tmsp.ownCar.po.TmspOwnOaRecordDetailPO;
-import com.yd.tmsp.ownCar.po.TmspOwnOaRecordPO;
-import com.yd.tmsp.ownCar.po.TmspOwnVehicleInsurancePO;
+import com.yd.tmsp.ownCar.util.OilCardUtil;
 import com.yd.tmsp.ownCar.validate.MyValidationUtil;
-import com.yd.utils.common.CollectionUtil;
-import com.yd.utils.common.DateUtils;
 import com.yd.utils.common.StringUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -39,8 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
-import java.sql.Timestamp;
-import java.util.*;
+import java.util.List;
+import java.util.Map;
 
 
 @Slf4j

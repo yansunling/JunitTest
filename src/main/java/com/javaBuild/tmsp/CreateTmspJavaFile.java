@@ -1,9 +1,8 @@
 package com.javaBuild.tmsp;
 
 
-import cn.hutool.core.collection.ListUtil;
 import com.google.common.collect.Lists;
-import com.javaBuild.po.ButtonType;
+import com.javaBuild.po.BuildConfig;
 import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -41,13 +40,11 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> tableNames = Arrays.asList("tmsp_send_order_turn");
+		Map<String, BuildConfig> tables=new HashMap<>();
+		tables.put("tmsp_send_order_turn1",new BuildConfig("","Y"));
+		Set<String> tableNames = tables.keySet();
         String sysId="tmsp";
 		String htmlGroup="";
-
-
-
-
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
@@ -70,6 +67,15 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 			String formHtml=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateForm.html"));
 			String formJs=FileUtil.readAsString(new File(filePath+"java/tmsp/TemplateForm.js"));
 			String mapperXml=FileUtil.readAsString(new File(filePath+ "java/tmsp/TemplateMapper.xml"));
+			//删除导入
+			BuildConfig buildConfig=tables.get(tableName);
+			//导入
+			if(buildConfig!=null&&!StringUtils.equals(buildConfig.getImportColumn(),"Y")){
+				jsContent=removeImport(jsContent);
+				controllerContent=removeImport(controllerContent);
+				serviceContent=removeImport(serviceContent);
+				implContent=removeImport(implContent);
+			}
 			List<ColumnData> columnDataList=new ArrayList<>();
 			List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time",
                     "version","op_user_id","creator","serial_no","oa_flag","oa_apply_user_id","oa_apply_time","loan_process_number","repayment_process_number",
@@ -90,6 +96,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 					"and tb.table_name in( '"+tableName+"');";
             List<Map<String, Object>> mapList = jdbcTemplate.queryForList(sql);
 			StringBuffer sb=new StringBuffer();
+
 			mapList.forEach(map->{
 				sb.append(map.get("filed")+"\n\n\n");
 				String columnId=map.get("column_name")+"";
@@ -150,6 +157,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 			//生成PO
 			String className=prexName+"PO";
 			String newContent=content.replaceAll("\\{content\\}",sb.toString())
+					.replaceAll("\\{title\\}",dataTitle.toString())
 					.replaceAll("\\{table_comment\\}",tableComment)
 					.replaceAll("\\{table_name\\}",tableName)
 					.replaceAll("\\{class_name\\}",className);
@@ -298,7 +306,37 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 		}
     }
 
+	private String removeImport(String content){
+		boolean inParagraph = false;
+		boolean deleteCurrentParagraph = false;
+		StringBuilder currentParagraph = new StringBuilder();
+		String[] contentList = content.split(System.lineSeparator());
+		List<String> newContentList=new ArrayList<>();
+		for(String line:contentList) {
+			if (line.trim().isEmpty()) { // 空行表示段落结束
+				if (!deleteCurrentParagraph) {
+					newContentList.add(currentParagraph.toString());
+				}
+				// 重置段落状态
+				currentParagraph.setLength(0);
+				deleteCurrentParagraph = false;
+				inParagraph = false;
+			} else {
+				inParagraph = true;
+				currentParagraph.append(line).append(System.lineSeparator());
 
+				if (line.contains("importData")) {
+					deleteCurrentParagraph = true;
+				}
+			}
+		}
+
+		// 处理文件末尾的段落
+		if (inParagraph && !deleteCurrentParagraph) {
+			newContentList.add(currentParagraph.toString());
+		}
+		return StringUtils.join(System.lineSeparator(),newContentList.toArray());
+	}
 
 
 

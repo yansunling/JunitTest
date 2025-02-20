@@ -119,7 +119,6 @@ public class CreateJavaFile implements ApplicationContextAware{
 			StringBuffer excelTitle=new StringBuffer();
 			mapList.forEach(map->{
 				sb.append(map.get("filed")+"\n\n\n");
-				excelTitle.append("        titleMap.put(\""+map.get("column_name")+"\", \""+map.get("column_comment")+"\");\n");
                 String columnId=map.get("column_name")+"";
                 if(StringUtils.equalsIgnoreCase("remark",columnId)){
                     remarkTd.append("\t\t\t<tr>\n" +
@@ -135,6 +134,7 @@ public class CreateJavaFile implements ApplicationContextAware{
                 }
                 if(!exceptColumns.contains(columnId)){
                     columnDataList.add(new ColumnData(columnId,map.get("column_comment")+"",map.get("data_type")+""));
+					excelTitle.append("        titleMap.put(\""+map.get("column_name")+"\", \""+map.get("column_comment")+"\");\n");
                 }
 
 			});
