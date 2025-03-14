@@ -45,7 +45,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 	public  void test() throws Exception {
 
         Map<String,BuildConfig> tables=new HashMap<>();
-		tables.put("crm_base_customer_delivery_config1",new BuildConfig("","Y"));
+		tables.put("crm_satisfaction_survey",new BuildConfig("","N"));
 
 		Set<String> tableNames = tables.keySet();
 

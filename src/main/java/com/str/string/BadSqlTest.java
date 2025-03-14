@@ -1,26 +1,47 @@
 package com.str.string;
 
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.json.JSONUtil;
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
+import com.yd.common.runtime.CIPRuntimeOperator;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class BadSqlTest {
 
 
     public static void main(String[] args) {
-      /*  boolean or = sqlValidate("test orage");
-        System.out.println(or);*/
+        CIPRuntimeOperator user=new CIPRuntimeOperator();
+        user.setSubject_id("11");
+        CIPRuntimeOperator user1=new CIPRuntimeOperator();
+        user1.setSubject_id("11");
+
+        List<CIPRuntimeOperator> list=new ArrayList<>();
+        list.add(user);
+        list.add(user1);
+
+        Map<String, CIPRuntimeOperator> collect = list.stream().filter(i -> StrUtil.isNotEmpty(i.getSubject_id()))
+                .collect(Collectors.toMap(CIPRuntimeOperator::getSubject_id, Function.identity(),(newValue,OldValue)->newValue));
+
+        Map<String, CIPRuntimeOperator> collect1 = list.stream().filter(i -> StrUtil.isNotEmpty(i.getSubject_id()))
+                .collect(Collectors.groupingBy(CIPRuntimeOperator::getSubject_id,Collectors.reducing(
+                        null,
+                        Function.identity(),
+                        (existing, replacement) -> existing // 保留第一个值
+                )));
 
 
-        Map<String,String> head = Maps.newHashMap();
-        head.put("user_id","T1113");
+        System.out.println(JSON.toJSONString(collect));
 
-        head.put("user_name","颜孙令");
 
-        System.out.println(URLUtil.encode(JSONUtil.toJsonStr(head)));
     }
 
 
