@@ -1,24 +1,22 @@
 package com.str.json;
 
-import com.alibaba.fastjson.JSON;
-import com.yd.utils.common.DateUtils;
 import com.yd.utils.common.StringUtils;
 import org.aspectj.util.FileUtil;
 
 import java.io.File;
-import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class JsonTest {
 	public static void main(String[] args) throws Exception{
 		String filePath = "C:\\Users\\yansunling\\Desktop/1.json";
 		String json = FileUtil.readAsString(new File(filePath));
-
-		List<Map> maps = JSON.parseArray(json, Map.class);
-		StringBuffer sb=new StringBuffer();
+        List<Map<String, String>> maps = getMap(json);
+        StringBuffer sb=new StringBuffer();
 		List<String> list=new ArrayList<>();
         List<String> sqlList=new ArrayList<>();
 		maps.forEach(temp->{
@@ -36,7 +34,7 @@ public class JsonTest {
 //                System.out.println(field);
 //            }
 
-            System.out.println("titleMap.put( \""+field+"\", \""+name+"\");");
+            System.out.println("titleMap.put(\""+field+"\",\""+name+"\");");
 
 
 		});
@@ -44,6 +42,23 @@ public class JsonTest {
 
 //        System.out.println(StringUtils.join("','",list.toArray()));
 
-
 	}
+	public static List<Map<String,String>> getMap(String json){
+        Pattern pattern = Pattern.compile("\\{([^}]*)\\}");
+        Matcher matcher = pattern.matcher(json);
+        List<Map<String,String>> list=new ArrayList<>();
+        while  (matcher.find()) {
+            String objStr = matcher.group(1);
+            String[] strs = objStr.split(",");
+            Map<String,String> map=new HashMap<>();
+            for(String str:strs){
+                String[] temps = str.split(":");
+                map.put(temps[0].replaceAll("'",""),temps[1].replaceAll("'",""));
+            }
+            list.add(map);
+        }
+        return list;
+    }
+
+
 }
