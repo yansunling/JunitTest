@@ -1,6 +1,9 @@
 package com.javaBuild.tmsp;
 
+import com.alibaba.fastjson.JSON;
 import com.excel.CJExcelUtil;
+import com.google.common.collect.Lists;
+import com.google.gson.JsonObject;
 import com.yd.utils.common.ExcelReader;
 import com.yd.utils.common.StringUtils;
 import lombok.Data;
@@ -12,7 +15,7 @@ public class CreateSqlByExcel {
     public static void main(String[] args) throws Exception{
 
 
-        String filePath="C:\\Users\\yansunling\\Desktop\\品质差错.xlsx";
+        String filePath="C:\\Users\\yansunling\\Desktop\\2.xlsx";
         File file=new File(filePath);
 
         ExcelReader excelReader = new ExcelReader(file);
@@ -24,8 +27,13 @@ public class CreateSqlByExcel {
         for(int i=0;i<importDataList.size();i++){
             ExcelData item = importDataList.get(i);
             if(StringUtils.isBlank(item.main_code)&& StringUtils.isNotBlank(item.getChild_code())){
-                ExcelData beforeData = importDataList.get(i - 1);
-                item.setMain_code(beforeData.getMain_code());
+                for(int j=i;j>=0;j--){
+                    ExcelData beforeData = importDataList.get(j - 1);
+                    if(StringUtils.isNotBlank(beforeData.getMain_code())){
+                        item.setMain_code(beforeData.getMain_code());
+                        break;
+                    }
+                }
             }
             if(StringUtils.isNotBlank(item.getMain_code())&&StringUtils.isNotBlank(item.getChild_code())){
                 List<String> children = mapRef.get(item.getMain_code());
@@ -37,15 +45,20 @@ public class CreateSqlByExcel {
             }
 
         }
-
-
         Set<String> keySet = mapRef.keySet();
+
+        ArrayList<String> list = Lists.newArrayList("事故处理", "系统备案", "违规操作", "工作失误", "工作配合");
+
         Integer start=1;
         for(String key:keySet){
-            String mainCode = StringUtils.apppendPre(start + "", 2, '0');
+            String mainCode = "e"+StringUtils.apppendPre(start + "", 2, '0');
+            String parentCode="e1";
+            if(list.contains(key)){
+                parentCode="e2";
+            }
             String sql="INSERT INTO mdm.mdm_ddic_ddic_codes(sys_id,domain_id, code_type, code_name,code_value,code_order,remark, create_time, update_time, op_user_id,creator) VALUES " +
-                    "('tmsp','error_type', '"+mainCode+"', '"+key+"','"+mainCode+"',"+start+",'', now(), now(), 'T1113','T1113');";
-            System.out.println(sql);
+                    "('tmsp','error_type', '"+mainCode+"', '"+key+"','"+parentCode+"',"+start+",'', now(), now(), 'T1113','T1113');";
+//            System.out.println(sql);
             Integer childStart=1;
             List<String> childSet = mapRef.get(key);
 
@@ -57,23 +70,9 @@ public class CreateSqlByExcel {
                childStart++;
            }
             start++;
-//            System.out.println("\n\n");
         }
 
 
-
-
-        /*String data="采购、租赁、自建、受捐、受赠";
-        String domainId="asset_source";
-       String[] clazzList=data.split("、");
-        StringBuffer sql=new StringBuffer();
-       for(int i=0;i<clazzList.length;i++){
-           String value = clazzList[i];
-           String key=String.valueOf(i+1);
-           sql.append("INSERT INTO cip_admin_codes(domain_id, code_type, code_name, create_time, update_time, operator) VALUES" +
-                   " ('"+domainId+"', '"+key+"', '"+value+"', now(), now(), 'T1113');\n");
-       }
-        System.out.println(sql.toString());*/
     }
 
     public static Map<String,String> titleMap=new LinkedHashMap<String,String>();

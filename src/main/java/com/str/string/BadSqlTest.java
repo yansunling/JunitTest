@@ -19,27 +19,22 @@ public class BadSqlTest {
 
 
     public static void main(String[] args) {
-        CIPRuntimeOperator user=new CIPRuntimeOperator();
-        user.setSubject_id("11");
-        CIPRuntimeOperator user1=new CIPRuntimeOperator();
-        user1.setSubject_id("11");
-
-        List<CIPRuntimeOperator> list=new ArrayList<>();
-        list.add(user);
-        list.add(user1);
-
-        Map<String, CIPRuntimeOperator> collect = list.stream().filter(i -> StrUtil.isNotEmpty(i.getSubject_id()))
-                .collect(Collectors.toMap(CIPRuntimeOperator::getSubject_id, Function.identity(),(newValue,OldValue)->newValue));
-
-        Map<String, CIPRuntimeOperator> collect1 = list.stream().filter(i -> StrUtil.isNotEmpty(i.getSubject_id()))
-                .collect(Collectors.groupingBy(CIPRuntimeOperator::getSubject_id,Collectors.reducing(
-                        null,
-                        Function.identity(),
-                        (existing, replacement) -> existing // 保留第一个值
-                )));
-
-
-        System.out.println(JSON.toJSONString(collect));
+        StringBuffer querySql = new StringBuffer().append("SELECT\n" +
+                "\tmain.role_plus_id, main.role_plus_name, main.company_id, main.name_space_id \n" +
+                "FROM\n" +
+                "\tauth_resource_role_plus main\n" +
+                "\tLEFT JOIN auth_resource_role_2_plus r2p ON main.company_id = r2p.company_id \n" +
+                "\tAND main.name_space_id = r2p.name_space_id \n" +
+                "\tAND main.role_plus_id = r2p.role_plus_id\n" +
+                "\tLEFT JOIN auth_resource_role r ON r2p.company_id = r.company_id \n" +
+                "\tAND r2p.name_space_id = r.name_space_id \n" +
+                "\tAND r2p.app_id = r.app_id \n" +
+                "\tAND r2p.role_id = r.role_id\n" +
+                "\tLEFT JOIN auth_resource_role2fun r2f ON r.company_id = r2f.company_id \n" +
+                "\tAND r.name_space_id = r2f.name_space_id \n" +
+                "\tAND r.app_id = r2f.app_id \n" +
+                "\tAND r.root_node_id = r2f.root_fun_id AND r2f.app_id = ? AND r2f.fun_id = ? ");
+        System.out.println(querySql);
 
 
     }

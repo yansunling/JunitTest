@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>HTML 转图片</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+<div id="content">
+    <h1>这是一个示例页面</h1>
+    <p>这是要转换为图片的内容。</p>
+</div>
+<button onclick="convertToImage()">转换为图片</button>
+<div id="image-container"></div>
+
+<script>
+    function convertToImage() {
+        const element = document.getElementById('content');
+        html2canvas(element).then(canvas => {
+            const image = canvas.toDataURL('image/png');
+            const imgElement = document.createElement('img');
+            imgElement.src = image;
+            document.getElementById('content').replaceWith(imgElement);
+        });
+    }
+    convertToImage();
+</script>
+</body>
+</html>
