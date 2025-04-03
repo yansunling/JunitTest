@@ -13,7 +13,8 @@ public class ScreenImg {
 
     public static void main(String[] args) {
         guge("https://kp.tuolong56.com/query/ui/out/query_request_log_detail.html?id=e467e2228af140ac801b3c773d0682f1");
-//        guge("https://registry.npmmirror.com/binary.html?path=chrome-for-testing/");
+        //驱动下载地址
+        //        guge("https://registry.npmmirror.com/binary.html?path=chrome-for-testing/");
     }
 
     //解决如下： 模拟浏览器滚动滚动条 解决懒加载问题
