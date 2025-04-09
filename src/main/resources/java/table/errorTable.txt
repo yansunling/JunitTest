@@ -157,3 +157,5 @@ tmsp.tmsp_order_items
 hcm.hcm_org_info_bk
 tmsp.tmsp_stock_all_user_rel
 tmsp.tmsp_stock_io_items_detail
+_tmsp_stock_info_new
+__tmsp_stock_info_new

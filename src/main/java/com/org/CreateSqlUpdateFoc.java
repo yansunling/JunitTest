@@ -58,8 +58,8 @@ public class CreateSqlUpdateFoc implements ApplicationContextAware {
 
 
         Map<String, String> condition = new HashMap<>();
-        condition.put("tmsp.foc_plugins_review_report", " and report_time>'2024-05-01'");
-        condition.put("tmsp.foc_plugins_review_log", " and create_time>'2024-05-01'");
+        condition.put("tmsp.foc_plugins_review_report", " and report_time>DATE_SUB(curdate(),interval 3 month)");
+        condition.put("tmsp.foc_plugins_review_log", " and create_time>DATE_SUB(curdate(),interval 3 month)");
         Set<String> allTotalSet = new LinkedHashSet<>();
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         Set<String> totalSet = new LinkedHashSet<>();

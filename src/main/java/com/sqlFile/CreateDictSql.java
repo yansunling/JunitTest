@@ -9,11 +9,11 @@ import java.util.Map;
 
 public class CreateDictSql {
     public static void main(String[] args) {
-        String name="直达车类、运费类、中转类、配送类、送货费类、卸货费类、转货类、返货类、坏账类";
+        String name="出库未推送、出库晚推送、司机未签收";
         String[] list = name.split("、");
         StringBuffer sb=new StringBuffer();
         StringBuffer sql=new StringBuffer();
-        String domainId="contact_class";
+        String domainId="pc_reason";
 
         List<Map<String,String>> codes=new ArrayList<>();
 
