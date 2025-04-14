@@ -1,6 +1,7 @@
-package com.org.old;
+package com.org;
 
 
+import cn.hutool.core.collection.CollUtil;
 import com.org.data.OrgData;
 import com.org.util.SwitchUtil;
 import com.yd.utils.common.CollectionUtil;
@@ -56,26 +57,13 @@ public class CreateSwitchOrgFixMdmSql implements ApplicationContextAware {
         List<OrgData> newOrgDataList = new ArrayList<>();
         newOrgDataList.add(orgDataList.get(0));
         String filePath = getClass().getClassLoader().getResource("").getPath();
-        List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/mdm.tab"), "utf-8");
+        List<String> tableFiles = FileUtils.readLines(new File(filePath + "java/table/mdm/mdm.tab"), "utf-8");
 
 
-        Map<String,Map<String,String>> defaultSqlMap=new HashMap<>();
-        Map<String,String> map= new HashMap<>();
-        map.put("start_org_id","update tmsp.tmsp_hand_schedule_car set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID单个>');");
-        map.put("end_org_id","update tmsp.tmsp_hand_schedule_car set end_org_id = '<新机构ID>' where end_org_id in('<老机构ID单个>');");
-        map.put("route_way_id","update tmsp.tmsp_hand_schedule_car set route_way_id = REPLACE(route_way_id,'<替换老机构ID集合>','<新机构ID>') where route_way_id regexp '<老机构ID集合>' ;");
-        map.put("route_way","update tmsp.tmsp_hand_schedule_car set route_way=REPLACE(route_way,'<替换老机构名称集合>','<新机构名称>') where route_way_id regexp '<老机构ID集合>' ;");
-        defaultSqlMap.put("tmsp.tmsp_hand_schedule_car",map);
+        List<String> totalSetAll=new ArrayList<>();
 
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         for(String table:tableFiles){
-            Map<String,String> sqlListTemp = defaultSqlMap.get(table);
-            if(CollectionUtil.isEmpty(sqlListTemp)){
-                sqlListTemp = buildBaseSql(table);
-            }
-            Map<String,String> sqlList=new HashMap<>();
-            sqlList.putAll(sqlListTemp);
-            if(CollectionUtil.isNotEmpty(sqlList)){
                 Set<String> totalSet=new LinkedHashSet<>();
                 CountDownLatch countDownLatch = new CountDownLatch(orgDataList.size());
                 for (OrgData orgData : orgDataList) {
@@ -85,20 +73,11 @@ public class CreateSwitchOrgFixMdmSql implements ApplicationContextAware {
                             try {
                                 String title = orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切为" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]";
                                 Set<String> newSqlList=new LinkedHashSet<>();
-
-
-                                sqlList.forEach((column,item)->{
-                                    String sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgId().replaceAll("','","|")+" limit 1";
-                                    List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
-
-                                    sql="select 1 as value from "+table+" where "+column+" regexp "+orgData.getOldOrgName().replaceAll("','","|")+" limit 1";
-                                    List<Map<String, Object>> resultName = jdbcTemplate.queryForList(sql);
-
-                                    if(CollectionUtil.isNotEmpty(result)||CollectionUtil.isNotEmpty(resultName)){
-                                        String newItem = SwitchUtil.replaceName(item, orgData);
-                                        if(StringUtils.isNotBlank(newItem)){
-                                            newSqlList.add(newItem);
-                                        }
+                                List<String> sqlList = buildBaseSql(table, orgData);
+                                sqlList.forEach(item->{
+                                    String newItem = SwitchUtil.replaceName(item, orgData);
+                                    if(StringUtils.isNotBlank(newItem)){
+                                        newSqlList.add(newItem);
                                     }
                                 });
                                 if(CollectionUtil.isNotEmpty(newSqlList)){
@@ -106,10 +85,7 @@ public class CreateSwitchOrgFixMdmSql implements ApplicationContextAware {
                                     titleList.add("\n\n--   "+title+"\n\n");
                                     titleList.addAll(newSqlList);
                                     totalSet.addAll(titleList);
-
                                 }
-
-
                             } catch (Exception e) {
                                 e.printStackTrace();
 
@@ -124,34 +100,38 @@ public class CreateSwitchOrgFixMdmSql implements ApplicationContextAware {
                 String[] tables = table.split("\\.");
                 File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\mdm\\" +  tables[1] + ".sql");
                 FileUtils.writeLines(allFile, "utf-8", totalSet);
+                totalSetAll.addAll(totalSet);
             }
-        }
-
+        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\mdm\\mdm.sql");
+        FileUtils.writeLines(allFile, "utf-8", totalSetAll);
 
 
     }
 
     @SneakyThrows
-    public Map<String,String> buildBaseSql(String newTable) {
-        String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";
-        List<Map<String, Object>> maps = jdbcTemplate.queryForList(orgSql);
-        List<String> orgList = new ArrayList<>();
-        List<String> orgNameList = new ArrayList<>();
-        maps.forEach(item -> {
-            orgList.add(item.get("org_id") + "");
-            orgNameList.add(item.get("org_name") + "");
-        });
-        Map<String,String> sqlList = new HashMap();
+    public List<String> buildBaseSql(String newTable,OrgData orgData) {
+
+        List<String> sqlList = new ArrayList<>();
         String[] tables = newTable.split("\\.");
         String table = tables[1];
         try {
+            String filePath = getClass().getClassLoader().getResource("").getPath();
+            List<String> odlSqlList = FileUtils.readLines(new File(filePath + "java/table/mdm/mdm_template.sql"), "utf-8");
+            odlSqlList.forEach(item -> {
+                if (item.indexOf(" " + newTable + " ") >= 0) {
+                    sqlList.add(item);
+                }
+            });
+            if(CollUtil.isNotEmpty(sqlList)){
+                return sqlList;
+            }
             String columnsSql = "select column_name from  information_schema.COLUMNS where table_name='" + table + "' " +
                     "and column_name not in('serial_no','create_user_id','update_user_id','remark','salesman_id','price_remark') and data_type not in('decimal','datetime','date','int') ";
             List<String> columnList = jdbcTemplate.queryForList(columnsSql, String.class);
             if (CollectionUtil.isNotEmpty(columnList)) {
 
                 columnList.forEach(column -> {
-                    String dataSql = "select `" + column + "` from " + newTable + " where  length(`" + column + "`)>=4   limit 1";
+                    String dataSql = "select `" + column + "` from " + newTable + " where  `" + column + "` in("+orgData.getOldOrgId()+","+orgData.getOldOrgName()+")   limit 1";
                     List<String> valueList = jdbcTemplate.queryForList(dataSql, String.class);
                     if (CollectionUtil.isEmpty(valueList)) {
                         return;
@@ -169,11 +149,11 @@ public class CreateSwitchOrgFixMdmSql implements ApplicationContextAware {
                     if (SwitchUtil.containsChinese(column)) {
                         column = "`" + column + "`";
                     }
-                    if (orgList.contains(newValue)) {
-                        sqlList.put(column,SwitchUtil.matchColumn(column, newTable, "ID", concat));
+                    if (!SwitchUtil.containsChinese(newValue)) {
+                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "ID", concat));
 
-                    } else if (orgNameList.contains(newValue)) {
-                        sqlList.put(column,SwitchUtil.matchColumn(column, newTable, "名称", concat));
+                    } else {
+                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "名称", concat));
                     }
 
                 });
