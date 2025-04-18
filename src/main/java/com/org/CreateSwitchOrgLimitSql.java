@@ -56,6 +56,8 @@ public class CreateSwitchOrgLimitSql implements ApplicationContextAware {
         //排除基础表
         Set<String> sqlTotalList = new LinkedHashSet<>();
         Map<String, List<String>> schemaMap = new HashMap<>();
+        Map<String, List<String>> schemaMapAll = new HashMap<>();
+
         List<String> notSchema=new ArrayList<>();
         for (OrgData orgData : orgDataList) {
             List<String> newSqlList = new ArrayList<>();
@@ -70,13 +72,18 @@ public class CreateSwitchOrgLimitSql implements ApplicationContextAware {
                     boolean addFlag=true;
                     for(String key:keySet){
                         if(newItem.indexOf(" "+key+".")>0){
-                            List<String> list = schemaMap.get(key);
+                            List<String> list = schemaMapAll.get(key);
+                            if(list==null){
+                                list=new ArrayList<>();
+                            }
+
                             String title="\n\n-- "+newFileName+"  \n\n";
                             if(!list.contains(title)){
                                 list.add(title);
                             }
                             list.add(newItem);
                             addFlag=false;
+                            schemaMapAll.put(key,list);
                             break;
                         }
                     }
@@ -97,14 +104,14 @@ public class CreateSwitchOrgLimitSql implements ApplicationContextAware {
         }
 
 
-        schemaMap.forEach((key,list)->{
+        schemaMapAll.forEach((key,list)->{
             try {
                 if(CollectionUtil.isNotEmpty(list)){
 
                     Set<String> set=new LinkedHashSet<>();
                     set.addAll(list);
-                    File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"+key+".sql");
-//                    FileUtils.writeLines(schemaFile,"utf-8",set);
+                    File schemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\schema\\"+key+".sql");
+                    FileUtils.writeLines(schemaFile,"utf-8",set);
 
                     sqlTotalList.addAll(set);
                 }
@@ -117,7 +124,7 @@ public class CreateSwitchOrgLimitSql implements ApplicationContextAware {
         FileUtils.writeLines(allFile,"utf-8",sqlTotalList);
 
 
-        File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\notSchema.sql");
+        File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\schema\\notSchema.sql");
         FileUtils.writeLines(notSchemaFile,"utf-8",notSchema);
     }
 
