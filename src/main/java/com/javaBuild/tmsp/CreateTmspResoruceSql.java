@@ -10,13 +10,13 @@ import java.util.Set;
 public class CreateTmspResoruceSql {
     public static void main(String[] args) {
 
-        String fun="tmsp_except_wx_config";
+        String fun="tmsp_print_replenish_approve";
         String parentId=fun+"_list";
 
-        String supParent="excep";
-        String parentName=" 异常实时推送维护";
-        String model="excep";
-        int num=1430;
+        String supParent="signin";
+        String parentName=" 到达联补打审批";
+        String model="print";
+        int num=220;
 
         String listSql="INSERT INTO `tmsp`.`foc_plugins_auth_resource`(`resource_id`, `resource_name`, `resource_desc`, `sys_uri`, `resource_type`, `create_time`, `update_time`, `operator`, `icon_id`)" +
                 " VALUES ('"+parentId+"', '"+parentName+"', '', 'ui/view/"+model+"/"+parentId+".html', 'A', now(), now(), 'T1113', '');";
@@ -32,23 +32,23 @@ public class CreateTmspResoruceSql {
 //          map.put("addData",new ButtonType("icon-add","申请"));
 //          map.put("updateData",new ButtonType("icon-cancel","作废"));
 //          map.put("getData",new ButtonType("icon-get","查看"));
-        map.put("addData",new ButtonType("icon-add","新增"));
-        map.put("updateData",new ButtonType("icon-edit","修改"));
-
-        map.put("enableData",new ButtonType("icon-ok","启用","updateData"));
-        map.put("disableData",new ButtonType("icon-cancel","禁用","updateData"));
-        map.put("deleteData",new ButtonType("icon-remove","删除"));
+//        map.put("addData",new ButtonType("icon-add","新增补打申请"));
+//        map.put("updateData",new ButtonType("icon-edit","修改"));
+//          map.put("printData",new ButtonType("icon-print","补打"));
+//        map.put("enableData",new ButtonType("icon-ok","启用","updateData"));
+//        map.put("disableData",new ButtonType("icon-cancel","禁用","updateData"));
+//        map.put("deleteData",new ButtonType("icon-remove","删除"));
 //        map.put("applyViolation",new ButtonType("icon-add","事故上报"));
 //        map.put("completeData",new ButtonType("icon-ok","事故完结"));
 //        map.put("applyData",new ButtonType("icon-add","借支"));
 //        map.put("repayData",new ButtonType("icon-redo","还借支"));
 //        map.put("payData",new ButtonType("icon-edit","申请付款"));
-        map.put("importData",new ButtonType("icon-upload","导入"));
+//        map.put("importData",new ButtonType("icon-upload","导入"));
 
-//        map.put("passData",new ButtonType("icon-ok","批准"));
-//        map.put("rejectData",new ButtonType("icon-cancel","退回"));
+        map.put("passData",new ButtonType("icon-ok","批准"));
+        map.put("rejectData",new ButtonType("icon-cancel","退回"));
 
-        map.put("exportData",new ButtonType("icon-download","导出"));
+//        map.put("exportData",new ButtonType("icon-download","导出"));
 //        map.put("scrapData",new ButtonType("icon-cut","报废"));
 
         Set<String> keySet = map.keySet();

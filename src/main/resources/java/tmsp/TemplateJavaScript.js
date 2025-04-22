@@ -45,11 +45,6 @@ var bda_data_str_field = {
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
 			return;
 		}
-		let oaStatus=selectRows[0].oa_status;
-		if(oaStatus!='待申请'){
-			$$.showJcdfMessager('提示消息',  "当前OA流程状态不为待申请，无法进行修改！", 'info');
-			return;
-		}
 		let formUrl='ui/view/{html_group}/{js_name}_form.html?actionId={js_name}_form';
 		let techParam = {
 			appId: appId,
@@ -71,14 +66,15 @@ var bda_data_str_field = {
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
 			return;
 		}
-		let oaStatus=selectRows[0].oa_status;
-		if(oaStatus!='待申请'){
-			$$.showJcdfMessager('提示消息',  "当前OA流程状态不为待申请，无法进行修改！", 'info');
+
+		let statusName=selectRows[0].{status_column};
+		if(statusName!='禁用'){
+			$$.showJcdfMessager('提示消息',  "当前状态不为禁用，无法删除！", 'info');
 			return;
 		}
+
 		let title = "确认";
 		let msg = "确定删除所选记录?";
-
 		$.messager.confirm(title, msg, function (r) {
 			if (r) {
 				$$.openProcessingDialog();
@@ -101,20 +97,20 @@ var bda_data_str_field = {
 			}
 		});
 	},
+
 	{js_name}_enableData: function (buttonId,actionUrl){
 		let selectRows = $("#"+metaData.listTemplate).datagrid('getChecked');
 		if(selectRows.length==0){
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
 			return;
 		}
-		let usageStatusName = selectRows[0].usage_status_name;
-		if(usageStatusName!='禁用'){
+		let statusName = selectRows[0].{status_column};
+		if(statusName!='禁用'){
 			$$.showJcdfMessager('提示消息',  "当前使用状态不为禁用，无法进行启用操作！", 'info');
 			return;
 		}
 		let title = "确认";
 		let msg = "确定启用所选记录?";
-
 		$.messager.confirm(title, msg, function (r) {
 			if (r) {
 				$$.openProcessingDialog();
@@ -122,7 +118,7 @@ var bda_data_str_field = {
 					type: "POST",
 					url: actionUrl + "?actionId=" + buttonId,
 					dataType: "json",
-					data: JSON.stringify({"serial_no":selectRows[0].serial_no,"usage_status":"1"}),
+					data: JSON.stringify({"serial_no":selectRows[0].serial_no,"{status_column}":"1"}),
 					contentType: "application/json",
 					success: function (data) {
 						$$.closeProcessingDialog();
@@ -144,8 +140,8 @@ var bda_data_str_field = {
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
 			return;
 		}
-		let usageStatusName = selectRows[0].usage_status_name;
-		if(usageStatusName!='启用'){
+		let statusName = selectRows[0].statusName;
+		if(statusName!='启用'){
 			$$.showJcdfMessager('提示消息',  "当前使用状态不为启用，无法进行禁用操作！", 'info');
 			return;
 		}
@@ -158,7 +154,7 @@ var bda_data_str_field = {
 					type: "POST",
 					url: actionUrl + "?actionId=" + buttonId,
 					dataType: "json",
-					data: JSON.stringify({"serial_no":selectRows[0].serial_no,"usage_status":"2"}),
+					data: JSON.stringify({"serial_no":selectRows[0].serial_no,"{status_column}":"2"}),
 					contentType: "application/json",
 					success: function (data) {
 						$$.closeProcessingDialog();
@@ -174,11 +170,11 @@ var bda_data_str_field = {
 			}
 		});
 	},
+
 	{js_name}_importData: function (buttonId, actionUrl) {
 		var form = {};
 		form.formId = "cip_import_form";
 		form.formUrl = "ui/view/public/cip_import_form.html?actionId=cip_import_form";
-
 		var techParam = {
 			appId: appId,
 			srcPageId: metaData.objectId,

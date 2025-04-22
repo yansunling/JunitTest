@@ -24,6 +24,6 @@ public class {class_name} extends Model<{class_name}> {
         Map<String, String> titleMap = new LinkedHashMap<>();
 {title}
         return titleMap;
-
     }
+
 }

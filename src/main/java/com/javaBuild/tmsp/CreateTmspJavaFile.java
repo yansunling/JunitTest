@@ -41,7 +41,8 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 	@Test
 	public  void test() throws Exception {
 		Map<String, BuildConfig> tables=new HashMap<>();
-		tables.put("tmsp_send_order_turn1",new BuildConfig("","Y"));
+		tables.put("tmsp_hand_box_record",new BuildConfig("",""));
+		tables.put("tmsp_hand_box_record_detail",new BuildConfig("",""));
 		Set<String> tableNames = tables.keySet();
         String sysId="tmsp";
 		String htmlGroup="";
@@ -71,11 +72,22 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 			BuildConfig buildConfig=tables.get(tableName);
 			//导入
 			if(buildConfig!=null&&!StringUtils.equals(buildConfig.getImportColumn(),"Y")){
-				jsContent=removeImport(jsContent);
-				controllerContent=removeImport(controllerContent);
-				serviceContent=removeImport(serviceContent);
-				implContent=removeImport(implContent);
+				jsContent=removeImport(jsContent,"importData");
+				controllerContent=removeImport(controllerContent,"importData");
+				serviceContent=removeImport(serviceContent,"importData");
+				implContent=removeImport(implContent,"importData");
+				content=removeImport(content,"importData","getExcelTitle");
+				dataContent=removeImport(dataContent,"importData","getExcelTitle");
 			}
+			if(StringUtils.isBlank(buildConfig.getStatusColumn())){
+				jsContent=removeImport(jsContent,"status_column","enableData","disableData");
+			}else{
+				jsContent=jsContent.replaceAll("\\{status_column\\}",buildConfig.getStatusColumn());
+			}
+
+
+
+
 			List<ColumnData> columnDataList=new ArrayList<>();
 			List<String> exceptColumns = Arrays.asList("update_user_id","update_time","create_user_id","create_time",
                     "version","op_user_id","creator","serial_no","oa_flag","oa_apply_user_id","oa_apply_time","loan_process_number","repayment_process_number",
@@ -306,7 +318,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 		}
     }
 
-	private String removeImport(String content){
+	private String removeImport(String content,String... keyWords){
 		boolean inParagraph = false;
 		boolean deleteCurrentParagraph = false;
 		StringBuilder currentParagraph = new StringBuilder();
@@ -325,9 +337,14 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 				inParagraph = true;
 				currentParagraph.append(line).append(System.lineSeparator());
 
-				if (line.contains("importData")) {
-					deleteCurrentParagraph = true;
+				for(String keyword:keyWords){
+					if (line.contains(keyword)||line.contains(keyword)) {
+						deleteCurrentParagraph = true;
+					}
 				}
+
+
+
 			}
 		}
 

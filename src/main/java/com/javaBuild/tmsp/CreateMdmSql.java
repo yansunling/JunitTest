@@ -2,22 +2,15 @@ package com.javaBuild.tmsp;
 
 public class CreateMdmSql {
     public static void main(String[] args) {
-        String name="事故处理,系统备案,违规操作,工作失误,工作配合";
+        String name="待审批,审批通过,审批退回";
         String[] list = name.split(",");
         StringBuffer sb=new StringBuffer();
         StringBuffer sql=new StringBuffer();
-        String domainId="error_subtype";
+        String domainId="replenish_status";
         for(int i=0;i<list.length;i++){
-
-            String key="e"+(i+10);
-            String codeValue="e2";
-
             String value=list[i].trim();
-//            sql.append("INSERT INTO comp.cip_admin_codes(domain_id, code_type, code_name, create_time, update_time, operator) VALUES" +
-//                    " ('"+domainId+"', '"+key+"', '"+value+"', now(), now(), 'T1113');\n");
-
             sql.append("INSERT INTO mdm.mdm_ddic_ddic_codes(sys_id,domain_id, code_type, code_name,code_value,code_order,remark, create_time, update_time, op_user_id,creator) VALUES" +
-                    " ('tmsp','"+domainId+"', '"+key+"', '"+value+"','"+codeValue+"',"+i+",'', now(), now(), 'T1113','T1113');\n");
+                    " ('tmsp','"+domainId+"', '"+i+"', '"+value+"','"+i+"',"+i+",'', now(), now(), 'T1113','T1113');\n");
 
         }
         System.out.println(sb.toString());
