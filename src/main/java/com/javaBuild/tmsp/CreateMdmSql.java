@@ -2,11 +2,11 @@ package com.javaBuild.tmsp;
 
 public class CreateMdmSql {
     public static void main(String[] args) {
-        String name="待审批,审批通过,审批退回";
+        String name="未装箱,装箱中,装箱完成";
         String[] list = name.split(",");
         StringBuffer sb=new StringBuffer();
         StringBuffer sql=new StringBuffer();
-        String domainId="replenish_status";
+        String domainId="box_status";
         for(int i=0;i<list.length;i++){
             String value=list[i].trim();
             sql.append("INSERT INTO mdm.mdm_ddic_ddic_codes(sys_id,domain_id, code_type, code_name,code_value,code_order,remark, create_time, update_time, op_user_id,creator) VALUES" +
