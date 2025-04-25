@@ -124,8 +124,8 @@ public class CreateSwitchOrgLimitSql implements ApplicationContextAware {
         FileUtils.writeLines(allFile,"utf-8",sqlTotalList);
 
 
-        File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\schema\\notSchema.sql");
-        FileUtils.writeLines(notSchemaFile,"utf-8",notSchema);
+//        File notSchemaFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\schema\\notSchema.sql");
+//        FileUtils.writeLines(notSchemaFile,"utf-8",notSchema);
     }
 
     @SneakyThrows

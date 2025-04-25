@@ -101,7 +101,7 @@ public class CreateSqlUpdateFoc implements ApplicationContextAware {
 
 
         String[] split = tableFiles.get(0).split("\\.");
-        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\" + split[0] + "_next_update_temp.sql");
+        File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\tmsp_foc.sql");
         FileUtils.writeLines(allFile, "utf-8", allTotalSet);
 
 
