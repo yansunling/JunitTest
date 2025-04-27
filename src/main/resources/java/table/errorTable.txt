@@ -165,3 +165,4 @@ tmsp.tmsp_stock_all_user_rel_all
 tmsp.tmsp_send_trans_cust_fee
 tmsp.tmsp_take_order_items
 bmsp.bmsp_share_file
+tmsp.tmsp_alter_order_report

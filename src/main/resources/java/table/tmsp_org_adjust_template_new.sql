@@ -667,5 +667,5 @@ update bds.bds_backdoc_track set above_org_id = '<新机构ID>' where above_org_
 update bds.bds_backdoc_track set next_org_id = '<新机构ID>' where next_org_id in('<老机构ID>');
 update bds.bds_backdoc_track set operate_org_id = '<新机构ID>' where operate_org_id in('<老机构ID>');
 
-delete from tmsp.tmsp_take_order_model where user_id in(select emp_id from hcm.hcm_emp_ent where dept='<新机构ID>') and model_info regexp '<老机构ID>';
+delete from tmsp.tmsp_take_order_model where user_id in(select emp_id from hcm.hcm_emp_ent where dept='<新机构ID>') and model_info regexp '<老机构ID集合>';
 
