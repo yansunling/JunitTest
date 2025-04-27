@@ -193,7 +193,7 @@ public class CreateSwitchOrgFixTmspSql implements ApplicationContextAware {
                                 if (SwitchUtil.containsChinese(column)) {
                                     column = "`" + column + "`";
                                 }
-                                if (orgList.contains(newValue)||(newValue.startsWith("2501")&&newValue.indexOf(".")<0)) {
+                                if (orgList.contains(newValue)||(newValue.startsWith("3501")&&newValue.indexOf(".")<0)) {
                                     sqlList.put(column,SwitchUtil.matchColumn(column, newTable, "ID", concat));
 
                                 } else if (orgNameList.contains(newValue)) {
