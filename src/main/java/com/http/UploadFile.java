@@ -29,7 +29,7 @@ public class UploadFile {
             RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(200000).setSocketTimeout(200000).build();
             httppost.setConfig(requestConfig);
 
-            FileBody bin = new FileBody(new File("C:/Users/admin/Desktop/销售app-uat.779d41d9.png"));
+            FileBody bin = new FileBody(new File("C:/Users/yansunling/Desktop/企业微信截图_20240301084259.png"));
             StringBody comment = new StringBody("crm", ContentType.TEXT_PLAIN);
 
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();
