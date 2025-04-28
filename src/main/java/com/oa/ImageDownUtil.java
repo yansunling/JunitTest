@@ -10,12 +10,19 @@ import org.apache.commons.httpclient.cookie.CookiePolicy;
 import org.apache.commons.httpclient.methods.PostMethod;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
@@ -29,11 +36,11 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
 
 
 @Slf4j
@@ -64,11 +71,68 @@ public class ImageDownUtil {
 
         String cookie = getCookie("T1105","0610");
         System.out.println("cookie:"+cookie);
-//        String username="T1113";
-//        String aCase = MD5Util.md5(username + "gcCK9o9kCy51L1Jy").toUpperCase();
-//        System.out.println(aCase);
+        File file=new File("C:/Users/yansunling/Desktop/企业微信截图_20240301084259.png");
+
+        uploadFile(file,cookie);
 
     }
+
+
+    public static void uploadFile(File file,String cookie){
+        CloseableHttpClient httpclient = HttpClients.createDefault();
+        try {
+            HttpPost httppost = new HttpPost("https://oa.uat.tuolong56.com/docs/docupload/MultiDocUploadByWorkflow.jsp");
+            RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(200000).setSocketTimeout(200000).build();
+            httppost.setConfig(requestConfig);
+
+
+            // 创建 MultipartEntityBuilder 对象
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            // 添加文件
+            builder.addBinaryBody("Filedata", file, ContentType.DEFAULT_BINARY,
+                    file.getName());
+            HttpEntity multipart = builder.build();
+            // 设置请求实体
+            httppost.setEntity(multipart);
+
+            httppost.setHeader("Content-Type",multipart.getContentType().getValue());
+            httppost.setHeader("cookie",cookie);
+            System.out.println("executing request " + httppost.getRequestLine());
+            CloseableHttpResponse response = httpclient.execute(httppost);
+            try {
+                System.out.println(response.getStatusLine());
+                HttpEntity resEntity = response.getEntity();
+                if (resEntity != null) {
+                    // 处理 Gzip 压缩内容
+                    InputStream inputStream = resEntity.getContent();
+                    // 读取分块数据
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+                    StringBuilder responseContent = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        responseContent.append(line);
+                    }
+                    // 输出响应内容
+                    System.out.println("Response: " + responseContent.toString());
+                }
+                EntityUtils.consume(resEntity);
+            } finally {
+                response.close();
+            }
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                httpclient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
 
     @SneakyThrows
     public static void downImg() {
