@@ -44,7 +44,7 @@ import java.util.zip.GZIPInputStream;
 
 
 @Slf4j
-public class ImageDownUtil {
+public class OaFileUploadDownUtil {
 
     public static void main(String[] args) {
 
@@ -69,7 +69,7 @@ public class ImageDownUtil {
 //       downImg();
 
 
-        String cookie = getCookie("T1105","0610");
+        String cookie = getCookie("T1113","0834");
         System.out.println("cookie:"+cookie);
         File file=new File("C:/Users/yansunling/Desktop/企业微信截图_20240301084259.png");
 
