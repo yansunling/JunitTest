@@ -18,7 +18,7 @@ public class SendTextCardWechat {
 
        String agentId="1000006";
         String corpID="ww7a1daec5af2f5422";
-       String secret="254D52A774A2D1201B86FAAA2AD961F678F6A01AF781AC9D8A5814103FD0B9C31310A198997C79C6C7B7E9FAF361BA2F";
+       String secret="2GpLw4ZFw9KjHm0MT_nkN0R-gqYTrv3deZ8pw4QIM2U";
 
 
 
