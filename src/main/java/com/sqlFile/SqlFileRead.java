@@ -9,18 +9,16 @@ import java.util.List;
 
 public class SqlFileRead {
     public static void main(String[] args) throws Exception{
-        File file=new File("C:\\Users\\yansunling\\Desktop\\address.sql");
+        File file=new File("C:\\Users\\yansunling\\Desktop\\allSql.sql");
         List<String> list = FileUtils.readLines(file, "utf-8");
         List<String> outLineList=new ArrayList<>();
         list.forEach(line->{
-            if(StringUtils.isNotBlank(line)){
-                String startWord="customer_id=";
-                String customerId = line.substring(line.indexOf(startWord)+startWord.length(), line.length() - 1)+",";
-                System.out.println(customerId);
-                outLineList.add(customerId);
+            if(line.indexOf("tmm.")<0&&line.indexOf("isp.")<0&&line.indexOf("pmp.")<0&&line.indexOf("bds.")<0&&line.indexOf("comp.")<0){
+
+                outLineList.add(line);
             }
         });
-        File outfile=new File("C:\\Users\\yansunling\\Desktop\\customer.text");
+        File outfile=new File("C:\\Users\\yansunling\\Desktop\\newSql.sql");
         FileUtils.writeLines(outfile,"utf-8",outLineList);
 
     }
