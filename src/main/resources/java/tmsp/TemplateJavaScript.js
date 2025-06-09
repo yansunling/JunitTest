@@ -50,7 +50,7 @@ var bda_data_str_field = {
 			appId: appId,
 			srcPageId: metaData.objectId,
 			srcTableId: metaData.listTemplate,
-			row:encodeURIComponent(JSON.stringify(selectRows[0]))
+			row:encodeURIComponent(encodeURIComponent(JSON.stringify(selectRows[0])))
 		};
 		techParam.actionId = buttonId;
 		techParam.mode = 'update';

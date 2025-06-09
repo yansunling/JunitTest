@@ -109,8 +109,13 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 			StringBuffer sb=new StringBuffer();
 
 			mapList.forEach(map->{
-				sb.append(map.get("filed")+"\n\n\n");
 				String columnId=map.get("column_name")+"";
+				if(StringUtils.equalsIgnoreCase(buildConfig.getStatusColumn(),columnId)){
+					sb.append((map.get("filed")+"").replace("String","ACTIVATE_STATUS")+"\n\n\n");
+				}else{
+					sb.append(map.get("filed")+"\n\n\n");
+				}
+
 				if(StringUtils.equalsIgnoreCase("remark",columnId)){
 					remarkTd.append("\t\t\t<tr>\n" +
 							"\t\t\t\t<td align='right' width=13%>\n" +
