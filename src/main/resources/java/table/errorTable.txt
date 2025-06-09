@@ -165,12 +165,5 @@ tmsp.tmsp_stock_all_user_rel_all
 tmsp.tmsp_send_trans_cust_fee
 tmsp.tmsp_take_order_items
 bmsp.bmsp_share_file
-# tmsp.tmsp_alter_order_report
-# tmsp.tmsp_send_order_cust
-# tmsp.tmsp_send_order_turn
-# tmsp.tmsp_send_trans_cust
-# tmsp.tmsp_send_trans_turn
-# tmsp.tmsp_base_send_region
-# tmsp.tmsp_box_send_doc
-# tmsp.tmsp_send_app_doc
-# tmsp.tmsp_send_order_cust_record
+tmsp.tmsp_alter_order_report
+bmsp.bmsp_should_inorder_bk

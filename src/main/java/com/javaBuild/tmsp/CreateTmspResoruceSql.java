@@ -35,8 +35,8 @@ public class CreateTmspResoruceSql {
         map.put("addData",new ButtonType("icon-add","新增"));
         map.put("updateData",new ButtonType("icon-edit","修改"));
 //          map.put("printData",new ButtonType("icon-print","补打"));
-        map.put("enableData",new ButtonType("icon-ok","启用","updateData"));
-        map.put("disableData",new ButtonType("icon-cancel","禁用","updateData"));
+        map.put("enableData",new ButtonType("icon-ok","启用","batchUpdate"));
+        map.put("disableData",new ButtonType("icon-cancel","禁用","batchUpdate"));
         map.put("deleteData",new ButtonType("icon-remove","删除"));
 //        map.put("applyViolation",new ButtonType("icon-add","事故上报"));
 //        map.put("completeData",new ButtonType("icon-ok","事故完结"));

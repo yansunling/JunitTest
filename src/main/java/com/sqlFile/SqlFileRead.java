@@ -13,7 +13,12 @@ public class SqlFileRead {
         List<String> list = FileUtils.readLines(file, "utf-8");
         List<String> outLineList=new ArrayList<>();
         list.forEach(line->{
-            if(line.indexOf("tmm.")<0&&line.indexOf("isp.")<0&&line.indexOf("pmp.")<0&&line.indexOf("bds.")<0&&line.indexOf("comp.")<0){
+            if(line.indexOf("tmm.")<0&&line.indexOf("isp.")<0&&line.indexOf("pmp.")<0&&line.indexOf("bds.")<0
+                    &&line.indexOf("comp.")<0&&line.indexOf("hcm.jgyd")<0
+                    &&line.indexOf("tmsp.tmsp_order_route_org_detail")<0
+                    &&line.indexOf("bmsp.bmsp_should_inorder_bk")<0
+
+            ){
 
                 outLineList.add(line);
             }

@@ -59,13 +59,24 @@ public class {class_impl} implements {class_service} {
     }
 
     @Transactional
-    public void deleteData({class_name} param) {
-        //获得变更前数据
-        {class_name} before = dataMapper.selectById(param.getSerial_no());
-        //删除记录
-        dataMapper.deleteById(param.getSerial_no());
-        //记录日志
-        logService.addLog(before,null,TmspShareDataLogConfig.build());
+    public void batchUpdate(List<{class_name}> params) {
+        params.forEach(item->{
+            updateData(item);
+        });
+    }
+
+
+
+    @Transactional
+    public void deleteData(List<{class_name}> params) {
+        params.forEach(item->{
+            //获得变更前数据
+            {class_name} before = dataMapper.selectById(param.getSerial_no());
+            //删除记录
+            dataMapper.deleteById(param.getSerial_no());
+            //记录日志
+            logService.addLog(before,null,TmspShareDataLogConfig.build());
+        });
     }
 
 

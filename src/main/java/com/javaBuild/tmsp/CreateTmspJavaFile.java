@@ -41,7 +41,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 	@Test
 	public  void test() throws Exception {
 		Map<String, BuildConfig> tables=new HashMap<>();
-		tables.put("tmsp_except_unknow_config",new BuildConfig("config_status","Y"));
+		tables.put("tmsp_except_unknow_config",new BuildConfig("config_status",""));
 		Set<String> tableNames = tables.keySet();
         String sysId="tmsp";
 		String htmlGroup="";
@@ -79,7 +79,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 				dataContent=removeImport(dataContent,"importData","getExcelTitle");
 			}
 			if(StringUtils.isBlank(buildConfig.getStatusColumn())){
-				jsContent=removeImport(jsContent,"status_column","enableData","disableData");
+				jsContent=removeImport(jsContent,"status_column","enableData","disableData","batchUpdate");
 			}else{
 				jsContent=jsContent.replaceAll("\\{status_column\\}",buildConfig.getStatusColumn());
 			}
