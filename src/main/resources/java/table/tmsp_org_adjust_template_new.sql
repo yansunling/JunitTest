@@ -166,7 +166,6 @@ update tmsp.tmsp_order_pre set recv_fail_org  = '<新机构ID>' where recv_fail_
 update tmsp.tmsp_order_pre set recv_succ_org  = '<新机构ID>' where recv_succ_org  in('<老机构ID>');
 update tmsp.tmsp_claims_oa_bear set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
 update tmsp.tmsp_claims_oa_expense_record set apply_org_id = '<新机构ID>' where apply_org_id in('<老机构ID>');
-update tmsp.tmsp_claims_oa_record set apply_org_id = '<新机构ID>' where apply_org_id in('<老机构ID>');
 update tmsp.tmsp_order_profile set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID>');
 update tmsp.tmsp_order_profile set sign_org_id = '<新机构ID>' where sign_org_id in('<老机构ID>');
 update tmsp.tmsp_order_profile set inventory_org_id = '<新机构ID>' where inventory_org_id in('<老机构ID>');

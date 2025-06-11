@@ -193,7 +193,7 @@ public class CreateSwitchOrgLimitSql implements ApplicationContextAware {
                                 return "";
                             }
                             String columnsSql = "select column_name from  information_schema.COLUMNS where table_name='" + table + "' and table_schema='" + schema + "' " +
-                                    "and column_name not in('serial_no','create_user_id','update_user_id','remark','salesman_id') and data_type not in('decimal','datetime','date','int') ";
+                                    "and column_name not in('serial_no','create_user_id','update_user_id','remark','salesman_id')  and character_maximum_length>12 and data_type not in('decimal','datetime','date','bigint','int') ";
                             List<String> columnList = jdbcTemplateYL.queryForList(columnsSql, String.class);
                             if (CollectionUtil.isNotEmpty(columnList)) {
                                 List<String> sqlList = new ArrayList<>();
