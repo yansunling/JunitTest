@@ -145,6 +145,16 @@ public class SwitchUtil {
     }
 
 
+    public static String matchColumn(String column,String newTable,String type){
+
+        // 创建Matcher对象
+        String sql="update "+newTable+" set "+column+" = '<新机构"+type+">' where "+column+" in('<老机构"+type+">');";
+
+        return sql;
+    }
+
+
+
 
 
 

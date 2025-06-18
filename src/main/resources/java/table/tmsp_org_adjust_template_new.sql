@@ -203,7 +203,7 @@ update tmsp.tmsp_take_order set book_org_id = '<新机构ID>' where book_org_id 
 update tmsp.tmsp_take_order_log set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update tmsp.tmsp_tcp_driver set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update tmsp.tmsp_tcp_vehicle set org_id = '<新机构ID>' where org_id in('<老机构ID>');
-update tmsp.tmsp_tcp_vehicle set belong_org_id = '<新机构ID>' where belong_org_id in('<老机构ID>');
+update tmsp.tmsp_tcp_vehicle set belong_region = '<新机构大区ID>',belong_org_id = '<新机构ID>' where belong_org_id in('<老机构ID>');
 update tmsp.tmsp_tcp_vendor set create_org_id = '<新机构ID>' where create_org_id in('<老机构ID>');
 update tmsp.tmsp_tcp_vendor set update_org_id = '<新机构ID>' where update_org_id in('<老机构ID>');
 update tmsp.tmsp_turn_external_apply set resp_org_id = '<新机构ID>' where resp_org_id in('<老机构ID>');
@@ -216,7 +216,7 @@ update tmsp.tmsp_turn_order set other_org_id = '<新机构ID>' where other_org_i
 update tmsp.tmsp_turn_order set ticket_org_id = '<新机构ID>' where ticket_org_id in('<老机构ID>');
 update tmsp.tmsp_msg_model set msg_model_org = '<新机构ID>' where msg_model_org in('<老机构ID>');
 update tmsp.tmsp_claims_profile set apply_big_area = '<新机构大区ID>' where judge_org_id = '<新机构ID>';
-update tmsp.tmsp_tcp_vehicle set belong_region = '<新机构大区ID>' where belong_org_id in('<老机构ID>');
+
 update tmsp.tmsp_base_box set own_org_id = '<新机构ID>' where own_org_id in('<老机构ID>');
 update tmsp.tmsp_base_box set org_id = '<新机构ID>' where org_id in('<老机构ID>');
 update tmsp.tmsp_base_box set latest_org_id = '<新机构ID>' where latest_org_id in('<老机构ID>');
@@ -667,3 +667,4 @@ update bds.bds_backdoc_track set operate_org_id = '<新机构ID>' where operate_
 
 delete from tmsp.tmsp_take_order_model where user_id in(select emp_id from hcm.hcm_emp_ent where dept='<新机构ID>') and model_info regexp '<老机构ID集合>';
 
+update isp.isp_work_issues_info set source_org_id='<新机构ID>',source_org_name='<新机构名称>' where source_org_id in('<新机构ID>');

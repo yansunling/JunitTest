@@ -26,7 +26,7 @@ public class CreateSwitchOrgJava  {
     public static void main(String[] args) {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = readExcel(excelFilePath);
-        String directoryPath = "E:\\myGit\\tmsp";
+        String directoryPath = "E:\\tmsp-upload";
 //        String directoryPath = "E:\\myGit\\tmsp\\tmsp-api\\src\\main\\java\\com\\dy\\tmsp\\arriveapp\\data\\TmspArriveAppBatchSigninOutVo.java";
         orgDataList.forEach(item->{
             replaceInFiles(new File(directoryPath),item);

@@ -47,7 +47,7 @@ public class CreateSwitchOrgLimitSqlNoTempalte implements ApplicationContextAwar
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\3.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
 //        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"));
         jdbcTemplateYL.setQueryTimeout(500);
@@ -131,7 +131,7 @@ public class CreateSwitchOrgLimitSqlNoTempalte implements ApplicationContextAwar
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap,OrgData orgData) {
         String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where  table_schema not in('auth','isp','crm','mpp','mpp2','dctx','report','marketing','bml','dctx','wac','acs','als','costx','information_schema'," +
+                "where  table_schema not in('auth','isp','mpp','mpp2','dctx','report','marketing','bml','dctx','wac','acs','als','costx','information_schema'," +
                 "'query','dct','ouyang','performance_schema','portal','biq','das','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','kjob','crmx','jeewx-boot') " +
                 "  group by table_schema";
         List<String> schemaList = jdbcTemplateYL.queryForList(schemaSql, String.class);
@@ -161,17 +161,18 @@ public class CreateSwitchOrgLimitSqlNoTempalte implements ApplicationContextAwar
                 }
             }
             if (addFlag) {
-               // sqlList.add(item);
+//               sqlList.add(item);
             }
         });
-        //String existSql = StringUtils.join(",", sqlList.toArray());
+//        String existSql = StringUtils.join(",", sqlList.toArray());
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         List<String> allData = new ArrayList<>();
         for (String schema : schemaList) {
             //设置初始值
             schemaMap.put(schema,new ArrayList<>());
 
-            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW' and table_name not like 's2024%'  ";
+            String sql = "select table_name from information_schema.`TABLES` where table_schema='" + schema + "' and table_type!='VIEW'" +
+                    " and table_name not like 's2024%'  ";
             List<String> tableList = jdbcTemplateYL.queryForList(sql, String.class);
             CountDownLatch countDownLatch = new CountDownLatch(tableList.size());
             List<String> totalSql = new ArrayList<>();
@@ -185,7 +186,6 @@ public class CreateSwitchOrgLimitSqlNoTempalte implements ApplicationContextAwar
 //                            if (existSql.indexOf(" " + newTable + " ") > 0) {
 //                                return "";
 //                            }
-
                             if (tableFilesStr.indexOf(newTable + ",") > 0) {
                                 return "";
                             }
@@ -218,9 +218,9 @@ public class CreateSwitchOrgLimitSqlNoTempalte implements ApplicationContextAwar
                                     }
 
                                     if (orgList.contains(newValue)||(newValue.startsWith("3501")&&newValue.indexOf(".")<0||(newValue.startsWith("2501")&&newValue.indexOf(".")<0))) {
-                                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "ID", concat));
+                                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "ID"));
                                     } else if (orgNameList.contains(newValue)) {
-                                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "名称", concat));
+                                        sqlList.add(SwitchUtil.matchColumn(column, newTable, "名称"));
                                     }
                                 });
                                 totalSql.addAll(sqlList);
