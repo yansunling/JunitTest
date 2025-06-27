@@ -6,7 +6,7 @@ public class SendFileWechat {
     public static void main(String[] args) throws Exception{
 
         String receiver="T1113";
-        String message="【流失预警-当月非自然月】\n" +
+        /*String message="【流失预警-当月非自然月】\n" +
                 "蔡志鹏 ，你好！针对客户发货符合以下任一条件，①超出近三月发货周期平均数的2倍 ②最长一个自然月未发货，将推送至销售人员企业微信，具体客户明细如下：\n" +
                 " 义乌大区\n" +
                 "  1.蔡志鹏\n" +
@@ -25,14 +25,14 @@ public class SendFileWechat {
                 "  1.严旭\n" +
                 "　　①邹畅畅-文具U 客户编码:1250250,手机号:13238697858, 9月4372元2天/次, 10月1007元3天/次, 11月1034元4天/次, 12月0元0天/次, 请于7天内拜访此客户, 并录入CRM系统拜访记。\n" +
                 "  2.蔡志鹏\n" +
-                "　　①杨冬平-文具U 客户编码:2198787,手机号:15887968757, 9月1234元3天/次, 10月824元5天/次, 11月3102元4天/次, 12月0元0天/次, 请于7天内拜访此客户, 并录入CRM系统拜访记。";
+                "　　①杨冬平-文具U 客户编码:2198787,手机号:15887968757, 9月1234元3天/次, 10月824元5天/次, 11月3102元4天/次, 12月0元0天/次, 请于7天内拜访此客户, 并录入CRM系统拜访记。";*/
         String corpID="ww7a1daec5af2f5422";
         String agentId="1000006";
         String secret="2GpLw4ZFw9KjHm0MT_nkN0R-gqYTrv3deZ8pw4QIM2U";
-        WechatUtils.sendMessage(receiver,message,corpID,agentId,secret);
+//        WechatUtils.sendMessage(receiver,message,corpID,agentId,secret);
 
-//        String filePath="C:/Users/admin/Desktop/销售客户发货统计_0601_颜孙令.xlsx";
-//        WechatUtils.sendFileMessage(receiver,filePath,corpID,agentId,secret);
+        String filePath="I:/img/4.jpg";
+        WechatUtils.sendFileMessage(receiver,filePath,corpID,agentId,secret);
 
     }
 }

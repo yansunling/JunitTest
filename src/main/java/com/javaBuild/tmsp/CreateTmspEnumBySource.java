@@ -40,7 +40,7 @@ public class CreateTmspEnumBySource implements ApplicationContextAware{
 
 	@Test
 	public  void test() throws Exception {
-        List<String> domainList = Arrays.asList("cust_area","print_template");
+        List<String> domainList = Arrays.asList("train_status");
         String path="C:\\Users\\yansunling\\Desktop\\enum\\";
 		File dir=new File(path);
 

@@ -265,8 +265,8 @@ public class WechatUtils {
             WechatMessage wechat = new WechatMessage();
             wechat.setTouser(receiver);
             wechat.setAgentid(Integer.parseInt(agentId));
-            wechat.setFile(new WechatFile(mediaId));
-            wechat.setMsgtype("file");
+            wechat.setImage(new WechatFile(mediaId));
+            wechat.setMsgtype("image");
             MessageFormat format=new MessageFormat(send_url);
             Object[] args = {token};
             String fileSendUrl=format.format(args);

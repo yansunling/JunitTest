@@ -19,6 +19,8 @@ public class WechatMessage {
 
     private WechatFile file;
 
+    private WechatFile image;
+
 
     private WechatTextcard textcard;//文本卡片消息
 //    private WechatNews news;//图文消息
