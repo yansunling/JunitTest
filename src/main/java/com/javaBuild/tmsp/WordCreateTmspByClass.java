@@ -10,6 +10,7 @@ import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
 import com.javaBuild.tmsp.api.controller.TmspUnloadDriverPlanApiController;
 import com.junit.po.ParamBean;
 import com.word.createWord.CopyWordParagraph;
+import com.word.dataSource.controller.CompAssetLevelClassController;
 import com.word.doc.GeneralTemplateTool;
 import com.word.doc.POIMergeDocUtil;
 import com.yd.utils.common.CollectionUtil;
@@ -32,8 +33,8 @@ public class WordCreateTmspByClass {
 
         closeWps();
 
-        Class<?> clazz = TmspArriveAppExceptController.class;
-        String fileName="异常核销";
+        Class<?> clazz = CompAssetLevelClassController.class;
+        String fileName="资产导入";
 
         String path = WordCreateTmspByClass.class.getClassLoader().getResource("").getPath();
         String filePath=path+"api";
@@ -46,11 +47,11 @@ public class WordCreateTmspByClass {
         File dirFile = new File(dir);
         FileUtils.deleteDirectory(dirFile);
 
-        boolean esbFlag=true;
+        boolean esbFlag=false;
 
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
-        String rootPath="https://tlwl.uat.tuolong56.com/tmsp"+annotation.value()[0];
+        String rootPath="https://tlwl.uat.tuolong56.com/asset-api"+annotation.value()[0];
         //获得所有方法
         Method[] methods = clazz.getMethods();
 

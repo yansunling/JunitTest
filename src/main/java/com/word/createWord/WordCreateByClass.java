@@ -7,6 +7,7 @@ import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
 import com.junit.po.ParamBean;
 import com.other.annotation.MyNotEmpty;
 import com.other.annotation.MyNotNull;
+import com.word.dataSource.controller.CompAssetLevelClassController;
 import com.word.dataSource.controller.CrmxSatisfactionSurveyController;
 import com.word.doc.GeneralTemplateTool;
 import com.yd.utils.common.CollectionUtil;
@@ -26,7 +27,7 @@ public class WordCreateByClass {
 
     public static void main(String[] args) throws Exception{
 
-        Class<?> clazz = CrmxSatisfactionSurveyController.class;
+        Class<?> clazz = CompAssetLevelClassController.class;
         closeWps();
         String path = WordCreateByClass.class.getClassLoader().getResource("").getPath();
         String filePath=path+"api";
@@ -37,10 +38,10 @@ public class WordCreateByClass {
 
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
-        String rootPath="https://tlwl.uat.tuolong56.com/tmsp"+annotation.value()[0];
+        String rootPath="https://tlwl.uat.tuolong56.com/asset-api"+annotation.value()[0];
         //获得所有方法
         Method[] methods = clazz.getMethods();
-        boolean esbFlag=true;
+        boolean esbFlag=false;
         List<String> fileList=new ArrayList<>();
 
         for (Method item : methods) {

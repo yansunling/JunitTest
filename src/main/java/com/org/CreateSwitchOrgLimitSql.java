@@ -47,7 +47,7 @@ public class CreateSwitchOrgLimitSql implements ApplicationContextAware {
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1 - 副本.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
 //        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"));
         jdbcTemplateYL.setQueryTimeout(500);

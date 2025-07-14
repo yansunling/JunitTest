@@ -30,7 +30,7 @@ public class WordCreateByQuery {
         QueryVueUtil queryUtil=new QueryVueUtil();
         queryUtil.setHOST_ADDRESS("https://tlwl.uat.tuolong56.com");
 
-        List<String> queryList = Arrays.asList("tmsp_quality_error_info_file","tmsp_quality_error_info_list","tmsp_quality_error_log_list","tmsp_quality_error_log_report","tmsp_quality_error_subtype_select","tmsp_quality_error_type_select","tmsp_quality_order_except","tmsp_quality_order_list","tmsp_quality_penalty_reward_list","tmsp_quality_penalty_reward_report","tmsp_quality_penalty_reward_select");
+        List<String> queryList = Arrays.asList("comp_asset_level_class_list","comp_asset_level_class_third_class","comp_asset_level_class_second_class","comp_asset_level_class_first_class");
 
         List<String> fileList=new ArrayList<>();
         for (String  queryId : queryList) {

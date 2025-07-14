@@ -44,7 +44,7 @@ public class CreateSqlUpdateFoc implements ApplicationContextAware {
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\3.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(5000);
 
