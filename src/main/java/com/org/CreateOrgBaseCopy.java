@@ -3,7 +3,10 @@ package com.org;
 
 import cn.hutool.core.util.IdUtil;
 import com.org.data.OrgData;
+import com.org.data.TableData;
+import com.org.data.TableItemData;
 import com.org.data.TableLinkData;
+import com.org.util.SerialNumberGenerator;
 import com.org.util.SwitchUtil;
 import com.yd.utils.common.SerialNoUtils;
 import com.yd.utils.common.StringUtils;
@@ -63,10 +66,34 @@ public class CreateOrgBaseCopy implements ApplicationContextAware {
                 String newItem = SwitchUtil.replaceName(item, orgData);
                 newSqlList.add(newItem);
             });
-            List<TableLinkData> linkDataList=new ArrayList<>();
-//            linkDataList.add(new TableLinkData("mpp2.mpp2_prise_ver_cust","prise_cust_ver_id","depart_org","mpp2.mpp2_prise_ver_cust_item","prise_cust_item_id"));
+            List<TableData> linkDataList=new ArrayList<>();
+            TableData deptVer = new TableData("mpp2.mpp2_prise_ver_cust", "prise_cust_ver_id", "depart_org");
+            deptVer.getItems().add(new TableItemData("mpp2.mpp2_prise_ver_cust_item","prise_cust_item_id"));
+            linkDataList.add(deptVer);
 
-            linkDataList.add(new TableLinkData("mpp2.mpp2_prise_dept_ver","prise_dept_ver_id","depart_org","mpp2.mpp2_prise_dept_ver_item","prise_dept_item_id"));
+            TableData custVer = new TableData("mpp2.mpp2_prise_dept_ver", "prise_dept_ver_id", "depart_org");
+            custVer.getItems().add(new TableItemData("mpp2.mpp2_prise_dept_ver_item","prise_dept_item_id"));
+            linkDataList.add(custVer);
+
+
+            TableData fixVer = new TableData("mpp2.mpp2_fixed_price_ver", "price_fixed_id", "depart_org");
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_discharge","price_fixed_discharge_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_freight","price_fixed_freight_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_handle","price_fixed_handle_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_insured","price_fixed_insured_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_position","price_fixed_position_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_pull","price_fixed_pull_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_rebate","price_fixed_rebate_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_receipt","price_fixed_receipt_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_receive","price_fixed_receive_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_send","price_fixed_send_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_service","price_fixed_service_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_storage","price_fixed_storage_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_transfer","price_fixed_transfer_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_upstairs","price_fixed_upstairs_id"));
+            fixVer.getItems().add(new TableItemData("mpp2.mpp2_fixed_price_wait","price_fixed_wait_id"));
+            linkDataList.add(fixVer);
+
 
 
             linkDataList.forEach(item->{
@@ -80,9 +107,11 @@ public class CreateOrgBaseCopy implements ApplicationContextAware {
         }
     }
 
-    private List<String> getLinkTable(OrgData orgData,TableLinkData linkData){
 
-        String sql="select * from "+linkData.getMain_table()+" where "+linkData.getMain_org()+"="+orgData.getOldOrgId();
+
+
+    private List<String> getLinkTable(OrgData orgData, TableData tableData){
+        String sql="select * from "+tableData.getMain_table()+" where "+tableData.getMain_org()+"="+orgData.getOldOrgId();
         List<Map<String, Object>> maps = jdbcTemplateYL.queryForList(sql);
         List<String> sqlList=new ArrayList<>();
         sqlList.add("\n\n");
@@ -91,13 +120,15 @@ public class CreateOrgBaseCopy implements ApplicationContextAware {
         columnRef.put("big_area","<新机构大区ID>");
         columnRef.put("small_area","<新机构小区ID>");
         maps.forEach(row->{
-            columnRef.put(linkData.getMain_column(), SerialNoUtils.getTimeSerialNo()+"");
-            sqlList.add(buildSql(row,columnRef,linkData.getMain_table(),orgData));
-            String linkSql="select * from "+linkData.getItem_table()+" where "+linkData.getMain_column()+"='"+row.get(linkData.getMain_column())+"' order by "+linkData.getItem_column();
-            List<Map<String, Object>> itemMaps = jdbcTemplateYL.queryForList(linkSql);
-            itemMaps.forEach(item->{
-                columnRef.put(linkData.getItem_column(), SerialNoUtils.getTimeSerialNo()+"");
-                sqlList.add(buildSql(item,columnRef,linkData.getItem_table(),orgData));
+            columnRef.put(tableData.getMain_column(), SerialNoUtils.getTimeSerialNo()+"");
+            sqlList.add(buildSql(row,columnRef,tableData.getMain_table(),orgData));
+            tableData.getItems().forEach(linkData->{
+                String linkSql="select * from "+linkData.getItem_table()+" where "+tableData.getMain_column()+"='"+row.get(tableData.getMain_column())+"' order by "+linkData.getItem_column();
+                List<Map<String, Object>> itemMaps = jdbcTemplateYL.queryForList(linkSql);
+                itemMaps.forEach(item->{
+                    columnRef.put(linkData.getItem_column(), SerialNumberGenerator.generate());
+                    sqlList.add(buildSql(item,columnRef,linkData.getItem_table(),orgData));
+                });
             });
             sqlList.add("\n\n");
         });
@@ -105,7 +136,6 @@ public class CreateOrgBaseCopy implements ApplicationContextAware {
         return sqlList;
 
     }
-
     private String buildSql(Map<String, Object> item, Map<String,String> columnRef,String table,OrgData orgData){
         List<String> column=new ArrayList<>();
         List<Object> columnValue=new ArrayList<>();
