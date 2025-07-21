@@ -58,8 +58,9 @@ var bda_data_str_field = {
 		techParam.refActionId = buttonId;
 		let callUrl = $$.buildPageUrl(formUrl, techParam, null);
 		$$.openJcdfDialog(callUrl, '修改' + metaData.objectName, 400, 1040);
-
 	},
+
+
 	{js_name}_deleteData: function (buttonId,actionUrl){
 		let selectRows = $("#"+metaData.listTemplate).datagrid('getChecked');
 		if(selectRows.length==0){
@@ -103,6 +104,10 @@ var bda_data_str_field = {
 			}
 		});
 	},
+
+
+
+
 
 	{js_name}_enableData: function (buttonId,actionUrl){
 		let selectRows = $("#"+metaData.listTemplate).datagrid('getChecked');
@@ -148,6 +153,7 @@ var bda_data_str_field = {
 			}
 		});
 	},
+
 	{js_name}_disableData: function (buttonId,actionUrl){
 		let selectRows = $("#"+metaData.listTemplate).datagrid('getChecked');
 		if(selectRows.length==0){

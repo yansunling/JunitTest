@@ -69,7 +69,7 @@ public class {class_impl} implements {class_service} {
 
     @Transactional
     public void deleteData(List<{class_name}> params) {
-        params.forEach(item->{
+        params.forEach(param->{
             //获得变更前数据
             {class_name} before = dataMapper.selectById(param.getSerial_no());
             //删除记录

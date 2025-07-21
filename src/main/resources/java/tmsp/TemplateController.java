@@ -42,12 +42,14 @@ public class {class_controller} {
         dataService.updateData(param);
         return OilCardUtil.success();
     }
+
     @RequestMapping(value="/batchUpdate")
     public CIPResponseMsg batchUpdate(@RequestBody List<{class_name}> param){
         log.info("batchUpdate param:"+ JSON.toJSONString(param));
         dataService.batchUpdate(param);
         return OilCardUtil.success();
     }
+
     @RequestMapping(value="/deleteData")
     public CIPResponseMsg deleteData(@RequestBody List<{class_name}> params){
         log.info("deleteData param:"+ JSON.toJSONString(params));
