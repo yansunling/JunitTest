@@ -41,7 +41,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 	@Test
 	public  void test() throws Exception {
 		Map<String, BuildConfig> tables=new HashMap<>();
-		tables.put("tmsp_except_wx_config",new BuildConfig("",""));
+		tables.put("tmsp_own_send_group_config",new BuildConfig("",""));
 		Set<String> tableNames = tables.keySet();
         String sysId="tmsp";
 		String htmlGroup="";
@@ -79,10 +79,11 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 				dataContent=removeImport(dataContent,"importData","getExcelTitle");
 			}
 			if(StringUtils.isBlank(buildConfig.getStatusColumn())){
-				jsContent=removeImport(jsContent,"enableData","disableData","batchUpdate");
+				jsContent=removeImport(jsContent,"enableData","disableData","batchUpdate","deleteError");
 				serviceContent=removeImport(serviceContent,"status_column","enableData","disableData","batchUpdate");
 				controllerContent=removeImport(controllerContent,"status_column","enableData","disableData","batchUpdate");
 				implContent=removeImport(implContent,"status_column","enableData","disableData","batchUpdate");
+				jsContent=jsContent.replaceAll("(\r?\n)+", "\n");
 			}else{
 				jsContent=jsContent.replaceAll("\\{status_column\\}",buildConfig.getStatusColumn());
 			}

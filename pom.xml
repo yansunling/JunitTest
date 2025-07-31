@@ -401,7 +401,11 @@
             <version>27.0-jre</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>com.yd.tmsp</groupId>
+            <artifactId>tmsp-common</artifactId>
+            <version>v1.0.0-SNAPSHOT</version>
+        </dependency>
 
 
     </dependencies>

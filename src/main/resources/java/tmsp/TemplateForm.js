@@ -56,3 +56,23 @@ function submitData(){
 		}
 	});
 };
+
+$.extend($.fn.combobox.defaults, {
+	onHidePanel: function () {
+		let opts = $(this).combobox("options");
+		let valueField=opts.valueField;
+		let data = $(this).combobox('getData');/* 下拉框所有选项 */
+		let value = $(this).combobox('getValue');/* 用户输入的值 */
+		if(value){
+			let json = JSON.stringify(data);
+			let selectData='"'+valueField+'":"'+value+'"';
+			let indexStart = json.indexOf(selectData);
+			if(indexStart<0){
+				$(this).combobox("clear");
+			}
+		}else{
+			$(this).combobox("clear");
+		}
+	}
+});
+

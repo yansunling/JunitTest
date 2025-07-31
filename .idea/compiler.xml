@@ -10,8 +10,5 @@
         <module name="JunitTest" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="JunitTest" target="1.8" />
-    </bytecodeTargetLevel>
   </component>
 </project>

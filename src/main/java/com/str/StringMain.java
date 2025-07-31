@@ -1,24 +1,16 @@
 package com.str;
 
-import cn.hutool.core.io.FileUtil;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.yd.common.busi.builder.base.BusiNo;
-import com.yd.utils.common.BeanConvertUtils;
-
-import java.io.File;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Arrays;
-import java.util.Base64;
-import java.util.List;
 
 public class StringMain {
     public static void main(String[] args) {
-
+        //打印当前日期
         System.out.println(new Timestamp(1752746520007L));
+
+
 
     }
 

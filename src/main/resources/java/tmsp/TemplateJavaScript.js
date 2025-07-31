@@ -67,19 +67,30 @@ var bda_data_str_field = {
 			$$.showJcdfMessager('提示消息',  "请选择一条记录", 'info');
 			return;
 		}
-		let error='';
 		let params=[];
+
+		let deleteError='';
+
 		selectRows.forEach(row=>{
+
+
 			let statusName=row.{status_column};
 			if(statusName!='禁用'){
-				error+= '第'+$("#"+metaData.listTemplate).datagrid('getRowIndex',row)+'不为禁用';
+				deleteError+= '第'+$("#"+metaData.listTemplate).datagrid('getRowIndex',row)+'不为禁用';
 			}
+
+
 			params.push({"serial_no":row.serial_no});
 		});
-		if(error){
+
+
+		if(deleteError){
 			$$.showJcdfMessager('提示消息',  error, 'info');
 			return;
 		}
+
+
+
 		let title = "确认";
 		let msg = "确定删除所选记录?";
 		$.messager.confirm(title, msg, function (r) {
