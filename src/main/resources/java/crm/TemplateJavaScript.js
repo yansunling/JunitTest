@@ -49,7 +49,7 @@ var bda_data_str_field = {
 		let techParam = {
 			appId: appId,
 			srcPageId: metaData.objectId,
-			srcTableId: metaData.listTemplate,
+			srcTableId: metaData.queryId,
 			row:encodeURIComponent(escape(JSON.stringify(selectRows[0])))
 		};
 		techParam.actionId = buttonId;
@@ -71,7 +71,7 @@ var bda_data_str_field = {
 			appId: appId,
 			srcPageId: metaData.objectId,
 			srcTableId: metaData.listTemplate,
-			row:encodeURIComponent(escape(JSON.stringify(selectRows[0])))
+			row:encodeURIComponent(encodeURIComponent(JSON.stringify(selectRows[0])))
 		};
 		techParam.actionId = buttonId;
 		techParam.mode = 'get';
@@ -105,7 +105,7 @@ var bda_data_str_field = {
 						$$.closeProcessingDialog();
 						if (data && data.errorCode == 0) {
 							$$.showJcdfMessager('提示消息', '操作成功', 'info');
-							$$.refreshJcdfDatagrid(metaData.objectId,metaData.listTemplate);
+							$$.refreshJcdfDatagrid(metaData.objectId,metaData.queryId);
 							$$.refreshJcdfDatagrid(metaData.objectId,"#crm_share_data_log_good_list");
 						} else {
 							$$.showJcdfMessager('提示消息', data.msg, 'warning');

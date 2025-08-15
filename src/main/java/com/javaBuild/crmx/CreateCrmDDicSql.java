@@ -9,10 +9,10 @@ import java.util.Map;
 
 public class CreateCrmDDicSql {
     public static void main(String[] args) {
-        String name="货到付款、现付、周期结算、临时欠款";
+        String name="全部、干线到达、开始派送、中转在途、签收";
         String[] list = name.split("、");
         StringBuffer sql=new StringBuffer();
-        String domainId="contract_type";
+        String domainId="push_node";
         for(int i=0;i<list.length;i++){
             Integer key=i;
             String value=list[i].trim();

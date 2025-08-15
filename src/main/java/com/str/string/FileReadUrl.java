@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ReadUrl {
+public class FileReadUrl {
     public static void main(String[] args) throws Exception{
 
         Map<String,String> costMap=new HashMap<>();
@@ -21,7 +21,7 @@ public class ReadUrl {
         Map<String, Integer> map = new HashMap<>();
         map1.forEach((key,value)->{
             Integer integer = map2.get(key);
-            if(integer!=null&&integer<value){
+            if(integer!=null){
                 map.put(key,value>integer?value:integer);
             }
         });
@@ -50,7 +50,7 @@ public class ReadUrl {
 
 
     }
-    private static Map<String,Integer> readUrl(String fileName, Map<String,String> costMap)throws Exception{
+    public static Map<String,Integer> readUrl(String fileName, Map<String,String> costMap)throws Exception{
         File file = new File("C:\\Users\\yansunling\\Desktop\\"+fileName);
         List<String> contentList = FileUtils.readLines(file, "utf-8");
 

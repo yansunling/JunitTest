@@ -11,10 +11,10 @@ public class CreateCrmxAuthSql {
     public static void main(String[] args) {
 
         String env="uat";
-        String fun="crm_org_dept_config_list";
+        String fun="crmx_news_order_config";
         String sysId="crm";
         String mainType="菜单";
-        String functionName="特殊配置";
+        String functionName="已关注运单推送维护";
         if(fun.endsWith("_list")){
             fun=fun.replaceAll("_list","");
         }
@@ -24,9 +24,9 @@ public class CreateCrmxAuthSql {
             mainType="A";
         }
         String funId=fun+"_list";
-        String parentFun="crm_org_dept_ext_list";
-        String listUrl="../crmx/ui/view/base/"+funId+".html?actionId="+funId;
-        int num=10;
+        String parentFun="news";
+        String listUrl="../crmx/ui/view/news/"+funId+".html?actionId="+funId;
+        int num=50;
 
 
         String listSql="INSERT INTO `auth`.`auth_resource_fun_info`(`company_id`, `name_space_id`, `app_id`, `fun_id`, `fun_name`, `fun_desc`, `fun_type`, `fun_url`, `icon_id`, `target_type`, `remark`, `creator`, `create_time`, `op_user_id`, `update_time`, `creator_name`, `op_user_name`)" +
@@ -45,10 +45,10 @@ public class CreateCrmxAuthSql {
           map.put("updateData",new ButtonType("icon-edit","修改"));
           map.put("deleteData",new ButtonType("icon-remove","删除"));
 
-        map.put("enableData",new ButtonType("icon-ok","启用"));
-        map.put("disableData",new ButtonType("icon-cancel","禁用"));
+//        map.put("enableData",new ButtonType("icon-ok","启用"));
+//        map.put("disableData",new ButtonType("icon-cancel","禁用"));
 //        map.put("importData",new ButtonType("icon-upload","导入"));
-//        map.put("exportData",new ButtonType("icon-download","导出"));
+        map.put("exportData",new ButtonType("icon-download","导出"));
 //        map.put("appyData",new ButtonType("icon-add","还借支申请"));
 
         Set<String> keySet = map.keySet();

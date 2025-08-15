@@ -45,7 +45,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 	public  void test() throws Exception {
 
         Map<String,BuildConfig> tables=new HashMap<>();
-		tables.put("crm_base_customer_marketing_order",new BuildConfig("","N"));
+		tables.put("crm_news_order_config",new BuildConfig("","N"));
 
 		Set<String> tableNames = tables.keySet();
 
@@ -86,6 +86,7 @@ public class CreateJavaFile implements ApplicationContextAware{
 				controllerContent=removeImport(controllerContent);
 				serviceContent=removeImport(serviceContent);
 				implContent=removeImport(implContent);
+				content=removeByKey(content,"getExcelTitle");
 			}
 
 
@@ -295,5 +296,42 @@ public class CreateJavaFile implements ApplicationContextAware{
 		return StringUtils.join("\r\n\r\n",newContentList.toArray());
 	}
 
+
+	private String removeByKey(String content,String... keyWords){
+		boolean inParagraph = false;
+		boolean deleteCurrentParagraph = false;
+		StringBuilder currentParagraph = new StringBuilder();
+		String[] contentList = content.split(System.lineSeparator());
+		List<String> newContentList=new ArrayList<>();
+		for(String line:contentList) {
+			if (line.trim().isEmpty()) { // 空行表示段落结束
+				if (!deleteCurrentParagraph) {
+					newContentList.add(currentParagraph.toString());
+				}
+				// 重置段落状态
+				currentParagraph.setLength(0);
+				deleteCurrentParagraph = false;
+				inParagraph = false;
+			} else {
+				inParagraph = true;
+				currentParagraph.append(line).append(System.lineSeparator());
+
+				for(String keyword:keyWords){
+					if (line.contains(keyword)||line.contains(keyword)) {
+						deleteCurrentParagraph = true;
+					}
+				}
+
+
+
+			}
+		}
+
+		// 处理文件末尾的段落
+		if (inParagraph && !deleteCurrentParagraph) {
+			newContentList.add(currentParagraph.toString());
+		}
+		return StringUtils.join(System.lineSeparator(),newContentList.toArray());
+	}
 
 }
