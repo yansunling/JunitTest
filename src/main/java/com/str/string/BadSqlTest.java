@@ -19,22 +19,22 @@ public class BadSqlTest {
 
 
     public static void main(String[] args) {
-        StringBuffer querySql = new StringBuffer().append("SELECT\n" +
-                "\tmain.role_plus_id, main.role_plus_name, main.company_id, main.name_space_id \n" +
-                "FROM\n" +
-                "\tauth_resource_role_plus main\n" +
-                "\tLEFT JOIN auth_resource_role_2_plus r2p ON main.company_id = r2p.company_id \n" +
-                "\tAND main.name_space_id = r2p.name_space_id \n" +
-                "\tAND main.role_plus_id = r2p.role_plus_id\n" +
-                "\tLEFT JOIN auth_resource_role r ON r2p.company_id = r.company_id \n" +
-                "\tAND r2p.name_space_id = r.name_space_id \n" +
-                "\tAND r2p.app_id = r.app_id \n" +
-                "\tAND r2p.role_id = r.role_id\n" +
-                "\tLEFT JOIN auth_resource_role2fun r2f ON r.company_id = r2f.company_id \n" +
-                "\tAND r.name_space_id = r2f.name_space_id \n" +
-                "\tAND r.app_id = r2f.app_id \n" +
-                "\tAND r.root_node_id = r2f.root_fun_id AND r2f.app_id = ? AND r2f.fun_id = ? ");
-        System.out.println(querySql);
+        String sql = "SELECT IF ( LENGTH(orderp.transfer_city)<2, signin.signin_time, IF ( signin.is_change <> '0', signin.change_time, signin.last_close_time )) AS signinTime ," +
+                "signin_count, \n" +
+                "user1.user_name AS signerName,\n" +
+                " signin.abnormal_type AS abnormalType,\n" +
+                " signin.abnormal_number abnormalNumber,\n" +
+                " codes.code_name AS abnormalName \n" +
+                "FROM tmsp.`tmsp_close_sign` signin \n" +
+                " left join tmsp.tmsp_order_profile orderp on orderp.order_id=signin.order_id "+
+                " LEFT JOIN tmsp.cip_admin_user user1 ON user1.user_id=signin.signin_user_id " +
+                "LEFT JOIN mdm.mdm_ddic_ddic_codes codes ON codes.code_type = signin.abnormal_type AND codes.domain_id = 'abnormal_type' and codes.sys_id='tmsp' \n" +
+                "WHERE signin.order_id= ? " +
+                "AND signin_status != '0' \n" +
+                "AND signin_time IS NOT NULL\n" +
+                "and IF ( LENGTH(orderp.transfer_city)<2, signin.signin_time, IF ( signin.is_change <> '0', signin.change_time, signin.last_close_time ))!='1970-01-01 00:00:00'"+
+                "ORDER BY signin_time ";
+        System.out.println(sql);
 
 
     }

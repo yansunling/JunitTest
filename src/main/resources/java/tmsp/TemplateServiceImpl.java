@@ -49,7 +49,7 @@ public class {class_impl} implements {class_service} {
         {class_name} before = dataMapper.selectById(param.getSerial_no());
         //获得变更后数据
         {class_name} after = new {class_name}();
-        BeanUtils.copyProperties(before,after);
+        BeanUtils.copyProperties(before,after,"update_time","update_user_id");
         //更新复制后数据
         BeanUtils.copyProperties(param, after, OilCardUtil.getNullPropertyNames(param));
         //更新数据

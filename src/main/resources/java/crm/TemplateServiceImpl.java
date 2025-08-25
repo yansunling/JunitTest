@@ -62,7 +62,7 @@ public class {class_impl} implements {class_service} {
         {class_name} before = dataMapper.selectById(param.getSerial_no());
         //获得变更后数据
         {class_name} after = new {class_name}();
-        BeanUtils.copyProperties(before,after);
+        BeanUtils.copyProperties(before,after,"update_time","update_user_id","op_user_id");
         //更新复制后数据
         BeanUtils.copyProperties(param, after, CrmxCommonUtil.getNullPropertyNames(param));
         //更新数据
@@ -82,7 +82,7 @@ public class {class_impl} implements {class_service} {
         paramList.forEach(item->{
             {class_name} before = dataMapper.selectById(item.getSerial_no());
             {class_name} after=new {class_name}();
-            BeanUtil.copyProperties(before,after);
+            BeanUtil.copyProperties(before,after,"update_time","update_user_id","op_user_id");
             //更新复制后数据
             BeanUtils.copyProperties(item, after, CrmxCommonUtil.getNullPropertyNames(item));
             //记录变更日志
