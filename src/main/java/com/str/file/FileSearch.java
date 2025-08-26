@@ -232,14 +232,6 @@ public class FileSearch {
                     fileFutures.add(future);
                 }
             }
-            // 等待目录处理完成（短超时）
-//            for (Future<Void> future : fileFutures) {
-//                try {
-//                    future.get();
-//                } catch (Exception e) {
-//                    future.cancel(true);
-//                }
-//            }
         } catch (Exception e) {
             // 忽略访问权限等问题，继续搜索其他目录
         }
