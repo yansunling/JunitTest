@@ -1,7 +1,10 @@
 package com.str.file;
 
+import cn.hutool.core.date.DateUtil;
+
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -12,7 +15,7 @@ public class FileSearch {
     private static final String FILE_TYPE = "pptx";
     
     // 高性能线程数
-    private static final int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 100;
+    private static final int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 1000;
     
     // 性能计数器
     private static final AtomicInteger directoriesProcessed = new AtomicInteger(0);
@@ -41,13 +44,20 @@ public class FileSearch {
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
 
-        for(int j=0;j<10;j++){
+
+        ThreadPoolExecutor threadPool = (ThreadPoolExecutor) sharedExecutor;
+        while(true){
             if(results.size()>=20){
                 break;
             }
-            Thread.sleep(10000L);
+            int activeCount = threadPool.getActiveCount();
+            if(activeCount>0){
+                System.out.printf(DateUtil.format(new Date(),"yyyy-MM-dd HH:mm:ss")+" 活跃线程: %d, 总线程: %d \n",activeCount, threadPool.getPoolSize());
+                Thread.sleep(2000L);
+            }else{
+                break;
+            }
         }
-
         // 输出结果和性能统计
         System.out.println("\n========== 搜索结果 ==========");
         System.out.println("总共找到 " + results.size() + " 个匹配的文件:");
@@ -103,27 +113,7 @@ public class FileSearch {
                 }
             }
 
-            ThreadPoolExecutor threadPool = (ThreadPoolExecutor) sharedExecutor;
 
-            new Thread(() -> {
-                try {
-                    // 每隔0.5秒打印一次线程状态
-                    for (int i = 0; i < 10; i++) {
-                        int activeCount = threadPool.getActiveCount(); // 活跃线程数（正在运行）
-                        int poolSize = threadPool.getPoolSize();       // 总线程数（活跃+空闲）
-                        int coreSize = threadPool.getCorePoolSize();   // 核心线程数
-                        int maxSize = threadPool.getMaximumPoolSize(); // 最大线程数
-
-                        System.out.printf(
-                                "活跃线程: %d, 总线程: %d, 核心线程: %d, 最大线程: %d%n",
-                                activeCount, poolSize, coreSize, maxSize
-                        );
-                        TimeUnit.MILLISECONDS.sleep(2000);
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                }
-            }).start();
 
 
 
