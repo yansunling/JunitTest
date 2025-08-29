@@ -88,7 +88,7 @@ public class FileSearchFinal {
                         public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
                             // 当访问文件失败时（如权限不足），打印警告并继续
                             if (exc instanceof AccessDeniedException) {
-                                System.err.println("警告：无法访问目录（权限不足）: " + file);
+//                                System.err.println("警告：无法访问目录（权限不足）: " + file);
                                 return FileVisitResult.SKIP_SUBTREE;
                             }
 
