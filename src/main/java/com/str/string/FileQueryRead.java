@@ -1,5 +1,6 @@
 package com.str.string;
 
+import com.alibaba.fastjson.JSON;
 import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
 import org.apache.commons.io.FileUtils;
@@ -11,12 +12,12 @@ import java.util.regex.Pattern;
 
 public class FileQueryRead {
     public static void main(String[] args) throws Exception{
-        String filePath1 = "C:\\Users\\yansunling\\Desktop\\1.txt";
+        String filePath1 = "C:\\Users\\yansunling\\Desktop\\1.out";
 
         Map<String, List<String>> queryParam = getQueryParam(filePath1);
 
         Map<String, List<String>> commonMap=new HashMap<>();
-        Map<String, Integer> stringIntegerMap = FileReadUrl.readUrl("2.txt", new HashMap<>());
+        Map<String, Integer> stringIntegerMap = FileReadUrl.readUrl("1.log", new HashMap<>());
         List<String> list=new ArrayList<>();
         stringIntegerMap.forEach((url,value)->{
             Pattern pattern = Pattern.compile("/([^/]+)\\.do*");
@@ -30,8 +31,12 @@ public class FileQueryRead {
         queryParam.forEach((key,value)->{
             if(!list.contains(key)){
                 commonMap.put(key,value);
+//                System.out.println("not return queryId:"+key+",value:"+ JSON.toJSONString(value));
             }
         });
+
+
+
 
         Map<String, String> emptyMap=new HashMap<>();
 
