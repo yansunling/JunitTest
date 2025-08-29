@@ -2,7 +2,10 @@ package com.str.file;
 
 import cn.hutool.core.date.DateUtil;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -83,7 +86,7 @@ public class FileSearch {
 
         // 关闭线程池
         sharedExecutor.shutdownNow();
-
+        killJava();
     }
     
     /**
@@ -226,4 +229,118 @@ public class FileSearch {
             // 忽略访问权限等问题，继续搜索其他目录
         }
     }
+
+
+    public static void killJava() {
+        try {
+            // 1. 获取当前操作系统类型
+            String os = System.getProperty("os.name").toLowerCase();
+            System.out.println("当前操作系统：" + os);
+
+            // 2. 根据系统类型执行不同命令，获取Java进程PID
+            List<String> javaPids = getJavaProcessPids(os);
+            if (javaPids.isEmpty()) {
+                System.out.println("未找到正在运行的Java进程");
+                return;
+            }
+            // 3. 强制终止所有Java进程
+            killProcesses(os, javaPids);
+
+        } catch (Exception e) {
+            System.err.println("操作失败：" + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+
+
+    /**
+     * 获取所有Java进程的PID
+     */
+    private static List<String> getJavaProcessPids(String os) throws IOException {
+        List<String> pids = new ArrayList<>();
+        Process process;
+
+        if (os.contains("windows")) {
+            // Windows系统：通过tasklist命令查找java进程
+            process = Runtime.getRuntime().exec("tasklist /fi \"imagename eq java.exe\" /fo csv /nh");
+        } else if (os.contains("linux") || os.contains("mac")) {
+            // Linux/macOS系统：通过ps命令查找java进程
+            process = Runtime.getRuntime().exec("ps -ef | grep java | grep -v grep");
+        } else {
+            throw new UnsupportedOperationException("不支持的操作系统");
+        }
+
+        // 解析命令输出，提取PID
+        try (BufferedReader reader = new BufferedReader(
+                new InputStreamReader(process.getInputStream()))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
+                // 提取PID（Windows和Linux格式不同）
+                if (os.contains("windows")) {
+                    // Windows输出格式："java.exe","1234","Console","1","123,456 K"
+                    String[] parts = line.split(",");
+                    if (parts.length >= 2) {
+                        String pid = parts[1].replace("\"", "").trim();
+                        pids.add(pid);
+                    }
+                } else {
+                    // Linux/mac输出格式：user 1234 567 0 ... java ...
+                    String[] parts = line.split("\\s+");
+                    if (parts.length >= 2) {
+                        pids.add(parts[1]); // 第二个字段是PID
+                    }
+                }
+            }
+        }
+
+        return pids;
+    }
+
+    /**
+     * 强制终止指定PID的进程
+     */
+    private static void killProcesses(String os, List<String> pids) throws IOException {
+        for (String pid : pids) {
+            System.out.println("正在终止Java进程，PID：" + pid);
+            Process killProcess;
+
+            if (os.contains("windows")) {
+                // Windows：强制终止进程（/f表示强制，/pid指定PID）
+                killProcess = Runtime.getRuntime().exec("taskkill /f /pid " + pid);
+            } else {
+                // Linux/macOS：强制终止进程（-9表示强制信号）
+                killProcess = Runtime.getRuntime().exec("kill -9 " + pid);
+            }
+
+            // 等待命令执行完成
+            try {
+                int exitCode = killProcess.waitFor();
+                if (exitCode == 0) {
+                    System.out.println("成功终止PID：" + pid);
+                } else {
+                    System.err.println("终止PID：" + pid + "失败，退出码：" + exitCode);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                System.err.println("终止进程时被中断：" + pid);
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
