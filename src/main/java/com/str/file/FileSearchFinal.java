@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 
 public class FileSearchFinal {
 
-    private static int ROOT_LENGTH=6;
+    private static int ROOT_LENGTH=7;
 
     private static String FILE_NAME="query";
     private static String FILE_TYPE="pptx";
@@ -31,7 +31,6 @@ public class FileSearchFinal {
         System.out.println("检测到 " + (roots != null ? roots.length : 0) + " 个磁盘驱动器");
         List<File> fileList = Arrays.asList(roots);
         CountDownLatch countDownLatch = new CountDownLatch(fileList.size());
-        System.out.println("size:"+fileList.size());
         // 为每个根目录创建一个搜索任务
         for (File root : fileList) {
             System.out.println("启动驱动器搜索任务: " + root.getAbsolutePath());
