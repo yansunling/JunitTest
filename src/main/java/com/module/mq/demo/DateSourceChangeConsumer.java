@@ -5,17 +5,18 @@ import com.rabbitmq.client.*;
 
 import java.io.IOException;
 
-public class DemoConsumer2 {
+public class DateSourceChangeConsumer {
     public static void main(String[] args) throws Exception{
         //1 创建ConnectionFactory
         ConnectionFactory connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost("127.0.0.1");
+        connectionFactory.setHost("tlwl-uat-rabbitmq.k8s.local");
         connectionFactory.setPort(5672);
-        connectionFactory.setPassword("guest");
-        connectionFactory.setUsername("guest");
+        connectionFactory.setUsername("rabbit");
+        connectionFactory.setPassword("123456");
 
-        String QUEUE_NAME = "consumer_info";
-        String EXCHANGE_NAME = "my_fanout_exchange";
+
+        String QUEUE_NAME = "consumer_info1";
+        String EXCHANGE_NAME = "DSB.QUEUE.EXCHANGER";
 
         //2 获取Connection
         Connection connection = connectionFactory.newConnection();
@@ -24,7 +25,7 @@ public class DemoConsumer2 {
         /* 3.消费者关联队列 */
         channel.queueDeclare(QUEUE_NAME, false, false, false, null);
         /* 4.消费者绑定交换机 参数1 队列 参数2交换机 参数3 routingKey */
-        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "error");
+        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "6510549174325248.hcm.hcm_emp_ent");
 //        channel.queueBind(QUEUE_NAME, EXCHANGE_NAME, "info");
         DefaultConsumer consumer = new DefaultConsumer(channel) {
             @Override

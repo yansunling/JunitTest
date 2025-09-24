@@ -11,34 +11,43 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class JsonTest {
+public class JavascriptToQueryUtil {
 	public static void main(String[] args) throws Exception{
-		String filePath = "C:\\Users\\yansunling\\Desktop/1.json";
+        String filePath = JavascriptToQueryUtil.class.getClassLoader().getResource("").getPath();
+        filePath+="/javascript/columns.js";
 		String json = FileUtil.readAsString(new File(filePath));
-        List<Map<String, String>> maps = getMap(json);
+        List<Map<String, String>> maps = JavaScriptToJsonUtil.jsToList(json);
         StringBuffer sb=new StringBuffer();
 		List<String> list=new ArrayList<>();
         List<String> sqlList=new ArrayList<>();
 		maps.forEach(temp->{
-            String field = temp.get("field") + "";
-            String name = temp.get("name") + "";
+            String name = temp.get("name");
+            if(StringUtils.isBlank(name)||temp.get("name")==null){
+                return;
+            }
+            String field = temp.get("field");
             sb.append("'' as "+ temp.get("field")+",-- "+temp.get("name")+"\n");
-			if(StringUtils.equals("true",temp.get("hidden")+"")){
+			if(StringUtils.equals("true",temp.get("hidden"))){
 			    list.add(temp.get("field")+"");
+//                System.out.println("update query.query_new_columns set hide_flag='Y' where query_id='tmsp_print_ticket_title_list' and ui_column_id='"+field+"';");
             }
 			if(temp.get("width")!=null){
                 String width = (temp.get("width") + "").replace("px", "");
-//                System.out.println("update query.query_new_columns set width='"+width+"' where query_id='tmsp_stock_info_title' and ui_column_id='"+field+"';");
+//                System.out.println("update query.query_new_columns set ui_width='"+width+"' where query_id='tmsp_print_ticket_title_list' and ui_column_id='"+field+"';");
             }
-//			if(StringUtils.equals("easyui-datetimebox",temp.get("ctrlType")+"")){
+			if(StringUtils.equals("easyui-datetimebox",temp.get("ctrlType")+"")){
 //                System.out.println(field);
-//            }
+            }
 
-            System.out.println("titleMap.put(\""+field+"\",\""+name+"\");");
+            if(temp.get("styler")!=null){
+//                System.out.println(field);
+            }
+
+//            System.out.println("titleMap.put(\""+field+"\",\""+name+"\");");
 
 
 		});
-//		System.out.println(sb.toString());
+		System.out.println(sb.toString());
 
 //        System.out.println(StringUtils.join("','",list.toArray()));
 

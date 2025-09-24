@@ -16,6 +16,8 @@ public class FileSearch {
     // 固定搜索条件
     private static final String FILE_NAME = "query";
     private static final String FILE_TYPE = "pptx";
+
+    private static final int MAX_COUNT=40;
     
     // 高性能线程数
     private static final int THREAD_POOL_SIZE = Runtime.getRuntime().availableProcessors() * 1000;
@@ -40,27 +42,24 @@ public class FileSearch {
         
         // 搜索文件
         List<String> results = searchFiles();
-        
-
-        
-        // 计算耗时
-        long endTime = System.currentTimeMillis();
-        long duration = endTime - startTime;
 
 
         ThreadPoolExecutor threadPool = (ThreadPoolExecutor) sharedExecutor;
         while(true){
-            if(results.size()>=20){
+            if(results.size()>=MAX_COUNT){
                 break;
             }
             int activeCount = threadPool.getActiveCount();
             if(activeCount>0){
                 System.out.printf(DateUtil.format(new Date(),"yyyy-MM-dd HH:mm:ss")+" 活跃线程: %d, 总线程: %d \n",activeCount, threadPool.getPoolSize());
-                Thread.sleep(2000L);
+                Thread.sleep(5000L);
             }else{
                 break;
             }
         }
+        // 计算耗时
+        long endTime = System.currentTimeMillis();
+        long duration = endTime - startTime;
         // 输出结果和性能统计
         System.out.println("\n========== 搜索结果 ==========");
         System.out.println("总共找到 " + results.size() + " 个匹配的文件:");
@@ -78,7 +77,7 @@ public class FileSearch {
         System.out.println("性能统计:");
         System.out.println("  处理目录数: " + directoriesProcessed.get());
         System.out.println("  处理文件数: " + filesProcessed.get());
-        System.out.println("  搜索耗时: " + duration + " 毫秒");
+        System.out.println("  搜索耗时: " + duration/1000 + " 秒");
         System.out.println("  处理速度: " + (filesProcessed.get() * 1000 / Math.max(1, duration)) + " 文件/秒");
 
 
@@ -146,7 +145,7 @@ public class FileSearch {
     private static void searchDirectoryUltraFast(File directory, List<String> results) {
         try {
             // 基本检查
-            if (!directory.exists() || !directory.isDirectory() || results.size() >= 20) {
+            if (!directory.exists() || !directory.isDirectory() || results.size() >= MAX_COUNT) {
                 return;
             }
             
@@ -174,7 +173,7 @@ public class FileSearch {
             // 高并发处理文件（每个文件一个任务）
             List<Future<Void>> fileFutures = new ArrayList<>();
             for (File file : regularFiles) {
-                if (results.size() >= 20) {
+                if (results.size() >= MAX_COUNT) {
                     break;
                 }
                 Future<Void> future = sharedExecutor.submit(() -> {
@@ -186,7 +185,7 @@ public class FileSearch {
                     if (lowerFileName.endsWith("." + FILE_TYPE.toLowerCase())) {
                         // 检查文件名是否匹配
                         if (FILE_NAME.isEmpty() || lowerFileName.contains(FILE_NAME.toLowerCase())) {
-                            if (results.size() < 20) {
+                            if (results.size() < MAX_COUNT) {
                                 results.add(file.getAbsolutePath());
                                 System.out.println("  *** [" + Thread.currentThread().getName() + "] 发现匹配文件: " + fileName);
                             }
@@ -197,14 +196,14 @@ public class FileSearch {
                 fileFutures.add(future);
             }
             // 如果已经找到足够结果，直接返回
-            if (results.size() >= 20) {
+            if (results.size() >= MAX_COUNT) {
                 return;
             }
 
             // 高并发处理子目录（每个目录一个任务）
 
             for (File subDir : subDirectories) {
-                if (results.size() >= 20) {
+                if (results.size() >= MAX_COUNT) {
                     break;
                 }
                 

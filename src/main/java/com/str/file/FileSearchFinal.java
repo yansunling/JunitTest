@@ -1,61 +1,131 @@
 package com.str.file;
 
-import com.yd.utils.common.CollectionUtil;
-
+import cn.hutool.core.date.DateUtil;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.EnumSet;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class FileSearchFinal {
 
-    private static int ROOT_LENGTH=7;
-
-    private static String FILE_NAME="query";
-    private static String FILE_TYPE="pptx";
+    private static int ROOT_LENGTH = 6;
+    private static String FILE_NAME = "query";
+    private static String FILE_TYPE = "pptx";
+    
+    // 使用线程安全的结果集合
+    private static final List<Path> results = new ArrayList<>();
+    private static final Object resultsLock = new Object();
+    
+    // 添加计数器来跟踪完成的任务
+    private static final AtomicInteger completedTasks = new AtomicInteger(0);
+    private static volatile int totalTasks = 0;
+    
+    // 使用阻塞队列来管理任务
+    private static final BlockingQueue<File> taskQueue = new LinkedBlockingQueue<>();
 
     public static void main(String[] args) throws Exception {
         // 记录开始时间
         long startTime = System.currentTimeMillis();
-        ExecutorService sharedExecutor = Executors.newFixedThreadPool(10);
+
         // 获取系统根目录
         File[] roots = File.listRoots();
-        List<Path> results = new ArrayList<>();
         System.out.println("检测到 " + (roots != null ? roots.length : 0) + " 个磁盘驱动器");
-        List<File> fileList = Arrays.asList(roots);
-        CountDownLatch countDownLatch = new CountDownLatch(fileList.size());
-        // 为每个根目录创建一个搜索任务
-        for (File root : fileList) {
-            System.out.println("启动驱动器搜索任务: " + root.getAbsolutePath());
-            sharedExecutor.submit(() -> {
-                List<Path> paths = searchDirFile(root.toPath(), ROOT_LENGTH);
-                if (CollectionUtil.isNotEmpty(paths)) {
-                    results.addAll(paths);
+        
+        // 收集所有一级子目录
+        for (File root : roots) {
+            File[] subDirs = root.listFiles(File::isDirectory);
+            if (subDirs != null) {
+                Collections.addAll(taskQueue, subDirs);
+            }
+        }
+        
+        totalTasks = taskQueue.size();
+        ROOT_LENGTH = ROOT_LENGTH - 1;
+
+        // 使用固定大小的线程池
+        int threadCount = Math.min(totalTasks, Runtime.getRuntime().availableProcessors() * 10);
+        ExecutorService sharedExecutor = Executors.newFixedThreadPool(threadCount);
+        
+        // 提交所有任务
+        CountDownLatch countDownLatch = new CountDownLatch(totalTasks);
+        
+        // 提交工作线程
+        for (int i = 0; i < threadCount; i++) {
+            sharedExecutor.submit(new Worker(countDownLatch));
+        }
+
+        // 启动监控线程
+        ThreadPoolExecutor threadPool = (ThreadPoolExecutor) sharedExecutor;
+        new Thread(() -> {
+            while (true) {
+                try {
+                    int activeCount = threadPool.getActiveCount();
+                    int completed = completedTasks.get();
+                    if (activeCount > 0 || completed < totalTasks) {
+                        System.out.printf(DateUtil.format(new Date(), "yyyy-MM-dd HH:mm:ss") + 
+                            " 活跃线程: %d, 总线程: %d, 完成任务: %d/%d, 待处理: %d\n",
+                            activeCount, threadPool.getPoolSize(), completed, totalTasks, taskQueue.size());
+                        TimeUnit.MILLISECONDS.sleep(5000);
+                    } else {
+                        break;
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                countDownLatch.countDown();
-                return null;
-            });
-        }
+            }
+        }).start();
+
         countDownLatch.await();
-        for (int i = 0; i < results.size(); i++) {
-            System.out.println((i + 1) + ". " + results.get(i));
+        
+        // 输出结果
+        System.out.println("搜索到 " + results.size() + " 个文件:");
+        synchronized (resultsLock) {
+            for (int i = 0; i < Math.min(results.size(), 100); i++) { // 限制输出前100个结果
+                System.out.println((i + 1) + ". " + results.get(i));
+            }
+            if (results.size() > 100) {
+                System.out.println("... 还有 " + (results.size() - 100) + " 个文件");
+            }
         }
+        
         // 计算耗时
         long endTime = System.currentTimeMillis();
         long duration = endTime - startTime;
-        System.out.println("  搜索耗时: " + duration/1000 + " 秒");
+        System.out.println("搜索耗时: " + duration/1000 + " 秒");
+        
         sharedExecutor.shutdownNow();
-
-
     }
 
+    static class Worker implements Runnable {
+        private final CountDownLatch latch;
+        
+        public Worker(CountDownLatch latch) {
+            this.latch = latch;
+        }
+        
+        @Override
+        public void run() {
+            File root;
+            while ((root = taskQueue.poll()) != null) {
+                try {
+                    List<Path> paths = searchDirFile(root.toPath(), ROOT_LENGTH);
+                    if (paths != null && !paths.isEmpty()) {
+                        synchronized (resultsLock) {
+                            results.addAll(paths);
+                        }
+                    }
+                } catch (Exception e) {
+                    System.err.println("处理目录时出错: " + root.getAbsolutePath() + " - " + e.getMessage());
+                } finally {
+                    latch.countDown();
+                    completedTasks.incrementAndGet();
+                }
+            }
+        }
+    }
 
     /**
      * 程序入口点。
@@ -63,142 +133,64 @@ public class FileSearchFinal {
      *
      * @param args 命令行参数（未使用）
      */
-    public static  List<Path>  searchDirFile(Path rootDir,int maxDepth) {
-
-        String fileName=FILE_NAME;
-        String fileType=FILE_TYPE;
-        List<Path> results=new ArrayList<>();
+    public static List<Path> searchDirFile(Path rootDir, int maxDepth) {
+        String fileName = FILE_NAME.toLowerCase(); // 转换为小写以支持不区分大小写的搜索
+        String fileType = "." + FILE_TYPE.toLowerCase(); // 确保扩展名以点开头
+        List<Path> localResults = new ArrayList<>();
 
         try {
             // 使用 Files.walkFileTree 跳过无法访问的目录
-            long startTime = System.currentTimeMillis();
-            Files.walkFileTree(rootDir, EnumSet.noneOf(FileVisitOption.class), maxDepth,
+            Files.walkFileTree(rootDir, EnumSet.of(FileVisitOption.FOLLOW_LINKS), maxDepth,
                     new SimpleFileVisitor<Path>() {
                         @Override
                         public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-                            // 打印当前目录路径
-                            List<Path> filePaths = searchFiles(dir, fileName, fileType);
-                            if(CollectionUtil.isNotEmpty(filePaths)){
-                                results.addAll(filePaths);
+                            // 直接在目录访问时搜索文件，而不是递归调用
+                            try (DirectoryStream<Path> stream = Files.newDirectoryStream(dir)) {
+                                for (Path file : stream) {
+                                    // 只处理常规文件
+                                    if (Files.isRegularFile(file)) {
+                                        String name = file.getFileName().toString().toLowerCase();
+                                        // 先检查文件扩展名，再检查文件名（更高效）
+                                        if (name.endsWith(fileType) && name.contains(fileName)) {
+                                            localResults.add(file.toAbsolutePath());
+                                        }
+                                    }
+                                }
+                            } catch (IOException e) {
+                                // 忽略无法访问的目录
+                                return FileVisitResult.SKIP_SUBTREE;
                             }
                             return FileVisitResult.CONTINUE;
                         }
+                        
                         @Override
                         public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-                            // 当访问文件失败时（如权限不足），打印警告并继续
+                            // 当访问文件失败时（如权限不足），跳过并继续
                             if (exc instanceof AccessDeniedException) {
-//                                System.err.println("警告：无法访问目录（权限不足）: " + file);
                                 return FileVisitResult.SKIP_SUBTREE;
                             }
 
-                            String dirName = file.getFileName().toString();
-                            if (!dirName.equals("$recycle.bin") &&
-                                    !dirName.equals("system volume information") &&
-                                    dirName.indexOf("window")<0&&
-                                    dirName.indexOf("Program")<0&&
-                                    !dirName.equals("temp")) {
+                            String dirName = file.getFileName().toString().toLowerCase();
+                            if (dirName.equals("$recycle.bin") ||
+                                    dirName.equals("system volume information") ||
+                                    dirName.contains("window") ||
+                                    dirName.contains("program") ||
+                                    dirName.equals("temp")) {
                                 return FileVisitResult.SKIP_SUBTREE;
                             }
                             return FileVisitResult.CONTINUE;
                         }
-                    });
+                        
 
-            long endTime = System.currentTimeMillis();
-            System.out.println(rootDir+"遍历完成，耗时: " + (endTime - startTime) + " 毫秒");
+                        public FileVisitResult preVisitDirectoryFailed(Path dir, IOException exc) throws IOException {
+                            // 当访问目录失败时，跳过整个子树
+                            return FileVisitResult.SKIP_SUBTREE;
+                        }
+                    });
         } catch (IOException e) {
             // 处理IO异常
             System.err.println("访问文件系统时发生错误: " + e.getMessage());
-            e.printStackTrace();
         }
-        return results;
-
-
-
-    }
-
-
-
-    /**
-     * 根据路径、文件名和文件类型搜索文件
-     *
-     * @param path 搜索的根路径
-     * @param fileName 要搜索的文件名（包含匹配）
-     * @param fileType 文件类型（扩展名，例如 ".txt"）
-     * @return 匹配的文件路径列表
-     * @throws IOException 当访问文件系统时出现问题
-     */
-    public static List<Path> searchFiles(Path path, String fileName, String fileType) throws IOException {
-        // 参数验证
-        if (path == null) {
-            throw new IllegalArgumentException("搜索路径不能为null");
-        }
-        List<Path> result = new ArrayList<>();
-        // 使用并行流来提高搜索效率
-        try {
-            result = Files.walk(path,1)
-                    .parallel()
-                    .filter(Files::isRegularFile)  // 只处理常规文件
-                    .filter(file -> {
-                        String name = file.getFileName().toString();
-                        return name.contains(fileName) && name.endsWith(fileType);
-                    })
-                    // 添加异常处理
-                    .filter(file -> {
-                        try {
-                            return Files.exists(file);
-                        } catch (SecurityException e) {
-                            // System.err.println("警告：无法访问文件（权限不足）: " + file);
-                            return false;
-                        }
-                    })
-                    .collect(ArrayList::new, ArrayList::add, ArrayList::addAll);
-        } catch (java.nio.file.AccessDeniedException e) {
-            // 特别处理访问被拒绝异常
-            System.err.println("访问被拒绝: " + e.getMessage());
-            // 回退到传统方法
-            result.clear();
-            walkFileTreeFallback(path, fileName, fileType, result);
-        } catch (Exception e) {
-            // 如果Files.walk出现问题，回退到原来的实现
-            System.err.println("并行搜索失败，回退到传统方法: " + e.getMessage());
-            result.clear();
-            walkFileTreeFallback(path, fileName, fileType, result);
-        }
-
-        return result;
-    }
-
-    /**
-     * 回退到传统Files.walkFileTree方法的实现
-     *
-     * @param path 搜索的根路径
-     * @param fileName 要搜索的文件名
-     * @param fileType 文件类型
-     * @param result 结果列表
-     * @throws IOException 当访问文件系统时出现问题
-     */
-    private static void walkFileTreeFallback(Path path, String fileName, String fileType, List<Path> result) throws IOException {
-        Files.walkFileTree(path, new SimpleFileVisitor<Path>() {
-            @Override
-            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-                String name = file.getFileName().toString();
-                // 检查文件名是否包含指定的fileName并且文件扩展名是否匹配
-                if (name.contains(fileName) && name.endsWith(fileType)) {
-                    result.add(file.toAbsolutePath());
-                }
-
-                return FileVisitResult.CONTINUE;
-            }
-
-            @Override
-            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
-                // 当访问文件失败时，跳过该文件并继续
-                if (exc instanceof AccessDeniedException) {
-                    // System.err.println("警告：无法访问文件（权限不足）: " + file);
-                    return FileVisitResult.SKIP_SUBTREE;
-                }
-                return FileVisitResult.CONTINUE;
-            }
-        });
+        return localResults;
     }
 }

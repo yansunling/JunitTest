@@ -1,5 +1,7 @@
 package com.str;
 
+import com.yd.utils.common.StringUtils;
+
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -10,9 +12,22 @@ public class StringMain {
         //打印当前日期
         System.out.println(new Timestamp(1752746520007L));
 
-
+        System.out.println(bankProcess(" 徐荷花"));
+        String customerName="徐荷花-服装W";
+        String[] split = customerName.split("-");
+        System.out.println(split[0]);
 
     }
+
+    private static String bankProcess(String str){
+        if(StringUtils.isNotBlank(str)){
+            str=str.trim();
+            str.replaceAll("\\s", "");
+        }
+        return str;
+    }
+
+
 
     public static Timestamp getMonthsLaterFirstDay(Timestamp timestamp, int month) {
         // 转换为 LocalDate（丢弃时间部分）

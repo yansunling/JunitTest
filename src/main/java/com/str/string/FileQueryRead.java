@@ -12,12 +12,12 @@ import java.util.regex.Pattern;
 
 public class FileQueryRead {
     public static void main(String[] args) throws Exception{
-        String filePath1 = "C:\\Users\\yansunling\\Desktop\\1.out";
+        String filePath1 = "C:\\Users\\yansunling\\Desktop\\query-master-1218100553-66f587dd45-jj6tf_saas_catalina.2025-09-16.out";
 
         Map<String, List<String>> queryParam = getQueryParam(filePath1);
 
         Map<String, List<String>> commonMap=new HashMap<>();
-        Map<String, Integer> stringIntegerMap = FileReadUrl.readUrl("1.log", new HashMap<>());
+       /* Map<String, Integer> stringIntegerMap = FileReadUrl.readUrl("1.log", new HashMap<>());
         List<String> list=new ArrayList<>();
         stringIntegerMap.forEach((url,value)->{
             Pattern pattern = Pattern.compile("/([^/]+)\\.do*");
@@ -33,7 +33,7 @@ public class FileQueryRead {
                 commonMap.put(key,value);
 //                System.out.println("not return queryId:"+key+",value:"+ JSON.toJSONString(value));
             }
-        });
+        });*/
 
 
 
