@@ -6,10 +6,7 @@ import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.xmlbeans.XmlOptions;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTBody;
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,6 +54,12 @@ public class POIMergeDocUtil {
         //获取的OPCPackage对象大于0时，执行合并操作
         if (opcpSize > 0) {
             try {
+                File file = new File(destDocx);
+                File parentDir = file.getParentFile();
+                if (parentDir != null && !parentDir.exists()) {
+                    // mkdirs() 会创建所有不存在的父目录，而 mkdir() 只会创建直接父目录
+                   parentDir.mkdirs();
+                }
                 dest = new FileOutputStream(destDocx);
                 XWPFDocument src1Document = new XWPFDocument(opcpList.get(0));
                 CTBody src1Body = src1Document.getDocument().getBody();

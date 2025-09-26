@@ -41,7 +41,7 @@ public class CreateTmspEnumBySource implements ApplicationContextAware{
 	@Test
 	public  void test() throws Exception {
         List<String> domainList = Arrays.asList("oa_account_nature");
-        String path="C:\\Users\\yansunling\\Desktop\\enum\\";
+        String path="C:/Users/yansunling/Desktop/build/enum/";
 		File dir=new File(path);
 
 		FileUtils.deleteDirectory(dir);

@@ -3,23 +3,26 @@ package com.word.createWord;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.javaBuild.tmsp.WordCreateTmspByClass;
-import com.word.doc.GeneralTemplateTool;
 import com.word.createWord.query.QueryNewColumnsData;
 import com.word.createWord.query.QueryNewRegisterData;
 import com.word.createWord.query.QueryNewWhereParamData;
+import com.word.doc.GeneralTemplateTool;
 import com.word.doc.POIMergeDocUtil;
 import com.yd.query.util.QueryVueUtil;
 import com.yd.query.vo.QueryBean;
+import com.yd.utils.common.CollectionUtil;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class WordCreateByQuery {
-
-
-
-    public static void main(String[] args) throws Exception{
-
+    public static void createQuery(boolean esbFlag,List<String> queryList) throws Exception{
+        if(CollectionUtil.isEmpty(queryList)){
+            return;
+        }
         String path = WordCreateTmspByClass.class.getClassLoader().getResource("").getPath();
         String filePath=path+"api";
         //模板路径
@@ -29,13 +32,12 @@ public class WordCreateByQuery {
 
         QueryVueUtil queryUtil=new QueryVueUtil();
         queryUtil.setHOST_ADDRESS("https://tlwl.uat.tuolong56.com");
-
-        List<String> queryList = Arrays.asList("comp_asset_level_class_list","comp_asset_level_class_third_class","comp_asset_level_class_second_class","comp_asset_level_class_first_class");
-
         List<String> fileList=new ArrayList<>();
         for (String  queryId : queryList) {
-
-            String url="https://tlwl.uat.tuolong56.com/query/auth/query_new_search/searchTotalData/V1.0.0/"+queryId+".do";
+            String url="/query/auth/query_new_search/searchTotalData/V1.0.0/"+queryId+".do";
+            if(esbFlag){
+                url="/esb-api/api/d/"+queryId;
+            }
             //......对应模板扩展
             //创建替代模板里段落中如${title}值结束
             Map<String, Object> params = new HashMap<>();
@@ -110,7 +112,7 @@ public class WordCreateByQuery {
             fileList.add(outFile);
         }
         String[] file =fileList.toArray(new String[0]);
-        String  apiDoc="C:/Users/yansunling/Desktop/api/查询接口.docx";
+        String  apiDoc="C:/Users/yansunling/Desktop/api/main/查询接口.docx";
         POIMergeDocUtil.mergeDoc(file,apiDoc);
 
     }

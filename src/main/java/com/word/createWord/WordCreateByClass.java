@@ -4,15 +4,17 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 import com.dy.components.annotations.CJ_column;
 import com.dy.components.annotations.CJ_jcjs_esbMethodInfo;
+import com.javaBuild.tmsp.WordCreateTmspByClass;
 import com.junit.po.ParamBean;
 import com.other.annotation.MyNotEmpty;
 import com.other.annotation.MyNotNull;
 import com.word.dataSource.controller.CompAssetLevelClassController;
-import com.word.dataSource.controller.CrmxSatisfactionSurveyController;
 import com.word.doc.GeneralTemplateTool;
+import com.word.doc.POIMergeDocUtil;
 import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
 import lombok.SneakyThrows;
+import org.apache.commons.io.FileUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.File;
@@ -25,23 +27,24 @@ import java.util.*;
 public class WordCreateByClass {
 
 
-    public static void main(String[] args) throws Exception{
-
-        Class<?> clazz = CompAssetLevelClassController.class;
+    public static void createApi(boolean esbFlag,Class<?> clazz) throws Exception{
         closeWps();
+        String fileName="操作接口";
         String path = WordCreateByClass.class.getClassLoader().getResource("").getPath();
         String filePath=path+"api";
         //模板路径
         String templatePath=filePath+"/template.docx";
         //doc文档生成工具
         GeneralTemplateTool gtt = new GeneralTemplateTool();
-
+        //删除目录下数据
+        String dir="C:/Users/yansunling/Desktop/api/detail";
+        File dirFile = new File(dir);
+        FileUtils.deleteDirectory(dirFile);
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
-        String rootPath="https://tlwl.uat.tuolong56.com/asset-api"+annotation.value()[0];
+        String rootPath="/asset-api"+annotation.value()[0];
         //获得所有方法
         Method[] methods = clazz.getMethods();
-        boolean esbFlag=false;
         List<String> fileList=new ArrayList<>();
 
         for (Method item : methods) {
@@ -57,7 +60,6 @@ public class WordCreateByClass {
                 if(esbFlag){
                     url = "/esb-api/api/d/"+methodInfo.alias();
                 }
-
                 if(item.getParameterTypes().length>0){
                     Class<?> parameterType = item.getParameterTypes()[0];
                     System.out.println(parameterType.getName());
@@ -118,12 +120,13 @@ public class WordCreateByClass {
                     pretty = JSON.toJSONString(responseJson, SerializerFeature.PrettyFormat, SerializerFeature.WriteMapNullValue);
                     pretty=pretty.replaceAll("\n","\r");
                     params.put("response_json", pretty);
-                    String dir="C:/Users/yansunling/Desktop/api/";
-                    File dirFile = new File(dir);
+
+
                     if (!dirFile.exists()) {
                         dirFile.mkdirs(); // 创建目录
                     }
-                    String outFile =dir+desc+".docx";
+
+                    String outFile =dir+"/"+desc+".docx";
                     gtt.templateWrite(templatePath, outFile, params);
                     fileList.add(outFile);
                     System.out.println("生成模板成功");
@@ -133,10 +136,11 @@ public class WordCreateByClass {
         }
 
 
+        String[] file =fileList.toArray(new String[0]);
+        String  apiDoc="C:/Users/yansunling/Desktop/api/main/"+fileName+".docx";
+        POIMergeDocUtil.mergeDoc(file,apiDoc);
 
 
-
-        openWps(fileList);
 
     }
     @SneakyThrows
@@ -153,7 +157,7 @@ public class WordCreateByClass {
                 if(StringUtils.isNotBlank(bean.getClazz())){
                     listChildren.add(bean);
                 }else{
-                    stringObjectMap.put(paramName, Arrays.asList(bean.getDescription().replaceAll("\\(集合\\)","")));//设置对象属性
+                    stringObjectMap.put(paramName,Arrays.asList(bean.getDescription().replaceAll("\\(集合\\)","")));//设置对象属性
                 }
             }else if(StringUtils.isNotBlank(bean.getClazz())){
                 listChildren.add(bean);
