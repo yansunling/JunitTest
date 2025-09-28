@@ -76,7 +76,7 @@ var bda_data_str_field = {
 
 			let statusName=row.{status_column};
 			if(statusName!='禁用'){
-				deleteError+= '第'+$("#"+metaData.listTemplate).datagrid('getRowIndex',row)+'不为禁用';
+				deleteError+= '第'+($("#"+metaData.listTemplate).datagrid('getRowIndex',row)+1)+'行不为禁用';
 			}
 
 
@@ -85,7 +85,7 @@ var bda_data_str_field = {
 
 
 		if(deleteError){
-			$$.showJcdfMessager('提示消息',  error, 'info');
+			$$.showJcdfMessager('提示消息',  deleteError, 'info');
 			return;
 		}
 
@@ -131,7 +131,7 @@ var bda_data_str_field = {
 		selectRows.forEach(row=>{
 			let statusName=row.{status_column};
 			if(statusName!='禁用'){
-				error+= '第'+$("#"+metaData.listTemplate).datagrid('getRowIndex',row)+'不为禁用';
+				error+= '第'+($("#"+metaData.listTemplate).datagrid('getRowIndex',row)+1)+'行不为禁用';
 			}
 			params.push({"serial_no":row.serial_no,"{status_column}":"1"});
 		});
@@ -176,7 +176,7 @@ var bda_data_str_field = {
 		selectRows.forEach(row=>{
 			let statusName=row.{status_column};
 			if(statusName!='启用'){
-				error+= '第'+$("#"+metaData.listTemplate).datagrid('getRowIndex',row)+'不为启用';
+				error+= '第'+($("#"+metaData.listTemplate).datagrid('getRowIndex',row)+1)+'行不为启用';
 			}
 			params.push({"serial_no":row.serial_no,"{status_column}":"2"});
 		});
