@@ -45,11 +45,11 @@ public class CreateSqlCheck implements ApplicationContextAware {
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\2.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(600);
 
-        List<String> schemaList = Arrays.asList("bmsp");
+        List<String> schemaList = Arrays.asList("auth");
 
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         Set<String> newSqlList=new LinkedHashSet<>();
@@ -80,7 +80,7 @@ public class CreateSqlCheck implements ApplicationContextAware {
                                         String sql="select 1 as value from "+newTable+" where "+column+" in( "+orgData.getOldOrgId()+" ) limit 1";
                                         List<Map<String, Object>> result = jdbcTemplate.queryForList(sql);
                                         if(CollectionUtil.isNotEmpty(result)){
-                                          newSqlList.add(newTable+":"+column);
+                                          newSqlList.add("select * from "+newTable+" where "+column+" in("+orgData.getOldOrgId()+");");
                                         }
                                     });
                                 } catch (Exception e) {
@@ -98,7 +98,7 @@ public class CreateSqlCheck implements ApplicationContextAware {
                 }
             }
             File allFile = new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\notSwitch"+ schemaList.get(0) +".sql");
-            FileUtils.writeLines(allFile, "utf-8", newSqlList,true);
+            FileUtils.writeLines(allFile, "utf-8", newSqlList);
 
 
 
@@ -132,7 +132,7 @@ public class CreateSqlCheck implements ApplicationContextAware {
         String table = tables[1];
         try {
             String columnsSql = "select column_name from  information_schema.COLUMNS where table_name='" + table + "' and table_schema='"+tables[0]+"' " +
-                    "and column_name not in('serial_no','create_user_id','update_user_id','remark','salesman_id','price_remark','product_type') and data_type not in('decimal','datetime','date','int') ";
+                    "and column_name not in('serial_no','create_user_id','is_bill','update_user_id','remark','salesman_id','price_remark','product_type','is_valid','is_red','unclear_remark') and data_type not in('decimal','datetime','date','int') ";
             List<String> columnList = jdbcTemplate.queryForList(columnsSql, String.class);
             if (CollectionUtil.isNotEmpty(columnList)) {
 
