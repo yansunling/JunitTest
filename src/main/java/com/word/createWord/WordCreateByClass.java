@@ -13,8 +13,12 @@ import com.word.doc.GeneralTemplateTool;
 import com.word.doc.POIMergeDocUtil;
 import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
+import javassist.ClassPool;
+import javassist.CtClass;
+import javassist.CtMethod;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FileUtils;
+import org.junit.runners.model.TestClass;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.io.File;
@@ -27,9 +31,9 @@ import java.util.*;
 public class WordCreateByClass {
 
 
-    public static void createApi(boolean esbFlag,Class<?> clazz) throws Exception{
+    public static List<String> createApi(boolean esbFlag,Class<?> clazz,boolean deleteFile) throws Exception{
         closeWps();
-        String fileName="操作接口";
+        String fileName=clazz.getName();
         String path = WordCreateByClass.class.getClassLoader().getResource("").getPath();
         String filePath=path+"api";
         //模板路径
@@ -39,15 +43,34 @@ public class WordCreateByClass {
         //删除目录下数据
         String dir="C:/Users/yansunling/Desktop/api/detail";
         File dirFile = new File(dir);
-        FileUtils.deleteDirectory(dirFile);
+        if(deleteFile){
+            FileUtils.deleteDirectory(dirFile);
+        }
+
         RequestMapping annotation = clazz.getAnnotation(RequestMapping.class);
         //获得开始路径
         String rootPath="/asset-api"+annotation.value()[0];
-        //获得所有方法
-        Method[] methods = clazz.getMethods();
+        ClassPool pool = ClassPool.getDefault();
+        CtClass ctClass = pool.get(clazz.getName());
+        CtMethod[] ctMethods = ctClass.getDeclaredMethods(); // 按声明顺序返回
         List<String> fileList=new ArrayList<>();
-
-        for (Method item : methods) {
+        for (CtMethod ctMethod : ctMethods) {
+            String methodName = ctMethod.getName();
+            CtClass[] parameterCtClasses = ctMethod.getParameterTypes();
+            Method item;
+            if(parameterCtClasses.length>0){
+                Class<?>[] parameterTypes = new Class[parameterCtClasses.length];
+                for (int i = 0; i < parameterCtClasses.length; i++) {
+                    try {
+                        parameterTypes[i] = Class.forName(parameterCtClasses[i].getName());
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException("Could not find class for " + parameterCtClasses[i].getName(), e);
+                    }
+                }
+                item = clazz.getDeclaredMethod(methodName, parameterTypes);
+            } else {
+                item = clazz.getMethod(methodName);
+            }
             RequestMapping declaredAnnotation = item.getDeclaredAnnotation(RequestMapping.class);
             if(declaredAnnotation!=null){
                 String url = rootPath+declaredAnnotation.value()[0]+".do";
@@ -129,8 +152,6 @@ public class WordCreateByClass {
                     String outFile =dir+"/"+desc+".docx";
                     gtt.templateWrite(templatePath, outFile, params);
                     fileList.add(outFile);
-                    System.out.println("生成模板成功");
-                    System.out.println(outFile);
                 }
             }
         }
@@ -140,6 +161,7 @@ public class WordCreateByClass {
         String  apiDoc="C:/Users/yansunling/Desktop/api/main/"+fileName+".docx";
         POIMergeDocUtil.mergeDoc(file,apiDoc);
 
+        return fileList;
 
 
     }

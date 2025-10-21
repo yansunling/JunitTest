@@ -47,7 +47,7 @@ public class CreateSwitchOrgLimitSqlNoTempalte implements ApplicationContextAwar
 
     @Test
     public void test() throws Exception {
-        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\3.xlsx";
+        String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
 //        SwitchUtil.deleteFolder(new File("C:\\Users\\yansunling\\Desktop\\switchOrg\\org\\"));
         jdbcTemplateYL.setQueryTimeout(500);
@@ -131,8 +131,7 @@ public class CreateSwitchOrgLimitSqlNoTempalte implements ApplicationContextAwar
     @SneakyThrows
     public List<String> buildBaseSql(Map<String, List<String>> schemaMap,OrgData orgData) {
         String schemaSql = "select table_schema from information_schema.`TABLES` " +
-                "where  table_schema not in('auth','isp','mpp','mpp2','dctx','report','marketing','bml','dctx','wac','acs','als','costx','information_schema'," +
-                "'query','dct','ouyang','performance_schema','portal','biq','das','gms','hcmp','click','dts','fsm','costx','mdm','mms','pay','task','tms','log','vip','kjob','crmx','jeewx-boot') " +
+                "where  table_schema='dctx'" +
                 "  group by table_schema";
         List<String> schemaList = jdbcTemplateYL.queryForList(schemaSql, String.class);
         String orgSql = "select org_id,org_name from hcm.hcm_org_info where org_id not in('25','990000011')";

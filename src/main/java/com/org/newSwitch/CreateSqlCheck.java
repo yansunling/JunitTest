@@ -49,7 +49,7 @@ public class CreateSqlCheck implements ApplicationContextAware {
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(600);
 
-        List<String> schemaList = Arrays.asList("auth");
+        List<String> schemaList = Arrays.asList("tmsp");
 
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         Set<String> newSqlList=new LinkedHashSet<>();

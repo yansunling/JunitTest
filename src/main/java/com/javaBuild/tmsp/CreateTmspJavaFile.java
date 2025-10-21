@@ -41,9 +41,11 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 	@Test
 	public  void test() throws Exception {
 		Map<String, BuildConfig> tables=new HashMap<>();
-		tables.put("tmsp_tcp_driver_io_record",new BuildConfig("",""));
+		tables.put("comp_asset_business_car",new BuildConfig("","Y"));
+		tables.put("comp_asset_insurance_remind",new BuildConfig("remind_status",""));
 		Set<String> tableNames = tables.keySet();
-        String sysId="tmsp";
+        String sysId="comp";
+
 		String htmlGroup="";
         String path="C:\\Users\\yansunling\\Desktop\\build\\";
 		File dir=new File(path);
@@ -167,10 +169,8 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 
 
 			String tableComment=mapList.get(0).get("table_comment")+"";
-
-
 			String[] strs = tableName.split("_");
-			String prexName="Tmsp";
+			String prexName=StringUtils.upperFirst(sysId);;
 			for(int i=1;i<strs.length;i++){
 				prexName+=StringUtils.upperFirst(strs[i]);
 			}

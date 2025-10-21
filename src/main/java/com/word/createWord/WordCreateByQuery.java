@@ -19,9 +19,9 @@ import java.util.List;
 import java.util.Map;
 
 public class WordCreateByQuery {
-    public static void createQuery(boolean esbFlag,List<String> queryList) throws Exception{
+    public static List<String> createQuery(boolean esbFlag,List<String> queryList) throws Exception{
         if(CollectionUtil.isEmpty(queryList)){
-            return;
+            return null;
         }
         String path = WordCreateTmspByClass.class.getClassLoader().getResource("").getPath();
         String filePath=path+"api";
@@ -114,6 +114,8 @@ public class WordCreateByQuery {
         String[] file =fileList.toArray(new String[0]);
         String  apiDoc="C:/Users/yansunling/Desktop/api/main/查询接口.docx";
         POIMergeDocUtil.mergeDoc(file,apiDoc);
+
+        return fileList;
 
     }
 

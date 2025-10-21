@@ -20,6 +20,7 @@ public class JavascriptToQueryUtil {
         StringBuffer sb=new StringBuffer();
 		List<String> list=new ArrayList<>();
         List<String> sqlList=new ArrayList<>();
+        String queryId="tmsp_stock_all_arrive_tile";
 		maps.forEach(temp->{
             String name = temp.get("name");
             if(StringUtils.isBlank(name)||temp.get("name")==null){
@@ -29,25 +30,25 @@ public class JavascriptToQueryUtil {
             sb.append("'' as "+ temp.get("field")+",-- "+temp.get("name")+"\n");
 			if(StringUtils.equals("true",temp.get("hidden"))){
 			    list.add(temp.get("field")+"");
-//                System.out.println("update query.query_new_columns set hide_flag='Y' where query_id='tmsp_print_ticket_title_list' and ui_column_id='"+field+"';");
+//                System.out.println("update query.query_new_columns set hide_flag='Y' where query_id='"+queryId+"' and ui_column_id='"+field+"';");
             }
 			if(temp.get("width")!=null){
                 String width = (temp.get("width") + "").replace("px", "");
-//                System.out.println("update query.query_new_columns set ui_width='"+width+"' where query_id='tmsp_print_ticket_title_list' and ui_column_id='"+field+"';");
+//                System.out.println("update query.query_new_columns set ui_width='"+width+"' where query_id='"+queryId+"' and ui_column_id='"+field+"';");
             }
 			if(StringUtils.equals("easyui-datetimebox",temp.get("ctrlType")+"")){
 //                System.out.println(field);
             }
 
             if(temp.get("styler")!=null){
-//                System.out.println(field);
+                System.out.println(field);
             }
 
 //            System.out.println("titleMap.put(\""+field+"\",\""+name+"\");");
 
 
 		});
-		System.out.println(sb.toString());
+//		System.out.println(sb.toString());
 
 //        System.out.println(StringUtils.join("','",list.toArray()));
 
