@@ -108,8 +108,6 @@ public class JavaScriptToJsonUtil {
             }
             list.add(map);
         }
-        System.out.println(JSON.toJSONString(list));
-        System.out.println("\n\n\n");
         return list;
     }
 
