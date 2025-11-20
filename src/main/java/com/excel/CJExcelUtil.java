@@ -2,6 +2,8 @@ package com.excel;
 
 import com.yd.common.runtime.CIPRuntime;
 import com.yd.common.runtime.CIPRuntimeOperator;
+import com.yd.utils.common.ExcelReader;
+import lombok.SneakyThrows;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.File;
@@ -18,6 +20,21 @@ import java.util.Set;
  * @Date: 2021/3/9 上午11:56
  */
 public class CJExcelUtil {
+
+    @SneakyThrows
+    public static <T>List<T> readData(File file,Map<String, String> titles, Class<T> class1){
+
+
+        ExcelReader excelReader = new ExcelReader(file);
+        excelReader.openFile();//打开文件
+        List<Object[]> listResult = excelReader.getAllRow();//读取Excel的数据
+
+        listResult = listResult.subList(1, listResult.size());
+
+        return initImportExcelDatas(titles,listResult,class1);
+    }
+
+
 
 
 

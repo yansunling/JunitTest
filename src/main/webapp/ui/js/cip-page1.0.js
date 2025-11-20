@@ -1350,7 +1350,12 @@ function setRandomData(){
 					$(this).numberbox("setValue", 1);
 				}
 			});
+			let idList=["contact_area","extension_contact"];
 			$(".easyui-validatebox").each(function () {
+				// 判断元素是否隐藏
+				if ($(this).is(":hidden")||idList.includes($(this).attr("id"))) {
+					return;
+				}
 				let clazz = $(this).attr("class");
 				if (clazz.indexOf("numberbox") > 0) {
 					let value = $(this).numberbox("getValue");
@@ -1368,10 +1373,11 @@ function setRandomData(){
 							let mineId = Math.round(Rand * 100000000);
 							$(this).val(mineId);
 						} else {
-							var result = "";
-							for (var i = 0; i < 3; i++) {
-								var char = Math.floor(Math.random() * 100 + 19968);
-								result += String.fromCharCode(char);
+							var result = Mock.Random.csentence(3);
+							if(id.indexOf("name")>=0){
+								result = Mock.Random.cname();
+							}else if(id.indexOf("code")>=0){
+								result = Mock.Random.word(3).toUpperCase();
 							}
 							$(this).val(result);
 						}
@@ -1389,9 +1395,10 @@ function setRandomData(){
 						let combobox = that.combobox("getData");
 						let valueField = that.combobox("options").valueField;
 						if (combobox.length > 0) {
-							that.combobox("setValue", combobox[0][valueField]);
+							that.combobox("select", combobox[0][valueField]);
 						}
 					}
+
 				}, index * 300);
 			});
 			$(".easyui-combobox").each(function (index) {
@@ -1408,7 +1415,19 @@ function setRandomData(){
 							that.combobox("setValue", combobox[0][valueField]);
 						}
 					}
-				}, index * 100);
+					setTimeout(function () {
+
+						let value = that.queryCombobox("getValue");
+						if (!value) {
+							let combobox = that.combobox("getData");
+							let valueField = that.combobox("options").valueField;
+							if (combobox.length > 0) {
+								that.combobox("select", combobox[0][valueField]);
+							}
+						}
+					},1000);
+
+				}, index * 200);
 			});
 			$(".easyui-datebox").each(function (index) {
 				try {
@@ -1448,6 +1467,10 @@ function setRandomData(){
 	setTimeout(function () {
 		setData();
 	}, nextTime * 50);
+
+	setTimeout(function () {
+		setData();
+	}, nextTime * 150);
 }
 
 
