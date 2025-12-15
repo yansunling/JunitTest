@@ -41,13 +41,12 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 	@Test
 	public  void test() throws Exception {
 		Map<String, BuildConfig> tables=new HashMap<>();
-		tables.put("comp_asset_business_car",new BuildConfig("","Y"));
-		tables.put("comp_asset_insurance_remind",new BuildConfig("remind_status",""));
+		tables.put("tmsp_hand_print_config",new BuildConfig("","N"));
 		Set<String> tableNames = tables.keySet();
-        String sysId="comp";
+        String sysId="tmsp";
 
 		String htmlGroup="";
-        String path="C:\\Users\\yansunling\\Desktop\\build\\";
+        String path="C:/Users/yansunling/Desktop/build/";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
 		//创建目录

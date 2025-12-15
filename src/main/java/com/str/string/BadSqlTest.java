@@ -2,16 +2,19 @@ package com.str.string;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
+import cn.hutool.http.HttpRequest;
+import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Maps;
 import com.yd.common.runtime.CIPRuntimeOperator;
+import com.yd.query.util.QueryVueUtil;
+import org.apache.http.HttpResponse;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -19,7 +22,7 @@ public class BadSqlTest {
 
 
     public static void main(String[] args) {
-        String sql = "SELECT IF ( LENGTH(orderp.transfer_city)<2, signin.signin_time, IF ( signin.is_change <> '0', signin.change_time, signin.last_close_time )) AS signinTime ," +
+       /* String sql = "SELECT IF ( LENGTH(orderp.transfer_city)<2, signin.signin_time, IF ( signin.is_change <> '0', signin.change_time, signin.last_close_time )) AS signinTime ," +
                 "signin_count, \n" +
                 "user1.user_name AS signerName,\n" +
                 " signin.abnormal_type AS abnormalType,\n" +
@@ -34,7 +37,31 @@ public class BadSqlTest {
                 "AND signin_time IS NOT NULL\n" +
                 "and IF ( LENGTH(orderp.transfer_city)<2, signin.signin_time, IF ( signin.is_change <> '0', signin.change_time, signin.last_close_time ))!='1970-01-01 00:00:00'"+
                 "ORDER BY signin_time ";
-        System.out.println(sql);
+        System.out.println(sql);*/
+
+
+
+
+        String url="https://tlwl.uat.tuolong56.com/auth-api";
+        Map<String,Object> map=new HashMap<>();
+        map.put("item_code","all_way_org");
+        map.put("name_space_id","uat");
+        map.put("company_id","tlwl");
+        map.put("user_id","T1113");
+
+        try {
+            System.out.println("正在发送请求到: " + url + "/permission");
+            System.out.println("请求参数: " + map);
+
+            String resp = HttpUtil.post(url + "/permission/get", map, 30000);
+
+
+
+            System.out.println("响应内容: " + resp);
+        } catch (Exception e) {
+            System.err.println("请求失败: " + e.getMessage());
+            e.printStackTrace();
+        }
 
 
     }

@@ -5,6 +5,7 @@ import cn.hutool.core.lang.Assert;
 import cn.hutool.core.text.StrBuilder;
 import cn.hutool.core.util.StrUtil;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -15,7 +16,7 @@ import java.util.Map;
  **/
 public class CIPHandlerContext<T> {
 
-    private final Map<String, Class<T>> classMap = CollUtil.newHashMap();
+    private final Map<String, Class<T>> classMap = new HashMap<>();
 
     public void add(Class<T> t, String... key) {
         classMap.put(key(key), t);

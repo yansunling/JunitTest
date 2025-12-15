@@ -141,6 +141,10 @@
                     <artifactId>foc-kernel</artifactId>
                     <groupId>com.dy.components</groupId>
                 </exclusion>
+                <exclusion>
+                    <artifactId>hutool-all</artifactId>
+                    <groupId>cn.hutool</groupId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -218,11 +222,11 @@
             <version>1.60</version>
         </dependency>
 
-        <dependency>
+        <!--dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.6.1</version>
-        </dependency>
+            <version>5.8.25</version>
+        </dependency-->
 
         <dependency>
             <groupId>com.dy.components</groupId>
@@ -265,6 +269,10 @@
                 <exclusion>
                     <artifactId>foc-kernel</artifactId>
                     <groupId>com.dy.components</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>hutool-all</artifactId>
+                    <groupId>cn.hutool</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
@@ -374,7 +382,7 @@
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.6.1</version>
+            <version>5.8.25</version>
         </dependency>
 
         <dependency>
@@ -405,6 +413,12 @@
             <groupId>com.yd.tmsp</groupId>
             <artifactId>tmsp-common</artifactId>
             <version>v1.0.0-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <artifactId>hutool-all</artifactId>
+                    <groupId>cn.hutool</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>

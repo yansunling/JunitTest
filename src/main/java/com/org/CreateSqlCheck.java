@@ -48,7 +48,7 @@ public class CreateSqlCheck implements ApplicationContextAware {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(600);
-        List<String> schemaList = Arrays.asList("tmsp", "bmsp", "hcm", "auth", "crm", "comp", "bds", "isp", "mpp", "mpp2");
+        List<String> schemaList = Arrays.asList("hcm");
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         Set<String> newSqlList = new LinkedHashSet<>();
         for (String schema : schemaList) {
@@ -115,32 +115,10 @@ public class CreateSqlCheck implements ApplicationContextAware {
                     "and column_name not in('serial_no','create_user_id','is_bill','update_user_id','creator','op_user_id','remark','salesman_id','price_remark','product_type','is_valid','is_red','unclear_remark') and data_type not in('decimal','datetime','date','int') ";
             List<String> columnList = jdbcTemplate.queryForList(columnsSql, String.class);
             if (CollectionUtil.isNotEmpty(columnList)) {
-
-                ExecutorService executorService = Executors.newFixedThreadPool(50);
-                CountDownLatch countDownLatch = new CountDownLatch(columnList.size());
-
                 columnList.forEach(tempColumn -> {
-
-                    executorService.submit(new FutureTask<String>(new Callable<String>() {
-                        @Override
-                        public String call() throws Exception {
-                            try {
-
-                                String column = tempColumn;
-                                sqlList.put(column, SwitchUtil.replaceSql(column, newTable, "ID"));
-
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
-
-                            } finally {
-                                countDownLatch.countDown();
-                            }
-                            return "";
-                        }
-                    }));
+                        sqlList.put(tempColumn, tempColumn);
                 });
-                countDownLatch.await();
+
             }
         } catch (Exception e) {
             e.printStackTrace();

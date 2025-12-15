@@ -1,39 +1,72 @@
 package com.str.string;
 
-import com.yd.utils.common.StringUtils;
+
+
+import com.fasterxml.jackson.databind.JsonNode;
+import lombok.SneakyThrows;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class StringTest {
 
     private static Map<String,String> map=new HashMap<>();
 
-    public static void main(String[] args) {
-        String orgId="33078201-520201,33078201-522301,32060001-520500,32060001-52030002,32060001-52030001,32060001-520300,32060001-520400,32060001-522601,32060001-520201,32060001-522301,32060001-52010005,32060001-52010004,32060001-52010003,32060001-52010001,32060001-53010003,32060001-53010002,32060001-53010001,33100003-33078208,33060002-52010006";
-        String[] split = orgId.split(",");
-        List<String> list=new ArrayList<>();
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final Pattern MUSTACHE_PATTERN = Pattern.compile("\\{\\{([^}]+)\\}\\}");
 
-        Set<String> set=new HashSet<>();
-        for(String str:split){
-            String trim = str.trim();
-            String[] split1 = trim.split("-");
-            String old1=split1[0];
-            String old2=split1[1];
-            set.add(old1);
-            set.add(old2);
-            String newOld1 = map.get(old1);
-            String newOld2 = map.get(old2);
-            if(StringUtils.isBlank(newOld2)){
-                System.out.println(old2);
-                continue;
-            }
-
-            String newStr="'"+newOld1+"-"+newOld2+"'";
-            list.add(newStr);
-        }
-        System.out.println(set);
-        System.out.println(list);
+    public static void main(String[] args){
+        String sql="{\"terms\":{\"org_id\":[\"${org_ids}\"]}}";
+        sql=sql.replaceAll("\\[\"\\$\\{org_ids}\"]","{{#toJson}}org_ids{{/toJson}}");
+        System.out.println(sql);
     }
+
+
+    @SneakyThrows
+    public static String toPrettyFormat(String templateStr) {
+        if (templateStr == null || templateStr.trim().isEmpty()) {
+            return templateStr;
+        }
+
+        // 1. 提取所有 {{...}} 并替换为唯一临时占位符
+        Map<String, String> placeholderMap = new LinkedHashMap<>();
+        String tempStr = templateStr;
+        Matcher matcher = MUSTACHE_PATTERN.matcher(templateStr);
+        int index = 0;
+
+        while (matcher.find()) {
+            String original = matcher.group(0); // e.g., "{{order_close_type}}"
+            String placeholder = "__MUSTACHE_PLACEHOLDER_" + index + "__";
+            placeholderMap.put(placeholder, original);
+            index++;
+        }
+
+        // 执行替换（从后往前替换，避免索引偏移问题；或全局替换）
+        String workingStr = templateStr;
+        for (Map.Entry<String, String> entry : placeholderMap.entrySet()) {
+            // 转义特殊字符（虽然 placeholder 是我们生成的，一般不需要）
+            workingStr = workingStr.replace(entry.getValue(), "\"" + entry.getKey() + "\"");
+        }
+
+        // 2. 解析为 JsonNode 并格式化
+        JsonNode jsonNode = objectMapper.readTree(workingStr);
+        String prettyJson = objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(jsonNode);
+
+        // 3. 将临时占位符还原为原始 {{...}}
+        String result = prettyJson;
+        for (Map.Entry<String, String> entry : placeholderMap.entrySet()) {
+            // 注意：Jackson 输出的字符串会带双引号，所以我们要替换的是带引号的 placeholder
+            String quotedPlaceholder = "\"" + entry.getKey() + "\"";
+            result = result.replace(quotedPlaceholder, entry.getValue());
+        }
+
+        return result;
+    }
+
+
 
     static {
         map.put("32060001","2501080402");
