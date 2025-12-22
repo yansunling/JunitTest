@@ -41,7 +41,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 	@Test
 	public  void test() throws Exception {
 		Map<String, BuildConfig> tables=new HashMap<>();
-		tables.put("tmsp_hand_print_config",new BuildConfig("","N"));
+		tables.put("tmsp_attend_detail",new BuildConfig("","N"));
 		Set<String> tableNames = tables.keySet();
         String sysId="tmsp";
 

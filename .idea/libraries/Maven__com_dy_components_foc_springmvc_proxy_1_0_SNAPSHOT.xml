@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: com.dy.components:foc-springmvc-proxy:1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/dy/components/foc-springmvc-proxy/1.0-SNAPSHOT/foc-springmvc-proxy-1.0-20210514.081235-11.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/com/dy/components/foc-springmvc-proxy/1.0-SNAPSHOT/foc-springmvc-proxy-1.0-20210514.081235-11-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/dy/components/foc-springmvc-proxy/1.0-SNAPSHOT/foc-springmvc-proxy-1.0-20210514.081235-11-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

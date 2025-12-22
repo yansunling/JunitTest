@@ -1,9 +1,6 @@
 package com.str;
 
 
-import com.yd.utils.common.CollectionUtil;
-import com.yd.utils.common.StringUtils;
-import com.yd.utils.datasource.DruidComboPoolDataSource;
 import com.yd.utils.datasource.YDDriverManagerDataSource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -20,7 +17,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 
 @Slf4j
