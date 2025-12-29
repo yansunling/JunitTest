@@ -41,7 +41,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 	@Test
 	public  void test() throws Exception {
 		Map<String, BuildConfig> tables=new HashMap<>();
-		tables.put("tmsp_attend_detail",new BuildConfig("","N"));
+		tables.put("tmsp_base_common_msg_config",new BuildConfig("config_status","Y"));
 		Set<String> tableNames = tables.keySet();
         String sysId="tmsp";
 
@@ -87,6 +87,8 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 				jsContent=jsContent.replaceAll("(\r?\n)+", "\n");
 			}else{
 				jsContent=jsContent.replaceAll("\\{status_column\\}",buildConfig.getStatusColumn());
+				String conent="param.set"+StringUtils.upperFirst(buildConfig.getStatusColumn())+"(ACTIVATE_STATUS.ACTIVATE_STATUS_1);";
+				implContent=implContent.replaceAll("\\{status_column\\}",conent);
 			}
 
 
@@ -103,7 +105,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 					"if(c.column_name in('create_time','create_user_id','creator'),'    @TableField(fill = FieldFill.INSERT)\\n',''),\n" +
 					"if(c.column_name in('operator','update_time','op_user_id','update_user_id'),'    @TableField(fill = FieldFill.INSERT_UPDATE)\\n',''),\n" +
 					"if((c.data_type='date' or c.data_type='datetime' and c.column_name not in('create_time','update_time','oa_apply_time')),'    @JsonFormat(pattern = \"yyyy-MM-dd\",timezone = \"GMT+8\")\\n',''),\n" +
-					"'    @CJ_column(name = \"',c.column_comment,'\")\\n',\n" +
+					"'    @CJ_column(name = \"',c.column_comment,'\"',"+"if(LOCATE('org_id',c.column_name)>0,',code = TMSPConstant.DEPT_QUERY_CACHE',''),'"+")\\n',\n" +
 					"'    private ',case when c.data_type in('Integer','int') then 'Integer ' when left(c.column_comment,2)='是否' then 'IS_NOT ' when c.data_type in('bigint') then 'Money ' when left(c.column_name,2)='是否' then 'IS_NOT ' when c.data_type='decimal ' then 'Double ' when c.data_type='date' or c.data_type='datetime'    then 'Timestamp ' else 'String ' end,c.column_name,';\\n\\n') as filed,\n" +
 					"c.data_type,column_name,c.column_comment,c.table_name,tb.table_comment from information_schema.columns c\n" +
 					"left join information_schema.tables tb on c.table_name=tb.table_name  and c.table_schema=tb.table_schema\n" +

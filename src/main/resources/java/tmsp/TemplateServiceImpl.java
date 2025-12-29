@@ -36,6 +36,9 @@ public class {class_impl} implements {class_service} {
     public void addData({class_name} param) {
         //设置流水号
         param.setSerial_no(IdUtil.simpleUUID());
+
+        {status_column}
+
         //插入记录
         dataMapper.insertDefault(param);
         //记录变更日志
