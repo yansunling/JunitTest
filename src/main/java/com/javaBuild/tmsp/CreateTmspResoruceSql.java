@@ -12,7 +12,7 @@ import java.util.Set;
 public class CreateTmspResoruceSql {
     public static void main(String[] args) {
 
-        String fun="tmsp_base_common_msg_config";
+        String fun="tmsp_except_wx_problem_detail";
         String parentId=fun+"_list";
 
         String supParent="push";
