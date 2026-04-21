@@ -29,7 +29,7 @@ public class TurnFeeUpdateSqlGenerator {
     private static final String COL_PROFILE_FEE = "实际送货费";
 
     public static void main(String[] args) throws Exception {
-        String EXCEL_PATH = "C:\\Users\\yansunling\\Desktop\\23.xlsx";
+        String EXCEL_PATH = "C:\\Users\\yansunling\\Desktop\\中转费用信息-郑奎.xlsx";
         File file = new File(EXCEL_PATH);
         if (!file.exists()) {
             System.err.println("Excel文件不存在: " + EXCEL_PATH);

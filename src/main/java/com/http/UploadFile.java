@@ -24,12 +24,12 @@ public class UploadFile {
         CloseableHttpClient httpclient = HttpClients.createDefault();
         //CloseableHttpClient httpclient = HttpClientBuilder.create().build();
         try {
-            HttpPost httppost = new HttpPost("http://localhost/fsm/api/fsm_api/upload.do");
+            HttpPost httppost = new HttpPost("https://tlwl.uat.tuolong56.com/fsm/api/fsm_api/upload.do");
 
             RequestConfig requestConfig = RequestConfig.custom().setConnectTimeout(200000).setSocketTimeout(200000).build();
             httppost.setConfig(requestConfig);
 
-            FileBody bin = new FileBody(new File("C:/Users/yansunling/Desktop/企业微信截图_20240301084259.png"));
+            FileBody bin = new FileBody(new File("C:/Users/yansunling/Desktop/1.avif"));
             StringBody comment = new StringBody("crm", ContentType.TEXT_PLAIN);
 
             MultipartEntityBuilder builder = MultipartEntityBuilder.create();

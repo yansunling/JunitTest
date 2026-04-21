@@ -12,7 +12,7 @@ import java.util.regex.Pattern;
 
 public class QueryFileErrorRead {
     public static void main(String[] args) throws Exception{
-        String filePath1 = "C:\\Users\\yansunling\\Desktop\\1.txt";
+        String filePath1 = "C:\\Users\\yansunling\\Desktop\\3.txt";
 
         Map<String, List<String>> queryParam = getQueryParam(filePath1);
 

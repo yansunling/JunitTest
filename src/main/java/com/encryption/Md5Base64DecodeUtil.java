@@ -10,7 +10,7 @@ public class Md5Base64DecodeUtil {
 
     public static void main(String[] args) {
         // 你的目标字符串
-        String md5Base64Str = "tZxnvxlqR1gZHkL3ZnDOug==";
+        String md5Base64Str = "oBYQIo/pmPUVpy3XMClNhw==";
 
         // ========== 方式1：解码得到【32位小写标准MD5字符串】 推荐 ==========
         String md5Hex = decodeMd5Base64To32Hex(md5Base64Str);

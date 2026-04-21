@@ -14,13 +14,14 @@ public class JavascriptToQueryUtil {
 	public static void main(String[] args) throws Exception{
         String filePath = JavascriptToQueryUtil.class.getClassLoader().getResource("").getPath();
         filePath+="/javascript/columns.js";
-		String json = FileUtil.readAsString(new File(filePath));
-        List<Map<String, String>> maps = JavaScriptToJsonUtil.jsToList(json);
+		String json = removeJsComments(FileUtil.readAsString(new File(filePath)));
+        List<Map<String, String>> maps = distinctByField(JavaScriptToJsonUtil.jsToList(json));
         StringBuffer sb=new StringBuffer();
 		List<String> list=new ArrayList<>();
-        String queryId="tmsp_stock_all_arrive_tile";
+        String queryId="tmsp_hand_arrive_list_title";
         Map<String,List<String>> sqlMap=new LinkedHashMap<>();
         Map<String,List<String>> fieldMap=new LinkedHashMap<>();
+        Map<String,String> stylerMap=new LinkedHashMap<>();
         AtomicInteger count = new AtomicInteger(1); // 初始化下标为 0
 
         maps.forEach(temp->{
@@ -50,8 +51,8 @@ public class JavascriptToQueryUtil {
                 setSqlMap(fieldMap,"datetime",field);
             }
 
-            if(temp.get("styler")!=null){
-                setSqlMap(fieldMap,"styler",field);
+            if(StringUtils.isNotBlank(temp.get("styler"))){
+                stylerMap.put(field,temp.get("styler"));
             }
 
 		});
@@ -66,15 +67,11 @@ public class JavascriptToQueryUtil {
             System.out.println("\n\n");
         });
         String datetimeFormat="";
-        String styler="";
         Set<String> keySet = fieldMap.keySet();
         for(String key:keySet){
             List<String> items = fieldMap.get(key);
             if(StringUtils.equalsIgnoreCase("datetime",key)){
                 datetimeFormat="let datetimeFormat="+ JSON.toJSONString(items)+";";
-            }
-            if(StringUtils.equalsIgnoreCase("styler",key)){
-                styler="let stylerList="+ JSON.toJSONString(items)+";";
             }
         }
 
@@ -84,14 +81,9 @@ public class JavascriptToQueryUtil {
         if(StringUtils.isNotBlank(datetimeFormat)){
             tempSql+=datetimeFormat+"\n";
         }
-        if(StringUtils.isNotBlank(styler)){
-            tempSql+=styler+"\n";
-        }
         tempSql+= "titleByQuery.forEach(item=>{\n" ;
-        if(StringUtils.isNotBlank(styler)){
-            tempSql+= "\t\tif(stylerList.includes(item.field)){\n" +
-                    "\t\t\titem.styler=cellStyler;\n" +
-                    "\t\t}\n" ;
+        if(!stylerMap.isEmpty()){
+            tempSql+= buildStylerAssignmentCode(stylerMap);
         }
         if(StringUtils.isNotBlank(datetimeFormat)){
             tempSql+=  "\t\tif(datetimeFormat.includes(item.field)){\n" +
@@ -108,6 +100,46 @@ public class JavascriptToQueryUtil {
         List<String> sqlList = sqlMap.getOrDefault(key, new ArrayList<>());
         sqlList.add(sql);
         sqlMap.put(key,sqlList);
+    }
+
+    private static List<Map<String, String>> distinctByField(List<Map<String, String>> maps){
+        List<Map<String, String>> result = new ArrayList<>();
+        Set<String> fieldSet = new HashSet<>();
+        for (Map<String, String> map : maps) {
+            String field = map.get("field");
+            if (StringUtils.isBlank(field) || fieldSet.add(field)) {
+                result.add(map);
+            }
+        }
+        return result;
+    }
+
+    static String buildStylerAssignmentCode(Map<String, String> stylerMap){
+        StringBuilder builder = new StringBuilder();
+        Map<String, List<String>> stylerFieldMap = new LinkedHashMap<>();
+        stylerMap.forEach((field, stylerName) -> {
+            List<String> fields = stylerFieldMap.getOrDefault(stylerName, new ArrayList<>());
+            fields.add(field);
+            stylerFieldMap.put(stylerName, fields);
+        });
+        stylerFieldMap.forEach((stylerName, fields) -> {
+            builder.append("\t\tif([");
+            for (int i = 0; i < fields.size(); i++) {
+                if (i > 0) {
+                    builder.append(",");
+                }
+                builder.append("'").append(fields.get(i)).append("'");
+            }
+            builder.append("].includes(item.field)){\n");
+            builder.append("\t\t\titem.styler=").append(stylerName).append(";\n");
+            builder.append("\t\t}\n");
+        });
+        return builder.toString();
+    }
+
+    private static String removeJsComments(String content){
+        String withoutBlockComments = content.replaceAll("(?s)/\\*.*?\\*/", "");
+        return withoutBlockComments.replaceAll("(?m)//.*$", "");
     }
 
 

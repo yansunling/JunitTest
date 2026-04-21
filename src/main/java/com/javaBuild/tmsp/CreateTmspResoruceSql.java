@@ -12,12 +12,12 @@ import java.util.Set;
 public class CreateTmspResoruceSql {
     public static void main(String[] args) {
 
-        String fun="tmsp_hand_trans_report_car_load";
+        String fun="tmsp_order_should_cost";
         String parentId=fun+"_list";
 
-        String supParent="attend";
-        String parentName="发站装卸组";
-        String model="attend";
+        String supParent="order";
+        String parentName="运单成本录入";
+        String model="order";
         int num= Integer.parseInt(DateUtil.format(new Date(),"MMdd"));
 
         String listSql="INSERT INTO `tmsp`.`foc_plugins_auth_resource`(`resource_id`, `resource_name`, `resource_desc`, `sys_uri`, `resource_type`, `create_time`, `update_time`, `operator`, `icon_id`)" +
@@ -46,7 +46,7 @@ public class CreateTmspResoruceSql {
 //        map.put("applyData",new ButtonType("icon-add","借支"));
 //        map.put("repayData",new ButtonType("icon-redo","还借支"));
 //        map.put("payData",new ButtonType("icon-edit","申请付款"));
-//        map.put("importData",new ButtonType("icon-upload","导入"));
+        map.put("importData",new ButtonType("icon-upload","导入"));
 
 //        map.put("passData",new ButtonType("icon-ok","批准"));
 //        map.put("rejectData",new ButtonType("icon-cancel","退回"));
