@@ -97,7 +97,6 @@ public class JavaScriptToJsonUtil {
         List<Map<String,String>> list=new ArrayList<>();
         while  (matcher.find()) {
             String objStr = matcher.group(1);
-            System.out.println(objStr);
             String[] strs = objStr.split(",");
             Map<String,String> map=new HashMap<>();
             for(String str:strs){

@@ -18,7 +18,7 @@ public class JavascriptToQueryUtil {
         List<Map<String, String>> maps = distinctByField(JavaScriptToJsonUtil.jsToList(json));
         StringBuffer sb=new StringBuffer();
 		List<String> list=new ArrayList<>();
-        String queryId="tmsp_hand_arrive_list_title";
+        String queryId="bmsp_balance_account_carout_detail_title";
         Map<String,List<String>> sqlMap=new LinkedHashMap<>();
         Map<String,List<String>> fieldMap=new LinkedHashMap<>();
         Map<String,String> stylerMap=new LinkedHashMap<>();
@@ -57,7 +57,7 @@ public class JavascriptToQueryUtil {
 
 		});
         sb.append("from tmsp.tmsp_order_profile main \n\n\n");
-		System.out.println(sb.toString());
+		System.out.println("select \n"+sb.toString());
 
 
         sqlMap.forEach((key,items)->{
