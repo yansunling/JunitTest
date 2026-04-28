@@ -1,15 +1,9 @@
 package com.str.json;
 
-import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class JavaScriptToJsonUtil {
 
@@ -92,24 +86,228 @@ public class JavaScriptToJsonUtil {
     }
 
     public static List<Map<String,String>> jsToList(String content){
-        Pattern pattern = Pattern.compile("\\{([^}]*)\\}");
-        Matcher matcher = pattern.matcher(content);
+        String sanitized = stripComments(content);
+        List<String> objectTexts = extractTopLevelObjects(sanitized);
         List<Map<String,String>> list=new ArrayList<>();
-        while  (matcher.find()) {
-            String objStr = matcher.group(1);
-            String[] strs = objStr.split(",");
-            Map<String,String> map=new HashMap<>();
-            for(String str:strs){
-                String[] temps = str.split(":");
-                if(temps.length==2){
-                    map.put(temps[0].replaceAll("'",""),temps[1].replaceAll("'",""));
-                }
-            }
-            list.add(map);
+        for (String objectText : objectTexts) {
+            list.add(parseObject(objectText));
         }
         return list;
     }
 
+    private static String stripComments(String content) {
+        StringBuilder builder = new StringBuilder(content.length());
+        boolean inSingleQuote = false;
+        boolean inDoubleQuote = false;
+        boolean escaped = false;
+        for (int i = 0; i < content.length(); i++) {
+            char ch = content.charAt(i);
+            char next = i + 1 < content.length() ? content.charAt(i + 1) : '\0';
+            if (escaped) {
+                builder.append(ch);
+                escaped = false;
+                continue;
+            }
+            if ((inSingleQuote || inDoubleQuote) && ch == '\\') {
+                builder.append(ch);
+                escaped = true;
+                continue;
+            }
+            if (!inSingleQuote && !inDoubleQuote && ch == '/' && next == '/') {
+                i += 2;
+                while (i < content.length() && content.charAt(i) != '\n' && content.charAt(i) != '\r') {
+                    i++;
+                }
+                if (i < content.length()) {
+                    builder.append(content.charAt(i));
+                }
+                continue;
+            }
+            if (!inSingleQuote && !inDoubleQuote && ch == '/' && next == '*') {
+                i += 2;
+                while (i + 1 < content.length() && !(content.charAt(i) == '*' && content.charAt(i + 1) == '/')) {
+                    i++;
+                }
+                i++;
+                continue;
+            }
+            if (ch == '\'' && !inDoubleQuote) {
+                inSingleQuote = !inSingleQuote;
+            } else if (ch == '"' && !inSingleQuote) {
+                inDoubleQuote = !inDoubleQuote;
+            }
+            builder.append(ch);
+        }
+        return builder.toString();
+    }
 
+    private static List<String> extractTopLevelObjects(String content) {
+        List<String> objectTexts = new ArrayList<>();
+        boolean inSingleQuote = false;
+        boolean inDoubleQuote = false;
+        boolean escaped = false;
+        int braceDepth = 0;
+        int start = -1;
+        for (int i = 0; i < content.length(); i++) {
+            char ch = content.charAt(i);
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+            if ((inSingleQuote || inDoubleQuote) && ch == '\\') {
+                escaped = true;
+                continue;
+            }
+            if (ch == '\'' && !inDoubleQuote) {
+                inSingleQuote = !inSingleQuote;
+                continue;
+            }
+            if (ch == '"' && !inSingleQuote) {
+                inDoubleQuote = !inDoubleQuote;
+                continue;
+            }
+            if (inSingleQuote || inDoubleQuote) {
+                continue;
+            }
+            if (ch == '{') {
+                if (braceDepth == 0) {
+                    start = i;
+                }
+                braceDepth++;
+            } else if (ch == '}') {
+                braceDepth--;
+                if (braceDepth == 0 && start >= 0) {
+                    objectTexts.add(content.substring(start, i + 1));
+                    start = -1;
+                }
+            }
+        }
+        return objectTexts;
+    }
 
-}
+    private static Map<String, String> parseObject(String objectText) {
+        Map<String, String> map = new HashMap<>();
+        String body = objectText.substring(1, objectText.length() - 1);
+        int index = 0;
+        while (index < body.length()) {
+            index = skipSeparators(body, index);
+            if (index >= body.length()) {
+                break;
+            }
+            int colonIndex = findTopLevelColon(body, index);
+            if (colonIndex < 0) {
+                break;
+            }
+            String key = normalizeToken(body.substring(index, colonIndex));
+            index = colonIndex + 1;
+            int valueEnd = findValueEnd(body, index);
+            String value = normalizeToken(body.substring(index, valueEnd));
+            map.put(key, value);
+            index = valueEnd + 1;
+        }
+        return map;
+    }
+
+    private static int skipSeparators(String text, int index) {
+        while (index < text.length()) {
+            char ch = text.charAt(index);
+            if (Character.isWhitespace(ch) || ch == ',') {
+                index++;
+                continue;
+            }
+            break;
+        }
+        return index;
+    }
+
+    private static int findTopLevelColon(String text, int start) {
+        boolean inSingleQuote = false;
+        boolean inDoubleQuote = false;
+        boolean escaped = false;
+        for (int i = start; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+            if ((inSingleQuote || inDoubleQuote) && ch == '\\') {
+                escaped = true;
+                continue;
+            }
+            if (ch == '\'' && !inDoubleQuote) {
+                inSingleQuote = !inSingleQuote;
+                continue;
+            }
+            if (ch == '"' && !inSingleQuote) {
+                inDoubleQuote = !inDoubleQuote;
+                continue;
+            }
+            if (!inSingleQuote && !inDoubleQuote && ch == ':') {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private static int findValueEnd(String text, int start) {
+        boolean inSingleQuote = false;
+        boolean inDoubleQuote = false;
+        boolean escaped = false;
+        int braceDepth = 0;
+        int bracketDepth = 0;
+        int parenthesisDepth = 0;
+        for (int i = start; i < text.length(); i++) {
+            char ch = text.charAt(i);
+            if (escaped) {
+                escaped = false;
+                continue;
+            }
+            if ((inSingleQuote || inDoubleQuote) && ch == '\\') {
+                escaped = true;
+                continue;
+            }
+            if (ch == '\'' && !inDoubleQuote) {
+                inSingleQuote = !inSingleQuote;
+                continue;
+            }
+            if (ch == '"' && !inSingleQuote) {
+                inDoubleQuote = !inDoubleQuote;
+                continue;
+            }
+            if (inSingleQuote || inDoubleQuote) {
+                continue;
+            }
+            if (ch == '{') {
+                braceDepth++;
+            } else if (ch == '}') {
+                if (braceDepth == 0) {
+                    return i;
+                }
+                braceDepth--;
+            } else if (ch == '[') {
+                bracketDepth++;
+            } else if (ch == ']') {
+                bracketDepth--;
+            } else if (ch == '(') {
+                parenthesisDepth++;
+            } else if (ch == ')') {
+                parenthesisDepth--;
+            } else if (ch == ',' && braceDepth == 0 && bracketDepth == 0 && parenthesisDepth == 0) {
+                return i;
+            }
+        }
+        return text.length();
+    }
+
+    private static String normalizeToken(String token) {
+        String trimmed = token.trim();
+        if (trimmed.length() >= 2) {
+            char first = trimmed.charAt(0);
+            char last = trimmed.charAt(trimmed.length() - 1);
+            if ((first == '\'' && last == '\'') || (first == '"' && last == '"')) {
+                return trimmed.substring(1, trimmed.length() - 1);
+            }
+        }
+        return trimmed;
+    }
+}
