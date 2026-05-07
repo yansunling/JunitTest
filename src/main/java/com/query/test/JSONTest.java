@@ -1,7 +1,7 @@
-package com.api.query.test;
+package com.query.test;
 
 import com.alibaba.fastjson.JSONObject;
-import com.api.query.vo.*;
+import com.query.vo.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;

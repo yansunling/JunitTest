@@ -1,4 +1,4 @@
-package com.api.query.test;
+package com.query.test;
 
 import org.apache.commons.io.FileUtils;
 

@@ -1,4 +1,4 @@
-package com.str.string;
+package com.query.error;
 
 import org.apache.commons.io.FileUtils;
 

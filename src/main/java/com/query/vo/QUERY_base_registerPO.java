@@ -1,10 +1,10 @@
-package com.api.query.vo;
+package com.query.vo;
 
 import lombok.Data;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
-import java.sql.Timestamp;
+
 @Data
 public class QUERY_base_registerPO {
 

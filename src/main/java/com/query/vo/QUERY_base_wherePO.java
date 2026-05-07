@@ -1,4 +1,4 @@
-package com.api.query.vo;
+package com.query.vo;
 
 import lombok.Data;
 

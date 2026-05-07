@@ -11,21 +11,25 @@ public class CreateCrmxAuthSql {
     public static void main(String[] args) {
 
         String env="uat";
-        String fun="crmx_news_order_config";
+        String fun="crm_sale_notice";
         String sysId="crm";
         String mainType="菜单";
-        String functionName="已关注运单推送维护";
+        String functionName="销售APP公告";
         if(fun.endsWith("_list")){
             fun=fun.replaceAll("_list","");
         }
+        fun=fun.replaceAll("crm_","crmx_");
         if(StringUtils.equalsIgnoreCase(mainType,"页面")){
             mainType="P";
         }else{
             mainType="A";
         }
         String funId=fun+"_list";
-        String parentFun="news";
-        String listUrl="../crmx/ui/view/news/"+funId+".html?actionId="+funId;
+
+
+        String parentFun="sale";
+        String model="sale";
+        String listUrl="../crmx/ui/view/"+model+"/"+funId+".html?actionId="+funId;
         int num=50;
 
 

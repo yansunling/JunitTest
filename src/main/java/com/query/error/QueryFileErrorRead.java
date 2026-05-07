@@ -1,14 +1,11 @@
-package com.str.string;
+package com.query.error;
 
-import com.alibaba.fastjson.JSON;
 import com.yd.utils.common.CollectionUtil;
 import com.yd.utils.common.StringUtils;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class QueryFileErrorRead {
     public static void main(String[] args) throws Exception{
