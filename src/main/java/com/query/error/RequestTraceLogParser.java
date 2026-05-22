@@ -22,7 +22,7 @@ public class RequestTraceLogParser {
     // 有些异常请求不会打印 END，而是直接打印 ERROR，这里把 ERROR 当作一次请求的收口日志处理。
     private static final Pattern ERROR_PATTERN = Pattern.compile("\\[request-trace\\]\\s+ERROR\\s+requestId=([^,\\s]+),\\s+uri=([^,\\s]+).*?,\\s+costMs=([^,\\s]+)");
     private static final long COST_THRESHOLD = 5000L;
-    private static final String DEFAULT_FILE_PATH = "C:\\Users\\yansunling\\Desktop\\1.log";
+    private static final String DEFAULT_FILE_PATH = "C:\\Users\\yansunling\\Desktop\\crmx-master-0513090246-5c6bc8d4cc-rngz9_tlwl_catalina.2026-05-14.out";
 
     public static void main(String[] args) throws IOException {
         String filePath = args != null && args.length > 0 ? args[0] : DEFAULT_FILE_PATH;

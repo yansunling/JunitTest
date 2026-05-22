@@ -22,7 +22,7 @@ public class QueryLogFileParser {
     private static final Pattern ANSI_PATTERN = Pattern.compile("\\u001B\\[[;\\d]*m");
 
     public static void main(String[] args) throws Exception {
-        String filePath = "C:\\Users\\yansunling\\Desktop\\1.txt";
+        String filePath = "C:\\Users\\yansunling\\Desktop\\query-master-0309173907-597b96bb5f-nd5d5_tlwl_catalina.2026-05-13.out";
         List<QueryParseResult> results = parseFile(filePath);
         for (QueryParseResult result : filterPrintableResults(results)) {
             System.out.println(result);

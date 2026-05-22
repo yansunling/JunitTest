@@ -37,9 +37,9 @@ public class CreateMainLineSql implements ApplicationContextAware {
      */
     @Test
     public  void createLineSql() throws Exception {
-        String mainLine="41";
-        String mainLineName="株洲";
-        String mainLineCode="ZZ";
+        String mainLine="42";
+        String mainLineName="东莞";
+        String mainLineCode="DG";
         String crmSql="INSERT INTO crm.cip_admin_codes(domain_id, code_type, code_name, create_time, update_time, operator) " +
                 "VALUES ('main_lines', '"+mainLine+"', '"+mainLineName+"', now(), now(), 'T1113');";
 
@@ -56,7 +56,7 @@ public class CreateMainLineSql implements ApplicationContextAware {
         if(CollectionUtil.isNotEmpty(areaList)){
             String areaCode = areaList.get(0);
             String cityCode = areaList.get(0).substring(0,4)+"00";
-            String addSql="INSERT INTO crm.crm_main_line_area_ref(serial_no, main_lines, main_lines_name, area_code, add_area_code, creator, create_time) " +
+            String addSql="INSERT INTO crm.crm_main_line_area_ref(serial_no, main_lines, main_lines_name, last_city, area_code, creator, create_time) " +
                     "VALUES (uuid_short(), '"+mainLine+"', '"+mainLineName+"', '"+cityCode+"', '"+areaCode+"', 'T1113', now());";
             sqlList.add(addSql);
         }

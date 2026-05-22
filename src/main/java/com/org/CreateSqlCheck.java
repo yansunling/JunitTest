@@ -48,7 +48,7 @@ public class CreateSqlCheck implements ApplicationContextAware {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(600);
-        List<String> schemaList = Arrays.asList("hcm");
+        List<String> schemaList = Arrays.asList("crm","tmsp","hcm","mpp2","bmsp");
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         Set<String> newSqlList = new LinkedHashSet<>();
         for (String schema : schemaList) {
