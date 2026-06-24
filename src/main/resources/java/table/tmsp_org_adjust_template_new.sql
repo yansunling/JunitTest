@@ -41,8 +41,7 @@ update hcm.hcm_org_relation_all set business_district_id = '<新机构小区ID>'
 update hcm.hcm_org_relation_all set committee_id = '<新机构ID>' where committee_id in('<老机构ID单个>');
 update hcm.hcm_org_info set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
 update hcm.hcm_org_info set org_name = '<新机构名称>' where org_name in('<老机构名称>');
-
-
+replace INTO hcm.hcm_sbgjj_org_position_rel_rule(org_id, position_id, report_position_id, report_position_name, serial_no, version, remark, update_user_id, update_time, create_user_id, create_time, is_delete) select '<新机构ID>', position_id, report_position_id, report_position_name, serial_no, version, remark, update_user_id, update_time, create_user_id, create_time, is_delete from hcm.hcm_sbgjj_org_position_rel_rule where org_id in('<老机构ID>');
 
 
 
@@ -274,7 +273,7 @@ update tmsp.tmsp_net_rail_group_item set arrive_org_id = '<新机构ID>' where a
 
 
 -- TMSP insert
-replace INTO tmsp.tmsp_net_org_hr(serial_no,org_id,hr_org_id,version,remark,update_user_id,update_time,create_user_id,create_time)  select serial_no,'<新机构ID>',hr_org_id,version,remark,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_net_org_hr where org_id in('<老机构ID>');
+replace INTO tmsp.tmsp_net_org_hr (serial_no,org_id,hr_org_id,version,remark,update_user_id,update_time,create_user_id,create_time)  select serial_no,'<新机构ID>',hr_org_id,version,remark,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_net_org_hr where org_id in('<老机构ID>');
 replace INTO tmsp.tmsp_net_org_hr(serial_no,org_id,hr_org_id,version,remark,update_user_id,update_time,create_user_id,create_time)  select serial_no,org_id,'<新机构ID>',version,remark,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_net_org_hr where hr_org_id in('<老机构ID>');
 replace INTO tmsp.tmsp_net_site_depart select serial_no, '<新机构ID>', depart_org_id, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart where site_org_id in('<老机构ID>');
 replace INTO tmsp.tmsp_net_site_depart select serial_no, site_org_id,'<新机构ID>', version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_site_depart where depart_org_id in('<老机构ID>');
@@ -291,7 +290,7 @@ replace INTO tmsp.tmsp_net_org_ext(serial_no, org_id, brand, enable_remote_stock
 replace INTO tmsp.tmsp_net_org select serial_no, '<新机构ID>', org_code, '<新机构名称>', org_short_name, org_status, resp_user_id, org_type, net_station_type, country_code, prov_code, city_code, area_code, org_address, longitude, latitude, org_tel, '', '<新机构大区ID>', '<新机构小区ID>', shutdown_user_id, shutdown_time, sale_mode, '<新机构ID>', send_decision, is_self_car, is_local_net, own_site_org_id, enable_order, send_city, send_city_name, enable_trans, enable_stock, enable_last, enable_rail, last_city, enable_aging, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_net_org where org_id in('<老机构ID>');
 update tmsp.tmsp_net_org set own_site_org_id = '<新机构ID>' where own_site_org_id in('<老机构ID>');
 replace into  tmsp.tmsp_own_driver_salary select serial_no,salary_month,'<新机构ID>',driver_salary,loader_salary,update_user_id,update_time,create_user_id,create_time from tmsp.tmsp_own_driver_salary where org_id in('<老机构ID>');
-
+replace INTO tmsp.tmsp_base_manufacturer (serial_no, org_id, cust_goods_name, manufacturer, version, remark, update_user_id, update_time, create_user_id, create_time) select serial_no, '<新机构ID>', cust_goods_name, manufacturer, version, remark, update_user_id, update_time, create_user_id, create_time from tmsp.tmsp_base_manufacturer where org_id in('<老机构ID>');
 
 
 

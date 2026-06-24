@@ -26,7 +26,8 @@ public class JwtTokenDecode {
         String userName = decodedJWT1.getClaim("userName-claim").asString();
         String orgId = decodedJWT1.getClaim("orgId-claim").asString();
         String compId = decodedJWT1.getClaim("compId-claim").asString();
-
+        String dateclaim = decodedJWT1.getClaim("date-claim").asString();
+        System.out.println(dateclaim);
         System.out.println("userId:"+userId+";userName:"+userName+";orgId:"+orgId+";compId:"+compId);
 
     }

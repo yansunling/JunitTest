@@ -21,7 +21,7 @@ import java.nio.file.Paths;
  */
 public class WaybillSqlFileGenerator {
 
-    private static final Path EXCEL_PATH = Paths.get("src", "main", "resources", "fee", "运单号.xlsx");
+    private static final Path EXCEL_PATH = Paths.get("C:\\Users\\yansunling\\Desktop\\运单号.xlsx");
     private static final Path TEMPLATE_PATH = Paths.get("src", "main", "resources", "fee", "1.sql");
     private static final Path OUTPUT_PATH = Paths.get("C:\\Users\\yansunling\\Desktop\\运单号_sheet1.sql");
 
