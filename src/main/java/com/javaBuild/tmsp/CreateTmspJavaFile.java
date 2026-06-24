@@ -45,7 +45,7 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 		Set<String> tableNames = tables.keySet();
         String sysId="tmsp";
 
-		String htmlGroup="";
+		String htmlGroup="unload";
         String path="C:/Users/yansunling/Desktop/build/";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);

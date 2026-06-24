@@ -13,8 +13,10 @@ public class CreateTmspResoruceSql {
     public static void main(String[] args) {
 
         String fun="tmsp_arrive_operator_schedule";
-        String parentId=fun+"_list";
-
+        String parentId=fun;
+        if(!fun.endsWith("list")){
+             parentId=fun+"_list";
+        }
         String supParent="hand_train_close";
         String parentName="装卸队排班";
         String model="unload";
