@@ -41,11 +41,11 @@ public class CreateTmspJavaFile implements ApplicationContextAware{
 	@Test
 	public  void test() throws Exception {
 		Map<String, BuildConfig> tables=new HashMap<>();
-		tables.put("tmsp_arrive_operator_schedule",new BuildConfig("","N"));
+		tables.put("tmsp_pre_except_info",new BuildConfig("","N"));
 		Set<String> tableNames = tables.keySet();
         String sysId="tmsp";
 
-		String htmlGroup="";
+		String htmlGroup="excep";
         String path="C:/Users/yansunling/Desktop/build/";
 		File dir=new File(path);
 		FileUtils.deleteDirectory(dir);
