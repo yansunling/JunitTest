@@ -20,6 +20,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.File;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -28,6 +29,8 @@ import java.util.concurrent.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:applicationContext.xml"})
 public class CreateSqlUpdateFoc implements ApplicationContextAware {
+    private static final int DAILY_QUERY_THREADS = 20;
+
     ApplicationContext ac;
 
     @Override
@@ -57,47 +60,40 @@ public class CreateSqlUpdateFoc implements ApplicationContextAware {
         mapSql.put("tmsp.foc_plugins_review_log", "review_org_id");
 
 
-        Map<String, String> condition = new HashMap<>();
-        condition.put("tmsp.foc_plugins_review_report", " and report_time>DATE_SUB(curdate(),interval 3 month)");
-        condition.put("tmsp.foc_plugins_review_log", " and create_time>DATE_SUB(curdate(),interval 3 month)");
+        Map<String, String> timeColumnMap = new HashMap<>();
+        timeColumnMap.put("tmsp.foc_plugins_review_report", "report_time");
+        timeColumnMap.put("tmsp.foc_plugins_review_log", "create_time");
+        LocalDate queryStartDate = LocalDate.now().minusMonths(2);
+        LocalDate queryEndDate = LocalDate.now().plusDays(1);
         Set<String> allTotalSet = new LinkedHashSet<>();
-        ExecutorService executorService = Executors.newFixedThreadPool(50);
-        Set<String> totalSet = new LinkedHashSet<>();
-        CountDownLatch countDownLatch = new CountDownLatch(orgDataList.size());
-        for (OrgData orgData : orgDataList) {
-            executorService.submit(new FutureTask<String>(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-
-                    Set<String> rowSet = new LinkedHashSet<>();
-                    for (String table : tableFiles) {
-
-                        try {
-                            String column = mapSql.get(table);
-                            if (StringUtils.isBlank(column)) {
-                                return null;
-                            }
-                            String sql = "select serial_no from " + table + " where " + column + " in(" + orgData.getOldOrgId() + ")" + condition.getOrDefault(table, "");
-                            List<String> result = jdbcTemplate.queryForList(sql, String.class);
-                            if (CollectionUtil.isNotEmpty(result)) {
-                                String title = "-- " + orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]\n\n\n";
-                                String updateSql = "update " + table + " set " + column + "=" + orgData.getNewOrgId() + " where serial_no in('" + StringUtils.join("','", result.toArray()) + "');";
-                                rowSet.add(title);
-                                rowSet.add(updateSql + "\n\n");
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-
-                        }
+        ExecutorService dailyQueryExecutor = Executors.newFixedThreadPool(DAILY_QUERY_THREADS);
+        try {
+            for (OrgData orgData : orgDataList) {
+                Set<String> rowSet = new LinkedHashSet<>();
+                for (String table : tableFiles) {
+                    String column = mapSql.get(table);
+                    if (StringUtils.isBlank(column)) {
+                        continue;
                     }
-                    totalSet.addAll(rowSet);
-                    countDownLatch.countDown();
-                    return "";
+                    String timeColumn = timeColumnMap.get(table);
+                    try {
+                        Set<String> result = querySerialNosByDay(table, column, timeColumn,
+                                orgData.getOldOrgId(), queryStartDate, queryEndDate, dailyQueryExecutor);
+                        if (CollectionUtil.isNotEmpty(result)) {
+                            String title = "-- " + orgData.getNewOrgName() + "[" + orgData.getNewOrgId() + "]切" + orgData.getOldOrgName() + "[" + orgData.getOldOrgId() + "]\n\n\n";
+                            String updateSql = "update " + table + " set " + column + "=" + orgData.getNewOrgId() + " where serial_no in('" + StringUtils.join("','", result.toArray()) + "');";
+                            rowSet.add(title);
+                            rowSet.add(updateSql + "\n\n");
+                        }
+                    } catch (Exception e) {
+                        log.error("按天查询失败，table={}, oldOrgId={}", table, orgData.getOldOrgId(), e);
+                    }
                 }
-            }));
+                allTotalSet.addAll(rowSet);
+            }
+        } finally {
+            dailyQueryExecutor.shutdownNow();
         }
-        countDownLatch.await();
-        allTotalSet.addAll(totalSet);
 
 
         String[] split = tableFiles.get(0).split("\\.");
@@ -105,6 +101,44 @@ public class CreateSqlUpdateFoc implements ApplicationContextAware {
         FileUtils.writeLines(allFile, "utf-8", allTotalSet);
 
 
+    }
+
+    private Set<String> querySerialNosByDay(String table, String orgColumn, String timeColumn,
+                                            String oldOrgIds, LocalDate startDate, LocalDate endDate,
+                                            ExecutorService queryExecutor) throws Exception {
+        Set<String> result = new LinkedHashSet<>();
+        List<Future<List<String>>> queryFutures = new ArrayList<>();
+        for (LocalDate queryDate = startDate; queryDate.isBefore(endDate); queryDate = queryDate.plusDays(1)) {
+            LocalDate currentDate = queryDate;
+            queryFutures.add(queryExecutor.submit(new Callable<List<String>>() {
+                @Override
+                public List<String> call() {
+                    LocalDate nextDate = currentDate.plusDays(1);
+                    String sql = "select serial_no from " + table
+                            + " where " + orgColumn + " in(" + oldOrgIds + ")"
+                            + " and " + timeColumn + ">=? and " + timeColumn + "<?";
+                    return jdbcTemplate.queryForList(sql,
+                            new Object[]{java.sql.Date.valueOf(currentDate), java.sql.Date.valueOf(nextDate)}, String.class);
+                }
+            }));
+        }
+        try {
+            for (Future<List<String>> queryFuture : queryFutures) {
+                List<String> dailyResult = queryFuture.get();
+                if (CollectionUtil.isNotEmpty(dailyResult)) {
+                    result.addAll(dailyResult);
+                }
+            }
+        } catch (Exception e) {
+            for (Future<List<String>> queryFuture : queryFutures) {
+                queryFuture.cancel(true);
+            }
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            throw e;
+        }
+        return result;
     }
 
 }
