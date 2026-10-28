@@ -107,10 +107,7 @@ update tmsp.tmsp_hand_book_doc set plan_reach_orgid = '<新机构ID>' where plan
 update tmsp.tmsp_hand_doc set send_org_id = '<新机构ID>' where send_org_id in('<老机构ID>');
 update tmsp.tmsp_hand_doc set arr_org_id = '<新机构ID>' where arr_org_id in('<老机构ID>');
 update tmsp.tmsp_hand_doc set arrive_org_id = '<新机构ID>' where arrive_org_id in('<老机构ID>');
-update tmsp.tmsp_hand_doc_alter set create_org_id = '<新机构ID>' where create_org_id in('<老机构ID>');
-update tmsp.tmsp_hand_doc_alter_info set arr_org_id_before = '<新机构ID>' where arr_org_id_before in('<老机构ID>');
-update tmsp.tmsp_hand_doc_alter_info set arr_org_id_after = '<新机构ID>' where arr_org_id_after in('<老机构ID>');
-update tmsp.tmsp_hand_doc_alter_info set create_org_id = '<新机构ID>' where create_org_id in('<老机构ID>');
+
 
 update tmsp.tmsp_hand_schedule_car set start_org_id = '<新机构ID>' where start_org_id in('<老机构ID单个>');
 update tmsp.tmsp_hand_schedule_car set end_org_id = '<新机构ID>' where end_org_id in('<老机构ID单个>');
