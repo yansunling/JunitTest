@@ -95,11 +95,14 @@ public class OrgNameValueCheck {
                             + "AND COLUMN_KEY <> 'PRI' "
                             + "AND LOWER(COLUMN_NAME) NOT IN "
                             + "('create_user_id','update_user_id','creator','creater','op_user_id') "
+                            + "AND LOWER(COLUMN_NAME) NOT LIKE '%name%' "
+                            + "AND LOWER(COLUMN_NAME) NOT LIKE '%type%' "
+                            + "AND LOWER(COLUMN_NAME) NOT LIKE '%remark%' "
                             + "AND DATA_TYPE IN ('char','varchar','tinytext','text','mediumtext','longtext','enum','set') "
                             // 排除容纳不下目标名称的短字符字段，避免仅有这些字段的表参与扫描。
                             + "AND (DATA_TYPE NOT IN ('char','varchar') OR CHARACTER_MAXIMUM_LENGTH >= ?)",
                     schema, TARGET_VALUE.codePointCount(0, TARGET_VALUE.length()));
-            log.info("读取索引元数据：库={}，排除主键、创建人和更新人后的候选文本字段数={}",
+            log.info("读取索引元数据：库={}，排除主键、创建人、更新人及字段名包含 name/type/remark 后的候选文本字段数={}",
                     schema, schemaColumns.size());
             List<Map<String, Object>> indexes = jdbcTemplateYL.queryForList(
                     "SELECT TABLE_NAME, COLUMN_NAME FROM information_schema.STATISTICS "
