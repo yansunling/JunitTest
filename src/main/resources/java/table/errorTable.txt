@@ -169,3 +169,5 @@ tmsp.tmsp_alter_order_report
 bmsp.bmsp_should_inorder_bk
 tmsp.tmsp_alter_order_flow_record
 tmsp.tmsp_base_alter_order_audit
+tmsp.tmsp_send_opt_log
+tmsp.tmsp_share_data_log
