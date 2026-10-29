@@ -48,12 +48,12 @@ public class CreateSqlCheck implements ApplicationContextAware {
         String excelFilePath = "C:\\Users\\yansunling\\Desktop\\1.xlsx";
         List<OrgData> orgDataList = SwitchUtil.readExcel(excelFilePath);
         jdbcTemplate.setQueryTimeout(600);
-        List<String> schemaList = Arrays.asList("crm","tmsp","hcm","mpp2","bmsp");
+        List<String> schemaList = Arrays.asList("hcm");
         ExecutorService executorService = Executors.newFixedThreadPool(50);
         Set<String> newSqlList = new LinkedHashSet<>();
         for (String schema : schemaList) {
             String sql = "select table_name from information_schema.`TABLES` where " +
-                    "table_schema='" + schema + "' and table_type!='VIEW' and table_name not like 'foc%' and table_name not like 'cip%'" +
+                    "table_schema='" + schema + "' and table_type!='VIEW' and table_name in('hcm_checkin_report ','hcm_checkin_logs') and table_name not like 'foc%' and table_name not like 'cip%'" +
                     " and table_name not in('tmsp_hand_schedule_car','tmsp_send_order_cust_edit_log','tmsp_order_route_org_detail_bak','tmsp_order_route_org_detail','tmsp_net_org','tmsp','tmsp_msg_send_sms','bmsp_report_outorder_order_cust','bmsp_report_inorder_putfee_order_cust','bmsp_report_inorder_putfee_customer_cust','tmsp_alter_order_report','bmsp_report_inorder_customer_cust','tmsp_depart_ontime_rate_report_item','tmsp_msg_result_sms','bmsp_report_inorder_order_cust' )  ";
             List<String> tableFiles = jdbcTemplate.queryForList(sql, String.class);
             String filePath = getClass().getClassLoader().getResource("").getPath();
