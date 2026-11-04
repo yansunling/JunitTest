@@ -430,11 +430,11 @@ update mpp2.mpp2_increment_send_disc set creator_org_id = '<新机构ID>' where 
 update mpp2.mpp2_increment_send_disc_h set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_increment_send_disc_h set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_send_disc_h set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
-update mpp2.mpp2_increment_service_disc set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_increment_service_disc set big_area='<新机构大区ID>', depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_increment_service_disc set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_service_disc set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_service_disc_h set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
-update mpp2.mpp2_increment_service_disc_h set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_increment_service_disc_h set big_area='<新机构大区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_increment_service_disc_h set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_storage_disc set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_storage_disc set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
