@@ -345,6 +345,11 @@ DELETE FROM crm.crm_org_dept WHERE org_id IN('<老机构ID>');
 
 
 -- MPP
+update mpp2.mpp2_apply_approve_node set big_area = '<新机构大区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_apply_approve_trunk_inventory set big_area = '<新机构大区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_apply_approve_trunk_inventory set inventory_big_area = '<新机构大区ID>',inventory_org_id = '<新机构ID>' where inventory_org_id in('<老机构ID>');
+update mpp2.mpp2_base_search_transfer set big_area = '<新机构大区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_increment_send_transfer_common set big_area = '<新机构大区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_arrive_storeage_price_ver set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_auth_apply set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_auth_code_info set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
@@ -396,10 +401,10 @@ update mpp2.mpp2_increment_discharge_disc_h set op_org_id = '<新机构ID>' wher
 update mpp2.mpp2_increment_discharge_disc_h set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_handle_disc set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_handle_disc set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
-update mpp2.mpp2_increment_handle_disc set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_increment_handle_disc set big_area = '<新机构大区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_increment_handle_disc_h set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_handle_disc_h set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
-update mpp2.mpp2_increment_handle_disc_h set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_increment_handle_disc_h set big_area = '<新机构大区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_increment_insured_disc set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_increment_insured_disc set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_insured_disc set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
@@ -413,11 +418,11 @@ update mpp2.mpp2_increment_position_disc_h set depart_org = '<新机构ID>' wher
 update mpp2.mpp2_increment_position_disc_h set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_position_disc_h set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_receipt_disc set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
-update mpp2.mpp2_increment_receipt_disc set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_increment_receipt_disc set big_area = '<新机构大区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_increment_receipt_disc set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_receipt_disc_h set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_receipt_disc_h set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
-update mpp2.mpp2_increment_receipt_disc_h set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_increment_receipt_disc_h set big_area = '<新机构大区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_increment_receive_disc set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_increment_receive_disc set op_org_id = '<新机构ID>' where op_org_id in('<老机构ID>');
 update mpp2.mpp2_increment_receive_disc set creator_org_id = '<新机构ID>' where creator_org_id in('<老机构ID>');
@@ -474,10 +479,10 @@ update mpp2.mpp2_prise_ver_cust set inventory_org_id = '<新机构ID>' where inv
 update mpp2.mpp2_prise_ver_cust_his set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_prise_ver_cust_his set inventory_org_id = '<新机构ID>' where inventory_org_id in('<老机构ID>');
 update mpp2.mpp2_apply_approve_oa_rel set org_id = '<新机构ID>' where org_id in('<老机构ID单个>');
-update mpp2.mpp2_apply_price set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_apply_price set big_area = '<新机构大区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 update mpp2.mpp2_apply_price set inventory_org_id = '<新机构ID>' where inventory_org_id in('<老机构ID>');
 update mpp2.mpp2_apply_price set apply_org_id = '<新机构ID>' where apply_org_id in('<老机构ID>');
-update mpp2.mpp2_increment_base_fee set depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
+update mpp2.mpp2_increment_base_fee set big_area = '<新机构大区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID>');
 
 -- 小区
 update mpp.mpp_prise_dept_ver set big_area = '<新机构大区ID>',small_area = '<新机构小区ID>',depart_org = '<新机构ID>' where depart_org in('<老机构ID单个>');
